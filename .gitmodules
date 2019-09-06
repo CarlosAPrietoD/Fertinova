@@ -13,4 +13,8 @@
 [submodule "fertinova"]
 	path = fertinova
 	url = git@git.vauxoo.com:Vauxoo/fertinova.git
+        branch = 12.0
+[submodule "server-tools"]
+	path = server-tools
+	url = git@github.com:Vauxoo/server-tools.git
 	branch = 12.0
