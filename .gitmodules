@@ -21,4 +21,8 @@
 [submodule "stock-logistics-workflow"]
 	path = stock-logistics-workflow
 	url = git@github.com:Vauxoo/stock-logistics-workflow.git
+        branch = 12.0
+[submodule "gandalf"]
+	path = gandalf
+	url = git@git.vauxoo.com:vauxoo/gandalf.git
 	branch = 12.0
