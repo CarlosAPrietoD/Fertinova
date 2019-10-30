@@ -32,6 +32,7 @@
         'wizards/internal_transfer_multicurrency_view.xml',
         'views/account_payment.xml',
         'views/sale_views.xml',
+        'views/stock_picking_views.xml',
     ],
     'demo': [
     ],

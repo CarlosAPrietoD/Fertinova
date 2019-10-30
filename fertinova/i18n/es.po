@@ -16,6 +16,11 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: fertinova
+#: model:ir.model.fields,field_description:fertinova.field_stock_picking__accounting_date
+msgid "Accounting Date"
+msgstr "Fecha contable"
+
+#. module: fertinova
 #: model:ir.model.fields,field_description:fertinova.field_internal_transfer_multicurrency__agreed_amount
 msgid "Agreed Amount"
 msgstr "Monto acordado"
@@ -59,6 +64,11 @@ msgstr "Creado el"
 #: model:ir.model.fields,field_description:fertinova.field_internal_transfer_multicurrency__currency_id
 msgid "Currency"
 msgstr "Moneda"
+
+#. module: fertinova
+#: model:ir.model.fields,help:fertinova.field_stock_picking__accounting_date
+msgid "Date at which the accounting entries will be created in case of automated product in picking."
+msgstr "Fecha en la que los asientos contables se crearán en  caso de que se trate de un producto automatizado en la transferencia."
 
 #. module: fertinova
 #: model:ir.model.fields,field_description:fertinova.field_internal_transfer_multicurrency__display_name

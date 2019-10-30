@@ -3,3 +3,4 @@
 
 from . import res_currency
 from . import sale
+from . import stock
