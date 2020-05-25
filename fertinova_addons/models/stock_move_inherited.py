@@ -102,7 +102,6 @@ class StockMoveLine(models.Model):
     #                               compute='_get_accumulated_qty')                               
 
     price_unit = fields.Float(string='Price Unit', 
-                              store=True,
                               digits=dp.get_precision('Product Unit of Measure'), 
                               compute='_get_price_unit') 
 
