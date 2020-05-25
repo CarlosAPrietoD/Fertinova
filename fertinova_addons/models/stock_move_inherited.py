@@ -78,18 +78,22 @@ class StockMoveLine(models.Model):
     # MODEL FIELDS
     #########################################################
     operative_qty = fields.Float(string='Operative Quantity', 
+                                 store=True,
                                  digits=dp.get_precision('Product Unit of Measure'),
                                  compute='_get_operative_qty')      
 
     inputs = fields.Float(string='Inputs', 
+                          store=True,
                           digits=dp.get_precision('Product Unit of Measure'),
                           compute='_get_inputs') 
 
     outputs = fields.Float(string='Outputs', 
+                           store=True,
                            digits=dp.get_precision('Product Unit of Measure'),
                            compute='_get_outputs')     
 
     transfers = fields.Float(string='Transfers', 
+                             store=True,                             
                              digits=dp.get_precision('Product Unit of Measure'),
                              compute='_get_transfers') 
 
@@ -98,6 +102,7 @@ class StockMoveLine(models.Model):
     #                               compute='_get_accumulated_qty')                               
 
     price_unit = fields.Float(string='Price Unit', 
+                              store=True,
                               digits=dp.get_precision('Product Unit of Measure'), 
                               compute='_get_price_unit') 
 
