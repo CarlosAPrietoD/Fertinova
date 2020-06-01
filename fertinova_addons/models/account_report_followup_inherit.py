@@ -34,6 +34,11 @@ class AccountFollowupReport(models.AbstractModel):
         headers.insert(2, {'name': _('Invoice Date'), 'class': 'date', 'style': 'text-align:center; white-space:nowrap;'})
 
         return headers
+    
+    
+    def _get_lines(self, options, line_id=None):        
+        """This method intends to add a new column into Account Payable Report"""
+        pass
         
 #//////////////////////////////////////////////////////////////////////////////////////////////#
 #   TICKET 116    DEVELOPED BY SEBASTIAN MENDEZ    --     END
