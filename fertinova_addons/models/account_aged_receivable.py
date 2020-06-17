@@ -36,7 +36,7 @@ class report_account_aged_receivable(models.AbstractModel):
                 factura, residuo = factura_aux.split('-')
                 _logger.info('\n\n\n factura: %s \n\n', factura)
                 #Retrieve the of invoice date from model 'account.invoice':
-                invoice_date = self.env['account.invoice'].search(['number','=', factura]).date_invoice
+                invoice_date = self.env['account.invoice'].search(['number','ilike', factura]).date_invoice
                 _logger.info('\n\n\n invoice_date: %s \n\n', invoice_date)
                 #Insert the new value in corresponding with the position of new columm added too:
                 line.get('columns').insert(3, {'name': str(invoice_date)}) 
