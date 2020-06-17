@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
-import logging
+from datetime import datetime
 from odoo import models, fields, api
 from odoo.exceptions import UserError
 from odoo.tools.translate import _  
 
-_logger = logging.getLogger(__name__)
 
 #//////////////////////////////////////////////////////////////////////////////////////////////#
 #   TICKET 116    DEVELOPED BY SEBASTIAN MENDEZ    --     START
@@ -26,71 +25,52 @@ class report_account_aged_receivable(models.AbstractModel):
         #Obtain original list of rows of the report:
         lines = super()._get_lines(options, line_id)
         for line in lines:
-            #Only the rows with level 4 correspond to broken down concepts:
+            #Inject an empty value into the new added column:
             if line['level'] == 2:
                 line.get('columns').insert(3, {'name': ''}) 
+            #Only the rows with level 4 correspond to broken down concepts:                
             elif line['level'] == 4:     
-                #Get 'Reference' value which is like INVOICE-INVOICE/REF:           
-                factura_aux = line['columns'][2].get('name')
-                #Obtain just the part before -(hyphen):
-                factura, residuo = factura_aux.split('-')
-                _logger.info('\n\n\n factura: %s \n\n', factura)
-                #Retrieve the of invoice date from model 'account.invoice':
-                invoice_date = self.env['account.invoice'].search(['number','ilike', factura]).date_invoice
-                _logger.info('\n\n\n invoice_date: %s \n\n', invoice_date)
-                #Insert the new value in corresponding with the position of new columm added too:
-                line.get('columns').insert(3, {'name': str(invoice_date)}) 
+                #Retrieve id of account move, after obtain invoice and its date:
+                move_id = self.env['account.move.line'].browse(line['id']).move_id
+                invoice_id = self.env['account.invoice'].search([('move_id', '=', move_id.id)])
+                #Inserting new value for column of Invoice Date:
+                line['columns'].insert(3, {'name': invoice_id.date_invoice.strftime("%x")}) 
         return lines
 
-    #SAMPLE OF A SINGLE ROW RETURNED BY ORIGINAL LIST "LINES":
+    #SAMPLE OF A SINGLE ROW RETURNED BY ORIGINAL LIST "LINES" IN ORDER TO FIGURE OUT ITS ORDER:
     """    
     lines: [ 
-            {
-            'id': 'partner_3918', 
-            'name': 'AGROFOS S DE RL DE CV', 
-            'level': 2, 
-            'columns': [
-                        {'name': ''}, 
-                        {'name': ''}, 
-                        {'name': ''}, 
-                        {'name': '$ 73,905.34'}, 
-                        {'name': '$ 0.00'}, 
-                        {'name': '$ 0.00'}, 
-                        {'name': '$ 0.00'}, 
-                        {'name': '$ 0.00'}, 
-                        {'name': '$ 0.00'}, 
-                        {'name': '$ 73,905.34'}
+            {   ==> REGISTRO DE CABECERA <== :
+                'id': 'partner_3918', 
+                'name': 'AGROFOS S DE RL DE CV', 
+                'level': 2, 
+                'columns': [
+                            {'name': ''},   {'name': ''},   {'name': ''},   {'name': '$ 73,905.34'}, 
+                            {'name': '$ 0.00'},   {'name': '$ 0.00'},   {'name': '$ 0.00'}, 
+                            {'name': '$ 0.00'},   {'name': '$ 0.00'},   {'name': '$ 73,905.34'}
                         ], 
-            'trust': 'normal', 
-            'unfoldable': True, 
-            'unfolded': True
+                'trust': 'normal',        'unfoldable': True,          'unfolded': True
             }, 
-            {
-            'id': 154380, 
-            'name': '27/06/2020', 
-            'class': 'date', 
-            'caret_options': 
-            'account.invoice.out', 
-            'level': 4, 
-            'parent_id': 'partner_3918', 
-            'columns': [
-                        {'name': 'FC'}, 
-                        {'name': '105.01.001'}, 
-                        {'name': 'FC3684-FC3684/95'}, 
-                        {'name': '$ 36,620.42'}, 
-                        {'name': ''}, 
-                        {'name': ''}, 
-                        {'name': ''}, 
-                        {'name': ''}, 
-                        {'name': ''}, 
-                        {'name': ''}
+            {   ==> REGISTRO DE DESGLOSE <== :
+                'id': 154380, 
+                'name': '27/06/2020', 
+                'class': 'date', 
+                'caret_options': 
+                'account.invoice.out', 
+                'level': 4, 
+                'parent_id': 'partner_3918', 
+                'columns': [
+                            {'name': 'FC'},               {'name': '105.01.001'}, 
+                            {'name': 'FC3684-FC3684/95'}, {'name': '$ 36,620.42'}, 
+                            {'name': ''},  {'name': ''},  {'name': ''}, 
+                            {'name': ''},  {'name': ''},  {'name': ''}
                         ], 
-            'action_context': {
-                                'default_type': 'out_invoice', 
-                                'default_journal_id': 41
-                                }
+                'action_context': {
+                                    'default_type': 'out_invoice', 
+                                    'default_journal_id': 41
+                                  }
             }, 
-            {
+            {   ==> REGISTRO DE DESGLOSE <== :
                 'id': 155735, 
                 'name': '30/06/2020', 
                 'class': 'date', 
@@ -98,21 +78,15 @@ class report_account_aged_receivable(models.AbstractModel):
                 'level': 4, 
                 'parent_id': 'partner_3918', 
                 'columns': [
-                            {'name': 'FC'}, 
-                            {'name': '105.01.001'}, 
-                            {'name': 'FC3688-FC3688/02'}, 
-                            {'name': '$ 37,284.92'}, 
-                            {'name': ''}, 
-                            {'name': ''}, 
-                            {'name': ''}, 
-                            {'name': ''}, 
-                            {'name': ''}, 
-                            {'name': ''}
-                        ], 
+                            {'name': 'FC'},                {'name': '105.01.001'}, 
+                            {'name': 'FC3688-FC3688/02'},  {'name': '$ 37,284.92'}, 
+                            {'name': ''},   {'name': ''},  {'name': ''}, 
+                            {'name': ''},   {'name': ''},  {'name': ''}
+                           ], 
                 'action_context': {
-                                'default_type': 'out_invoice', 
-                                'default_journal_id': 41
-                                }
+                                   'default_type': 'out_invoice', 
+                                   'default_journal_id': 41
+                                  }
                 } 
             ]
     """                                    
