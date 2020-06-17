@@ -25,11 +25,13 @@ class report_account_aged_receivable(models.AbstractModel):
         """This method intends add a new values of Invoice Dates into Account Aged Receivable Report"""
         #Obtain original list of rows of the report:
         lines = super()._get_lines(options, line_id)
-        for i in lines:
+        for line in lines:
             #Only the rows with level 4 correspond to broken down concepts:
-            if i['level'] == 4:     
+            if line['level'] == 2:
+                line.get('columns').insert(3, {'name': ''}) 
+            elif line['level'] == 4:     
                 #Get 'Reference' value which is like INVOICE-INVOICE/REF:           
-                factura_aux = i['columns'][2].get('name')
+                factura_aux = line['columns'][2].get('name')
                 #Obtain just the part before -(hyphen):
                 factura, residuo = factura_aux.split('-')
                 _logger.info('\n\n\n factura: %s \n\n', factura)
@@ -37,7 +39,7 @@ class report_account_aged_receivable(models.AbstractModel):
                 invoice_date = self.env['account.invoice'].search(['number','=', factura]).date_invoice
                 _logger.info('\n\n\n invoice_date: %s \n\n', invoice_date)
                 #Insert the new value in corresponding with the position of new columm added too:
-                i[1]['columns'].insert(4, {'name': invoice_date}) 
+                line.get('columns').insert(3, {'name': str(invoice_date)}) 
         return lines
 
     #SAMPLE OF A SINGLE ROW RETURNED BY ORIGINAL LIST "LINES":
