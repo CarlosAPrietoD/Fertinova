@@ -34,7 +34,7 @@ class report_account_aged_receivable(models.AbstractModel):
                 move_id = self.env['account.move.line'].browse(line['id']).move_id
                 invoice_id = self.env['account.invoice'].search([('move_id', '=', move_id.id)])
                 #Inserting new value for column of Invoice Date:
-                line['columns'].insert(3, {'name': invoice_id.date_invoice.strftime("%x")}) 
+                line['columns'].insert(3, {'name': invoice_id.date_invoice.strftime("%d-%m-%Y")})
         return lines
 
     #SAMPLE OF A SINGLE ROW RETURNED BY ORIGINAL LIST "LINES" IN ORDER TO FIGURE OUT ITS ORDER:
