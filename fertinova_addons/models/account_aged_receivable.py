@@ -8,6 +8,7 @@ from odoo.tools.translate import _
 #//////////////////////////////////////////////////////////////////////////////////////////////#
 #   TICKET 116    DEVELOPED BY SEBASTIAN MENDEZ    --     START
 #//////////////////////////////////////////////////////////////////////////////////////////////#
+
 class report_account_aged_receivable(models.AbstractModel):
     _inherit = "account.aged.receivable"
 
@@ -36,6 +37,7 @@ class report_account_aged_receivable(models.AbstractModel):
                 #Inserting new value for column of Invoice Date:
                 line['columns'].insert(3, {'name': invoice_id.date_invoice.strftime("%d-%m-%Y")})
         return lines
+
 
     #SAMPLE OF A SINGLE ROW RETURNED BY ORIGINAL LIST "LINES" IN ORDER TO FIGURE OUT ITS ORDER:
     """    
@@ -90,6 +92,7 @@ class report_account_aged_receivable(models.AbstractModel):
                 } 
             ]
     """                                    
+    
 #//////////////////////////////////////////////////////////////////////////////////////////////#
 #   TICKET 116    DEVELOPED BY SEBASTIAN MENDEZ    --     END
 #//////////////////////////////////////////////////////////////////////////////////////////////#  
