@@ -2,10 +2,6 @@
 	path = mexico
 	url = git@git.vauxoo.com:vauxoo/mexico.git
 	branch = 12.0
-[submodule "mandrake"]
-	path = mandrake
-	url = git@git.vauxoo.com:vauxoo/mandrake.git
-	branch = 12.0
 [submodule "vendor-bills"]
 	path = vendor-bills
 	url = git@git.vauxoo.com:vauxoo/vendor-bills.git
