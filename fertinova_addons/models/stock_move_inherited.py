@@ -3,8 +3,6 @@ import math
 from odoo import api, fields, models, _
 from odoo.addons import decimal_precision as dp
 
-import logging
-_logger = logging.getLogger(__name__)
 
 #//////////////////////////////////////////////////////////////////////////////////////////////#
 #   TICKET 108    DEVELOPED BY SEBASTIAN MENDEZ    --     START
@@ -168,7 +166,6 @@ class StockMoveLine(models.Model):
     def _get_transfers(self):
       '''This method computes the value of transfers'''
       # Since 0.0, 0, None are evaluated as False
-      _logger.info('\n\n\n contexto en stock.move.line: %s\n\n', self.env.context)  
       for record in self: 
         #If value is equal to 0 "tranfers" must be qty_done:         
         if not record.x_studio_valor:    
