@@ -26,13 +26,3 @@
 	path = gandalf
 	url = git@git.vauxoo.com:vauxoo/gandalf.git
 	branch = 12.0
-
-[submodule "vendor_bills_Aux"]
-	path = vendor_bills_Aux
-	url = git@github.com:CarlosAPrietoD/Fertinova.git
-	branch = wobin_12-tk_030-Agregacion_campos_carga_XML
-
-[submodule "CarlosAPrietoD/vendor_bills"]
-	path = CarlosAPrietoD/vendor_bills
-	url = git@github.com:CarlosAPrietoD/Fertinova.git
-	branch = wobin_12-tk_030-Agregacion_campos_carga_XML
