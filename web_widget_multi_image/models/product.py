@@ -5,6 +5,7 @@ from odoo import fields, models
 
 class MultiImages(models.Model):
     _name = "multi.images"
+    _description = "multi.images"
 
     image = fields.Binary('Images')
     description = fields.Char('Description')
