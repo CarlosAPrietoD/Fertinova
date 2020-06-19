@@ -169,19 +169,17 @@ class StockMoveLine(models.Model):
       '''This method computes the value of transfers'''
       # Since 0.0, 0, None are evaluated as False
       _logger.info('\n\n\n contexto en stock.move.line: %s\n\n', self.env.context)  
-      for record in self:
-        #If value is equal to 0 "tranfers" must be qty_done: 
-        if not record.x_studio_valor:                 
-          #if self.env.context.get('location_id') == record.location_id.id:
-          record.transfers = record.qty_done          
-          #  record.transfers = record.transfers * -1  
-          #else:
-          #  record.transfers = record.qty_done                    
+      for record in self: 
+        #If value is equal to 0 "tranfers" must be qty_done:         
+        if not record.x_studio_valor:    
+          #Although it is important notice the conditional about the context brought from 'stock.quant'             
+          if self.env.context.get('location_id') == record.location_id.id:        
+            record.transfers = record.qty_done  * -1  
+          else:
+            record.transfers = record.qty_done                    
         else:
           record.transfers = 0.0
-              
-                      
-
+                                  
 
     #@api.depends('product_id', 'operative_qty')
     #def _get_accumulated_qty(self):
