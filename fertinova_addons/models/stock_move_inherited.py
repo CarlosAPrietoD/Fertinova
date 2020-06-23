@@ -2,8 +2,6 @@
 import math
 from odoo import api, fields, models, _
 from odoo.addons import decimal_precision as dp
-import logging
-_logger = logging.getLogger(__name__)
 
 
 #//////////////////////////////////////////////////////////////////////////////////////////////#
@@ -167,13 +165,10 @@ class StockMoveLine(models.Model):
     @api.depends('location_id', 'qty_done', 'x_studio_valor')
     def _get_transfers(self):
       '''This method computes the value of transfers'''
-      # Since 0.0, 0, None are evaluated as False
-      _logger.info('\n\n\n contexto en st.mv.ln: %s\n\n\n', str(self.env.context))         
+      # Since 0.0, 0, None are evaluated as False      
       for record in self: 
-        #If value is equal to 0 "tranfers" must be qty_done:  
-        _logger.info('\n\n\n fuera del condicional valor: %s\n\n\n', record.x_studio_valor)        
-        if not record.x_studio_valor: 
-          _logger.info('\n\n\n dentro del condicional valor: %s\n\n\n', record.x_studio_valor)                                 
+        #If value is equal to 0 "tranfers" must be qty_done:         
+        if not record.x_studio_valor:                             
           #Although it is important notice the conditional about the context brought from 'stock.quant'             
           if self.env.context.get('location_id') == record.location_id.id:        
             record.transfers = record.qty_done  * -1  

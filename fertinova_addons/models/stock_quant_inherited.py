@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import api, fields, models, _
-import logging
-_logger = logging.getLogger(__name__)
+
 
 #//////////////////////////////////////////////////////////////////////////////////////////////#
 # TICKET 107 DEVELOPED BY SEBASTIAN MENDEZ -- START
@@ -19,8 +18,7 @@ class StockQuant(models.Model):
         #Pass the location_id by context:
         ctx = eval(action['context'])
         ctx.update({'location_id': self.location_id.id})
-        action['context'] = str(ctx)    
-        _logger.info('\n\n\n contexto en st.qnt: %s\n\n\n', str(self.env.context))         
+        action['context'] = str(ctx)          
 
         return action         
 #//////////////////////////////////////////////////////////////////////////////////////////////#
