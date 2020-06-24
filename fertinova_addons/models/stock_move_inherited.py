@@ -92,8 +92,7 @@ class StockMoveLine(models.Model):
                            digits=dp.get_precision('Product Unit of Measure'),
                            compute='_get_outputs')     
 
-    transfers = fields.Float(string='Transfers', 
-                             store=True,                             
+    transfers = fields.Float(string='Transfers',                                                          
                              digits=dp.get_precision('Product Unit of Measure'),
                              compute='_get_transfers') 
 
@@ -145,7 +144,7 @@ class StockMoveLine(models.Model):
         if not record.qty_done and not record.x_studio_valor:
           record.inputs = 0.0
         else:
-          #If value is equal or lesser than 0 "inputs" must be 0.0    
+          #If value is equal or lesser than 0 "inputs" must be 0.0:    
           if record.x_studio_valor > 0:
             record.inputs = record.qty_done  
           else:
@@ -156,23 +155,28 @@ class StockMoveLine(models.Model):
     def _get_outputs(self):
       '''This method computes the value of outputs'''
       for record in self:
-        #If value is equal or superior than 0 "inputs" must be 0.0    
+        #If value is equal or superior than 0 "inputs" must be 0.0:    
         if record.x_studio_valor >= 0:
           record.outputs = 0.0  
         else:
           record.outputs = record.qty_done
     
 
-    @api.depends('qty_done', 'x_studio_valor')
+    @api.depends('location_id', 'qty_done', 'x_studio_valor')
     def _get_transfers(self):
       '''This method computes the value of transfers'''
-      for record in self:
-        #If value is equal to 0 "tranfers" must be qty_done  
-        if record.x_studio_valor == 0.0000 or record.x_studio_valor == 0 or not record.x_studio_valor or record.x_studio_valor == None:            
-          record.transfers = record.qty_done
+      # Since 0.0, 0, None are evaluated as False      
+      for record in self: 
+        #If value is equal to 0 "tranfers" must be qty_done:         
+        if not record.x_studio_valor:                             
+          #Although it is important notice the conditional about the context brought from 'stock.quant'             
+          if self.env.context.get('location_id') == record.location_id.id:        
+            record.transfers = record.qty_done  * -1  
+          else:
+            record.transfers = record.qty_done                    
         else:
           record.transfers = 0.0
-
+                                  
 
     #@api.depends('product_id', 'operative_qty')
     #def _get_accumulated_qty(self):
@@ -201,7 +205,7 @@ class StockMoveLine(models.Model):
         if not record.qty_done:
           record.price_unit = 0.0
         else:
-          #price unit = value / quantity done                
+          #price unit = value / quantity done :               
           record.price_unit = record.x_studio_valor / record.qty_done      
       
     
