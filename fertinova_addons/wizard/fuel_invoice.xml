@@ -1,0 +1,26 @@
+<odoo>
+
+    <record model="ir.ui.view" id="wizard_fuel_form_views">
+        <field name="name">wizard.form</field>
+        <field name="model">fuel.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Impor fuel invoices">
+                <group>
+                    <field name="file_xls"/>
+                </group>
+                <footer>
+                    <button name="import_fuel_xls" type="object" string="Submit" class="oe_highlight"></button>
+                </footer>
+            </form>
+        </field>        
+    </record>
+
+    <act_window id="launch_fuel_wizard"
+                name="Import fuel invoice"
+                src_model="account.invoice"
+                res_model="fuel.wizard"
+                view_mode="form"
+                target="new"
+                key2="client_action_multi"/>
+
+</odoo>
