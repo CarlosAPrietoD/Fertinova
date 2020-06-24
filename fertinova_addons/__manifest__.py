@@ -25,7 +25,8 @@
         'views/stock_picking_inherited_view.xml',
 
         #Wizards:
-        'wizard/account_move_inherited_view.xml',        
+        'wizard/account_move_inherited_view.xml',
+        'wizard/fuel_invoice.xml',        
     ],
     # only loaded in demonstration mode
     'demo': [
