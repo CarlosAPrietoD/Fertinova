@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-17 20:55+0000\n"
-"PO-Revision-Date: 2020-06-17 20:55+0000\n"
+"POT-Creation-Date: 2020-06-25 18:09+0000\n"
+"PO-Revision-Date: 2020-06-25 18:09+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,12 +16,12 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: fertinova_addons
-#: code:addons/fertinova_addons/models/purchase_inherited.py:61
+#: code:addons/fertinova_addons/models/purchase_inherited.py:54
 #, python-format
 msgid "\n"
 "The purchase price of the product %s $%s is superior than sales price $%s\n"
 ""
-msgstr "\n" 
+msgstr "\n"
 "El precio de compra del producto %s $%s es superior que el precio de venta $%s\n"
 ""
 
@@ -31,10 +31,15 @@ msgid "Accept"
 msgstr "Aceptar"
 
 #. module: fertinova_addons
+#: model:ir.model,name:fertinova_addons.model_account_aged_receivable
+msgid "Aged Receivable"
+msgstr "Vencida por Cobrar"
+
+#. module: fertinova_addons
 #: model:ir.model.fields,field_description:fertinova_addons.field_analytic_acc_tag_wizard__analytic_account_id
-#: model:ir.model.fpurchase_priceields,field_description:fertinova_addons.field_stock_move__analytic_account_id
+#: model:ir.model.fields,field_description:fertinova_addons.field_stock_move__analytic_account_id
 msgid "Analytic Account"
-msgstr "Cuenta Analítica"
+msgstr "Cuenta analítica"
 
 #. module: fertinova_addons
 #: model:ir.model.fields,field_description:fertinova_addons.field_analytic_acc_tag_wizard__analytic_tag_id
@@ -55,42 +60,42 @@ msgstr "Cancelar"
 
 #. module: fertinova_addons
 #: model:ir.model.fields,field_description:fertinova_addons.field_analytic_acc_tag_wizard__create_uid
+#: model:ir.model.fields,field_description:fertinova_addons.field_fuel_wizard__create_uid
 msgid "Created by"
 msgstr "Creado por"
 
 #. module: fertinova_addons
 #: model:ir.model.fields,field_description:fertinova_addons.field_analytic_acc_tag_wizard__create_date
+#: model:ir.model.fields,field_description:fertinova_addons.field_fuel_wizard__create_date
 msgid "Created on"
 msgstr "Creado el"
 
 #. module: fertinova_addons
-#: model_terms:ir.ui.view,arch_db:fertinova_addons.report_invoice_inherit
-msgid "DEBO Y PAGARÉ A LA ORDEN DE GRANERO EL CASTILLO S.P.R. DE R.L. DE C.V. EN ESTA CIUDAD \n"
-"                    DE ATOTONILCO EL ALTO, JALISCO, MÉXICO O EN CUALQUIERA OTRA QUE SE REQUIERA EL PAGO. \n"
-"                    CON FECHA DE"
-msgstr "DEBO Y PAGARÉ A LA ORDEN DE GRANERO EL CASTILLO S.P.R. DE R.L. DE C.V. EN ESTA CIUDAD \n"
-"                    DE ATOTONILCO EL ALTO, JALISCO, MÉXICO O EN CUALQUIERA OTRA QUE SE REQUIERA EL PAGO. \n"
-"                    CON FECHA DE"
-
-#. module: fertinova_addons
 #: model:ir.model.fields,field_description:fertinova_addons.field_analytic_acc_tag_wizard__display_name
+#: model:ir.model.fields,field_description:fertinova_addons.field_fuel_wizard__display_name
 msgid "Display Name"
 msgstr "Nombre a mostrar"
 
 #. module: fertinova_addons
-#: model_terms:ir.ui.view,arch_db:fertinova_addons.report_invoice_inherit
-msgid "EL IMPORTE DE"
-msgstr "EL IMPORTE DE"
-
-#. module: fertinova_addons
-#: model_terms:ir.ui.view,arch_db:fertinova_addons.report_invoice_inherit
-msgid "FIRMA DE CONFORMIDAD"
-msgstr "FIRMA DE CONFORMIDAD"
+#: model:ir.model.fields,field_description:fertinova_addons.field_fuel_wizard__file_xls
+msgid "Excel File"
+msgstr "Archivo Excel"
 
 #. module: fertinova_addons
 #: model:ir.model.fields,field_description:fertinova_addons.field_analytic_acc_tag_wizard__id
+#: model:ir.model.fields,field_description:fertinova_addons.field_fuel_wizard__id
 msgid "ID"
 msgstr "ID"
+
+#. module: fertinova_addons
+#: model_terms:ir.ui.view,arch_db:fertinova_addons.wizard_fuel_form_views
+msgid "Impor fuel invoices"
+msgstr "Importar facturas de combustible"
+
+#. module: fertinova_addons
+#: model:ir.actions.act_window,name:fertinova_addons.launch_fuel_wizard
+msgid "Import fuel invoice"
+msgstr "Importar factura de combustible"
 
 #. module: fertinova_addons
 #: model:ir.model.fields,field_description:fertinova_addons.field_stock_move_line__inputs
@@ -98,17 +103,26 @@ msgid "Inputs"
 msgstr "Entradas"
 
 #. module: fertinova_addons
+#: code:addons/fertinova_addons/models/account_aged_receivable.py:19
+#, python-format
+msgid "Invoice Date"
+msgstr "Fecha de factura"
+
+#. module: fertinova_addons
 #: model:ir.model.fields,field_description:fertinova_addons.field_analytic_acc_tag_wizard____last_update
+#: model:ir.model.fields,field_description:fertinova_addons.field_fuel_wizard____last_update
 msgid "Last Modified on"
 msgstr "Última modificación en"
 
 #. module: fertinova_addons
 #: model:ir.model.fields,field_description:fertinova_addons.field_analytic_acc_tag_wizard__write_uid
+#: model:ir.model.fields,field_description:fertinova_addons.field_fuel_wizard__write_uid
 msgid "Last Updated by"
 msgstr "Última actualización por"
 
 #. module: fertinova_addons
 #: model:ir.model.fields,field_description:fertinova_addons.field_analytic_acc_tag_wizard__write_date
+#: model:ir.model.fields,field_description:fertinova_addons.field_fuel_wizard__write_date
 msgid "Last Updated on"
 msgstr "Última actualización el"
 
@@ -138,11 +152,6 @@ msgid "Product Template"
 msgstr "Plantilla de producto"
 
 #. module: fertinova_addons
-#: model:ir.model,name:fertinova_addons.model_purchase_order
-msgid "Purchase Order"
-msgstr "Pedido de compra"
-
-#. module: fertinova_addons
 #: model:ir.model,name:fertinova_addons.model_purchase_order_line
 msgid "Purchase Order Line"
 msgstr "Línea de pedido de compra"
@@ -160,8 +169,8 @@ msgstr "Cantidad a entregar"
 
 #. module: fertinova_addons
 #: model:ir.model.fields,field_description:fertinova_addons.field_purchase_order_line__qty_to_receive
-msgid "Quantity to purchase_pricereceive"
-msgstr "Cantidad a recibir"
+msgid "Quantity to receive"
+msgstr ""
 
 #. module: fertinova_addons
 #: model:ir.model,name:fertinova_addons.model_sale_order_line
@@ -174,6 +183,11 @@ msgid "Stock Move"
 msgstr "Movimiento de existencias"
 
 #. module: fertinova_addons
+#: model_terms:ir.ui.view,arch_db:fertinova_addons.wizard_fuel_form_views
+msgid "Submit"
+msgstr "Aceptar"
+
+#. module: fertinova_addons
 #: model_terms:ir.ui.view,arch_db:fertinova_addons.wizard_acc_tag_form_view
 msgid "This action will replace the existent values of analytic accounts and tags, where the new values will be stored. The Equity, Assets and Liabilities Accounts will be not affected"
 msgstr "Esta acción reemplazará los valores existentes de las cuentas y etiquetas analíticas, donde los nuevos valores serán lo que se almacenarán. Las cuentas de Capital, Activos y Pasivos no serán afectadas"
@@ -182,17 +196,6 @@ msgstr "Esta acción reemplazará los valores existentes de las cuentas y etique
 #: model:ir.model.fields,field_description:fertinova_addons.field_stock_move_line__transfers
 msgid "Transfers"
 msgstr "Transferencias"
-
-#. module: fertinova_addons
-#: model_terms:ir.ui.view,arch_db:fertinova_addons.report_invoice_inherit
-msgid "VALOR DE LA MERCANCIA O SERVICIO QUE SE HA RECIBIDO A MI ENTERA SATISFACCIÓN ESTE PAGARÉ \n"
-"                    ES MERCANTIL Y ESTA REGIDO POR LA LEY FEDERAL DE TÍTULOS Y OPERACIONES DE CRÉDITO EN SU \n"
-"                    ARTÍCULO 173 PARTE FINAL Y ARTÍCULOS CORRELATIVOS POR NO SER PAGARÉ DOMICILIADO. DE NO SER \n"
-"                    PAGADO A SU VENCIMENTO SE CAUSARA EL ___% MENSUAL DE INTERES MORATORIOS HASTA SU TOTAL LIQUIDACIÓN."
-msgstr "VALOR DE LA MERCANCIA O SERVICIO QUE SE HA RECIBIDO A MI ENTERA SATISFACCIÓN ESTE PAGARÉ \n"
-"                    ES MERCANTIL Y ESTA REGIDO POR LA LEY FEDERAL DE TÍTULOS Y OPERACIONES DE CRÉDITO EN SU \n"
-"                    ARTÍCULO 173 PARTE FINAL Y ARTÍCULOS CORRELATIVOS POR NO SER PAGARÉ DOMICILIADO. DE NO SER \n"
-"                    PAGADO A SU VENCIMENTO SE CAUSARA EL ___% MENSUAL DE INTERES MORATORIOS HASTA SU TOTAL LIQUIDACIÓN."
 
 #. module: fertinova_addons
 #: model_terms:ir.ui.view,arch_db:fertinova_addons.wizard_acc_tag_form_view
@@ -205,27 +208,7 @@ msgid "Wizard for adding analytic accounts and labels"
 msgstr "Wizard para agregar cuentas y etiquetas analíticas"
 
 #. module: fertinova_addons
-#: model_terms:ir.ui.view,arch_db:fertinova_addons.report_invoice_inherit
-msgid "_________________________"
-msgstr "_________________________"
+#: model:ir.model,name:fertinova_addons.model_fuel_wizard
+msgid "fuel.wizard"
+msgstr "fuel.wizard"
 
-#. module: fertinova_addons
-#: model:ir.model,name:fertinova_addons.model_account_aged_receivable
-msgid "Aged Receivable"
-msgstr "Vencida por Cobrar"
-
-#. module: fertinova_addons
-#: model:ir.model,name:fertinova_addons.model_account_followup_report
-msgid "Follow-up Report"
-msgstr "Reporte de Seguimiento"
-
-#. module: fertinova_addons
-#: code:addons/fertinova_addons/models/account_aged_receivable.py:20
-#, python-format
-msgid "Invoice Date"
-msgstr "Fecha de factura"
-
-#. module: fertinova_addons
-#: model:ir.model,name:fertinova_addons.model_stock_quant
-msgid "Quants"
-msgstr "Quants"
