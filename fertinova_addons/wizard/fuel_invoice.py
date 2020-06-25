@@ -2,10 +2,14 @@ from odoo import models, fields, api
 import xlrd
 import tempfile
 import binascii
+from datetime import date
 
 class FuelWizard(models.TransientModel):
     _name = "fuel.wizard"
 
+    #----------------------------------------------------------------------------
+    #--SC_FN.TA_TK-Interno 00100 Importar Plantilla de combustible en compras.---
+    #----------------------------------------------------------------------------
     file_xls=fields.Binary(string='Excel File')
 
     @api.multi
@@ -34,6 +38,7 @@ class FuelWizard(models.TransientModel):
                     if lines[0].decode("utf-8").find('DIESEL') >= 0:
                         data.append(lines)
         
+        #Search related fields
 
         partner=""
         if provider!="":
@@ -47,29 +52,49 @@ class FuelWizard(models.TransientModel):
 
         iva_16 = self.env['account.tax'].search([('name','=','IVA(16%) COMPRAS')]).id
 
+        if iva_16 == False:
+            iva_16=0
+
         iva_ex = self.env['account.tax'].search([('name','=','IVA(Exento) COMPRAS')]).id
+
+        if iva_ex == False:
+            iva_ex=0
 
         product = self.env['product.product'].search([('default_code','=','SERV007')]).id
 
-
+        #Create invoice
         vals = {
                 'type': 'in_invoice',
-                'partner_id' : partner.id
+                'partner_id' : partner.id,
             }
         record = self.env['account.invoice'].create(vals)
 
-
         for d in data:
+
+            #Create invoice lines
+            a_account = self.env['account.analytic.account'].search([('name','=',d[1].decode("utf-8"))]).id
+            
+            a_tag = self.env['account.analytic.tag'].search([('name','=',d[2].decode("utf-8"))]).id
+            
+            if a_tag == False:
+                a_tag=0
+            
             line_vals = {
                     'name': d[0].decode("utf-8"),
                     'quantity': d[3],
                     'price_unit' : d[4],
                     'uom_id': uom,
                     'account_id': account,
-                    'invoice_line_tax_ids': [(4,iva_16)]
+                    'account_analytic_id': a_account
                 }
 
             line = self.env['account.invoice.line'].create(line_vals)
+
+            if iva_16 != 0:
+                line.invoice_line_tax_ids=[(4,iva_16)]
+            
+            if a_tag != 0:
+                line.analytic_tag_ids=[(4,a_tag)]
             
             record.invoice_line_ids=[(4,line.id)]
 
@@ -80,19 +105,22 @@ class FuelWizard(models.TransientModel):
                     'price_unit' : d[12],
                     'uom_id': uom,
                     'account_id': account_ieps,
-                    'invoice_line_tax_ids': [(4,iva_ex)]
+                    'account_analytic_id': a_account,
                 }
-            
+
             line = self.env['account.invoice.line'].create(line_vals)
+
+            if iva_ex != 0:
+                line.invoice_line_tax_ids=[(4,iva_ex)]
+            
+            if a_tag != 0:
+                line.analytic_tag_ids=[(4,a_tag)]
 
             record.invoice_line_ids=[(4,line.id)]
 
+    #----------------------------------------------------------------------------
+    #---------------SC_FN.TA_TK-Interno 00100 Fin del desarrollo-----------------
+    #----------------------------------------------------------------------------
 
-        
-
-        #record.invoice_line_ids=[(4, record_line.id)]
-
-        '''for d in data:
-            self.env[]'''
             
                 
