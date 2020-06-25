@@ -12,7 +12,7 @@
                 <field name="operative_qty"/>
                 <field name="inputs"/>
                 <field name="outputs"/>
-                <field name="transfers"/>                
+                <field name="transfers" sum="Transfers"/>                
                 <field name="price_unit"/>   
             </field>
         </field>
