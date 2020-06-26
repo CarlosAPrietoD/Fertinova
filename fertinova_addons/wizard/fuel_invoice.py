@@ -24,6 +24,9 @@ class FuelWizard(models.TransientModel):
         
         #load the data in an array "data"
         provider=""
+        product1=""
+        product2=""
+        p_n=-1
         data=[]
         for row_no in range(sheet.nrows):
             if row_no <= 0:
@@ -33,6 +36,13 @@ class FuelWizard(models.TransientModel):
                 
                 if lines[1]==b'Proveedor':
                     provider=lines[2].decode("utf-8")
+                    p_n=row_no+1
+
+                if p_n == row_no:
+                    if lines[0] != "":
+                        product1 = lines[0].decode("utf-8")
+                    if lines[7] != "":
+                        product2 = lines[7].decode("utf-8")
                 
                 if lines[0]!='':
                     if lines[0].decode("utf-8").find('DIESEL') >= 0:
@@ -40,9 +50,17 @@ class FuelWizard(models.TransientModel):
         
         #Search related fields
 
-        partner=""
+        partner=0
         if provider!="":
-            partner = self.env['res.partner'].search([('name','=',provider)])
+            partner = self.env['res.partner'].search([('name','=',provider)]).id
+
+        product1_id=0
+        if product1!="":
+            product1_id = self.env['product.product'].search([('default_code','=',product1)]).id
+
+        product2_id=0
+        if product2!="":
+            product2_id = self.env['product.product'].search([('default_code','=',product2)]).id
         
         account = self.env['account.account'].search([('code','=','501.01.002')]).id
 
@@ -60,12 +78,10 @@ class FuelWizard(models.TransientModel):
         if iva_ex == False:
             iva_ex=0
 
-        product = self.env['product.product'].search([('default_code','=','SERV007')]).id
-
         #Create invoice
         vals = {
                 'type': 'in_invoice',
-                'partner_id' : partner.id,
+                'partner_id' : partner,
             }
         record = self.env['account.invoice'].create(vals)
 
@@ -80,6 +96,7 @@ class FuelWizard(models.TransientModel):
                 a_tag=0
             
             line_vals = {
+                    'product_id': product1_id,
                     'name': d[0].decode("utf-8"),
                     'quantity': d[3],
                     'price_unit' : d[4],
@@ -99,7 +116,7 @@ class FuelWizard(models.TransientModel):
             record.invoice_line_ids=[(4,line.id)]
 
             line_vals = {
-                    'product_id': product,
+                    'product_id': product2_id,
                     'name': d[7].decode("utf-8"),
                     'quantity': d[10],
                     'price_unit' : d[12],
