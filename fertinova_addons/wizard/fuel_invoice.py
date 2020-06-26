@@ -44,9 +44,9 @@ class FuelWizard(models.TransientModel):
         if provider!="":
             partner = self.env['res.partner'].search([('name','=',provider)])
         
-        account = self.env['account.account'].search([('name','=','COMBUSTIBLE')]).id
+        account = self.env['account.account'].search([('code','=','501.01.002')]).id
 
-        account_ieps = self.env['account.account'].search([('name','=','IEPS COMBUSTIBLE')]).id
+        account_ieps = self.env['account.account'].search([('code','=','501.01.010')]).id
 
         uom = self.env['uom.uom'].search([('name','=','Servicio(s)')]).id
 
@@ -117,6 +117,12 @@ class FuelWizard(models.TransientModel):
                 line.analytic_tag_ids=[(4,a_tag)]
 
             record.invoice_line_ids=[(4,line.id)]
+
+        taxes_grouped = record.get_taxes_values()
+        tax_lines = record.tax_line_ids.filtered('manual')
+        for tax in taxes_grouped.values():
+            tax_lines += tax_lines.new(tax)
+        record.tax_line_ids = tax_lines
 
     #----------------------------------------------------------------------------
     #---------------SC_FN.TA_TK-Interno 00100 Fin del desarrollo-----------------
