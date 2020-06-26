@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>  
+    <!--  TICKET 107  -  DEVELOPED BY SEBASTIAN MENDEZ  -  START   -->    
+    <!--Stock Quant Form Inherited where new fields were added-->
+    <record id="stock_quant_form_inherit" model="ir.ui.view">
+        <field name="name">stock.quant.form.inherit</field>
+        <field name="model">stock.quant</field>
+        <field name="inherit_id" ref="stock.view_stock_quant_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='reserved_quantity']" position="after">
+                <group>
+                    <label for="inputs" string="Inputs" modifiers="{}"/>
+                        <div class="o_row" modifiers="{}">            
+                            <field name="inputs" modifiers="{'invisible':false, 'readonly':true}"/>
+                        </div>
+                    <label for="outputs" string="Outputs" modifiers="{}"/>
+                        <div class="o_row" modifiers="{}">                                          
+                            <field name="outputs" modifiers="{'invisible':false,'readonly':true}"/>
+                        </div>                
+                    <label for="transfers" string="Transfers" modifiers="{}"/>
+                        <div class="o_row" modifiers="{}">                  
+                            <field name="transfers" modifiers="{'invisible':false,'readonly':true}"/>
+                        </div>
+                    </group>
+            </xpath>
+        </field>
+    </record> 
+    <!--  TICKET 107  -  DEVELOPED BY SEBASTIAN MENDEZ  -  END   -->        
+  </data>
+</odoo>  
