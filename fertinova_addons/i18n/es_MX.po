@@ -229,3 +229,24 @@ msgstr "Fecha de factura"
 #: model:ir.model,name:fertinova_addons.model_stock_quant
 msgid "Quants"
 msgstr "Quants"
+
+#. module: fertinova_addons
+#: model:ir.model.fields,field_description:fertinova_addons.field_stock_move_line__inputs
+#: model:ir.model.fields,field_description:fertinova_addons.field_stock_quant__inputs
+#: model_terms:ir.ui.view,arch_db:fertinova_addons.stock_quant_form_inherit
+msgid "Inputs"
+msgstr "Entradas"
+
+#. module: fertinova_addons
+#: model:ir.model.fields,field_description:fertinova_addons.field_stock_move_line__outputs
+#: model:ir.model.fields,field_description:fertinova_addons.field_stock_quant__outputs
+#: model_terms:ir.ui.view,arch_db:fertinova_addons.stock_quant_form_inherit
+msgid "Outputs"
+msgstr "Salidas"
+
+#. module: fertinova_addons
+#: model:ir.model.fields,field_description:fertinova_addons.field_stock_move_line__transfers
+#: model:ir.model.fields,field_description:fertinova_addons.field_stock_quant__transfers
+#: model_terms:ir.ui.view,arch_db:fertinova_addons.stock_quant_form_inherit
+msgid "Transfers"
+msgstr "Transferencias"
