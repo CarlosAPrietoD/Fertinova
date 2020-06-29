@@ -90,12 +90,12 @@ msgstr "ID"
 #. module: fertinova_addons
 #: model_terms:ir.ui.view,arch_db:fertinova_addons.wizard_fuel_form_views
 msgid "Impor fuel invoices"
-msgstr "Importar facturas de combustible"
+msgstr "Importar facturas de combustible/casetas"
 
 #. module: fertinova_addons
 #: model:ir.actions.act_window,name:fertinova_addons.launch_fuel_wizard
 msgid "Import fuel invoice"
-msgstr "Importar factura de combustible"
+msgstr "Importar factura de combustible/casetas"
 
 #. module: fertinova_addons
 #: model:ir.model.fields,field_description:fertinova_addons.field_stock_move_line__inputs
