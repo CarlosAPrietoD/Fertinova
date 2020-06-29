@@ -23,7 +23,6 @@
         'views/sale_inherited_view.xml',       
         'views/stock_move_inherited_view.xml',
         'views/stock_picking_inherited_view.xml',
-        'views/stock_quant_inherited_view.xml',
 
         #Wizards:
         'wizard/account_move_inherited_view.xml',        
