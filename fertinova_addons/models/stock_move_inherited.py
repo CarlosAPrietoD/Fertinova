@@ -94,7 +94,7 @@ class StockMoveLine(models.Model):
 
     transfers = fields.Float(string='Transfers',                                                          
                              digits=dp.get_precision('Product Unit of Measure'),
-                             compute='_get_transfers') 
+                             compute='_get_transfers')                              
 
     #accumulated_qty = fields.Float(string='Accumulated Quantity', 
     #                               digits=dp.get_precision('Product Unit of Measure'),
@@ -103,6 +103,11 @@ class StockMoveLine(models.Model):
     price_unit = fields.Float(string='Price Unit', 
                               digits=dp.get_precision('Product Unit of Measure'), 
                               compute='_get_price_unit') 
+
+    value = fields.Float(string='Value', 
+                           store=True,
+                           digits=dp.get_precision('Product Unit of Measure'),
+                           compute='_get_value')   
 
     #accumulated_ammount = fields.Float(string='Accumulated Ammount', 
     #                                   digits=dp.get_precision('Product Unit of Measure'),
@@ -206,8 +211,19 @@ class StockMoveLine(models.Model):
           record.price_unit = 0.0
         else:
           #price unit = value / quantity done :               
-          record.price_unit = record.x_studio_valor / record.qty_done      
-      
+          record.price_unit = record.x_studio_valor / record.qty_done   
+
+
+    @api.depends('move_id')
+    def _get_value(self):
+      '''This method computes the column value'''
+      for record in self:
+        #Avoiding zero division:  
+        if not record.move_id:
+          record.value = 0.0
+        else:
+          #price unit = value / quantity done :               
+          record.value = record.move_id.value       
     
     #@api.depends('x_studio_valor')
     #def _get_accumulated_ammount(self):

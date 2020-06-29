@@ -13,7 +13,8 @@
                 <field name="inputs"/>
                 <field name="outputs"/>
                 <field name="transfers"/>                
-                <field name="price_unit"/>   
+                <field name="price_unit"/>  
+                <field name="value"/>                  
             </field>
         </field>
     </record>     
