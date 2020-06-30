@@ -193,7 +193,7 @@ class FuelWizard(models.TransientModel):
             if product!="":
                 product_id = self.env['product.product'].search([('default_code','=',product)]).id
             
-            account = self.env['account.account'].search([('code','=','601.84.018')]).id
+            account = self.env['account.account'].search([('code','=','501.01.004')]).id
 
             #Create invoice
             vals = {
