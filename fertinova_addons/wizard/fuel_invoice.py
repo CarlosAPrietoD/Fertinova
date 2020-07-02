@@ -9,6 +9,7 @@ class FuelWizard(models.TransientModel):
 
     #----------------------------------------------------------------------------
     #--SC_FN.TA_TK-Interno 00100 Importar Plantilla de combustible en compras.---
+    #--SC_FN.TA_TK-Interno 00101 Importar Plantilla de casetas en contabilidad---
     #----------------------------------------------------------------------------
     file_xls=fields.Binary(string='Excel File')
 
