@@ -74,14 +74,9 @@ class FuelWizard(models.TransientModel):
 
             account_ieps = self.env['account.account'].search([('code','=','501.01.010')]).id
 
+            array_lines=[]
 
-            #Create invoice
-            vals = {
-                    'type': 'in_invoice',
-                    'partner_id' : partner,
-                }
-            record = self.env['account.invoice'].create(vals)
-
+            #lines for invoice
             for d in data:
 
                 uom = self.env['uom.uom'].search([('name','=',d[5].decode("utf-8"))]).id
@@ -96,7 +91,6 @@ class FuelWizard(models.TransientModel):
                 if iva_ex == False:
                     iva_ex=0
 
-                #Create invoice lines
                 a_account = self.env['account.analytic.account'].search([('name','=',d[1].decode("utf-8"))]).id
                 
                 a_tag = self.env['account.analytic.tag'].search([('name','=',d[2].decode("utf-8"))]).id
@@ -114,16 +108,14 @@ class FuelWizard(models.TransientModel):
                         'account_analytic_id': a_account
                     }
 
-                line = self.env['account.invoice.line'].create(line_vals)
-
                 if iva_16 != 0:
-                    line.invoice_line_tax_ids=[(4,iva_16)]
+                    line_vals['invoice_line_tax_ids']=[(4,iva_16)]
                 
                 if a_tag != 0:
-                    line.analytic_tag_ids=[(4,a_tag)]
-                
-                record.invoice_line_ids=[(4,line.id)]
+                    line_vals['analytic_tag_ids']=[(4,a_tag)]
 
+                array_lines.append((0,0,line_vals))
+                
                 line_vals = {
                         'product_id': product2_id,
                         'name': d[7].decode("utf-8"),
@@ -134,15 +126,22 @@ class FuelWizard(models.TransientModel):
                         'account_analytic_id': a_account,
                     }
 
-                line = self.env['account.invoice.line'].create(line_vals)
-
                 if iva_ex != 0:
-                    line.invoice_line_tax_ids=[(4,iva_ex)]
+                    line_vals['invoice_line_tax_ids']=[(4,iva_ex)]
                 
                 if a_tag != 0:
-                    line.analytic_tag_ids=[(4,a_tag)]
+                    line_vals['analytic_tag_ids']=[(4,a_tag)]
 
-                record.invoice_line_ids=[(4,line.id)]
+                array_lines.append((0,0,line_vals))
+
+
+            #Create invoice whit lines
+            vals = {
+                    'type': 'in_invoice',
+                    'partner_id' : partner,
+                    'invoice_line_ids' : array_lines
+                }
+            record = self.env['account.invoice'].create(vals)    
 
             taxes_grouped = record.get_taxes_values()
             tax_lines = record.tax_line_ids.filtered('manual')
@@ -195,13 +194,8 @@ class FuelWizard(models.TransientModel):
             
             account = self.env['account.account'].search([('code','=','501.01.004')]).id
 
-            #Create invoice
-            vals = {
-                    'type': 'in_invoice',
-                    'partner_id' : partner,
-                }
-            record = self.env['account.invoice'].create(vals)
-
+            array_lines=[]
+            #lines in data
             for d in data:
 
                 uom = self.env['uom.uom'].search([('name','=',d[5].decode("utf-8"))]).id
@@ -211,7 +205,6 @@ class FuelWizard(models.TransientModel):
                 if iva_16 == False:
                     iva_16=0
 
-                #Create invoice lines
                 a_account = self.env['account.analytic.account'].search([('name','=',d[1].decode("utf-8"))]).id
                 
                 a_tag = self.env['account.analytic.tag'].search([('name','=',d[2].decode("utf-8"))]).id
@@ -229,15 +222,21 @@ class FuelWizard(models.TransientModel):
                         'account_analytic_id': a_account
                     }
 
-                line = self.env['account.invoice.line'].create(line_vals)
-
                 if iva_16 != 0:
-                    line.invoice_line_tax_ids=[(4,iva_16)]
+                    line_vals['invoice_line_tax_ids']=[(4,iva_16)]
                 
                 if a_tag != 0:
-                    line.analytic_tag_ids=[(4,a_tag)]
+                    line_vals['analytic_tag_ids']=[(4,a_tag)]
                 
-                record.invoice_line_ids=[(4,line.id)]
+                array_lines.append((0,0,line_vals))
+            
+            #Create invoice
+            vals = {
+                    'type': 'in_invoice',
+                    'partner_id' : partner,
+                    'invoice_line_ids' : array_lines
+                }
+            record = self.env['account.invoice'].create(vals)
 
             taxes_grouped = record.get_taxes_values()
             tax_lines = record.tax_line_ids.filtered('manual')
