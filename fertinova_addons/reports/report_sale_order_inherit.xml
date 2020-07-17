@@ -1,9 +1,10 @@
+ 
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 <!-- Add of new payment terms -->
     <template id="report_sale_order_inherit" inherit_id="sale.report_saleorder_document">
         <xpath expr="//div[@class='page']" position="after">
-            <div class="container">
+            <div class="page">
                 <p style="page-break-after:always;"></p>
                 <h1>New Payment Terms</h1>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate, rerum? Incidunt ullam nam aliquid placeat! Ipsa quasi corporis in aperiam, doloremque necessitatibus, tenetur autem mollitia quis, perspiciatis aliquid maiores ex.</p>
