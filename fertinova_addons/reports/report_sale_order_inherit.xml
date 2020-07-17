@@ -5,7 +5,7 @@
         <xpath expr="//div[@class='page']" position="after">
             <div class="container">
                 <p style="page-break-after:always;"></p>
-                <h1>New Payment Terms</p>
+                <h1>New Payment Terms</h1>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate, rerum? Incidunt ullam nam aliquid placeat! Ipsa quasi corporis in aperiam, doloremque necessitatibus, tenetur autem mollitia quis, perspiciatis aliquid maiores ex.</p>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate, rerum? Incidunt ullam nam aliquid placeat! Ipsa quasi corporis in aperiam, doloremque necessitatibus, tenetur autem mollitia quis, perspiciatis aliquid maiores ex.</p>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate, rerum? Incidunt ullam nam aliquid placeat! Ipsa quasi corporis in aperiam, doloremque necessitatibus, tenetur autem mollitia quis, perspiciatis aliquid maiores ex.</p>
