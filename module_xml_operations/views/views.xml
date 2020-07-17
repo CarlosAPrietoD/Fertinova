@@ -1,0 +1,81 @@
+<odoo>
+  <data>
+
+    <record id="view_xml_operations_form" model="ir.ui.view">
+        <field name="name">XML Operations</field>
+        <field name="model">xml.operations</field>
+        <field name="arch" type="xml">
+          <form>
+              <group>
+                <field name="name" />
+                <field name="xml_file" />
+                <field name="check_ppd" />
+                <field name="check_payment" />
+              </group>                  
+              
+              <div class="oe_chatter">
+                <field name="message_follower_ids" widget="mail_followers"/>
+                <field name="activity_ids" widget="mail_activity"/>
+                <field name="message_ids" widget="mail_thread"/>
+              </div>                              
+          </form>     
+        </field>
+    </record> 
+
+    <!-- explicit list view definition -->
+    <!--
+    <record model="ir.ui.view" id="module_xml_operations.list">
+      <field name="name">module_xml_operations list</field>
+      <field name="model">module_xml_operations.module_xml_operations</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+    -->
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="module_xml_operations.action_window">
+      <field name="name">module_xml_operations</field>
+      <field name="res_model">xml.operations</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+  
+    <!-- server action to the one above -->
+    <!--
+    <record model="ir.actions.server" id="module_xml_operations.action_server">
+      <field name="name">module_xml_operations server</field>
+      <field name="model_id" ref="model_module_xml_operations_module_xml_operations"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": self._name,
+        }
+      </field>
+    </record>
+    -->
+
+    <!-- Top menu item -->
+    <menuitem name="module_xml_operations" id="module_xml_operations.menu_root" sequence="1"/>
+
+    <!-- menu categories -->
+    <!--
+    <menuitem name="Menu 1" id="module_xml_operations.menu_1" parent="module_xml_operations.menu_root"/>
+    <menuitem name="Menu 2" id="module_xml_operations.menu_2" parent="module_xml_operations.menu_root"/>
+    -->
+    <!-- actions -->
+    <!--
+    <menuitem name="List" id="module_xml_operations.menu_1_list" parent="module_xml_operations.menu_1"
+              action="module_xml_operations.action_window"/>
+    <menuitem name="Server to list" id="module_xml_operations" parent="module_xml_operations.menu_2"
+              action="module_xml_operations.action_server"/>
+    -->
+
+  </data>
+</odoo>
