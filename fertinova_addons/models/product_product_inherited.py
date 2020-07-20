@@ -24,26 +24,23 @@ class ProductProduct(models.Model):
     #::::::::::::::::::::::::::::::::::::
     # MODEL METHODS
     #::::::::::::::::::::::::::::::::::::
-    @api.depends('qty_at_date', 'stock_value')
+    @api.depends('id')
     def _get_inputs(self):
-      '''This method computes the value of inputs'''
+      """This method computes the value of inputs"""
       for record in self:
-        if not record.qty_at_date and not record.stock_value:
-          record.inputs = 0.0
-        else:
-          #If value is equal or lesser than 0 "inputs" must be 0.0:    
-          if record.stock_value > 0:
-            record.inputs = record.qty_at_date  
-          else:
-            record.inputs = 0.0
+        #Retrieval of inputs from model 'stock.move.line' matching with id->product_id:         
+        sql_query = """SELECT sum(inputs) FROM stock_move_line WHERE product_id = %s;"""
+        self.env.cr.execute(sql_query, (record.id,))
+        inputs_aux = self.env.cr.fetchone()
+        record.inputs = inputs_aux[0]
 
 
-    @api.depends('qty_at_date', 'stock_value')
+    @api.depends('id')
     def _get_outputs(self):
-      '''This method computes the value of outputs'''
+      """This method computes the value of inputs"""
       for record in self:
-        #If value is equal or superior than 0 "inputs" must be 0.0:    
-        if record.stock_value >= 0:
-          record.outputs = 0.0  
-        else:
-          record.outputs = record.qty_at_date
+        #Retrieval of outputs from model 'stock.move.line' matching with id->product_id:         
+        sql_query = """SELECT sum(outputs) FROM stock_move_line WHERE product_id = %s;"""
+        self.env.cr.execute(sql_query, (record.id,))
+        outputs_aux = self.env.cr.fetchone()
+        record.outputs = outputs_aux[0]
