@@ -24,7 +24,6 @@ class ProductProduct(models.Model):
     #::::::::::::::::::::::::::::::::::::
     # MODEL METHODS
     #::::::::::::::::::::::::::::::::::::
-    @api.depends('id')
     def _get_inputs(self):
       """This method computes the value of inputs"""
       for record in self:
@@ -35,7 +34,6 @@ class ProductProduct(models.Model):
         record.inputs = inputs_aux[0]
 
 
-    @api.depends('id')
     def _get_outputs(self):
       """This method computes the value of inputs"""
       for record in self:
