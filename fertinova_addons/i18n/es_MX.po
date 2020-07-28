@@ -99,6 +99,7 @@ msgstr "Importar factura de combustible/casetas"
 
 #. module: fertinova_addons
 #: model:ir.model.fields,field_description:fertinova_addons.field_stock_move_line__inputs
+#: model:ir.model.fields,field_description:fertinova_addons.field_product_product__inputs
 msgid "Inputs"
 msgstr "Entradas"
 
@@ -133,6 +134,7 @@ msgstr "Cantidad Operativa"
 
 #. module: fertinova_addons
 #: model:ir.model.fields,field_description:fertinova_addons.field_stock_move_line__outputs
+#: model:ir.model.fields,field_description:fertinova_addons.field_product_product__outputs
 msgid "Outputs"
 msgstr "Salidas"
 
@@ -211,4 +213,3 @@ msgstr "Wizard para agregar cuentas y etiquetas analíticas"
 #: model:ir.model,name:fertinova_addons.model_fuel_wizard
 msgid "fuel.wizard"
 msgstr "fuel.wizard"
-
