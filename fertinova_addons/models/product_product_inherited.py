@@ -62,7 +62,7 @@ class StockQuantityHistory(models.TransientModel):
           #Retrieve INputs summatory from model "stock.move.line"          
           sql_query = """SELECT sum(outputs) FROM stock_move_line WHERE product_id = %s;"""
           self.env.cr.execute(sql_query, (product,))
-          inputs_aux = self.env.cr.fetchone()                    
+          outputs_aux = self.env.cr.fetchone()                    
 
           #Modify recordset according to iterated product to set inputs and outputs:
           recordset_product = self.env['product.product'].browse(product) 
