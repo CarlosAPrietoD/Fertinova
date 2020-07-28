@@ -32,45 +32,34 @@ class StockQuantityHistory(models.TransientModel):
         all_products = self.env['product.product'].search([('type', '=', 'product')]) 
 
         for product in all_products.ids:
-          #Retrieve INputs summatory from model "stock.move.line" 
+          #Retrieve INputs % OUTputs summatory from model "stock.move.line" 
           # matching with id->product_id and a given date:         
-          sql_query = """SELECT sum(inputs) FROM stock_move_line WHERE product_id = %(prod)s AND date <= %(date)s;"""
+          sql_query = """SELECT sum(inputs), sum(outputs) FROM stock_move_line WHERE product_id = %(prod)s AND date <= %(date)s;"""
           self.env.cr.execute(sql_query, {'prod': product, 'date': date_ingress})
-          inputs_aux = self.env.cr.fetchone()  
-
-          #Retrieve OUTputs summatory from model "stock.move.line" 
-          # matching with id->product_id and a given date:         
-          sql_query = """SELECT sum(outputs) FROM stock_move_line WHERE product_id = %(prod)s AND date <= %(date)s;"""
-          self.env.cr.execute(sql_query, {'prod': product, 'date': date_ingress})
-          outputs_aux = self.env.cr.fetchone()                    
+          inputs_outputs = self.env.cr.fetchone()  
 
           #Modify recordset according to iterated product to set inputs and outputs:
           recordset_product = self.env['product.product'].browse(product) 
-          recordset_product.inputs  = inputs_aux[0]         
-          recordset_product.outputs = outputs_aux[0]
+          recordset_product.inputs  = inputs_outputs[0]         
+          recordset_product.outputs = inputs_outputs[1]
 
       else:          
         #Obtain all products from model "product.product":
         all_products = self.env['product.product'].search([('type', '=', 'product')]) 
 
         for product in all_products.ids:
-          #Retrieve INputs summatory from model "stock.move.line"          
-          sql_query = """SELECT sum(inputs) FROM stock_move_line WHERE product_id = %s;"""
+          #Retrieve INputs & OUTputs summatory from model "stock.move.line"          
+          sql_query = """SELECT sum(inputs), sum(outputs) FROM stock_move_line WHERE product_id = %s;"""
           self.env.cr.execute(sql_query, (product,))
-          inputs_aux = self.env.cr.fetchone()  
-
-          #Retrieve INputs summatory from model "stock.move.line"          
-          sql_query = """SELECT sum(outputs) FROM stock_move_line WHERE product_id = %s;"""
-          self.env.cr.execute(sql_query, (product,))
-          outputs_aux = self.env.cr.fetchone()                    
+          inputs_outputs = self.env.cr.fetchone()                     
 
           #Modify recordset according to iterated product to set inputs and outputs:
           recordset_product = self.env['product.product'].browse(product) 
-          recordset_product.inputs  = inputs_aux[0]         
-          recordset_product.outputs = outputs_aux[0]        
+          recordset_product.inputs  = inputs_outputs[0]         
+          recordset_product.outputs = inputs_outputs[1]        
 
       #Return modified view in method "open_table":
       return action 
 #//////////////////////////////////////////////////////////////////////////////////////////////#
 #   PRACTICE    DEVELOPED BY SEBASTIAN MENDEZ    --     END
-#//////////////////////////////////////////////////////////////////////////////////////////////#        
+#//////////////////////////////////////////////////////////////////////////////////////////////#  
