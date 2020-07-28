@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>  
+    <!--  PRACTICE -  DEVELOPED BY SEBASTIAN MENDEZ  -  START   -->    
+    <record id="view_form_maintenance_team_inherit" model="ir.ui.view">
+        <field name="name">maintenance.team.form.inherit</field>
+        <field name="model">maintenance.team</field>
+        <field name="inherit_id" ref="maintenance.maintenance_team_view_form"/>
+        <field name="arch" type="xml">
+            <field name="member_ids" position="before">
+                <field name="vehicle_selector" invisible="False"/>
+            </field>
+        </field>
+    </record> 
+    <!--  PRACTICE  -  DEVELOPED BY SEBASTIAN MENDEZ  -  END   -->        
+  </data>
+</odoo>  

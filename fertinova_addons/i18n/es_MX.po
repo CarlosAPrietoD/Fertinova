@@ -213,3 +213,8 @@ msgstr "Wizard para agregar cuentas y etiquetas analíticas"
 #: model:ir.model,name:fertinova_addons.model_fuel_wizard
 msgid "fuel.wizard"
 msgstr "fuel.wizard"
+
+#. module: fertinova_addons
+#: model:ir.model.fields,field_description:fertinova_addons.field_maintenance_team__vehicle_selector
+msgid "Vehicle Selector"
+msgstr "Vehículo"
