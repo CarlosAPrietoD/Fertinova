@@ -19,33 +19,55 @@ class ProductProduct(models.Model):
 class StockQuantityHistory(models.TransientModel):
     _inherit = 'stock.quantity.history'
 
-    def open_table(self):      
+    def open_table(self):  
+      #INHERITANCE of original method "open_table()": 
+      action = super(StockQuantityHistory, self).open_table()
+
       #Assign date input by user:
       date_ingress = self.date
 
-      #INHERITANCE of original method "open_table()": 
-      action = super(StockQuantityHistory, self).open_table()
-     
-      #Obtain all products from model "product.product":
-      all_products = self.env['product.product'].search([('type', '=', 'product')]) 
+      #Verify if radiobutton or option "compute_at_date" has been selected:
+      if self.compute_at_date:     
+        #Obtain all products from model "product.product":
+        all_products = self.env['product.product'].search([('type', '=', 'product')]) 
 
-      for product in all_products.ids:
-        #Retrieve INputs summatory from model "stock.move.line" 
-        # matching with id->product_id and a given date:         
-        sql_query = """SELECT sum(inputs) FROM stock_move_line WHERE product_id = %(prod)s AND date <= %(date)s;"""
-        self.env.cr.execute(sql_query, {'prod': product, 'date': date_ingress})
-        inputs_aux = self.env.cr.fetchone()  
+        for product in all_products.ids:
+          #Retrieve INputs summatory from model "stock.move.line" 
+          # matching with id->product_id and a given date:         
+          sql_query = """SELECT sum(inputs) FROM stock_move_line WHERE product_id = %(prod)s AND date <= %(date)s;"""
+          self.env.cr.execute(sql_query, {'prod': product, 'date': date_ingress})
+          inputs_aux = self.env.cr.fetchone()  
 
-        #Retrieve OUTputs summatory from model "stock.move.line" 
-        # matching with id->product_id and a given date:         
-        sql_query = """SELECT sum(outputs) FROM stock_move_line WHERE product_id = %(prod)s AND date <= %(date)s;"""
-        self.env.cr.execute(sql_query, {'prod': product, 'date': date_ingress})
-        outputs_aux = self.env.cr.fetchone()                    
+          #Retrieve OUTputs summatory from model "stock.move.line" 
+          # matching with id->product_id and a given date:         
+          sql_query = """SELECT sum(outputs) FROM stock_move_line WHERE product_id = %(prod)s AND date <= %(date)s;"""
+          self.env.cr.execute(sql_query, {'prod': product, 'date': date_ingress})
+          outputs_aux = self.env.cr.fetchone()                    
 
-        #Modify recordset according to iterated product to set inputs and outputs:
-        recordset_product = self.env['product.product'].browse(product) 
-        recordset_product.inputs  = inputs_aux[0]         
-        recordset_product.outputs = outputs_aux[0]
+          #Modify recordset according to iterated product to set inputs and outputs:
+          recordset_product = self.env['product.product'].browse(product) 
+          recordset_product.inputs  = inputs_aux[0]         
+          recordset_product.outputs = outputs_aux[0]
+
+      else:          
+        #Obtain all products from model "product.product":
+        all_products = self.env['product.product'].search([('type', '=', 'product')]) 
+
+        for product in all_products.ids:
+          #Retrieve INputs summatory from model "stock.move.line"          
+          sql_query = """SELECT sum(inputs) FROM stock_move_line WHERE product_id = %s;"""
+          self.env.cr.execute(sql_query, (product,))
+          inputs_aux = self.env.cr.fetchone()  
+
+          #Retrieve INputs summatory from model "stock.move.line"          
+          sql_query = """SELECT sum(outputs) FROM stock_move_line WHERE product_id = %s;"""
+          self.env.cr.execute(sql_query, (product,))
+          inputs_aux = self.env.cr.fetchone()                    
+
+          #Modify recordset according to iterated product to set inputs and outputs:
+          recordset_product = self.env['product.product'].browse(product) 
+          recordset_product.inputs  = inputs_aux[0]         
+          recordset_product.outputs = outputs_aux[0]        
 
       #Return modified view in method "open_table":
       return action 
