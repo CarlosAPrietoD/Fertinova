@@ -13,7 +13,7 @@
                 <field name="analytic_tag_id" attrs="{'readonly': [('state', 'not in', ('draft', 'assigned'))]}" widget="many2many_tags" />
             </xpath>
         </field>
-    </record> 
+    </record>        
     <!--  TICKET 108  -  DEVELOPED BY SEBASTIAN MENDEZ  -  END   -->        
   </data>
 </odoo>  

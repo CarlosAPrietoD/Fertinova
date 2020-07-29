@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>  
+    <!--  PRACTICE -  DEVELOPED BY SEBASTIAN MENDEZ  -  START   -->  
+    <!-- MAYBE THIS ONE SHALL NOT APPEAR-->  
+    <record id="view_form_maintenance_team_inherit" model="ir.ui.view">
+        <field name="name">maintenance.team.form.inherit</field>
+        <field name="model">maintenance.team</field>
+        <field name="inherit_id" ref="maintenance.maintenance_team_view_form"/>
+        <field name="arch" type="xml">
+            <field name="member_ids" position="before">
+                <field name="vehicle_selector" invisible="False"/>
+            </field>
+        </field>
+    </record> 
+    <!-- MAYBE THIS ONE SHALL NOT APPEAR-->      
+
+
+    <record id="view_form_equipment_form" model="ir.ui.view">
+        <field name="name">equipment.request.form.inherit</field>
+        <field name="model">maintenance.request</field>
+        <field name="inherit_id" ref="maintenance.hr_equipment_request_view_form"/>
+        <field name="arch" type="xml">
+            <field name="equipment_id" position="after">
+                <field name="vehicle" invisible="False"/>
+            </field>
+        </field>
+    </record> 
+
+
+    <record id="view_form_equipment" model="ir.ui.view">
+        <field name="name">equipment.equipment.form.inherit</field>
+        <field name="model">maintenance.equipment</field>
+        <field name="inherit_id" ref="maintenance.hr_equipment_view_form"/>
+        <field name="arch" type="xml">
+            <field name="owner_user_id" position="after">
+                <field name="vehicle" invisible="False"/>
+            </field>
+        </field>
+    </record>      
+    <!--  PRACTICE  -  DEVELOPED BY SEBASTIAN MENDEZ  -  END   -->        
+  </data>
+</odoo>  
