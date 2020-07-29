@@ -24,7 +24,7 @@ class MaintenanceRequest(models.Model):
     
     @api.onchange('equipment_id')
     def _onchange_equipment(self):
-        self.vehicle = self.env['maintenance.equipment'].search([('id', '=', self._origin.id)]).vehicle.id
+        self.vehicle = self.env['maintenance.equipment'].search([('id', '=', self.equipment_id.id)]).vehicle.id
 #//////////////////////////////////////////////////////////////////////////////////////////////#
 #   PRACTICE    DEVELOPED BY SEBASTIAN MENDEZ    --     END
 #//////////////////////////////////////////////////////////////////////////////////////////////#
