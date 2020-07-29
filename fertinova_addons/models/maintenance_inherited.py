@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import api, fields, models
  
- 
+
 #//////////////////////////////////////////////////////////////////////////////////////////////#
 #   PRACTICE    DEVELOPED BY SEBASTIAN MENDEZ    --     START
 #//////////////////////////////////////////////////////////////////////////////////////////////#
@@ -21,6 +21,10 @@ class MaintenanceRequest(models.Model):
     # MODEL FIELDS
     #:::::::::::::::::::::::::::::::::::::::
     vehicle = fields.Many2one('fleet.vehicle', required=True, store=True)         
+    
+    @api.onchange('equipment_id')
+    def _onchange_equipment(self):
+        self.vehicle = self.env['maintenance.equipment'].search([('id', '=', self._origin.id)]).vehicle.id
 #//////////////////////////////////////////////////////////////////////////////////////////////#
 #   PRACTICE    DEVELOPED BY SEBASTIAN MENDEZ    --     END
 #//////////////////////////////////////////////////////////////////////////////////////////////#
