@@ -2,7 +2,7 @@
 
 from . import account_aged_receivable
 from . import account_diot
-from . import maintenance_team_inherited
+from . import maintenance_inherited
 from . import product_product_inherited
 from . import product_template_inherited
 from . import purchase_inherited
