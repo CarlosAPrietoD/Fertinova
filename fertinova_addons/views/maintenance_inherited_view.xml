@@ -1,21 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
   <data>  
-    <!--  PRACTICE -  DEVELOPED BY SEBASTIAN MENDEZ  -  START   -->  
-    <!-- MAYBE THIS ONE SHALL NOT APPEAR-->  
-    <record id="view_form_maintenance_team_inherit" model="ir.ui.view">
-        <field name="name">maintenance.team.form.inherit</field>
-        <field name="model">maintenance.team</field>
-        <field name="inherit_id" ref="maintenance.maintenance_team_view_form"/>
-        <field name="arch" type="xml">
-            <field name="member_ids" position="before">
-                <field name="vehicle_selector" invisible="False"/>
-            </field>
-        </field>
-    </record> 
-    <!-- MAYBE THIS ONE SHALL NOT APPEAR-->      
-
-
+    <!--  PRACTICE -  DEVELOPED BY SEBASTIAN MENDEZ  -  START   -->      
     <record id="view_form_equipment_form" model="ir.ui.view">
         <field name="name">equipment.request.form.inherit</field>
         <field name="model">maintenance.request</field>
@@ -26,7 +12,6 @@
             </field>
         </field>
     </record> 
-
 
     <record id="view_form_equipment" model="ir.ui.view">
         <field name="name">equipment.equipment.form.inherit</field>

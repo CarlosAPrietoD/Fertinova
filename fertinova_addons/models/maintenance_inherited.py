@@ -5,18 +5,6 @@ from odoo import api, fields, models
 #//////////////////////////////////////////////////////////////////////////////////////////////#
 #   PRACTICE    DEVELOPED BY SEBASTIAN MENDEZ    --     START
 #//////////////////////////////////////////////////////////////////////////////////////////////#
-
-
-#IT'S POSSIBLE THIS ONE SHALL NOT APPEAR
-class MaintenanceTeam(models.Model):
-    _inherit = "maintenance.team"
-
-    #:::::::::::::::::::::::::::::::::::::::
-    # MODEL FIELDS
-    #:::::::::::::::::::::::::::::::::::::::
-    vehicle_selector = fields.Many2one('fleet.vehicle', required=True, store=True)
-
-
 class MaintenanceEquipment(models.Model):
     _inherit = "maintenance.equipment"
 
@@ -32,9 +20,7 @@ class MaintenanceRequest(models.Model):
     #:::::::::::::::::::::::::::::::::::::::
     # MODEL FIELDS
     #:::::::::::::::::::::::::::::::::::::::
-    vehicle = fields.Many2one('fleet.vehicle', required=True, store=True)    
-        
-
+    vehicle = fields.Many2one('fleet.vehicle', required=True, store=True)         
 #//////////////////////////////////////////////////////////////////////////////////////////////#
 #   PRACTICE    DEVELOPED BY SEBASTIAN MENDEZ    --     END
 #//////////////////////////////////////////////////////////////////////////////////////////////#
