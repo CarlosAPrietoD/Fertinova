@@ -13,8 +13,8 @@ class Quotations(models.Model):
     quotation_id       = fields.Integer(string='ID')
     name               = fields.Char(string='No. Cotización')
     client             = fields.Char(string='Cliente')
-    unique_quotation   = fields.Boolean(string='Tipo de Cotización')
-    contract_quotation = fields.Boolean(string='Tipo de Cotización')
+    unique_quotation   = fields.Boolean(string='Unico')
+    contract_quotation = fields.Boolean(string='Contrato')
     volume             = fields.Float(string='Volumen', digits=dp.get_precision('Product Unit of Measure'))
     quotation_lines    = fields.One2many('crm.quotations.lines', 'quotation_line_id', string="Líneas")
 
