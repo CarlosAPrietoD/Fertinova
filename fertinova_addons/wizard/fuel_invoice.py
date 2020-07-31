@@ -6,6 +6,7 @@ from datetime import date
 
 class FuelWizard(models.TransientModel):
     _name = "fuel.wizard"
+    _description = "fuel_wizard"
 
     #----------------------------------------------------------------------------
     #--SC_FN.TA_TK-Interno 00100 Importar Plantilla de combustible en compras.---

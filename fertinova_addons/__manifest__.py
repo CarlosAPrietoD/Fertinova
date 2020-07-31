@@ -11,7 +11,7 @@
     'category': 'Uncategorized',
     'version': '12.0.1.0.1',
     # any module necessary for this one to work correctly
-    'depends': ['purchase_stock', 'sale_management'],
+    'depends': ['purchase_stock', 'sale_management', 'crm'],
     # always loaded
     'data': [
         #Security Files:
@@ -22,6 +22,7 @@
         'views/product_product_inherited_view.xml',        
         'views/product_template_inherited_view.xml',
         'views/purchase_inherited_view.xml',
+        'views/quotations_views.xml',        
         'views/sale_inherited_view.xml',       
         'views/stock_move_inherited_view.xml',
         'views/stock_picking_inherited_view.xml',
