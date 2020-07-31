@@ -1,0 +1,52 @@
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    
+    <!--  PRACTICE MAQUETACIÓN  -  DEVELOPED BY SEBASTIAN MENDEZ  -  START   -->
+        <record id="crm_quotations_form" model="ir.ui.view">
+        <field name="name">quotations.form</field>
+        <field name="model">quotations</field>
+        <field name="arch" type="xml">
+            <form string="Cotizaciones">
+                <header>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="client"/>
+                        <field name="unique_quotation"/>
+                        <field name="contract_quotation"/>
+                        <field name="volumne"/>                                          
+                    </group>
+                    <notebook modifiers="{}">
+                        <page string="Líneas de Cotizaciones" modifiers="{}">
+                            <field name="quotation_lines"/>
+                        </page>     
+                    </notebook>               
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread" options="{'post_refresh': 'recipients'}"/>
+                </div>
+            </form>
+        </field>
+        </record>
+
+        <record id="quotations_view" model="ir.actions.act_window">
+            <field name="name">Cotizaciones</field>
+            <field name="res_model">quotations</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem
+            id="crm_menu_quotations"
+            name="Cotizaciones"
+            parent="crm_menu_root"
+            sequence="30"
+            action=""/>        
+    <!--  PRACTICE MAQUETACIÓN  -  DEVELOPED BY SEBASTIAN MENDEZ  -  END   -->
+  </data>
+</odoo> 
