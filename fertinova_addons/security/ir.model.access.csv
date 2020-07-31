@@ -1,3 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_fertinova_addons_fertinova_addons,fertinova_addons.fertinova_addons,model_fertinova_addons_fertinova_addons,,1,1,1,1
+access_crm_quotations,access_crm_quotations,model_crm_quotations,base.group_user,1,1,1,1
 access_crm_quotations_lines,access_crm_quotations_lines,model_crm_quotations_lines,base.group_user,1,1,1,1 
