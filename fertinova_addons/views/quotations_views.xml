@@ -1,3 +1,4 @@
+
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!--  PRACTICE MAQUETACIÓN  -  DEVELOPED BY SEBASTIAN MENDEZ  -  START   -->
@@ -14,7 +15,7 @@
                         <field name="client"/>
                         <field name="unique_quotation"/>
                         <field name="contract_quotation"/>
-                        <field name="volumne"/>                                          
+                        <field name="volume"/>                                          
                     </group>
                     <notebook modifiers="{}">
                         <page string="Líneas de Cotizaciones" modifiers="{}">
@@ -40,7 +41,7 @@
         <menuitem id="crm_menu_quotations"
             name="Cotizaciones"
             parent="crm.crm_menu_sales"
-            action="fertico-addons.crm_quotations_view"
+            action="crm_quotations_view"
             sequence="10"/>
 
     <!--  PRACTICE MAQUETACIÓN  -  DEVELOPED BY SEBASTIAN MENDEZ  -  END   -->

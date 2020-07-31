@@ -15,7 +15,7 @@
     # always loaded
     'data': [
         #Security Files:
-        #'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
         
         #Views:
         'views/maintenance_inherited_view.xml',
