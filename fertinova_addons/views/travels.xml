@@ -1,0 +1,79 @@
+<odoo>
+
+    <!--==============================Vistas de arbor y formulario para modelo de viajes=============================-->
+
+    <record id="travel_form_view" model="ir.ui.view">
+        <field name="name">fleet.travel.form</field>
+        <field name="model">fleet.travel</field>
+        <field name="arch" type="xml">
+            <form string="Travel">
+                <header>
+                    <button name="accordance_change" type="object" string="Conformidad"/>
+                    <button name="adjustment_change" type="object" string="Ajustes"/>
+                    <field name="state" widget="statusbar" statusbar_visible="asigned,route,discharged" />
+                </header>
+                <sheet>
+                    <header class="border-bottom-0">
+                        <field name="condition" widget="statusbar" statusbar_visible="accordance,adjustment,authorized"></field>
+                    </header>
+                    <group>
+                        <group>
+                            <field name="id" string="No. travel"></field>
+                            <field name="customer"></field>
+                            <field name="vehicle"></field>
+                            <field name="travel_tag"></field>
+                            <field name="route_tag"></field>
+                            <field name="driver_tag"></field>
+                            <field name="advance"></field>
+                        </group>
+                        <group>
+                            <field name="travel_init"></field>
+                            <field name="cargo_date"></field>
+                            <field name="cargo_qty"></field>
+                            <field name="unload_date"></field>
+                            <field name="unload_qty"></field>
+                            <field name="file_name" invisible="True"></field>
+                            <field name="accordance_payment" filename="file_name"></field>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_travel_view_tree" model="ir.ui.view">
+        <field name="name">fleet.travel.tree</field>
+        <field name="model">fleet.travel</field>
+        <field name="arch" type="xml">
+            <tree string="Fleet Travel">
+                <field name="customer"/>
+                <field name="vehicle"/>
+                <field name="travel_tag"/>
+                <field name="route_tag"/>
+                <field name="driver_tag"/>
+                <field name="travel_init"/>
+                <field name="condition"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="fleet_travel_form" model="ir.actions.act_window">
+        <field name="name">Travels</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">fleet.travel</field>
+        <field name="domain">[]</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+            Click to add a track value.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="travel_menu_action" name="Travels" action="fleet_travel_form" parent="fleet.fleet_vehicles" sequence="20" />
+
+    <!--==============================Vistas de arbor y formulario para modelo de viajes=============================-->
+
+</odoo>
