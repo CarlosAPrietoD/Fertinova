@@ -3,7 +3,7 @@
     'name': "transportes_alba_customs",
 
     'summary': """Module for Transportes de Alba in order to add new functionalities in its Logistics
-                  concernings Quotations and Trips Process""",
+                  concerning Quotations and Trips Process""",
 
     'description': """Module which looks for improving a new whole area in Logistics, adding 
                       effectual controls, views, validations, models for integrating CRM with
