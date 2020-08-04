@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_transportes_alba_customs_transportes_alba_customs,transportes_alba_customs.transportes_alba_customs,model_transportes_alba_customs_transportes_alba_customs,,1,0,0,0
