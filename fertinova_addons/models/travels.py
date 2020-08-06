@@ -32,6 +32,30 @@ class FleetTravel(models.Model):
         return travel
 
 
+    #==============metodo para cambiar el estado del viaje a asignado al llenar ciertos campos============== 
+    @api.multi
+    @api.onchange('vehicle','route_tag','driver_tag')
+    def _onchange_asigned(self):
+        if self.vehicle and self.route_tag and self.driver_tag:
+            self.state = 'asigned'
+
+    #==============metodo para cambiar el estado del viaje a en ruta al llenar ciertos campos==============
+    @api.multi
+    @api.onchange('cargo_date','cargo_qty')
+    def _onchange_in_route(self):
+        if self.cargo_date and self.cargo_qty:
+            self.state = 'route'
+        else:
+            self.state = 'asigned'
+
+    #==============metodo para cambiar el estado del viaje a descargado al llenar ciertos campos==============
+    @api.multi
+    @api.onchange('unload_date','unload_qty')
+    def _onchange_discharged(self):
+        if self.unload_date and self.unload_qty:
+            self.state = 'discharged'
+        else:
+            self.state = 'route'
 
 
     customer = fields.Many2one('res.partner', string="Customer", required=True)
