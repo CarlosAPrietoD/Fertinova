@@ -32,30 +32,20 @@ class FleetTravel(models.Model):
         return travel
 
 
-    #==============metodo para cambiar el estado del viaje a asignado al llenar ciertos campos============== 
+    #==============metodo para cambiar el estado del viaje al llenar ciertos campos============== 
     @api.multi
-    @api.onchange('vehicle','route_tag','driver_tag')
-    def _onchange_asigned(self):
+    @api.onchange('vehicle','route_tag','driver_tag','cargo_date','cargo_qty','unload_date','unload_qty')
+    def _onchange_state(self):
         if self.vehicle and self.route_tag and self.driver_tag:
-            self.state = 'asigned'
-
-    #==============metodo para cambiar el estado del viaje a en ruta al llenar ciertos campos==============
-    @api.multi
-    @api.onchange('cargo_date','cargo_qty')
-    def _onchange_in_route(self):
-        if self.cargo_date and self.cargo_qty:
-            self.state = 'route'
-        else:
-            self.state = 'asigned'
-
-    #==============metodo para cambiar el estado del viaje a descargado al llenar ciertos campos==============
-    @api.multi
-    @api.onchange('unload_date','unload_qty')
-    def _onchange_discharged(self):
-        if self.unload_date and self.unload_qty:
+            if not self.cargo_date or not self.cargo_qty or not self.unload_date or not self.unload_qty:
+                self.state = 'asigned'
+        if self.vehicle and self.route_tag and self.driver_tag and self.cargo_date and self.cargo_qty:
+            if not self.unload_date or not self.unload_qty:
+                self.state = 'route'
+        if self.vehicle and self.route_tag and self.driver_tag and self.cargo_date and self.cargo_qty and self.unload_date and self.unload_qty:
             self.state = 'discharged'
-        else:
-            self.state = 'route'
+        
+
 
 
     customer = fields.Many2one('res.partner', string="Customer", required=True)
@@ -71,5 +61,5 @@ class FleetTravel(models.Model):
     unload_qty = fields.Float(string="Unload quantity")
     accordance_payment = fields.Binary(string="Accordance Payment")
     file_name = fields.Char()
-    condition = fields.Selection([('accordance', 'Conformidad'), ('adjustment', 'Ajustes'), ('authorized', 'Autorizado')], string="Condition unload")
+    condition = fields.Selection([('accordance', 'Conformidad'), ('adjustment', 'Ajustes'), ('authorized', 'Autorizado')])
     state = fields.Selection([('asigned', 'Asignado'), ('route', 'Ruta'),('discharged','Descargado')])
