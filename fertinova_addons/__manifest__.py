@@ -23,6 +23,7 @@
         'views/sale_inherited_view.xml',       
         'views/stock_move_inherited_view.xml',
         'views/stock_picking_inherited_view.xml',
+        'views/account_move.xml',
 
         #Wizards:
         'wizard/account_move_inherited_view.xml',
