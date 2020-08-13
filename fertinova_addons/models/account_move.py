@@ -124,6 +124,7 @@ class AccountMoveLine(models.Model):
             self.analytic_account_id = False
             self.analytic_tag_ids = False
 
+
     
     @api.multi
     @api.onchange('sale')
