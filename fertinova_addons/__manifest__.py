@@ -16,6 +16,7 @@
     'data': [
         #Security Files:
         #'security/ir.model.access.csv',
+        'security/account_security.xml',
         
         #Views:
         'views/product_template_inherited_view.xml',
@@ -27,7 +28,7 @@
 
         #Wizards:
         'wizard/account_move_inherited_view.xml',
-        'wizard/fuel_invoice.xml',        
+        'wizard/fuel_invoice.xml',      
     ],
     # only loaded in demonstration mode
     'demo': [

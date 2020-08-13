@@ -8,19 +8,16 @@
             <field name="model">account.move</field>
             <field name="inherit_id" ref="account.view_move_form"/>
             <field name="arch" type="xml">
-                <!--<xpath expr="//field[@name='journal_id']" position="after">
-                    <field name="prov"/>
-                </xpath>-->
                 <xpath expr="//button" position="after">
                     <button name="duplicate_account" type="object" string="Duplicate Inverse" class="oe_highlight"/>
                 </xpath>
                 <xpath expr="//tree/field[@name='account_id']" position="before">
-                    <field name="purchase"/>
-                    <field name="po_status"/>
-                    <field name="po_date"/>
-                    <field name="sale"/>
-                    <field name="so_status"/>
-                    <field name="so_date"/>
+                    <field name="purchase" groups="fertinova_addons.group_view_provisional"/>
+                    <field name="po_status" groups="fertinova_addons.group_view_provisional"/>
+                    <field name="po_date" groups="fertinova_addons.group_view_provisional"/>
+                    <field name="sale" groups="fertinova_addons.group_view_provisional"/>
+                    <field name="so_status" groups="fertinova_addons.group_view_provisional"/>
+                    <field name="so_date" groups="fertinova_addons.group_view_provisional"/>
                 </xpath>
             </field>
         </record>
