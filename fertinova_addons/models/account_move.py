@@ -83,6 +83,7 @@ class AccountMoveLine(models.Model):
             ('cancel', 'Cancelled'),
         ],string="SO invoice status")
     so_date = fields.Date(string="SO invoice date")
+    prov = fields.Boolean(related='move_id.prov')
 
     @api.multi
     @api.onchange('purchase')
