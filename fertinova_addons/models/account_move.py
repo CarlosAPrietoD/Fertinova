@@ -90,13 +90,23 @@ class AccountMoveLine(models.Model):
     def get_account_po(self):
         if self.purchase:
             if self.purchase.invoice_ids:
-                self.account_id = self.purchase.invoice_ids[0].invoice_line_ids[0].account_id
                 self.po_status = self.purchase.invoice_ids[0].state
                 self.po_date = self.purchase.invoice_ids[0].date_invoice
                 self.credit = self.purchase.invoice_ids[0].amount_total
                 self.partner_id = self.purchase.invoice_ids[0].partner_id
-                self.analytic_account_id = self.purchase.invoice_ids[0].invoice_line_ids[0].account_analytic_id
-                self.analytic_tag_ids = self.purchase.invoice_ids[0].invoice_line_ids[0].analytic_tag_ids
+                n_account=-1
+                if self.purchase.invoice_ids[0].invoice_line_ids:
+                    n_line=-1
+                    for line in self.purchase.invoice_ids[0].invoice_line_ids:
+                        n_line+=1
+                        if line.account_id:
+                            code = line.account_id.code
+                            if code[0] == '2':
+                                n_account=n_line
+                if n_account != -1:
+                    self.account_id = self.purchase.invoice_ids[0].invoice_line_ids[0].account_id
+                    self.analytic_account_id = self.purchase.invoice_ids[0].invoice_line_ids[0].account_analytic_id
+                    self.analytic_tag_ids = self.purchase.invoice_ids[0].invoice_line_ids[0].analytic_tag_ids
             else:
                 self.account_id = False
                 self.po_status = False
@@ -120,13 +130,23 @@ class AccountMoveLine(models.Model):
     def get_account_so(self):
         if self.sale:
             if self.sale.invoice_ids:
-                self.account_id = self.sale.invoice_ids[0].invoice_line_ids[0].account_id
                 self.so_status = self.sale.invoice_ids[0].state
                 self.so_date = self.sale.invoice_ids[0].date_invoice
                 self.debit = self.sale.invoice_ids[0].amount_total
                 self.partner_id = self.sale.invoice_ids[0].partner_id
-                self.analytic_account_id = self.sale.invoice_ids[0].invoice_line_ids[0].account_analytic_id
-                self.analytic_tag_ids = self.sale.invoice_ids[0].invoice_line_ids[0].analytic_tag_ids
+                n_account=-1
+                if self.sale.invoice_ids[0].invoice_line_ids:
+                    n_line=-1
+                    for line in self.sale.invoice_ids[0].invoice_line_ids:
+                        n_line+=1
+                        if line.account_id:
+                            code = line.account_id.code
+                            if code[0] == '4':
+                                n_account=n_line
+                if n_account != -1:
+                    self.account_id = self.sale.invoice_ids[0].invoice_line_ids[n_account].account_id
+                    self.analytic_account_id = self.sale.invoice_ids[0].invoice_line_ids[n_account].account_analytic_id
+                    self.analytic_tag_ids = self.sale.invoice_ids[0].invoice_line_ids[n_account].analytic_tag_ids
             else:
                 self.account_id = False
                 self.so_status = False
