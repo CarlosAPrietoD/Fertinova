@@ -107,6 +107,8 @@ class AccountMoveLine(models.Model):
         if self.purchase:
             if self.purchase.invoice_ids:
                 self.po_date = self.purchase.invoice_ids[0].date_invoice
+            else:
+                self.po_date = False
             self.po_status = self.purchase.invoice_status
             self.debit = self.purchase.amount_total
             self.partner_id = self.purchase.partner_id
@@ -139,6 +141,8 @@ class AccountMoveLine(models.Model):
         if self.sale:
             if self.sale.invoice_ids:
                 self.so_date = self.sale.invoice_ids[0].date_invoice
+            else:
+                self.so_date = False
             self.so_status = self.sale.invoice_status
             self.credit = self.sale.amount_total
             self.partner_id = self.sale.partner_id
