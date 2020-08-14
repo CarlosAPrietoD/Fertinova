@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-25 18:09+0000\n"
-"PO-Revision-Date: 2020-06-25 18:09+0000\n"
+"POT-Creation-Date: 2020-08-14 18:00+0000\n"
+"PO-Revision-Date: 2020-08-14 18:00+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -71,10 +71,20 @@ msgid "Created on"
 msgstr "Creado el"
 
 #. module: fertinova_addons
+#: model:ir.model,name:fertinova_addons.model_l10n_mx_account_diot
+msgid "DIOT"
+msgstr ""
+
+#. module: fertinova_addons
 #: model:ir.model.fields,field_description:fertinova_addons.field_analytic_acc_tag_wizard__display_name
 #: model:ir.model.fields,field_description:fertinova_addons.field_fuel_wizard__display_name
 msgid "Display Name"
-msgstr "Nombre a mostrar"
+msgstr "Nombre mostrado"
+
+#. module: fertinova_addons
+#: model_terms:ir.ui.view,arch_db:fertinova_addons.account_move_check
+msgid "Duplicate Inverse"
+msgstr "Duplicar inverso"
 
 #. module: fertinova_addons
 #: model:ir.model.fields,field_description:fertinova_addons.field_fuel_wizard__file_xls
@@ -85,7 +95,7 @@ msgstr "Archivo Excel"
 #: model:ir.model.fields,field_description:fertinova_addons.field_analytic_acc_tag_wizard__id
 #: model:ir.model.fields,field_description:fertinova_addons.field_fuel_wizard__id
 msgid "ID"
-msgstr "ID"
+msgstr ""
 
 #. module: fertinova_addons
 #: model_terms:ir.ui.view,arch_db:fertinova_addons.wizard_fuel_form_views
@@ -109,6 +119,16 @@ msgid "Invoice Date"
 msgstr "Fecha de factura"
 
 #. module: fertinova_addons
+#: model:ir.model,name:fertinova_addons.model_account_move
+msgid "Journal Entries"
+msgstr "Asientos contables"
+
+#. module: fertinova_addons
+#: model:ir.model,name:fertinova_addons.model_account_move_line
+msgid "Journal Item"
+msgstr "Apunte contable"
+
+#. module: fertinova_addons
 #: model:ir.model.fields,field_description:fertinova_addons.field_analytic_acc_tag_wizard____last_update
 #: model:ir.model.fields,field_description:fertinova_addons.field_fuel_wizard____last_update
 msgid "Last Modified on"
@@ -127,6 +147,18 @@ msgid "Last Updated on"
 msgstr "Última actualización el"
 
 #. module: fertinova_addons
+#: selection:account.move.line,po_status:0
+#: selection:account.move.line,so_status:0
+msgid "No Bill to Receive"
+msgstr "Totalmente facturado"
+
+#. module: fertinova_addons
+#: selection:account.move.line,po_status:0
+#: selection:account.move.line,so_status:0
+msgid "Nothing to Bill"
+msgstr "Nada para facturar"
+
+#. module: fertinova_addons
 #: model:ir.model.fields,field_description:fertinova_addons.field_stock_move_line__operative_qty
 msgid "Operative Quantity"
 msgstr "Cantidad Operativa"
@@ -135,6 +167,16 @@ msgstr "Cantidad Operativa"
 #: model:ir.model.fields,field_description:fertinova_addons.field_stock_move_line__outputs
 msgid "Outputs"
 msgstr "Salidas"
+
+#. module: fertinova_addons
+#: model:ir.model.fields,field_description:fertinova_addons.field_account_move_line__po_date
+msgid "PO invoice date"
+msgstr "Fecha de factura PO"
+
+#. module: fertinova_addons
+#: model:ir.model.fields,field_description:fertinova_addons.field_account_move_line__po_status
+msgid "PO invoice status"
+msgstr "Estado de facturacion PO"
 
 #. module: fertinova_addons
 #: model:ir.model.fields,field_description:fertinova_addons.field_stock_move_line__price_unit
@@ -150,6 +192,17 @@ msgstr "Movimientos de Producto (Stock Move Line)"
 #: model:ir.model,name:fertinova_addons.model_product_template
 msgid "Product Template"
 msgstr "Plantilla de producto"
+
+#. module: fertinova_addons
+#: model:ir.model.fields,field_description:fertinova_addons.field_account_move__prov
+#: model:ir.model.fields,field_description:fertinova_addons.field_account_move_line__prov
+msgid "Provisional"
+msgstr ""
+
+#. module: fertinova_addons
+#: model:ir.model.fields,field_description:fertinova_addons.field_account_move_line__purchase
+msgid "Purchase Order"
+msgstr "Pedido de compra"
 
 #. module: fertinova_addons
 #: model:ir.model,name:fertinova_addons.model_purchase_order_line
@@ -171,6 +224,26 @@ msgstr "Cantidad a entregar"
 #: model:ir.model.fields,field_description:fertinova_addons.field_purchase_order_line__qty_to_receive
 msgid "Quantity to receive"
 msgstr ""
+
+#. module: fertinova_addons
+#: model:ir.model,name:fertinova_addons.model_stock_quant
+msgid "Quants"
+msgstr ""
+
+#. module: fertinova_addons
+#: model:ir.model.fields,field_description:fertinova_addons.field_account_move_line__so_date
+msgid "SO invoice date"
+msgstr "Fecha de factura SO"
+
+#. module: fertinova_addons
+#: model:ir.model.fields,field_description:fertinova_addons.field_account_move_line__so_status
+msgid "SO invoice status"
+msgstr "Estado de facturacion SO"
+
+#. module: fertinova_addons
+#: model:ir.model.fields,field_description:fertinova_addons.field_account_move_line__sale
+msgid "Sale Order"
+msgstr "Pedido de venta"
 
 #. module: fertinova_addons
 #: model:ir.model,name:fertinova_addons.model_sale_order_line
@@ -198,6 +271,22 @@ msgid "Transfers"
 msgstr "Transferencias"
 
 #. module: fertinova_addons
+#: selection:account.move.line,so_status:0
+msgid "Upselling Opportunity"
+msgstr "Oportunidad de Upselling"
+
+#. module: fertinova_addons
+#: model:res.groups,name:fertinova_addons.group_view_provisional
+msgid "View provisional account"
+msgstr ""
+
+#. module: fertinova_addons
+#: selection:account.move.line,po_status:0
+#: selection:account.move.line,so_status:0
+msgid "Waiting Bills"
+msgstr "Para facturar"
+
+#. module: fertinova_addons
 #: model_terms:ir.ui.view,arch_db:fertinova_addons.wizard_acc_tag_form_view
 msgid "Warning:"
 msgstr "Advertencia"
@@ -208,7 +297,11 @@ msgid "Wizard for adding analytic accounts and labels"
 msgstr "Wizard para agregar cuentas y etiquetas analíticas"
 
 #. module: fertinova_addons
+#: model:ir.model,name:fertinova_addons.model_fleet_travel
+msgid "fleet.travel"
+msgstr ""
+
+#. module: fertinova_addons
 #: model:ir.model,name:fertinova_addons.model_fuel_wizard
 msgid "fuel.wizard"
-msgstr "fuel.wizard"
-
+msgstr ""
