@@ -23,6 +23,7 @@ class AccountMove(models.Model):
                         'po_date' : date_inv,
                         'account_id' : line.account_id.id,
                         'credit' : line.debit,
+                        'debit' : line.credit,
                         'partner_id' : line.partner_id.id,
                         'analytic_account_id' : line.analytic_account_id.id,
                         'analytic_tag_ids' : tag_lines
@@ -43,6 +44,7 @@ class AccountMove(models.Model):
                         'so_date' : date_inv,
                         'account_id' : line.account_id.id,
                         'debit' : line.credit,
+                        'credit' : line.debit,
                         'partner_id' : line.partner_id.id,
                         'analytic_account_id' : line.analytic_account_id.id,
                         'analytic_tag_ids' : tag_lines
@@ -128,6 +130,7 @@ class AccountMoveLine(models.Model):
             self.account_id = False
             self.po_status = False
             self.po_date = False
+            self.debit = False
             self.credit = False
             self.partner_id = False
             self.analytic_account_id = False
@@ -162,6 +165,7 @@ class AccountMoveLine(models.Model):
             self.so_status = False
             self.so_date = False
             self.debit = False
+            self.credit = False
             self.partner_id = False
             self.analytic_account_id = False
             self.analytic_tag_ids = False
