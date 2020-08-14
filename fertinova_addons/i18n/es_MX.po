@@ -278,13 +278,13 @@ msgstr "Oportunidad de Upselling"
 #. module: fertinova_addons
 #: model:res.groups,name:fertinova_addons.group_view_provisional
 msgid "View provisional account"
-msgstr ""
+msgstr "Ver contabilidad provisional"
 
 #. module: fertinova_addons
 #: selection:account.move.line,po_status:0
 #: selection:account.move.line,so_status:0
 msgid "Waiting Bills"
-msgstr "Para facturar"
+msgstr "A facturar"
 
 #. module: fertinova_addons
 #: model_terms:ir.ui.view,arch_db:fertinova_addons.wizard_acc_tag_form_view
