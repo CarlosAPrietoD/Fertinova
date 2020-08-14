@@ -10,7 +10,7 @@ class AccountMove(models.Model):
         array_lines = []
 
         for line in self.line_ids:
-            if line.purchase and line.po_status:
+            if line.purchase:
                 tag_lines = []
                 for tag in line.analytic_tag_ids:
                     tag_lines.append((4,tag.id))
@@ -30,7 +30,7 @@ class AccountMove(models.Model):
 
                 array_lines.append((0,0,line_vals))
             
-            if line.sale and line.so_status:
+            elif line.sale:
                 tag_lines = []
                 for tag in line.analytic_tag_ids:
                     tag_lines.append((4,tag.id))
@@ -43,6 +43,21 @@ class AccountMove(models.Model):
                         'so_date' : date_inv,
                         'account_id' : line.account_id.id,
                         'debit' : line.credit,
+                        'partner_id' : line.partner_id.id,
+                        'analytic_account_id' : line.analytic_account_id.id,
+                        'analytic_tag_ids' : tag_lines
+                        }
+
+                array_lines.append((0,0,line_vals))
+            else:
+                tag_lines = []
+                for tag in line.analytic_tag_ids:
+                    tag_lines.append((4,tag.id))
+                
+                line_vals = {
+                        'account_id' : line.account_id.id,
+                        'debit' : line.credit,
+                        'credit' : line.debit,
                         'partner_id' : line.partner_id.id,
                         'analytic_account_id' : line.analytic_account_id.id,
                         'analytic_tag_ids' : tag_lines
