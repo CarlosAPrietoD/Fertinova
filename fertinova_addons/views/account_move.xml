@@ -9,7 +9,21 @@
             <field name="inherit_id" ref="account.view_move_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//button" position="after">
-                    <button name="duplicate_account" type="object" string="Duplicate Inverse" class="oe_highlight"/>
+                    <button name="duplicate_account" type="object" string="Duplicate Inverse" class="oe_highlight" groups="fertinova_addons.group_view_provisional"/>
+                    <button name="update_move" type="object" string="Update" class="oe_highlight" groups="fertinova_addons.group_view_provisional"/>
+                </xpath>
+                <xpath expr="//field[@name='ref']" position="after">
+                    <field name="parent_id"/>
+                </xpath>
+                <xpath expr="//page" position="after">
+                    <page name="moves" string="Related moves">
+                        <field name="inverse_ids">
+                            <tree string="Related moves">
+                                <field name="id" class="text-left"/>
+                                <field name="ref"/>
+                            </tree>
+                        </field>
+                    </page>
                 </xpath>
                 <xpath expr="//tree/field[@name='account_id']" position="before">
                     <field name="purchase" groups="fertinova_addons.group_view_provisional"/>
