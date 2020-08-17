@@ -4,6 +4,8 @@ class AccountMove(models.Model):
     _inherit = 'account.move'
 
     prov = fields.Boolean(string="Provisional")
+    parent_id = fields.Many2one('account.move', string="Parent")
+    inverse_ids = fields.One2many('account.move', 'parent_id')
 
     def duplicate_account(self, context=None):
         
@@ -70,7 +72,8 @@ class AccountMove(models.Model):
         vals = {
                 'ref': self.ref,
                 'journal_id' : self.journal_id.id,
-                'line_ids' : array_lines
+                'line_ids' : array_lines,
+                'parent_id': self.id
                 }
         new_move = self.env['account.move'].create(vals)
 
@@ -82,6 +85,18 @@ class AccountMove(models.Model):
                 'type' : 'ir.actions.act_window',
                 'target' : 'current',
                 }
+
+    def update_move(self):
+        for line in self.line_ids:
+            if line.purchase:
+                line.po_status = line.purchase.invoice_status
+                if line.purchase.invoice_ids:
+                    line.po_date = line.purchase.invoice_ids[0].date_invoice
+            elif line.sale:
+                line.so_status = line.sale.invoice_status
+                if line.sale.invoice_ids:
+                    line.so_date = line.sale.invoice_ids[0].date_invoice
+
 
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
@@ -158,7 +173,6 @@ class AccountMoveLine(models.Model):
                         n_account=n_line
             if n_account != -1:
                 self.account_id = self.sale.order_line[n_account].product_id.categ_id.property_account_income_categ_id
-                #self.analytic_account_id = self.sale.order_line[n_account].account_analytic_id
                 self.analytic_tag_ids = self.sale.order_line[n_account].analytic_tag_ids
         else:
             self.account_id = False
