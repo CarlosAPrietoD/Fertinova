@@ -9,7 +9,7 @@
         <field name="inherit_id" ref="account.view_account_payment_form" />
         <field name="arch" type="xml">
             <xpath expr="//button[@name='post']" position="attributes">
-                <attribute name="groups">group_tesoreria</attribute>
+                <attribute name="groups">fertinova_addons.group_tesoreria</attribute>
             </xpath>       
         </field>
     </record>      
