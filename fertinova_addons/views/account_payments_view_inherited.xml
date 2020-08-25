@@ -3,16 +3,15 @@
   <data>
 
     <!--Avoid that some users cannot see Confirm button in Payments-->
-    <record id="view_account_payments_wot_confirm_inherit" model="ir.ui.view">
+    <record id="vw_accnt_paymts_wot_confirm_inhrt" model="ir.ui.view">
         <field name="name">account.payment.form.inherit</field>
         <field name="model">account.payment</field>
-        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="inherit_id" ref="account.view_account_payment_form" />
         <field name="arch" type="xml">
             <xpath expr="//button[@name='post']" position="attributes">
                 <attribute name="groups">group_tesoreria</attribute>
             </xpath>       
         </field>
-    </record>
-      
+    </record>      
   </data>
 </odoo>
