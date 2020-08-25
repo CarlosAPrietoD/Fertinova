@@ -16,9 +16,10 @@
     'data': [
         #Security Files:
         #'security/ir.model.access.csv',
-        'security/account_security.xml',
+        'security/account_security.xml',     
         
         #Views:
+        'views/account_payments_view_inherited.xml',         
         'views/product_template_inherited_view.xml',
         'views/purchase_inherited_view.xml',
         'views/sale_inherited_view.xml',       
