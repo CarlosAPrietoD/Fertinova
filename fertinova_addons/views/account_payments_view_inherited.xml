@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+
+    <!--Avoid that some users cannot see Confirm button in Payments-->
+    <record id="view_account_payment_inherited" model="ir.ui.view">
+        <field name="name">account.payment.form.inherit</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='post']" position="attributes">
+                <attribute name="groups">group_tesoreria</attribute>
+            </xpath>       
+        </field>
+    </record>
+      
+  </data><?xml version="1.0" encoding="utf-8"?>
+<odoo>
