@@ -3,7 +3,7 @@
   <data>
 
     <!--Avoid that some users cannot see Confirm button in Payments-->
-    <record id="view_account_payment_inherited" model="ir.ui.view">
+    <record id="view_account_payments_wot_confirm_inherit" model="ir.ui.view">
         <field name="name">account.payment.form.inherit</field>
         <field name="model">account.payment</field>
         <field name="inherit_id" ref="account.view_account_payment_form"/>
