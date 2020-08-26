@@ -1,0 +1,26 @@
+<odoo>
+
+    <record model="ir.ui.view" id="wizard_template_form_views">
+        <field name="name">wizard.form</field>
+        <field name="model">import.templates.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Impor from templates">
+                <group>
+                    <field name="file_xls"/>
+                </group>
+                <footer>
+                    <button name="import_fuel_xls" type="object" string="Submit" class="oe_highlight"></button>
+                </footer>
+            </form>
+        </field>        
+    </record>
+
+    <act_window id="launch_template_wizard"
+                name="Import from templates"
+                src_model="account.move"
+                res_model="import.templates.wizard"
+                view_mode="form"
+                target="new"
+                key2="client_action_multi"/>
+
+</odoo>

@@ -28,7 +28,8 @@
 
         #Wizards:
         'wizard/account_move_inherited_view.xml',
-        'wizard/fuel_invoice.xml',      
+        'wizard/fuel_invoice.xml',
+        'wizard/import_account_move.xml',      
     ],
     # only loaded in demonstration mode
     'demo': [
