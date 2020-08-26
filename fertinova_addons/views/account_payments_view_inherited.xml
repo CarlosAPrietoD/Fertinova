@@ -8,8 +8,8 @@
         <field name="model">account.payment</field>
         <field name="inherit_id" ref="account.view_account_payment_form" />
         <field name="arch" type="xml">
-            <xpath expr="//button[@name='post'][0]" position="attributes">
-                <attribute name="groups">group_tesoreria</attribute>
+            <xpath expr="//button[@name='post']" position="attributes">
+                <attribute name="groups">fertinova_addons.group_tesoreria</attribute>
             </xpath>       
         </field>
     </record> 
