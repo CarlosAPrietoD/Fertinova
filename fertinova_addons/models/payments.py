@@ -7,7 +7,7 @@ from odoo import models, fields, api
 class AccountPayment(models.Model):
     _inherit = 'account.payment'
     
-    cta_diario_pago = fields.Many2one('account.journal', string='Cuenta Diario Pago')
+    cta_diario_pago = fields.Char(string='Cuenta Diario Pago')
     factura = fields.Many2one('account.invoice', 
                               string = 'Factura',
                               domain = [('partner_id', '=', self.partner_id.id),
