@@ -14,16 +14,16 @@ class AccountPayment(models.Model):
 
     @api.depends('journal_id')
     def _compute_bank_account(self):
-        self.bank_account_id = self.env['account.journal'].search([('id', '=', self.journal_id)]).bank_account_id
+        self.bank_account_id = self.env['account.journal'].search([('id', '=', self.journal_id.id)]).bank_account_id.id
         
         
     def _set_invoices(self):
-        domain=[('partner_id', 'in', self.partner_id.ids), 
+        domain=[('partner_id', '=', self.partner_id.id), 
                 ('state', 'not in', ['paid', 'cancel'])]
         self.invoices_id = self.env['account.invoice'].search(domain)
         
         
     def _set_purchases(self):
-        domain = [('partner_id', 'in', self.partner_id.ids), 
+        domain = [('partner_id', '=', self.partner_id.id), 
                   ('state', 'not in', ['done', 'cancel'])]
         self.purchases_id = self.env['purchase.order'].search(domain)
