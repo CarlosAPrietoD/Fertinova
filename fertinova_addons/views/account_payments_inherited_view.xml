@@ -11,12 +11,12 @@
             <xpath expr="//button[@name='post']" position="attributes">
                 <attribute name="groups">fertinova_addons.group_tesoreria</attribute>
             </xpath>
-            <xpath expr="//field[@name='journal_id']" position="after">
-                <field name="cta_diario_pago"/>
+            <xpath expr="/form/sheet/group/field[@name='journal_id']" position="after">
+                <field name="bank_account_id"/>
             </xpath>
-            <xpath expr="//field[@name='payment_transaction_id']" position="after">
-                <field name="factura"/>
-                <field name="compra"/>              
+            <xpath expr="/form/sheet/group/field[@name='payment_transaction_id']" position="after">
+                <field name="invoices_id"/>
+                <field name="purchases_id"/>              
             </xpath>            
         </field>
     </record>          
