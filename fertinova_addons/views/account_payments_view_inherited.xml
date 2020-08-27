@@ -10,9 +10,16 @@
         <field name="arch" type="xml">
             <xpath expr="//button[@name='post']" position="attributes">
                 <attribute name="groups">fertinova_addons.group_tesoreria</attribute>
-            </xpath>       
+            </xpath>  
+            <field name="journal_id" position="after">
+                <field name="cta_diario_pago" />
+            </field>       
+            <field name="payment_transaction_id" position="after">
+                <field name="factura" />
+                <field name="pago" />              
+            </field>             
         </field>
-    </record> 
+    </record>       
     
   </data>
 </odoo>
