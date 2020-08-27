@@ -7,9 +7,9 @@ from odoo import models, fields, api
 class AccountPayment(models.Model):
     _inherit = 'account.payment'
     
-    bank_account_id = fields.Many2many('res.partner.bank', string='Cuenta Diario Pago', compute='_compute_bank_account')
-    invoices_id     = fields.Many2many('account.invoice', string='Factura', compute='_set_invoices')
-    purchases_id    = fields.Many2many('purchase.order', string='Orden de Compra', compute='_set_purchases')
+    bank_account_id = fields.Many2one('res.partner.bank', string='Cuenta Diario Pago', compute='_compute_bank_account')
+    invoices_id     = fields.Many2one('account.invoice', string='Factura', compute='_set_invoices')
+    purchases_id    = fields.Many2one('purchase.order', string='Orden de Compra', compute='_set_purchases')
     
 
     @api.depends('journal_id')
