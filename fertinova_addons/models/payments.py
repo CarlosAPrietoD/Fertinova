@@ -18,12 +18,12 @@ class AccountPayment(models.Model):
         
         
     def _set_invoices(self):
-        domain=[('partner_id', '=', self.partner_id.ids), 
+        domain=[('partner_id', 'in', self.partner_id.ids), 
                 ('state', 'not in', ['paid', 'cancel'])]
         self.invoices_id = self.env['account.invoice'].search(domain)
         
         
     def _set_purchases(self):
-        domain = [('partner_id', '=', self.partner_id.ids), 
+        domain = [('partner_id', 'in', self.partner_id.ids), 
                   ('state', 'not in', ['done', 'cancel'])]
         self.purchases_id = self.env['purchase.order'].search(domain)
