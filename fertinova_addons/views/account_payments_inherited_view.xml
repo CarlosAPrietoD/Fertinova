@@ -16,7 +16,7 @@
             </xpath>
             <xpath expr="//field[@name='payment_transaction_id']" position="after">
                 <field name="factura"/>
-                <field name="pago"/>              
+                <field name="compra"/>              
             </xpath>            
         </field>
     </record>          
