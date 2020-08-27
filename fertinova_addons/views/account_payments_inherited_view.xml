@@ -15,8 +15,8 @@
                 <field name="bank_account_id"/>
             </xpath>
             <xpath expr="//field[@name='payment_transaction_id']" position="after">
-                <field name="invoices_id"/>
-                <field name="purchases_id"/>              
+                <field name="invoices_id" modifiers={}/>
+                <field name="purchases_id" modifiers={}/>              
             </xpath>            
         </field>
     </record>          
