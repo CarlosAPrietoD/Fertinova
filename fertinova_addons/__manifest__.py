@@ -16,7 +16,7 @@
     'data': [
         #Security Files:
         #'security/ir.model.access.csv',
-        #'security/account_security.xml',     
+        'security/account_security.xml',     
         
         #Views:
         'views/account_move.xml',        
