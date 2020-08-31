@@ -9,7 +9,7 @@ class AccountPayment(models.Model):
     
     #\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\
     #             MODEL FIELDS
-    state = fields.Selection(selection_add=[('authorized', 'Autorizado')])
+    state = fields.Selection(selection_add=[('authorized', 'Autorizado'), ('draft',)])
     
     bank_account_id = fields.Many2one('res.partner.bank', string='Cuenta Diario Pago', 
                                       compute='_compute_bank_account', readonly=False)
