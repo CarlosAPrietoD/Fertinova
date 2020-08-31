@@ -16,7 +16,7 @@ class AccountPayment(models.Model):
         ('posted', 'Posted'),
         ('sent', 'Sent'),
         ('reconciled', 'Reconciled'),
-        ('cancel', 'Cancelled')
+        ('cancelled', 'Cancelled')
         ], string='Status', required=True, readonly=True, copy=False, tracking=True, default='draft')    
     
     bank_account_id = fields.Many2one('res.partner.bank', string='Cuenta Diario Pago', 
