@@ -67,15 +67,15 @@ class FuelWizard(models.TransientModel):
                         #hacemos las busquedas de ids de otros modelos que necesitemos
                         
                         if lines[0] != '':
-                            account = self.env['account.account'].search([('code','=',lines[0])]).id
+                            account = self.env['account.account'].search([('code','=',lines[0])], limit=1).id
                         if lines[1] != '':
-                            partner = self.env['res.partner'].search([('name','ilike',lines[1])]).id
+                            partner = self.env['res.partner'].search([('name','ilike',lines[1])], limit=1).id
                         if lines[2] != '':
                             label = lines[2]
                         if lines[3] != '':
-                            a_account = self.env['account.analytic.account'].search([('name','=',lines[3])]).id
+                            a_account = self.env['account.analytic.account'].search([('name','=',lines[3])], limit=1).id
                         if lines[4] != '':
-                            a_label_id = self.env['account.analytic.tag'].search([('name','=',lines[4])]).id
+                            a_label_id = self.env['account.analytic.tag'].search([('name','=',lines[4])], limit=1).id
                             if a_label_id:
                                 a_label = [(4,a_label_id)]
                         if lines[5] != '':
@@ -83,7 +83,7 @@ class FuelWizard(models.TransientModel):
                         if lines[6] != '':
                             credit = lines[6]
                         if lines[7] != '':
-                            tax_id = self.env['account.tax'].search([('name','=',lines[7])]).id
+                            tax_id = self.env['account.tax'].search([('name','=',lines[7])], limit=1).id
                             if tax_id:
                                 taxes = [(4,tax_id)]
 
@@ -115,7 +115,7 @@ class FuelWizard(models.TransientModel):
 
             #agregamos un ultimo renglon con la diferencia
 
-            account_dif = self.env['account.account'].search([('code','=','201.01.001')]).id
+            account_dif = self.env['account.account'].search([('code','=','201.01.001')], limit=1).id
         
             difference = { 'account_id' : account_dif,
                             'debit' : final_debit,
@@ -126,7 +126,7 @@ class FuelWizard(models.TransientModel):
 
             #creamos el nuevo registro con todas las lineas
 
-            journal = self.env['account.journal'].search([('name','=','TA. Provisiones')]).id
+            journal = self.env['account.journal'].search([('name','=','TA. Provisiones')], limit=1).id
 
             vals = {
                     'ref': 'Diesel Nuevo',
@@ -173,15 +173,15 @@ class FuelWizard(models.TransientModel):
                         #hacemos las busquedas de ids de otros modelos que necesitemos
                         
                         if lines[0] != '':
-                            account = self.env['account.account'].search([('code','=',lines[0])]).id
+                            account = self.env['account.account'].search([('code','=',lines[0])], limit=1).id
                         if lines[1] != '':
-                            partner = self.env['res.partner'].search([('name','ilike',lines[1])]).id
+                            partner = self.env['res.partner'].search([('name','ilike',lines[1])], limit=1).id
                         if lines[2] != '':
                             label = lines[2]
                         if lines[3] != '':
-                            a_account = self.env['account.analytic.account'].search([('name','=',lines[3])]).id
+                            a_account = self.env['account.analytic.account'].search([('name','=',lines[3])], limit=1).id
                         if lines[4] != '':
-                            a_label_id = self.env['account.analytic.tag'].search([('name','=',lines[4])]).id
+                            a_label_id = self.env['account.analytic.tag'].search([('name','=',lines[4])], limit=1).id
                             if a_label_id:
                                 a_label = [(4,a_label_id)]
                         if lines[5] != '':
@@ -189,7 +189,7 @@ class FuelWizard(models.TransientModel):
                         if lines[6] != '':
                             credit = lines[6]
                         if lines[7] != '':
-                            tax_id = self.env['account.tax'].search([('name','=',lines[7])]).id
+                            tax_id = self.env['account.tax'].search([('name','=',lines[7])], limit=1).id
                             if tax_id:
                                 taxes = [(4,tax_id)]
 
@@ -221,7 +221,7 @@ class FuelWizard(models.TransientModel):
 
             #agregamos un ultimo renglon con la diferencia
 
-            account_dif = self.env['account.account'].search([('code','=','201.01.001')]).id
+            account_dif = self.env['account.account'].search([('code','=','201.01.001')], limit=1).id
         
             difference = { 'account_id' : account_dif,
                             'debit' : final_debit,
@@ -232,7 +232,7 @@ class FuelWizard(models.TransientModel):
 
             #creamos el nuevo registro con todas las lineas
 
-            journal = self.env['account.journal'].search([('name','=','TA. Provisiones')]).id
+            journal = self.env['account.journal'].search([('name','=','TA. Provisiones')], limit=1).id
 
             vals = {
                     'ref': 'Casetas Nuevo',
@@ -279,15 +279,15 @@ class FuelWizard(models.TransientModel):
                         #hacemos las busquedas de ids de otros modelos que necesitemos
                         
                         if lines[0] != '':
-                            account = self.env['account.account'].search([('code','=',lines[0])]).id
+                            account = self.env['account.account'].search([('code','=',lines[0])], limit=1).id
                         if lines[2] != '':
                             partner = self.env['res.partner'].search([('name','ilike',lines[2])]).id
                         if lines[3] != '':
                             label = lines[3]
                         if lines[4] != '':
-                            a_account = self.env['account.analytic.account'].search([('name','=',lines[4])]).id
+                            a_account = self.env['account.analytic.account'].search([('name','=',lines[4])], limit=1).id
                         if lines[5] != '':
-                            a_label_id = self.env['account.analytic.tag'].search([('name','=',lines[5])]).id
+                            a_label_id = self.env['account.analytic.tag'].search([('name','=',lines[5])], limit=1).id
                             if a_label_id:
                                 a_label = [(4,a_label_id)]
                         if lines[6] != '':
@@ -323,7 +323,7 @@ class FuelWizard(models.TransientModel):
 
             #agregamos un ultimo renglon con la diferencia
 
-            account_dif = self.env['account.account'].search([('code','=','201.01.001')]).id
+            account_dif = self.env['account.account'].search([('code','=','201.01.001')], limit=1).id
         
             difference = { 'account_id' : account_dif,
                             'debit' : final_debit,
@@ -334,7 +334,7 @@ class FuelWizard(models.TransientModel):
 
             #creamos el nuevo registro con todas las lineas
 
-            journal = self.env['account.journal'].search([('name','=','TA. Provisiones')]).id
+            journal = self.env['account.journal'].search([('name','=','TA. Provisiones')], limit=1).id
 
             vals = {
                     'ref': 'Aportaciones Nuevo',
