@@ -14,8 +14,8 @@ class AccountPayment(models.Model):
         ('draft', 'Draft'),
         ('authorized', 'Autorizado')
         ('posted', 'Posted'),
-        ('sent', 'Sent')
-        ('reconciled', 'Reconciled')
+        ('sent', 'Sent'),
+        ('reconciled', 'Reconciled'),
         ('cancel', 'Cancelled')
         ], string='Status', required=True, readonly=True, copy=False, tracking=True, default='draft')    
     
