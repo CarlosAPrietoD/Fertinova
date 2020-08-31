@@ -9,6 +9,8 @@ class AccountPayment(models.Model):
     
     #\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\
     #             MODEL FIELDS
+    state = fields.Selection(selection_add=[('authorized', 'Autorizado')])
+    
     bank_account_id = fields.Many2one('res.partner.bank', string='Cuenta Diario Pago', 
                                       compute='_compute_bank_account', readonly=False)
     
@@ -27,3 +29,6 @@ class AccountPayment(models.Model):
     @api.depends('journal_id')
     def _compute_bank_account(self):
         self.bank_account_id = self.env['account.journal'].search([('id', '=', self.journal_id.id)]).bank_account_id.id
+    
+    def change_state_authorized(self):
+        self.state = 'authorized'
