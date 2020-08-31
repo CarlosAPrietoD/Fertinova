@@ -12,7 +12,7 @@ class AccountPayment(models.Model):
     #state = fields.Selection(selection_add=[('authorized', 'Autorizado'), ('draft',)])
     state = fields.Selection(selection=[
         ('draft', 'Draft'),
-        ('authorized', 'Autorizado')
+        ('authorized', 'Autorizado'),
         ('posted', 'Posted'),
         ('sent', 'Sent'),
         ('reconciled', 'Reconciled'),
