@@ -15,6 +15,9 @@
             <xpath expr="//button[@name='post']" position="after">
                 <button name="change_state_authorized" type="object" string="Autorizar" class="oe_highlight" groups="fertinova_addons.group_tesoreria"/>
             </xpath>
+            <field name="state" position="replace">
+                <field name="state" widget="statusbar" statusbar_visible="draft,authorized,posted,reconciled,cancelled"/>
+            </field>          
             <!--Add 3 new fields into Payments Form-->
             <xpath expr="//field[@name='journal_id']" position="after">
                 <field name="bank_account_id"/>
