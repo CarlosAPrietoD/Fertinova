@@ -9,7 +9,15 @@ class AccountPayment(models.Model):
     
     #\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\
     #             MODEL FIELDS
-    state = fields.Selection(selection_add=[('authorized', 'Autorizado'), ('draft',)])
+    #state = fields.Selection(selection_add=[('authorized', 'Autorizado'), ('draft',)])
+    state = fields.Selection(selection=[
+        ('draft', 'Draft'),
+        ('authorized', 'Autorizado')
+        ('posted', 'Posted'),
+        ('sent', 'Sent')
+        ('reconciled', 'Reconciled')
+        ('cancel', 'Cancelled')
+        ], string='Status', required=True, readonly=True, copy=False, tracking=True, default='draft')    
     
     bank_account_id = fields.Many2one('res.partner.bank', string='Cuenta Diario Pago', 
                                       compute='_compute_bank_account', readonly=False)
