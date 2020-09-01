@@ -38,5 +38,9 @@ class AccountPayment(models.Model):
     def _compute_bank_account(self):
         self.bank_account_id = self.env['account.journal'].search([('id', '=', self.journal_id.id)]).bank_account_id.id
     
-    def change_state_authorized(self):
-        self.state = 'authorized'
+    #def change_state_authorized(self):
+    #    self.state = 'authorized'
+        
+    def change_state_authorized(self, cr, uid, ids, context=None):
+        res = self.write(cr, uid, ids, {'state': 'authorized'}, context=context)    
+        return res        
