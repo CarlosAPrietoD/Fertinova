@@ -1,7 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
   <data>
+        <!-- Create new activity for the new state Authorized-->
+        <record id="act_authorized" model="workflow.activity">
+            <field name="wkf_id" ref="account.wkf_account"/>
+            <field name="name">authorized</field>
+            <field name="kind">function</field>
+            <field name="action">change_state_authorized()</field>
+        </record>
+
+        <!-- Create transitions -->
+        <!-- From Draft to new state Authorized -->
+        <record id="trans_draft_authorized" model="workflow.transition">
+            <field name="act_from" ref="account.act_draft"/>
+            <field name="act_to" ref="act_authorized"/>
+            <field name="signal">signal_authorized_forward</field>
+        </record>    
+
+        <!-- From new state Authorized to Confirm -->
+        <record id="trans_authorized_confirm" model="workflow.transition">
+            <field name="act_from" ref="act_authorized"/>
+            <field name="act_to" ref="account.act_confirm"/>
+            <field name="signal">signal_confirm</field>
+        </record>
+
+        <!-- From Confirm back to new state Authorized -->
+        <record id="trans_confirm_authorized" model="workflow.transition">
+            <field name="act_from" ref="account.act_confirm"/>
+            <field name="act_to" ref="act_authorized"/>
+            <field name="signal">signal_authorized_backward</field>
+        </record>      
     
+    <!--View Inheritance-->
     <record id="vw_accnt_paymts_wot_confirm_inhrt" model="ir.ui.view">
         <field name="name">account.payment.form.inherit</field>
         <field name="model">account.payment</field>
@@ -11,13 +41,22 @@
             <xpath expr="//button[@name='post']" position="attributes">
                 <attribute name="groups">fertinova_addons.group_tesoreria</attribute>
             </xpath>
-            <!--Add new button to indicate Authorized state-->
-            <xpath expr="//button[@name='post']" position="after">
-                <button name="change_state_authorized" type="object" string="Autorizar" class="oe_highlight" groups="fertinova_addons.group_tesoreria"/>
-            </xpath>    
+          
+            <!--Add new buttons to indicate Authorized state-->    
+            <!-- Statusbar widget should also contain the new status of Authorized -->
             <field name="state" position="replace">
                 <field name="state" widget="statusbar" statusbar_visible="draft,authorized,posted,reconciled,cancelled"/>
+            </field> 
+            <!--New buttons-->
+            <field name="state" position="before">
+                <!-- From draft to new state Authorized -->
+                <button string="Autorizar" type="workflow" name="signal_authorized_forward" states="draft" class="oe_highlight" groups="fertinova_addons.group_autorizacion"/>
+                <!-- From new state Authorized to Confirm -->
+                <button string="Marcar como Confirmado" type="workflow" name="signal_confirm" states="authorized" class="oe_highlight" groups="fertinova_addons.group_tesoreria"/> 
+                <!-- From Confirm back to new state Authorized -->
+                <button string="Regresar a Autorizado" type="workflow" name="signal_authorized_backward" states="confirm" class="oe_highlight" groups="fertinova_addons.group_tesoreria"/>
             </field>          
+          
             <!--Add 3 new fields into Payments Form-->
             <xpath expr="//field[@name='journal_id']" position="after">
                 <field name="bank_account_id"/>
@@ -27,7 +66,7 @@
                 <field name="purchases_id"/>              
             </xpath>            
         </field>
-    </record>          
+    </record>             
     
   </data>
 </odoo>
