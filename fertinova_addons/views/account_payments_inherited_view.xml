@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
   <data>
-    
+       
+    <!--View Inheritance-->
     <record id="vw_accnt_paymts_wot_confirm_inhrt" model="ir.ui.view">
         <field name="name">account.payment.form.inherit</field>
         <field name="model">account.payment</field>
@@ -10,7 +11,18 @@
             <!--Avoid that some users cannot see Confirm button in Payments-->
             <xpath expr="//button[@name='post']" position="attributes">
                 <attribute name="groups">fertinova_addons.group_tesoreria</attribute>
+                <attribute name="states">authorized</attribute>
             </xpath>
+          
+            <!--Add new button to indicate Authorized state-->    
+            <xpath expr="//button[@name='post']" position="after">
+                <button name="change_state_authorized" class="oe_highlight" states="draft" string="Autorizar" type="object" groups="fertinova_addons.group_autorizacion"/>                
+            </xpath>           
+            <!-- Statusbar widget should also contain the new status of Authorized -->
+            <field name="state" position="replace">
+                <field name="state" widget="statusbar" statusbar_visible="draft,authorized,posted,reconciled,cancelled"/>
+            </field>         
+          
             <!--Add 3 new fields into Payments Form-->
             <xpath expr="//field[@name='journal_id']" position="after">
                 <field name="bank_account_id"/>
@@ -20,7 +32,7 @@
                 <field name="purchases_id"/>              
             </xpath>            
         </field>
-    </record>          
+    </record>             
     
   </data>
 </odoo>
