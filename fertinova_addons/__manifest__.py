@@ -32,7 +32,7 @@
         'wizard/fuel_invoice.xml',     
 
         #reports
-        'reports/trial_report.xml', 
+        #'reports/trial_report.xml', 
     ],
     # only loaded in demonstration mode
     'demo': [
