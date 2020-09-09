@@ -87,6 +87,11 @@ msgid "Duplicate Inverse"
 msgstr "Duplicar inverso"
 
 #. module: fertinova_addons
+#: model_terms:ir.ui.view,arch_db:fertinova_addons.account_move_check
+msgid "Duplicate Inverse"
+msgstr "Duplicar inverso"
+
+#. module: fertinova_addons
 #: model:ir.model.fields,field_description:fertinova_addons.field_fuel_wizard__file_xls
 msgid "Excel File"
 msgstr "Archivo Excel"
@@ -111,6 +116,11 @@ msgstr "Importar factura de combustible/casetas"
 #: model:ir.model.fields,field_description:fertinova_addons.field_stock_move_line__inputs
 msgid "Inputs"
 msgstr "Entradas"
+
+#. module: fertinova_addons
+#: model:ir.model.fields,field_description:fertinova_addons.field_account_move__inverse_ids
+msgid "Inverse"
+msgstr "Inverso"
 
 #. module: fertinova_addons
 #: code:addons/fertinova_addons/models/account_aged_receivable.py:19
