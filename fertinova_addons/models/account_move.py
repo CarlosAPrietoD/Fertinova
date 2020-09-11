@@ -173,6 +173,7 @@ class AccountMoveLine(models.Model):
                         n_account=n_line
             if n_account != -1:
                 self.account_id = self.sale.order_line[n_account].product_id.categ_id.property_account_income_categ_id
+                self.analytic_account_id = self.self.sale.analytic_account_id
                 self.analytic_tag_ids = self.sale.order_line[n_account].analytic_tag_ids
         else:
             self.account_id = False
