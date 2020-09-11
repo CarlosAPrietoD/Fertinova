@@ -127,7 +127,7 @@ class AccountMoveLine(models.Model):
             else:
                 self.po_date = False
             self.po_status = self.purchase.invoice_status
-            self.debit = self.purchase.amount_total
+            self.debit = self.purchase.amount_untaxed
             self.partner_id = self.purchase.partner_id
             n_account=-1
             if self.purchase.order_line:
@@ -162,7 +162,7 @@ class AccountMoveLine(models.Model):
             else:
                 self.so_date = False
             self.so_status = self.sale.invoice_status
-            self.credit = self.sale.amount_total
+            self.credit = self.sale.amount_untaxed
             self.partner_id = self.sale.partner_id
             n_account=-1
             if self.sale.order_line:
