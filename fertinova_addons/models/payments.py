@@ -29,7 +29,7 @@ class AccountPayment(models.Model):
     
     purchases_id    = fields.Many2one('purchase.order', 
                                       string='Orden de Compra', readonly=False,
-                                      default=lambda self: self.env['account.invoice'].search([('partner_id', '=', self.partner_id.id), 
+                                      default=lambda self: self.env['purchase.order'].search([('partner_id', '=', self.partner_id.id), 
                                                                                                ('state', 'not in', ['done', 'cancel'])]))
 
     #\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\
