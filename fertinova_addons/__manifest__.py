@@ -27,6 +27,7 @@
         'views/stock_move_inherited_view.xml',
         'views/stock_picking_inherited_view.xml',
 
+
         #Wizards:
         'wizard/account_move_inherited_view.xml',
         'wizard/fuel_invoice.xml',     
