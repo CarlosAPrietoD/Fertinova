@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="documents_view_kanban">
+        <field name="name">ir.attachment kanban</field>
+        <field name="model">ir.attachment</field>
+        <field name="inherit_id" ref="documents.documents_view_kanban"/>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <xpath expr="//kanban/templates//t[@t-set='binaryPreviewable']" position="replace">
+                <t t-set="binaryPreviewable"
+                    t-value="new RegExp('(image|video|application/pdf|application/xml|text)').test(record.mimetype.value) &amp;&amp; record.type.raw_value === 'binary'"/>
+            </xpath>
+            <xpath expr="//kanban//div[hasclass('o_kanban_details')]//div[hasclass('o_kanban_record_title')]/field" position="replace">
+                <t t-if="record.emitter_partner_id.raw_value">
+                    <field name="emitter_partner_id" class="o_text_overflow "/>
+                </t>
+                <t t-else="">
+                    <field name="name" class="o_text_overflow"/>
+                </t>
+            </xpath>
+            <xpath expr="//kanban//div[hasclass('o_kanban_details')]//div[hasclass('o_kanban_record_body')]" position="inside">
+                <p t-if="record.emitter_partner_id.raw_value" class="mb-0">
+                    <field name="name" class="o_text_overflow"/>
+                </p>
+                <p t-if="record.invoice_total_amount.raw_value" class="mb-0">
+                    Total amount: $ <field name="invoice_total_amount"/>
+                </p>
+            </xpath>
+            <xpath expr="//kanban//div[hasclass('o_kanban_details')]//time[hasclass('oe_kanban_bottom_left')]/field" position="replace">
+                <t t-if="record.stamp_date.raw_value">
+                    <field name="stamp_date" widget="date"/>
+                </t>
+                <t t-else="">
+                    <field name="create_date" widget="date"/>
+                </t>
+            </xpath>
+            <xpath expr="//kanban//div[starts-with(@t-attf-class,'o_kanban_image')]" position="attributes">
+              <attribute name="t-attf-class" add="h-100" separator=" "/>
+            </xpath>
+            <xpath expr="//kanban//div[starts-with(@t-attf-class,'o_kanban_image_wrapper')]" position="attributes">
+              <attribute name="t-attf-class" add="h-100" separator=" "/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

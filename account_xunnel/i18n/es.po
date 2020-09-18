@@ -1,0 +1,197 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* account_xunnel
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-12-11 16:17+0000\n"
+"PO-Revision-Date: 2018-12-11 16:17+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: account_xunnel
+#: model_terms:ir.ui.view,arch_db:account_xunnel.view_account_config_settings_xunnel
+msgid "<i class=\"fa fa-refresh fa-fw\"/> Synchronize banks &amp; accounts"
+msgstr "<i class=\"fa fa-refresh fa-fw\"/> Sincronizar bancos &amp; cuentas"
+
+#. module: account_xunnel
+#: model_terms:ir.ui.view,arch_db:account_xunnel.account_journal_dashboard_inherit_online_sync_id
+msgid "<small class=\"text-danger\" attrs=\"{'invisible': ['|', ('has_synchronized_xunnel', '=', True), ('account_online_journal_id', '=', False)]}\">Online synchronization may duplicate the transactions added manually.</small>"
+msgstr "<small class=\"text-danger\" attrs=\"{'invisible': [('has_synchronized_xunnel', '=', True)]}\">La sincronización en línea puede duplicar las transacciones agregadas manualmente.</small>"
+
+#. module: account_xunnel
+#: model_terms:ir.ui.view,arch_db:account_xunnel.view_account_journal_dashboard_kanban_xunnel
+msgid "<span title=\"Latest synchronization\">Xunnel Last sync</span>"
+msgstr "<span title=\"Latest synchronization\">Última sincronización Xunnel</span>  "
+
+#. module: account_xunnel
+#: code:addons/account_xunnel/models/account_config_settings.py:59
+#, python-format
+msgid "An error has occurred while synchronizing your banks. %s"
+msgstr "Ha sucedido un error mientras se sincronizaban los bancos. %s   "
+
+#. module: account_xunnel
+#: model:ir.model,name:account_xunnel.model_res_company
+msgid "Companies"
+msgstr "Compañías"
+
+#. module: account_xunnel
+#: model:ir.model,name:account_xunnel.model_res_config_settings
+msgid "Config Settings"
+msgstr "Opciones de Configuración"
+
+#. module: account_xunnel
+#: model:res.company,overdue_msg:account_xunnel.webhook_company
+msgid "Dear Sir/Madam,\n"
+"\n"
+"Our records indicate that some payments on your account are still due. Please find details below.\n"
+"If the amount has already been paid, please disregard this notice. Otherwise, please forward us the total amount stated below.\n"
+"If you have any queries regarding your account, Please contact us.\n"
+"\n"
+"Thank you in advance for your cooperation.\n"
+"Best Regards,"
+msgstr "Estimado/a Señor/Señora, \n"
+"\n"
+"Nuestros registros indican que tiene pagos pendientes de su cuenta. Encontrará los detalles a continuación. \n"
+"Si ya ha pagado la cantidad, por favor ignore este aviso. \n"
+"De lo contrario, por favor envíe la cantidad total que se indica a continuación. \n"
+"Si tiene cualquier pregunta relacionada con su cuenta, por favor póngase en contacto con nosotros. \n"
+"\n"
+"Gracias de antemano por su colaboración. \n"
+"Atentamente,"
+
+#. module: account_xunnel
+#: model_terms:ir.ui.view,arch_db:account_xunnel.view_account_config_settings_xunnel
+msgid "Enable/Disable Xunnel Test Environment."
+msgstr "Activa/Desactiva Ambiente de pruebas de Xunnel."
+
+#. module: account_xunnel
+#: model:ir.model.fields,field_description:account_xunnel.field_account_journal__has_synchronized_xunnel
+msgid "Has Synchronized Xunnel"
+msgstr "Sincronizada con Xunnel"
+
+#. module: account_xunnel
+#: model:ir.model,name:account_xunnel.model_account_online_journal
+msgid "Interface for Online Account Journal"
+msgstr "Interfaz para diario de cuentas en línea"
+
+#. module: account_xunnel
+#: model:ir.model,name:account_xunnel.model_account_journal
+msgid "Journal"
+msgstr "Diario"
+
+#. module: account_xunnel
+#: model:ir.model.fields,help:account_xunnel.field_res_config_settings__xunnel_token
+msgid "Key-like text for authentication in controllers."
+msgstr "Llave de autenticación para los controllers."
+
+#. module: account_xunnel
+#: model:ir.model.fields,field_description:account_xunnel.field_account_journal__online_journal_last_sync
+msgid "Online account last synchronization"
+msgstr "Última sincronización de cuenta en linea"
+
+#. module: account_xunnel
+#: code:addons/account_xunnel/models/xunnel_online_account.py:108
+#, python-format
+msgid "Opening statement: first synchronization"
+msgstr ""
+
+#. module: account_xunnel
+#: selection:account.online.provider,provider_type:0
+msgid "Plaid"
+msgstr "Plaid"
+
+#. module: account_xunnel
+#: model:ir.model.fields,field_description:account_xunnel.field_account_online_provider__provider_type
+msgid "Provider Type"
+msgstr "Tipo de Proveedor"
+
+#. module: account_xunnel
+#: model:ir.model,name:account_xunnel.model_account_online_provider
+msgid "Provider for online account synchronization"
+msgstr "Proveedor de sincronización de cuenta en línea"
+
+#. module: account_xunnel
+#: model:ir.model.fields,help:account_xunnel.field_account_journal__has_synchronized_xunnel
+msgid "Recognize if has synchronized with Xunnel"
+msgstr "Reconocer si se ha sincronizado con Xunnel"
+
+#. module: account_xunnel
+#: code:addons/account_xunnel/models/account_config_settings.py:62
+#, python-format
+msgid "Success! %s banks have been synchronized."
+msgstr "Éxito! %s bancos han sido sincronizados."
+
+#. module: account_xunnel
+#: code:addons/account_xunnel/models/xunnel_online_account.py:120
+#, python-format
+msgid "Transaction synchronized from Xunnel"
+msgstr "Transacción sincronizada desde Xunnel"
+
+#. module: account_xunnel
+#: code:addons/account_xunnel/models/xunnel_provider_account.py:52
+#, python-format
+msgid "Updating credentials is not allowed here. Please go to https://www.xunnel.com/ to achieve that."
+msgstr "Actualizar tus credenciales no esta permitido aquí. Por favor ve a https://www.xunnel.com/ para lograrlo."
+
+#. module: account_xunnel
+#: model:ir.model.fields,help:account_xunnel.field_res_config_settings__xunnel_testing
+msgid "Use Xunnel server testing?"
+msgstr "¿Usar el servidor de testeo Xunnel?"
+
+#. module: account_xunnel
+#: model_terms:ir.ui.view,arch_db:account_xunnel.view_account_config_settings_xunnel
+msgid "User's private token authentication"
+msgstr "Token de autorización privado del usuario"
+
+#. module: account_xunnel
+#: selection:account.online.provider,provider_type:0
+msgid "Xunnel"
+msgstr "Xunnel"
+
+#. module: account_xunnel
+#: model_terms:ir.ui.view,arch_db:account_xunnel.view_account_config_settings_xunnel
+msgid "Xunnel Account"
+msgstr "Xunnel Account"
+
+#. module: account_xunnel
+#: model:ir.model.fields,field_description:account_xunnel.field_res_company__xunnel_testing
+#: model:ir.model.fields,field_description:account_xunnel.field_res_config_settings__xunnel_testing
+msgid "Xunnel Testing"
+msgstr "Pruebas Xunnel"
+
+#. module: account_xunnel
+#: model:ir.model.fields,field_description:account_xunnel.field_res_company__xunnel_token
+#: model:ir.model.fields,field_description:account_xunnel.field_res_config_settings__xunnel_token
+msgid "Xunnel Token"
+msgstr "Token Xunnel"
+
+#. module: account_xunnel
+#: code:addons/account_xunnel/models/account_config_settings.py:67
+#, python-format
+msgid "Xunnel response."
+msgstr "Respuesta Xunnel."
+
+#. module: account_xunnel
+#: selection:account.online.provider,provider_type:0
+msgid "Yodlee"
+msgstr "Yodlee"
+
+#. module: account_xunnel
+#: code:addons/account_xunnel/models/res_company.py:28
+#, python-format
+msgid "You need to define Xunnel Token"
+msgstr "Debes defininir el Token de Xunnel"
+
+#. module: account_xunnel
+#: code:addons/account_xunnel/models/account_config_settings.py:14
+#, python-format
+msgid "Your company doesn't have a Xunnel Token established. Make sure you have saved your configuration changes before trying manual sync."
+msgstr "Tu compañía no tiene un Xunnel Token establecido. Asegurate de haber guardado tus configuraciones antes de intentar sincronizar."
+

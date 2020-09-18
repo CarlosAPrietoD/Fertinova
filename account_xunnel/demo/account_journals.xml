@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="account_journal_attachments" model="account.journal">
+        <field name="name">Demo bank attachments</field>
+        <field name="code">TESTB</field>
+        <field name="type">bank</field>
+        <field name="company_id" ref="base.main_company"/>
+        <field name="account_online_journal_id" ref="account_xunnel.online_journal_attachments"/>
+        <field name="account_online_provider_id" ref="account_xunnel.online_provider_attachments"/>
+        <field name="bank_statements_source">online_sync</field>
+    </record>
+    <record id="account_journal_webhooks" model="account.journal">
+        <field name="name">Demo bank webhooks</field>
+        <field name="code">TESTW</field>
+        <field name="type">bank</field>
+        <field name="company_id" ref="base.main_company"/>
+        <field name="account_online_journal_id" ref="account_xunnel.online_journal_webhooks"/>
+        <field name="account_online_provider_id" ref="account_xunnel.online_provider_webhooks"/>
+        <field name="bank_statements_source">online_sync</field>
+    </record>
+</odoo>
+
