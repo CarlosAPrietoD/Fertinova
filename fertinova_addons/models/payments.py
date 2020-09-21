@@ -90,6 +90,6 @@ class AccountPayment(models.Model):
                 (transfer_credit_aml + transfer_debit_aml).reconcile()
                 persist_move_name += self._get_move_name_transfer_separator() + transfer_debit_aml.move_id.name
 
-            rec.write({'state': 'posted', 'move_name': persist_move_name})
+            rec.write({'state': 'posted', 'move_name': persist_move_name, 'bank_account_id': rec.bank_account_id.id})
         return True
  
