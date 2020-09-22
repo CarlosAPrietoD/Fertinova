@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="base.main_company" model="res.company">
+        <field name="xunnel_last_sync">1970-01-01</field>
+    </record>
+</odoo>
+

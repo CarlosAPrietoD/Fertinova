@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+    <t t-extend="BillsListView.upload_button">
+        <t t-jquery="button.o_button_upload_bill" t-operation="after">
+            <button icon="fa-cloud-download" type="button" class="btn btn-secondary o_button_xunnel_sync">
+                Xunnel sync
+            </button>
+        </t>
+    </t>
+    <t t-extend="DocumentViewer.Content">
+        <t t-jquery=".o_viewer_pdf" t-operation="after">
+            <div
+                class="mt32 o_viewer_xml" t-if="widget.activeAttachment.mimetype == 'application/xml'" 
+                t-attf-data-src="/web/content/#{widget.activeAttachment.id}?raw_html=1" />
+        </t>
+    </t>
+    <t t-name="invoice_xunnel.xml_preview">
+        <pre class="prettyprint">
+            <t t-esc="view" />
+        </pre>
+        <input type="text" id="copy" />
+    </t>
+    <t t-name="invoice_xunnel.product_list">
+        <ul class="p-0 m-0 list-unstyled ">
+            <li class="ellipsis" t-foreach="products" t-as="product" t-esc="product" t-att-title="product"/>
+        </ul>
+    </t>
+    <t t-extend="documents.DocumentsInspector.documentsInfo">
+        <t t-jquery=".o_inspector_fields tbody tr.product_list" t-operation="replace"/>
+        <t t-jquery=".o_inspector_fields tbody tr.o_inspector_divider" t-operation="after">
+            <tr class="product_list">
+                <td class="o_inspector_label align-baseline">
+                    <span>
+                        <i class="o_documents_model_color fa fa-reorder o_documents_tag_color"></i>
+                        <label for="product_list">Products</label>
+                    </span>
+                </td>
+                <td class="o_inspector_value w-100">
+                    <div class="o_inspector_product_list"/>
+                </td>
+            </tr>
+        </t>
+        <t t-jquery=".o_inspector_fields tbody" t-operation="append">
+            <tr class="related_cfdi o_inspector_custom_field"/>    
+        </t>
+    </t>
+
+    <t t-name="invoice_xunnel.related_cfdi">
+        <td class="o_inspector_label align-baseline">
+            <label>Related CFDI</label>
+        </td>
+        <td class="o_inspector_value w-100">
+            <ul class="p-0 m-0 list-unstyled ">
+                <li t-foreach="cfdis" t-as="cfdi" t-esc="cfdi"/>
+            </ul>
+        </td>
+    </t>
+
+</templates>

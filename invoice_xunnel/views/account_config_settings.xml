@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_account_config_settings_xunnel_invoice" model="ir.ui.view">
+        <field name="name">view_account_config_settings_xunnel_invoice</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="account_xunnel.view_account_config_settings_xunnel"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@id='xunnel_token']" position="inside">
+                <h2>Xunnel Invoice</h2>
+                <div class="row mt16 o_settings_container">
+                    <div class="col-xs-12 col-md-12 o_setting_box" groups="account.group_account_user">
+                        <div class="o_setting_right_pane">
+                            <label for="xunnel_token" string="Xunnel attachments"/>
+                            <div class="text-muted">
+                                Download your SAT's invoices.
+                            </div>
+                            <button class="oe_highlight mt8" name="%(invoice_xunnel.action_product_confirm_wizard)d" string="Download attachments" type="action" icon="fa-file-code-o mr4" />
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
