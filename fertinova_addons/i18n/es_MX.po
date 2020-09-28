@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-19 16:00+0000\n"
-"PO-Revision-Date: 2020-08-19 16:00+0000\n"
+"POT-Creation-Date: 2020-08-14 18:37+0000\n"
+"PO-Revision-Date: 2020-08-14 18:37+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -79,7 +79,12 @@ msgstr ""
 #: model:ir.model.fields,field_description:fertinova_addons.field_analytic_acc_tag_wizard__display_name
 #: model:ir.model.fields,field_description:fertinova_addons.field_fuel_wizard__display_name
 msgid "Display Name"
-msgstr "Nombre a mostrar"
+msgstr "Nombre mostrado"
+
+#. module: fertinova_addons
+#: model_terms:ir.ui.view,arch_db:fertinova_addons.account_move_check
+msgid "Duplicate Inverse"
+msgstr "Duplicar inverso"
 
 #. module: fertinova_addons
 #: model_terms:ir.ui.view,arch_db:fertinova_addons.account_move_check
@@ -184,11 +189,6 @@ msgid "PO invoice status"
 msgstr "Estado de facturacion PO"
 
 #. module: fertinova_addons
-#: model:ir.model.fields,field_description:fertinova_addons.field_account_move__parent_id
-msgid "Parent"
-msgstr "Padre"
-
-#. module: fertinova_addons
 #: model:ir.model.fields,field_description:fertinova_addons.field_stock_move_line__price_unit
 msgid "Price Unit"
 msgstr "Precio Unitario"
@@ -241,11 +241,6 @@ msgid "Quants"
 msgstr ""
 
 #. module: fertinova_addons
-#: model_terms:ir.ui.view,arch_db:fertinova_addons.account_move_check
-msgid "Related moves"
-msgstr "Movimientos relacionados"
-
-#. module: fertinova_addons
 #: model:ir.model.fields,field_description:fertinova_addons.field_account_move_line__so_date
 msgid "SO invoice date"
 msgstr "Fecha de facturacion SO"
@@ -284,11 +279,6 @@ msgstr "Esta acción reemplazará los valores existentes de las cuentas y etique
 #: model:ir.model.fields,field_description:fertinova_addons.field_stock_move_line__transfers
 msgid "Transfers"
 msgstr "Transferencias"
-
-#. module: fertinova_addons
-#: model_terms:ir.ui.view,arch_db:fertinova_addons.account_move_check
-msgid "Update"
-msgstr "Actualizar"
 
 #. module: fertinova_addons
 #: selection:account.move.line,so_status:0
