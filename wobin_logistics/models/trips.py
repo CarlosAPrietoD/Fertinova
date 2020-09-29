@@ -89,7 +89,7 @@ class LogisticsTrips(models.Model):
         '''Authomatic assignation for fields "operator_id" & "analytic_accnt_id" 
            from driver_id taken from vehicle_id's input'''
         self.operator_id = self.env['fleet.vehicle'].search([('id', '=', self.vehicle_id.id)]).driver_id.id
-        self.analytic_accnt_id = self.env['account.analytic.account'].search([('vehicle_id', '=', self.vehicle_id.id)]).id
+        self.analytic_accnt_id = self.env['account.analytic.account'].search([('vehicle_id', '=', self.vehicle_id.id)], limit=1).id
 
  
 
