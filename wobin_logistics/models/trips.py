@@ -49,6 +49,7 @@ class LogisticsTrips(models.Model):
     opportunity_id    = fields.Many2one('crm.lead', string='Lead', track_visibility='always')
     client_id         = fields.Many2one('res.partner', string='Client', track_visibility='always')
     vehicle_id        = fields.Many2one('fleet.vehicle', string='Vehicle')    
+    analytic_accnt_id = fields.Many2one('account.analytic.account', string='Analytic Account', track_visibility='always')
     operator_id       = fields.Many2one('res.partner',string='Operator', track_visibility='always')
     route_id          = fields.Many2one('account.analytic.tag',string='Route', track_visibility='always', domain=[('analytic_tag_type', '=', "route")])
     advance           = fields.Char(string='Advance', track_visibility='always')
@@ -80,15 +81,27 @@ class LogisticsTrips(models.Model):
     @api.onchange('sales_order_id')
     def _onchange_sales_order(self):
         '''Authomatic assignation for field "client_id" from sales_order's input'''
-        self.client_id = self.env['sale.order'].search([('id', '=', self.sales_order_id.id)]).partner_id.id       
-
+        self.client_id = self.env['sale.order'].search([('id', '=', self.sales_order_id.id)]).partner_id.id 
+         
 
     @api.onchange('vehicle_id')
     def _onchange_vehicle(self):
-        '''Authomatic assignation for field "operator_id" from driver_id taken from vehicle_id's input'''
+        '''Authomatic assignation for fields "operator_id" & "analytic_accnt_id" 
+           from driver_id taken from vehicle_id's input'''
         self.operator_id = self.env['fleet.vehicle'].search([('id', '=', self.vehicle_id.id)]).driver_id.id
+        self.analytic_accnt_id = self.env['account.analytic.account'].search([('vehicle_id', '=', self.vehicle_id.id)]).id
 
  
+
+
+class AccountAnalyticAccount(models.Model):
+    _inherit = "account.analytic.account"
+
+    #:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+    # Aggregation of a new many2one field of Vehicles in Analytic Accounts 
+    #:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  
+    vehicle_id = fields.Many2one('fleet.vehicle', string='Vehicle')    
+
 
 
 
