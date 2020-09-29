@@ -33,7 +33,7 @@ class AccountPayment(models.Model):
                                                                                                ('state', 'not in', ['done', 'cancel'])]))
     #\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\
     #             METHOD FIELDS
-    @api.multi
+    @api.one
     @api.depends('journal_id')
     def _compute_bank_account(self):
         self.ensure_one()
