@@ -16,6 +16,17 @@
             </xpath>        
         </field>
     </record> 
+    <!--Add a new many2one field into Analytic Account model-->
+    <record id="analytic_accountform_inherit" model="ir.ui.view">
+        <field name="name">analytic.analytic.account.form.inherit</field>
+        <field name="model">account.analytic.account</field>
+        <field name="inherit_id" ref="analytic.view_account_analytic_account_form"/>
+        <field name="arch" type="xml">
+           <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="vehicle_id"/>
+            </xpath>        
+        </field>
+    </record>      
 
 
     <!--::::::::::::::::::::::::::::::::::::::::::::-->
@@ -49,6 +60,7 @@
           <field name="opportunity_id"/>
           <field name="client_id"/>
           <field name="vehicle_id"/>
+          <field name="analytic_accnt_id"/>
           <field name="operator_id"/>          
           <field name="route_id"/>
           <field name="advance"/>
@@ -84,7 +96,8 @@
                             <field name="sales_order_id"/>
                             <field name="opportunity_id"/>
                             <field name="client_id"/>
-                            <field name="vehicle_id"/>                            
+                            <field name="vehicle_id"/> 
+                            <field name="analytic_accnt_id"/>                           
                             <field name="operator_id"/>
                             <field name="route_id"/>  
                             <field name="advance"/>                                           
