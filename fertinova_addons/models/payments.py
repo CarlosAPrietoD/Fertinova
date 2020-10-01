@@ -38,7 +38,7 @@ class AccountPayment(models.Model):
     def _compute_bank_account(self):
         self.bank_account_id = self.env['account.journal'].search([('id', '=', self.journal_id.id)]).bank_account_id.id
     
-    @api.one
+    #@api.one
     def change_state_authorized(self):
         self.state = 'authorized'  
         
