@@ -40,7 +40,21 @@ class AccountPayment(models.Model):
     
     #@api.one
     def change_state_authorized(self):
-        self.state = 'authorized'  
+        #Modify state to Authorized
+        self.state = 'authorized' 
+        
+        #Construction of post message's content in Payments:
+        uid = self.env.user.id
+        name_user = self.env['res.users'].search([('id', '=', uid)]).name
+
+        payment_post =  "<ul style=\"margin:0px 0 9px 0\">"
+        payment_post += "<li><p style='margin:0px; font-size:13px; font-family:\"Lucida Grande\", Helvetica, Verdana, Arial, sans-serif'>Usuario que autorizó el pago: <strong>" + name_user + "</strong></p></li>"
+        payment_post += "<li><p style='margin:0px; font-size:13px; font-family:\"Lucida Grande\", Helvetica, Verdana, Arial, sans-serif'>Estado: <strong>AUTORIZADO</strong></p></li>"
+        payment_post += "</ul>"
+
+        payment_order_recorset = self.env['account.payment'].browse(self.id)
+        payment_order_recorset.message_post(body=payment_post) 
+        
         
     @api.multi
     def post(self):
