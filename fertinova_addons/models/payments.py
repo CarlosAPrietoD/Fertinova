@@ -43,6 +43,7 @@ class AccountPayment(models.Model):
         self.state = 'authorized' 
         
         #Construction of post's content in Payments:
+        uid = self.env.user.id
         name_user = self.env['res.users'].search([('id', '=', uid)]).name
 
         payment_post =  "<ul style=\"margin:0px 0 9px 0\">"
