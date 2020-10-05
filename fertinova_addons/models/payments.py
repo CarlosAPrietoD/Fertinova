@@ -40,7 +40,18 @@ class AccountPayment(models.Model):
         self.bank_account_id = self.env['account.journal'].search([('id', '=', self.journal_id.id)]).bank_account_id.id
     
     def change_state_authorized(self):
-        self.state = 'authorized'  
+        self.state = 'authorized' 
+        
+        #Construction of post's content in Payments:
+        name_user = self.env['res.users'].search([('id', '=', uid)]).name
+
+        payment_post =  "<ul style=\"margin:0px 0 9px 0\">"
+        payment_post += "<li><p style='margin:0px; font-size:13px; font-family:\"Lucida Grande\", Helvetica, Verdana, Arial, sans-serif'>Usuario que autorizó el pago: <strong>" + name_user + "</strong></p></li>"
+        payment_post += "<li><p style='margin:0px; font-size:13px; font-family:\"Lucida Grande\", Helvetica, Verdana, Arial, sans-serif'><strong>Estado: </strong>" + str(self.state) + "</p></li>"
+        payment_post += "</ul>"
+
+        payment_order_recorset = self.env['account.payment'].browse(self.id)
+        payment_order_recorset.message_post(body=payment_post)         
         
     @api.multi
     def post(self):
