@@ -10,7 +10,7 @@ class AccountPayment(models.Model):
     #\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\
     #             MODEL FIELDS
     #state = fields.Selection(selection_add=[('authorized', 'Autorizado'), ('draft',)])
-    state = fields.Selection(selection=[
+    state_aux = fields.Selection(selection=[
         ('draft', 'Draft'),
         ('authorized', 'Autorizado'),
         ('posted', 'Posted'),
@@ -43,7 +43,7 @@ class AccountPayment(models.Model):
         #Modify state to Authorized
         #self.state = 'authorized'
         values = {
-                  'state': 'authorized',
+                  'state_aux': 'authorized',
                   'bank_account_id': self.bank_account_id.id
                  }
         self.write(values) 
@@ -60,14 +60,7 @@ class AccountPayment(models.Model):
         payment_order_recorset = self.env['account.payment'].browse(self.id)
         payment_order_recorset.message_post(body=payment_post)         
 
-
-
-    @api.multi
-    def post(self):
-        for rec in self:
-            if rec.state == 'authorized': 
-                values = {'state': 'draft'}
-                self.write(values)                                               
+                                             
     '''        
     @api.multi
     def post(self):

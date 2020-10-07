@@ -11,7 +11,7 @@
             <!--Avoid that some users cannot see Confirm button in Payments-->
             <xpath expr="//button[@name='post']" position="attributes">
                 <attribute name="groups">fertinova_addons.group_tesoreria</attribute>
-                <attribute name="states">authorized</attribute>
+                <attribute name="states">draft</attribute>
             </xpath>
           
             <!--Add new button to indicate Authorized state-->    
@@ -20,7 +20,7 @@
             </xpath>           
             <!-- Statusbar widget should also contain the new status of Authorized -->
             <field name="state" position="replace">
-                <field name="state" widget="statusbar" statusbar_visible="draft,authorized,posted,reconciled,cancelled"/>
+                <field name="state_aux" widget="statusbar" statusbar_visible="draft,authorized,posted,reconciled,cancelled"/>
             </field>         
           
             <!--Add 3 new fields into Payments Form-->
@@ -29,7 +29,7 @@
             </xpath>
             <xpath expr="//field[@name='payment_transaction_id']" position="after">
                 <field name="invoices_id"/>
-                <!--<field name="purchases_id"/>              -->
+                <field name="purchases_id"/>   
             </xpath>            
         </field>
     </record>             
