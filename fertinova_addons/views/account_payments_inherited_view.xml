@@ -19,7 +19,10 @@
                 <button name="change_state_authorized" class="oe_highlight" states="draft" string="Autorizar" type="object" groups="fertinova_addons.group_autorizacion"/>                
             </xpath>           
             <!-- Statusbar widget should also contain the new status of Authorized -->
-            <field name="state" position="replace">
+            <field name="state" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="state" position="after">
                 <field name="state_aux" widget="statusbar" statusbar_visible="draft,authorized,posted,reconciled,cancelled"/>
             </field>         
           
