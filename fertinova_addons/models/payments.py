@@ -9,18 +9,17 @@ class AccountPayment(models.Model):
     
     #\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\
     #             MODEL FIELDS
-    #state = fields.Selection(selection_add=[('authorized', 'Autorizado'), ('draft',)])
     state_aux = fields.Selection(selection=[
         ('draft', 'Draft'),
-        ('authorized', 'Autorizado'),
+        ('authorized', 'Authorized'),
         ('posted', 'Posted'),
         ('sent', 'Sent'),
         ('reconciled', 'Reconciled'),
         ('cancelled', 'Cancelled')
-        ], string='Status', required=True, readonly=True, copy=False, tracking=True, default='draft')    
+        ], string='Status', required=True, readonly=True, copy=False, tracking=True, default='draft')  
     
     bank_account_id = fields.Many2one('res.partner.bank', string='Cuenta Diario Pago', 
-                                      compute='_compute_bank_account', readonly=False)
+                                      compute='_compute_bank_account', store=True, readonly=False)
     
     invoices_id     = fields.Many2one('account.invoice', 
                                       string='Factura', readonly=False,
@@ -41,11 +40,7 @@ class AccountPayment(models.Model):
     
     def change_state_authorized(self):
         #Modify state to Authorized
-        #self.state = 'authorized'
-        values = {
-                  'state_aux': 'authorized',
-                  'bank_account_id': self.bank_account_id.id
-                 }
+        values = {'state_aux': 'authorized'}
         self.write(values) 
         
         #Construction of post message's content in Payments:
@@ -58,9 +53,24 @@ class AccountPayment(models.Model):
         payment_post += "</ul>"
 
         payment_order_recorset = self.env['account.payment'].browse(self.id)
-        payment_order_recorset.message_post(body=payment_post)         
+        payment_order_recorset.message_post(body=payment_post)  
 
-                                             
+    @api.multi
+    def post(self):
+        for rec in self:   
+            rec.state_aux = 'posted'   
+
+    @api.multi
+    def cancel(self):
+        for rec in self:
+            rec.state_aux = 'cancelled' 
+
+    @api.multi
+    def action_draft(self):
+        return self.write({'state_aux': 'draft'})    
+                
+
+
     '''        
     @api.multi
     def post(self):

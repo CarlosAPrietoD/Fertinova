@@ -100,7 +100,7 @@ msgstr "Archivo Excel"
 #: model:ir.model.fields,field_description:fertinova_addons.field_analytic_acc_tag_wizard__id
 #: model:ir.model.fields,field_description:fertinova_addons.field_fuel_wizard__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: fertinova_addons
 #: model_terms:ir.ui.view,arch_db:fertinova_addons.wizard_fuel_form_views
@@ -316,3 +316,32 @@ msgstr ""
 msgid "fuel.wizard"
 msgstr ""
 
+#. module: fertinova_addons
+#: selection:account.payment,state_aux:0
+msgid "Authorized"
+msgstr "Autorizado"
+
+#. module: fertinova_addons
+#: selection:account.payment,state_aux:0
+msgid "Cancelled"
+msgstr "Cancelado"
+
+#. module: fertinova_addons
+#: selection:account.payment,state_aux:0
+msgid "Draft"
+msgstr "Borrador"
+
+#. module: fertinova_addons
+#: selection:account.payment,state_aux:0
+msgid "Posted"
+msgstr "Publicado"
+
+#. module: fertinova_addons
+#: selection:account.payment,state_aux:0
+msgid "Reconciled"
+msgstr "Reconciliado"
+
+#. module: fertinova_addons
+#: selection:account.payment,state_aux:0
+msgid "Sent"
+msgstr "Enviado"
