@@ -41,7 +41,12 @@ class AccountPayment(models.Model):
     
     def change_state_authorized(self):
         #Modify state to Authorized
-        self.state = 'authorized' 
+        #self.state = 'authorized'
+        values = {
+                  'state': 'authorized',
+                  'bank_account_id': self.bank_account_id.id
+                 }
+        self.write(values) 
         
         #Construction of post message's content in Payments:
         uid = self.env.user.id
@@ -54,7 +59,8 @@ class AccountPayment(models.Model):
 
         payment_order_recorset = self.env['account.payment'].browse(self.id)
         payment_order_recorset.message_post(body=payment_post)         
-        
+
+    '''        
     @api.multi
     def post(self):
         """ Create the journal items for the payment and update the payment's state to 'posted'.
@@ -106,4 +112,4 @@ class AccountPayment(models.Model):
 
             rec.write({'state': 'posted', 'move_name': persist_move_name, 'bank_account_id': rec.bank_account_id.id})
         return True
- 
+        '''
