@@ -11,7 +11,7 @@
     'category': 'Uncategorized',
     'version': '12.0.1.0.1',
     # any module necessary for this one to work correctly
-    'depends': ['account', 'purchase_stock', 'sale_management'],
+    'depends': ['account', 'purchase_stock', 'sale_management', 'mail'],
     # always loaded
     'data': [
         #Security Files:
@@ -26,6 +26,7 @@
         'views/sale_inherited_view.xml',       
         'views/stock_move_inherited_view.xml',
         'views/stock_picking_inherited_view.xml',
+        'views/tracking_values.xml',
 
         #Wizards:
         'wizard/account_move_inherited_view.xml',
