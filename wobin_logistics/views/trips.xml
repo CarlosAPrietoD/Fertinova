@@ -63,7 +63,7 @@
           <field name="analytic_accnt_id"/>
           <field name="operator_id"/>          
           <field name="route_id"/>
-          <field name="advance"/>
+          <field name="advance_id"/>
           <field name="start_date"/>
           <field name="upload_date"/>
           <field name="estimated_qty"/>
@@ -100,7 +100,7 @@
                             <field name="analytic_accnt_id"/>                           
                             <field name="operator_id"/>
                             <field name="route_id"/>  
-                            <field name="advance"/>                                           
+                            <field name="advance_id"/>                                           
                         </group>
                         <group>
                             <field name="start_date"/>
