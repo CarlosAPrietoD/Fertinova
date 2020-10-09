@@ -271,7 +271,147 @@ class AccountAnalyticLine(models.Model):
     product_uom_id = fields.Many2one(track_visibility='onchange')
     general_account_id = fields.Many2one(track_visibility='onchange')
     move_id = fields.Many2one(track_visibility='onchange')
+    
+class CrossoveredBudget(models.Model):
+    _inherit = 'crossovered.budget'   
+    
+    name = fields.Char(track_visibility='onchange')
+    user_id = fields.Many2one(track_visibility='onchange')
+    date_from = fields.Date(track_visibility='onchange')
+    date_to = fields.Date(track_visibility='onchange')
+    company_id = fields.Many2one(track_visibility='onchange')
+    crossovered_budget_line = fields.One2many(track_visibility='onchange')
+    state = fields.Selection([
+        ('draft', 'Draft'),
+        ('cancel', 'Cancelled'),
+        ('confirm', 'Confirmed'),
+        ('validate', 'Validated'),
+        ('done', 'Done')
+        ], track_visibility='onchange')
+    
+class AccountAssetAsset(models.Model):
+    _inherit = 'account.asset.asset'  
+    
+    name = fields.Char(track_visibility='onchange')
+    category_id = fields.Many2one(track_visibility='onchange')
+    code = fields.Char(track_visibility='onchange')
+    date = fields.Date(track_visibility='onchange')
+    date_first_depreciation = fields.Selection([
+        ('last_day_period', 'Based on Last Day of Purchase Period'),
+        ('manual', 'Manual (Defaulted on Purchase Date)')], track_visibility='onchange')
+    first_depreciation_manual_date = fields.Date(track_visibility='onchange')
+    account_analytic_id = fields.Many2one(track_visibility='onchange')
+    currency_id = fields.Many2one(track_visibility='onchange')
+    company_id = fields.Many2one(track_visibility='onchange')
+    value = fields.Float(track_visibility='onchange')
+    salvage_value = fields.Float(track_visibility='onchange')
+    value_residual = fields.Float(track_visibility='onchange')
+    partner_id = fields.Many2one(track_visibility='onchange')
+    invoice_id = fields.Many2one(track_visibility='onchange')
+    analytic_tag_ids = fields.Many2many(track_visibility='onchange')
+    depreciation_line_ids = fields.One2many(track_visibility='onchange')
+    method = fields.Selection([('linear', 'Linear'), ('degressive', 'Degressive')], track_visibility='onchange')
+    prorata = fields.Boolean(track_visibility='onchange')
+    method_number = fields.Integer(track_visibility='onchange')
+    method_period = fields.Integer(track_visibility='onchange')
+    entry_count = fields.Integer(track_visibility='onchange')
+    state = fields.Selection([('draft', 'Draft'), ('open', 'Running'), ('close', 'Close')], track_visibility='onchange')
+    
+class ResCurrency(models.Model):
+    _name = 'res.currency'
+    _inherit = ['res.currency', 'mail.thread']
+    
+    name = fields.Char(track_visibility='onchange')
+    rate = fields.Float(track_visibility='onchange')
+    rounding = fields.Float(track_visibility='onchange')
+    decimal_places = fields.Integer(track_visibility='onchange')
+    currency_unit_label = fields.Char(track_visibility='onchange')
+    currency_subunit_label = fields.Char(track_visibility='onchange')
+    symbol = fields.Char(track_visibility='onchange')
+    position = fields.Selection([('after', 'After Amount'), ('before', 'Before Amount')], track_visibility='onchange')
+    active = fields.Boolean(track_visibility='onchange')
+
+
+class AccountAccount(models.Model):
+    _name = 'account.account'
+    _inherit = ['account.account', 'mail.thread']
+
+
+    code = fields.Char(track_visibility='onchange')
+    name = fields.Char(track_visibility='onchange')
+    user_type_id = fields.Many2one(track_visibility='onchange')
+    tax_ids = fields.Many2many(track_visibility='onchange')
+    tag_ids = fields.Many2many(track_visibility='onchange')
+    group_id = fields.Many2one(track_visibility='onchange')
+    company_id = fields.Many2one(track_visibility='onchange')
+    currency_id = fields.Many2one(track_visibility='onchange')
+    reconcile = fields.Boolean(track_visibility='onchange')
+    deprecated = fields.Boolean(track_visibility='onchange')
+    realizable_account = fields.Boolean(track_visibility='onchange')
+
+
+class AccountTax(models.Model):
+    _name = 'account.tax'
+    _inherit = ['account.tax', 'mail.thread']
+
+    name = fields.Char(track_visibility='onchange')
+    type_tax_use = fields.Selection([('sale', 'Sales'), ('purchase', 'Purchases'), ('none', 'None'), ('adjustment', 'Adjustment')], track_visibility='onchange')
+    amount_type = fields.Selection([('group', 'Group of Taxes'), ('fixed', 'Fixed'), ('percent', 'Percentage of Price'), ('division', 'Percentage of Price Tax Included')], track_visibility='onchange')
+    amount = fields.Float(track_visibility='onchange')
+    account_id = fields.Many2one(track_visibility='onchange')
+    refund_account_id = fields.Many2one(track_visibility='onchange')
+    description = fields.Char(track_visibility='onchange')
+    tax_group_id = fields.Many2one(track_visibility='onchange')
+    tag_ids = fields.Many2many(track_visibility='onchange')
+    l10n_mx_cfdi_tax_type = fields.Selection(
+        [('Tasa', 'Tasa'),
+         ('Cuota', 'Cuota'),
+         ('Exento', 'Exento')], track_visibility='onchange')
+    analytic_id = fields.Boolean(track_visibility='onchange')
+    company_id = fields.Many2one(track_visibility='onchange')
+    price_include = fields.Boolean(track_visibility='onchange')
+    include_base_amount = fields.Boolean(track_visibility='onchange')
+    tax_exigibility = fields.Selection(
+        [('on_invoice', 'Based on Invoice'),
+         ('on_payment', 'Based on Payment'),
+        ], track_visibility='onchange')
+    active = fields.Boolean(track_visibility='onchange')
     '''(track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
     (track_visibility='onchange')
     (track_visibility='onchange')
     (track_visibility='onchange')
