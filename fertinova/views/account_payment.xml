@@ -9,7 +9,7 @@
                 <button name="%(action_internal_transfer_multicurrency)d" type="action"
                     string="Confirm with an agreed amount" groups="fertinova.allow_confirm_internal_transfer_with_agreed_amount" attrs="{'invisible':['|', ('payment_type','!=','transfer'), ('state', '!=', 'draft')]}"/>
                 <button name="%(action_internal_transfer_multicurrency)d" type="action"
-                     string="Edit agreed amount" ="fertinova.allow_confirm_internal_transfer_with_agreed_amount" attrs="{'invisible':['|', ('payment_type','!=','transfer'), ('state', 'in', ('draft', 'cancelled'))]}"/>
+                     string="Edit agreed amount" groups="fertinova.allow_confirm_internal_transfer_with_agreed_amount" attrs="{'invisible':['|', ('payment_type','!=','transfer'), ('state', 'in', ('draft', 'cancelled'))]}"/>
             </xpath>
         </field>
     </record>

@@ -38,6 +38,7 @@ class AccountPayment(models.Model):
         self.ensure_one()
         self.bank_account_id = self.env['account.journal'].search([('id', '=', self.journal_id.id)]).bank_account_id.id
     
+    #@api.one
     def change_state_authorized(self):
         #Modify state to Authorized
         values = {'state_aux': 'authorized'}
