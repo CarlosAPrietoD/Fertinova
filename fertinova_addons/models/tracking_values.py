@@ -376,7 +376,146 @@ class AccountTax(models.Model):
          ('on_payment', 'Based on Payment'),
         ], track_visibility='onchange')
     active = fields.Boolean(track_visibility='onchange')
+
+
+class AccountFiscalPosition(models.Model):
+    _name = 'account.fiscal.position'
+    _inherit = ['account.fiscal.position', 'mail.thread']
+    
+    name = fields.Char(track_visibility='onchange')
+    l10n_mx_edi_code = fields.Char(track_visibility='onchange')
+    company_id = fields.Many2one(track_visibility='onchange')
+    auto_apply = fields.Boolean(track_visibility='onchange')
+    tax_ids = fields.One2many(track_visibility='onchange')
+    note = fields.Text(track_visibility='onchange')
+    account_ids = fields.One2many(track_visibility='onchange')
+    active = fields.Boolean(track_visibility='onchange')
+    
+    
+class AccountFiscalPosition(models.Model):
+    _name = 'account.incoterms'
+    _inherit = ['account.incoterms', 'mail.thread']
+
+
+    name = fields.Char(track_visibility='onchange')
+    code = fields.Char(track_visibility='onchange')
+    active = fields.Boolean(track_visibility='onchange')
+
+class AccountAccountTag(models.Model):
+    _name = 'account.account.tag'
+    _inherit = ['account.account.tag', 'mail.thread']
+
+    name = fields.Char(track_visibility='onchange')
+    active = fields.Boolean(track_visibility='onchange')
+
+
+class AccountGroup(models.Model):
+    _name = 'account.group'
+    _inherit = ['account.group', 'mail.thread']
+    
+    name = fields.Char(track_visibility='onchange')
+    code_prefix = fields.Char(track_visibility='onchange')
+    parent_id = fields.Many2one(track_visibility='onchange')
+
+class AccountReconcileModel(models.Model):
+    _name = 'account.reconcile.model'
+    _inherit = ['account.reconcile.model', 'mail.thread']
+
+    
+    name =  fields.Char(track_visibility='onchange')
+    rule_type = fields.Selection(selection=[
+        ('writeoff_button', 'Manually create a write-off on clicked button.'),
+        ('writeoff_suggestion', 'Suggest counterpart values.'),
+        ('invoice_matching', 'Match existing invoices/bills.')
+    ], track_visibility='onchange')
+    match_journal_ids = fields.Many2many(track_visibility='onchange')
+    account_id = fields.Many2one(track_visibility='onchange')
+    amount_type = fields.Selection([
+        ('fixed', 'Fixed'),
+        ('percentage', 'Percentage of balance')
+        ], track_visibility='onchange')
+    tax_id = fields.Many2one(track_visibility='onchange')
+    analytic_account_id = fields.Many2one(track_visibility='onchange')
+    analytic_tag_ids = fields.Many2many(track_visibility='onchange')
+    company_id = fields.Many2one(track_visibility='onchange')
+    has_second_line = fields.Boolean(track_visibility='onchange')
+    label = fields.Char(track_visibility='onchange')
+    amount = fields.Float(track_visibility='onchange')
+    journal_id = fields.Many2one(track_visibility='onchange')
+    
+
+class AccountPaymentTerm(models.Model):
+    _name = 'account.payment.term'
+    _inherit = ['account.payment.term', 'mail.thread']
+    
+    name = fields.Char(track_visibility='onchange')
+    note = fields.Text(track_visibility='onchange')
+    line_ids = fields.One2many(track_visibility='onchange')
+    active = fields.Boolean(track_visibility='onchange')
+
+
+class ProductCategory(models.Model):
+    _name = 'product.category'
+    _inherit = ['product.category', 'mail.thread']
+    
+    name =  fields.Char(track_visibility='onchange')
+    parent_id = fields.Many2one(track_visibility='onchange')
+    property_cost_method = fields.Selection([
+        ('standard', 'Standard Price'),
+        ('fifo', 'First In First Out (FIFO)'),
+        ('average', 'Average Cost (AVCO)')], track_visibility='onchange')
+    property_valuation = fields.Selection([
+        ('manual_periodic', 'Manual'),
+        ('real_time', 'Automated')], track_visibility='onchange')
+    property_account_creditor_price_difference_categ = fields.Many2one(track_visibility='onchange')
+    property_account_income_categ_id = fields.Many2one(track_visibility='onchange')
+    property_account_expense_categ_id = fields.Many2one(track_visibility='onchange')
+    property_stock_account_input_categ_id = fields.Many2one(track_visibility='onchange')
+    property_stock_account_output_categ_id = fields.Many2one(track_visibility='onchange')
+    property_stock_valuation_account_id = fields.Many2one(track_visibility='onchange')
+    property_stock_journal = fields.Many2one(track_visibility='onchange')
+    route_ids = fields.Many2many(track_visibility='onchange')
+    removal_strategy_id = fields.Many2one(track_visibility='onchange')
+    
+    
     '''(track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
+    (track_visibility='onchange')
     (track_visibility='onchange')
     (track_visibility='onchange')
     (track_visibility='onchange')
