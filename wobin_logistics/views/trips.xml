@@ -1,0 +1,146 @@
+<odoo>
+  <data>
+
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+    <!-- INHERITANCES -->
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+
+    <!--Analytic Tag Form Inherited where a new selection field type was added-->
+    <record id="analytic_tagform_inherited" model="ir.ui.view">
+        <field name="name">account.analytic.tag.form.inherit</field>
+        <field name="model">account.analytic.tag</field>
+        <field name="inherit_id" ref="analytic.account_analytic_tag_form_view"/>
+        <field name="arch" type="xml">
+           <xpath expr="//field[@name='name']" position="after">
+                <field name="analytic_tag_type"/>
+            </xpath>        
+        </field>
+    </record> 
+    <!--Add a new many2one field into Analytic Account model-->
+    <record id="analytic_accountform_inherit" model="ir.ui.view">
+        <field name="name">analytic.analytic.account.form.inherit</field>
+        <field name="model">account.analytic.account</field>
+        <field name="inherit_id" ref="analytic.view_account_analytic_account_form"/>
+        <field name="arch" type="xml">
+           <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="vehicle_id"/>
+            </xpath>        
+        </field>
+    </record>      
+
+
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+    <!-- SEQUENCE for name of Logistics Trips -->
+    <!--::::::::::::::::::::::::::::::::::::::::::::
+    <record id="sequence_logistics_trips" model="ir.sequence">
+      <field name="name">Logistics Trips</field>
+      <field name="code">self.trip</field>
+      <field name="active">TRUE</field>
+      <field name="prefix">VJ</field>
+      <field name="padding">6</field>
+      <field name="number_next">1</field>
+      <field name="number_increment">1</field>
+    </record>
+    -->
+
+
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+    <!-- VIEWS {LISTS, FORMS, SEARCH} -->
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+
+    <!-- TRIPS - LIST VIEW -->
+    <record id="view_logistics_trips_list" model="ir.ui.view">
+      <field name="name">Trips</field>
+      <field name="model">logistics.trips</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="trip_number_tag"/>
+          <field name="sales_order_id"/>
+          <field name="opportunity_id"/>
+          <field name="client_id"/>
+          <field name="vehicle_id"/>
+          <field name="analytic_accnt_id"/>
+          <field name="operator_id"/>          
+          <field name="route_id"/>
+          <field name="advance"/>
+          <field name="start_date"/>
+          <field name="upload_date"/>
+          <field name="estimated_qty"/>
+          <field name="real_upload_qty"/>
+          <field name="download_date"/>
+          <field name="real_download_qty"/>  
+          <field name="state"/>          
+        </tree>
+      </field>
+    </record>
+
+    <!-- TRIPS - FORM VIEW -->
+    <record id="view_logistics_trips_form" model="ir.ui.view"> 
+        <field name="name">Trips</field> 
+        <field name="model">logistics.trips</field> 
+        <field name="arch" type="xml"> 
+            <form> 
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="assigned,route,discharged"/>
+                </header> 
+                <sheet>
+                    <div class="oe_left oe_title">
+                        <h1>
+                            <field name="name" readonly="True"/>
+                        </h1>
+                    </div>                
+                    <group>
+                        <group>
+                            <field name="trip_number_tag"/>
+                            <field name="sales_order_id"/>
+                            <field name="opportunity_id"/>
+                            <field name="client_id"/>
+                            <field name="vehicle_id"/> 
+                            <field name="analytic_accnt_id"/>                           
+                            <field name="operator_id"/>
+                            <field name="route_id"/>  
+                            <field name="advance"/>                                           
+                        </group>
+                        <group>
+                            <field name="start_date"/>
+                            <field name="upload_date"/>
+                            <field name="estimated_qty"/>
+                            <field name="real_upload_qty"/>
+                            <field name="download_date"/>
+                            <field name="real_download_qty"/>
+                            <label for="conformity"/>
+                            <div>
+                                <field name="conformity" class="oe_inline" style="padding-right: 10px"/>
+                                <field name="checked" class="oe_inline"/>
+                            </div>                          
+                        </group>
+                    </group>
+                </sheet>              
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>               
+            </form> 
+        </field> 
+    </record>
+
+    <!-- ANALYSIS (TRIPS) - LIST VIEW -->
+    <record id="view_logs_trips_anlys_lst" model="ir.ui.view">
+      <field name="name">Trips Analysis</field>
+      <field name="model">sale.order</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>          
+          <field name="trips"/>
+          <field name="sale_order_qty"/>
+          <field name="trip_delivered_qty"/>
+          <field name="difference_qty"/>
+          <field name="state" invisible="1"/> 
+        </tree>
+      </field>
+    </record>
+
+  </data>  
+</odoo>    

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record model="ir.ui.view" id="attach_xmls_wizard_form_view">
+        <field name="name">attach_xmls_wizard_form</field>
+        <field name="model">xunnel.attach.xmls.wizard</field>
+        <field name="arch" type="xml">
+            <form class="form-xml">
+                <group class="wizard_fields">
+                    <group>
+                        <field name="journal_id" options="{'no_create': True}"/>
+                        <field name="account_id" options="{'no_create': True}"/>
+                    </group>
+                    <group groups="invoice_xunnel.allow_force_invoice_generation">
+                        <field name="omit_cfdi_related"/>
+                    </group>
+                </group>
+                <br/><br/><br/>
+                <field nolabel="1" name="dragndrop" widget="xunnel_attach_xmls_wizard_widget" string="Attach Supplier XML's"/>
+                <footer class="xml-footer"/>
+            </form>
+        </field>
+    </record>
+</odoo>

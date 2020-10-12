@@ -11,17 +11,20 @@
             <!--Avoid that some users cannot see Confirm button in Payments-->
             <xpath expr="//button[@name='post']" position="attributes">
                 <attribute name="groups">fertinova_addons.group_tesoreria</attribute>
-                <attribute name="states">authorized</attribute>
+                <attribute name="states">draft</attribute>
             </xpath>
           
             <!--Add new button to indicate Authorized state-->    
             <xpath expr="//button[@name='post']" position="after">
                 <button name="change_state_authorized" class="oe_highlight" states="draft" string="Autorizar" type="object" groups="fertinova_addons.group_autorizacion"/>                
             </xpath>           
-            <!-- Statusbar widget should also contain the new status of Authorized -->
-            <field name="state" position="replace">
-                <field name="state" widget="statusbar" statusbar_visible="draft,authorized,posted,reconciled,cancelled"/>
-            </field>         
+            <!-- Statusbar widget should also contain the new status of Authorized-->
+            <field name="state" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="state" position="after">
+                <field name="state_aux" widget="statusbar" statusbar_visible="draft,authorized,posted,reconciled,cancelled"/>
+            </field>  
           
             <!--Add 3 new fields into Payments Form-->
             <xpath expr="//field[@name='journal_id']" position="after">
@@ -29,7 +32,7 @@
             </xpath>
             <xpath expr="//field[@name='payment_transaction_id']" position="after">
                 <field name="invoices_id"/>
-                <field name="purchases_id"/>              
+                <field name="purchases_id"/>   
             </xpath>            
         </field>
     </record>             

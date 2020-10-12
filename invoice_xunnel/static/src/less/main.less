@@ -1,0 +1,35 @@
+
+.o_viewer_xml {
+    display: none;
+
+    &:first-of-type{
+        display: block;
+    }
+
+    width: 90%;
+    height: 90%;
+    
+    pre.prettyprint{
+        height: 100%;
+        color: black;
+        background: white;
+        white-space: pre-wrap;
+        .atn, .atv{
+            &:hover{
+                font-weight: bold;
+                text-decoration: underline;
+            }
+        }
+    }
+    #copy{
+        position: fixed;
+        top: -10em;
+    }
+}
+
+.notifyjs-corner{
+    z-index: 9999 !important;
+    .notifyjs-bootstrap-base{
+        padding: 1em;
+    }
+}

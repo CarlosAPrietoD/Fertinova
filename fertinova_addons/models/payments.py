@@ -9,18 +9,17 @@ class AccountPayment(models.Model):
     
     #\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\
     #             MODEL FIELDS
-    #state = fields.Selection(selection_add=[('authorized', 'Autorizado'), ('draft',)])
-    state = fields.Selection(selection=[
+    state_aux = fields.Selection(selection=[
         ('draft', 'Draft'),
-        ('authorized', 'Autorizado'),
+        ('authorized', 'Authorized'),
         ('posted', 'Posted'),
         ('sent', 'Sent'),
         ('reconciled', 'Reconciled'),
         ('cancelled', 'Cancelled')
-        ], string='Status', required=True, readonly=True, copy=False, tracking=True, default='draft')    
+        ], string='Status', required=True, readonly=True, copy=False, tracking=True, default='draft')  
     
     bank_account_id = fields.Many2one('res.partner.bank', string='Cuenta Diario Pago', 
-                                      compute='_compute_bank_account', readonly=False)
+                                      compute='_compute_bank_account', store=True, readonly=False)
     
     invoices_id     = fields.Many2one('account.invoice', 
                                       string='Factura', readonly=False,
@@ -29,66 +28,49 @@ class AccountPayment(models.Model):
     
     purchases_id    = fields.Many2one('purchase.order', 
                                       string='Orden de Compra', readonly=False,
-                                      default=lambda self: self.env['account.invoice'].search([('partner_id', '=', self.partner_id.id), 
+                                      default=lambda self: self.env['purchase.order'].search([('partner_id', '=', self.partner_id.id), 
                                                                                                ('state', 'not in', ['done', 'cancel'])]))
-
     #\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\
     #             METHOD FIELDS
+    @api.one
     @api.depends('journal_id')
     def _compute_bank_account(self):
+        self.ensure_one()
         self.bank_account_id = self.env['account.journal'].search([('id', '=', self.journal_id.id)]).bank_account_id.id
     
     def change_state_authorized(self):
-        self.state = 'authorized'  
+        #Modify state to Authorized
+        values = {'state_aux': 'authorized'}
+        self.write(values) 
         
+        #Construction of post message's content in Payments:
+        uid = self.env.user.id
+        name_user = self.env['res.users'].search([('id', '=', uid)]).name
+
+        payment_post =  "<ul style=\"margin:0px 0 9px 0\">"
+        payment_post += "<li><p style='margin:0px; font-size:13px; font-family:\"Lucida Grande\", Helvetica, Verdana, Arial, sans-serif'>Usuario que autorizó el pago: <strong>" + name_user + "</strong></p></li>"
+        payment_post += "<li><p style='margin:0px; font-size:13px; font-family:\"Lucida Grande\", Helvetica, Verdana, Arial, sans-serif'>Estado: <strong>AUTORIZADO</strong></p></li>"
+        payment_post += "</ul>"
+
+        payment_order_recorset = self.env['account.payment'].browse(self.id)
+        payment_order_recorset.message_post(body=payment_post)  
+
     @api.multi
     def post(self):
-        """ Create the journal items for the payment and update the payment's state to 'posted'.
-            A journal entry is created containing an item in the source liquidity account (selected journal's default_debit or default_credit)
-            and another in the destination reconcilable account (see _compute_destination_account_id).
-            If invoice_ids is not empty, there will be one reconcilable move line per invoice to reconcile with.
-            If the payment is a transfer, a second journal entry is created in the destination journal to receive money from the transfer account.
-        """
+        payment = super(AccountPayment, self).post()
+        for rec in self:   
+            rec.state_aux = 'posted'
+        return payment   
+
+    @api.multi
+    def cancel(self):
+        payment = super(AccountPayment, self).cancel()
         for rec in self:
+            rec.state_aux = 'cancelled'
+        return payment  
 
-            #if rec.state != 'draft':
-            #    raise UserError(_("Only a draft payment can be posted."))
-
-            if any(inv.state != 'open' for inv in rec.invoice_ids):
-                raise ValidationError(_("The payment cannot be processed because the invoice is not open!"))
-
-            # keep the name in case of a payment reset to draft
-            if not rec.name:
-                # Use the right sequence to set the name
-                if rec.payment_type == 'transfer':
-                    sequence_code = 'account.payment.transfer'
-                else:
-                    if rec.partner_type == 'customer':
-                        if rec.payment_type == 'inbound':
-                            sequence_code = 'account.payment.customer.invoice'
-                        if rec.payment_type == 'outbound':
-                            sequence_code = 'account.payment.customer.refund'
-                    if rec.partner_type == 'supplier':
-                        if rec.payment_type == 'inbound':
-                            sequence_code = 'account.payment.supplier.refund'
-                        if rec.payment_type == 'outbound':
-                            sequence_code = 'account.payment.supplier.invoice'
-                rec.name = self.env['ir.sequence'].with_context(ir_sequence_date=rec.payment_date).next_by_code(sequence_code)
-                if not rec.name and rec.payment_type != 'transfer':
-                    raise UserError(_("You have to define a sequence for %s in your company.") % (sequence_code,))
-
-            # Create the journal entry
-            amount = rec.amount * (rec.payment_type in ('outbound', 'transfer') and 1 or -1)
-            move = rec._create_payment_entry(amount)
-            persist_move_name = move.name
-
-            # In case of a transfer, the first journal entry created debited the source liquidity account and credited
-            # the transfer account. Now we debit the transfer account and credit the destination liquidity account.
-            if rec.payment_type == 'transfer':
-                transfer_credit_aml = move.line_ids.filtered(lambda r: r.account_id == rec.company_id.transfer_account_id)
-                transfer_debit_aml = rec._create_transfer_entry(amount)
-                (transfer_credit_aml + transfer_debit_aml).reconcile()
-                persist_move_name += self._get_move_name_transfer_separator() + transfer_debit_aml.move_id.name
-
-            rec.write({'state': 'posted', 'move_name': persist_move_name})
-        return True
+    @api.multi
+    def action_draft(self):
+        payment = super(AccountPayment, self).action_draft()
+        self.write({'state_aux': 'draft'})  
+        return payment   

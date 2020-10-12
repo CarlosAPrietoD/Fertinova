@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="online_journal_attachments" model="account.online.journal">
+        <field name="name">ACME Checking</field>
+        <field name="account_online_provider_id" ref="account_xunnel.online_provider_attachments"/>
+        <field name="account_number">00000001</field>
+        <field name="last_sync">1970-01-01</field>
+        <field name="online_identifier">5a9dcb3d244283f35a8c6e22</field>
+        <field name="balance">1099</field>
+    </record>
+    <record id="online_journal_webhooks" model="account.online.journal">
+        <field name="name">Webhook Checking</field>
+        <field name="account_online_provider_id" ref="account_xunnel.online_provider_webhooks"/>
+        <field name="account_number">00000001</field>
+        <field name="online_identifier">5703f88223428348328b45db</field>
+        <field name="balance">0</field>
+    </record>
+</odoo>

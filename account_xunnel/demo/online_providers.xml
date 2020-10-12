@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="online_provider_attachments" model="account.online.provider">
+        <field name="name">Acme Bank - Normal with Attachments</field>
+        <field name="provider_type">xunnel</field>
+        <field name="provider_account_identifier">5ad5ad730c212a6a268b45e4</field>
+        <field name="provider_identifier">58b884fc056f295aa1483a02</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+    <record id="online_provider_webhooks" model="account.online.provider">
+        <field name="name">Acme Bank - Webhook</field>
+        <field name="provider_type">xunnel</field>
+        <field name="provider_account_identifier">56cf5728784806f72b8b4568</field>
+        <field name="provider_identifier">5b2d85a00b212a1f1c8b456d</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+</odoo>

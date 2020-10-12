@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+<odoo>
+    <record id="change_xunnel_last_sync_date_view" model="ir.ui.view">
+        <field name="name">Change last synchronization date</field>
+        <field name="model">wizard.change.date</field>
+        <field name="arch" type="xml">
+            <form string="Import Bank Statements">
+                <h2>Select a date to start syncing</h2>
+                <p>Only de statements after the date specified will be fetched at the synchronization</p>
+                <field name="sync_date" />
+                <footer>
+                    <button name="change_sync_date" string="Change date" type="object" class="btn-primary" />
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="change_xunnel_last_sync_date_action" model="ir.actions.act_window">
+        <field name="name">Xunnel last sync date</field>
+        <field name="res_model">wizard.change.date</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="change_xunnel_last_sync_date_view"/>
+    </record>
+
+    <record id="journal_dashboard_view_inherit_inherit" model="ir.ui.view">
+        <field name="name">account.journal.dashboard.kanban.inherit</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.account_journal_dashboard_kanban_view"/>
+        <field name="arch" type="xml">
+            <xpath expr='//div[@name="bank_cash_commands"]' position="before">
+                <a type="action" name="%(account_xunnel.change_xunnel_last_sync_date_action)d">Xunnel synchronization date</a>
+            </xpath>
+        </field>
+    </record>
+</odoo>

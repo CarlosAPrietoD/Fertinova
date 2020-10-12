@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- pylint:disable=file-not-used -->
+<template xml:space="preserve">
+    <t t-name="account_xunnel.synchronized_accounts">
+        <div t-attf-class="alert alert-#{widget.message_class}">
+            <h3 t-attf-class="mt8 mb8 ml8 text-#{widget.message_class}" t-esc="widget.message"/>
+        </div>
+    </t>
+    <t t-name="account_xunnel.synchronized_accounts_footer">
+        <div>
+            <button class="btn btn-primary js_cancel pull-right">Ok</button>
+        </div>
+    </t>
+</template>
