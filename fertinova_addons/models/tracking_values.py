@@ -478,65 +478,112 @@ class ProductCategory(models.Model):
     removal_strategy_id = fields.Many2one(track_visibility='onchange')
     
     
+class AccountBudgetPost(models.Model):
+    _name = 'account.budget.post'
+    _inherit = ['account.budget.post', 'mail.thread']
+
+
+    name = fields.Char(track_visibility='onchange')
+    company_id =  fields.Many2one(track_visibility='onchange')
+    account_ids = fields.Many2many(track_visibility='onchange')
+
+
+class AccountAssetCategory(models.Model):
+    _name = 'account.asset.category'
+    _inherit = ['account.asset.category', 'mail.thread'] 
+    
+    name = fields.Char(track_visibility='onchange')
+    journal_id = fields.Many2one(track_visibility='onchange')
+    account_asset_id = fields.Many2one(track_visibility='onchange')
+    account_depreciation_id = fields.Many2one(track_visibility='onchange')
+    account_depreciation_expense_id = fields.Many2one(track_visibility='onchange')
+    account_analytic_id = fields.Many2one(track_visibility='onchange')
+    analytic_tag_ids = fields.Many2many(track_visibility='onchange')
+    company_id = fields.Many2one(track_visibility='onchange')
+    method_time = fields.Selection([('number', 'Number of Entries'), ('end', 'Ending Date')], track_visibility='onchange')
+    method_number = fields.Integer(track_visibility='onchange')
+    method_period = fields.Integer(track_visibility='onchange')
+    method_end = fields.Date(track_visibility='onchange')
+    open_asset = fields.Boolean(track_visibility='onchange')
+    group_entries = fields.Boolean(track_visibility='onchange')
+    date_first_depreciation = fields.Selection([
+        ('last_day_period', 'Based on Last Day of Purchase Period'),
+        ('manual', 'Manual (Defaulted on Purchase Date)')], track_visibility='onchange')
+    method = fields.Selection([('linear', 'Linear'), ('degressive', 'Degressive')], track_visibility='onchange')
+    method_progress_factor = fields.Float(track_visibility='onchange')
+
+
+class AccountFinancialHtmlReport(models.Model):
+    _name = 'account.financial.html.report'
+    _inherit = ['account.financial.html.report', 'mail.thread'] 
+
+
+    name = fields.Char(track_visibility='onchange')
+    company_id = fields.Many2one(track_visibility='onchange')
+    date_range = fields.Boolean(track_visibility='onchange')
+    tax_report = fields.Boolean(track_visibility='onchange')
+    debit_credit = fields.Boolean(track_visibility='onchange')
+    generated_menu_id = fields.Many2one(track_visibility='onchange')
+    comparison = fields.Boolean(track_visibility='onchange')
+    cash_basis = fields.Boolean(track_visibility='onchange')
+    unfol_all_filters = fields.Boolean(track_visibility='onchange')
+    hierarchy_option = fields.Boolean(track_visibility='onchange')
+    show_journal_filter = fields.Boolean(track_visibility='onchange')
+    analytic = fields.Boolean(track_visibility='onchange')
+    applicable_filters_ids = fields.Many2many(track_visibility='onchange')
+    line_ids = fields.One2many(track_visibility='onchange')
+
+
+class AccountAnalyticAccount(models.Model):
+    _inherit = 'account.analytic.account' 
+
+    name = fields.Char(track_visibility='onchange')
+    code = fields.Char(track_visibility='onchange')
+    partner_id = fields.Many2one(track_visibility='onchange')
+    vehicle_id = fields.Many2one(track_visibility='onchange')
+    group_id = fields.Many2one(track_visibility='onchange')
+    company_id = fields.Many2one(track_visibility='onchange')
+    currency_id = fields.Many2one(track_visibility='onchange')
+    crossovered_budget_line = fields.One2many(track_visibility='onchange')
+    active = fields.Boolean(track_visibility='onchange')
+
+class AccountAnalyticTag(models.Model):
+    _name = 'account.analytic.tag'
+    _inherit = ['account.analytic.tag', 'mail.thread']   
+    
+    name = fields.Char(track_visibility='onchange')
+    active_analytic_distribution = fields.Boolean(track_visibility='onchange')
+    company_id = fields.Many2one(track_visibility='onchange')
+    analytic_distribution_ids = fields.One2many(track_visibility='onchange')
+    active = fields.Boolean(track_visibility='onchange')
+
+
+class AccountAnalyticGroup(models.Model):
+    _name = 'account.analytic.group'
+    _inherit = ['account.analytic.group', 'mail.thread']
+
+    name = fields.Char(track_visibility='onchange')
+    parent_id = fields.Many2one(track_visibility='onchange')
+    description = fields.Text(track_visibility='onchange')
+    company_id = fields.Many2one(track_visibility='onchange')
+
+
+class UomUom(models.Model):
+    _name = 'uom.uom'
+    _inherit = ['uom.uom', 'mail.thread']
+
+    name = fields.Char(track_visibility='onchange')
+    category_id = fields.Many2one(track_visibility='onchange')
+    uom_type = fields.Selection([
+        ('bigger', 'Bigger than the reference Unit of Measure'),
+        ('reference', 'Reference Unit of Measure for this category'),
+        ('smaller', 'Smaller than the reference Unit of Measure')], track_visibility='onchange')
+    l10n_mx_edi_code_sat_id = fields.Many2one(track_visibility='onchange')
+    active = fields.Boolean(track_visibility='onchange')
+    rounding = fields.Float(track_visibility='onchange')
+
+
     '''(track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
     (track_visibility='onchange')
     (track_visibility='onchange')
     (track_visibility='onchange')
