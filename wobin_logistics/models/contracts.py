@@ -29,3 +29,21 @@ class LogisticsContracts(models.Model):
     carrier      = fields.Char(string='Carrier')
     shipping     = fields.Char(string='Shipping')
     observations = fields.Html('Observations')
+
+
+    def create_trip(self):
+        #action_id = self.env['ir.model.data'].xmlid_to_res_id('wobin_logistics.view_logistics_trips_form', 
+
+        return {
+            #'name':_("Products to Process"),
+            'view_mode': 'form',
+            'view_id': False,
+            'view_type': 'form',
+            'res_model': 'logistics.trips',
+            #'res_id': partial_id,
+            'type': 'ir.actions.act_window',
+            'nodestroy': True,
+            'target': 'current',
+            'domain': '[]',
+            'context': {'default_contracts_id': self.id}
+        }

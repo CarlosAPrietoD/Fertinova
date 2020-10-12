@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api
 from odoo.addons import decimal_precision as dp
+from odoo.exceptions import UserError
+from odoo.tools.translate import _
+
 import logging
 _logger = logging.getLogger(__name__)     
 
@@ -30,6 +33,9 @@ class LogisticsTrips(models.Model):
                     'analytic_tag_type': 'trip'
                 }
             new_tag = self.env['account.analytic.tag'].create(values)
+        else:
+            msg = _('Make sure you have assigned analytic tag types previously')
+            raise UserError(msg)            
         
         #Change of sequence (if it isn't stored is shown "New" else e.g VJ000005)  
         #if vals.get('name', 'New') == 'New':
@@ -45,6 +51,7 @@ class LogisticsTrips(models.Model):
 
     name              = fields.Char(string="Trip", readonly=True, required=True, copy=False, default='New')
     trip_number_tag   = fields.Char(string='Trip Number (Analytic Tag)', track_visibility='always')
+    contracts_id      = fields.Many2one('logistics.contracts', string='Contracts', track_visibility='always')
     sales_order_id    = fields.Many2one('sale.order', string='Sales Order', track_visibility='always')
     opportunity_id    = fields.Many2one('crm.lead', string='Lead', track_visibility='always')
     client_id         = fields.Many2one('res.partner', string='Client', track_visibility='always')
@@ -52,7 +59,7 @@ class LogisticsTrips(models.Model):
     analytic_accnt_id = fields.Many2one('account.analytic.account', string='Analytic Account', track_visibility='always')
     operator_id       = fields.Many2one('res.partner',string='Operator', track_visibility='always')
     route_id          = fields.Many2one('account.analytic.tag',string='Route', track_visibility='always', domain=[('analytic_tag_type', '=', "route")])
-    advance_id           = fields.Many2one('hr.expense.sheet',string='Advance', track_visibility='always')
+    advance_id        = fields.Many2one('hr.expense.sheet',string='Advance', track_visibility='always')
     start_date        = fields.Date(string='Start Date', track_visibility='always')
     upload_date       = fields.Date(string='Upload Date', track_visibility='always')
     estimated_qty     = fields.Float(string='Estimated Quantity', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always')
@@ -70,9 +77,9 @@ class LogisticsTrips(models.Model):
     @api.one
     def set_status(self):
         '''Set up state in base a which fields are filled up'''
-        if self.trip_number_tag and self.sales_order_id and self.opportunity_id and self.client_id and self.vehicle_id and self.operator_id and self.route_id and self.advance and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty and self.download_date and self.real_download_qty and self.conformity and self.checked:
+        if self.trip_number_tag and self.contracts_id and self.sales_order_id and self.opportunity_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route_id and self.advance_id and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty and self.download_date and self.real_download_qty and self.conformity and self.checked:
            self.state = 'discharged'
-        elif self.trip_number_tag and self.sales_order_id and self.opportunity_id and self.client_id and self.vehicle_id and self.operator_id and self.route_id and self.advance and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty:
+        elif self.trip_number_tag and self.contracts_id and self.sales_order_id and self.opportunity_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route_id and self.advance_id and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty:
             self.state = 'route'
         else:
             self.state = 'assigned'

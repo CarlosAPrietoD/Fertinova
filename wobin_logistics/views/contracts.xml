@@ -45,7 +45,10 @@
         <field name="model">logistics.contracts</field> 
         <field name="arch" type="xml"> 
             <form> 
-                 <sheet> 
+                <header>
+                    <button name="create_trip" type="object" string="Create Trip" class="oe_highlight" attrs="{'invisible': [('name', '=', 'New')]}"/>
+                </header>
+                <sheet> 
                     <div class="oe_left oe_title">
                         <h1>
                             <field name="name" readonly="True"/>

@@ -56,6 +56,7 @@
         <tree>
           <field name="name"/>
           <field name="trip_number_tag"/>
+          <field name="contracts_id"/>
           <field name="sales_order_id"/>
           <field name="opportunity_id"/>
           <field name="client_id"/>
@@ -93,6 +94,7 @@
                     <group>
                         <group>
                             <field name="trip_number_tag"/>
+                            <field name="contracts_id"/>
                             <field name="sales_order_id"/>
                             <field name="opportunity_id"/>
                             <field name="client_id"/>
