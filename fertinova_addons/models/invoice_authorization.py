@@ -80,17 +80,17 @@ class AccountInvoice(models.Model):
     _inherit = 'account.invoice'    
 
     state = fields.Selection([
-            ('draft','Draft'),
-            ('authorized', 'Authorized'),
+            ('draft','Draft'),            
             ('open', 'Open'),
+            ('authorized', 'Authorized Payment'),
             ('in_payment', 'In Payment'),
             ('paid', 'Paid'),
             ('cancel', 'Cancelled'),
         ], string='Status', index=True, readonly=True, default='draft',
         track_visibility='onchange', copy=False,
-        help=" * The 'Draft' status is used when a user is encoding a new and unconfirmed Invoice.\n"
-             " * The 'Authorized' status is used as a part of customization for authorizing Invoices before continue general process.\n"
+        help=" * The 'Draft' status is used when a user is encoding a new and unconfirmed Invoice.\n"             
              " * The 'Open' status is used when user creates invoice, an invoice number is generated. It stays in the open status till the user pays the invoice.\n"
+             " * The 'Authorized' status is used as a part of customization for authorizing Invoices before continue general process.\n"
              " * The 'In Payment' status is used when payments have been registered for the entirety of the invoice in a journal configured to post entries at bank reconciliation only, and some of them haven't been reconciled with a bank statement line yet.\n"
              " * The 'Paid' status is set automatically when the invoice is paid. Its related journal entries may or may not be reconciled.\n"
              " * The 'Cancelled' status is used when user cancel invoice.")
@@ -114,10 +114,28 @@ class AccountInvoice(models.Model):
         invoice_order_recorset = self.env['account.invoice'].browse(self.id)
         invoice_order_recorset.message_post(body=invoice_post)    
 
-    @api.multi
-    def action_invoice_open(self):
-        for rec in self:
-            if rec.state == 'authorized':
-                rec.state = 'draft' 
-        invoice = super(AccountInvoice, self).action_invoice_open()        
+
+
+class account_abstract_payment(models.AbstractModel):
+    _inherit = "account.abstract.payment"
+
+    @api.model
+    def default_get(self, fields):
+        #Obtain context
+        ctx = self.env.context
+        #key variant in ACCOUNTING > CLIENTS > INVOICES
+        id_aux = ctx.get('params', {}).get('id')
+
+        if not id_aux:
+            #key variant in ACCOUNTING > PROVIDERS > BILLS
+            id_aux = ctx.get('active_id', {})
+        
+        if id_aux:
+            #AFTER RETRIEVE ID, CONSULT STATE AND UPDATE IT IF IS AUTHORIZED
+            state_retrieved = self.env['account.invoice'].search([('id', '=', id_aux)]).state
+            if state_retrieved == 'authorized':
+                invoice_obj = self.env['account.invoice'].browse(id_aux)
+                invoice_obj.update({'state': 'open'})
+            
+        invoice = super(account_abstract_payment, self).default_get(fields)        
         return invoice 

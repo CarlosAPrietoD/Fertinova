@@ -26,21 +26,21 @@
         <field name="inherit_id" ref="account.invoice_form" />
         <field name="arch" type="xml">                     
             <!--Add new button to indicate Authorized state-->    
-            <xpath expr="//button[@name='action_invoice_open']" position="after">
-                <button name="change_state_authorized" class="oe_highlight" states="draft" string="Authorize" type="object" groups="fertinova_addons.group_autorizacion"/>                
+            <xpath expr="//button[@name='action_invoice_sent']" position="after">
+                <button name="change_state_authorized" class="oe_highlight" states="open" string="Authorize" type="object" groups="fertinova_addons.group_autorizacion"/>                
             </xpath>
-            <!--Avoid that some users cannot see Validate button in Clients > Invoices-->
-            <xpath expr="//button[@name='action_invoice_open']" position="attributes">
+            <!--Avoid that some users cannot see Register button in Clients > Invoices-->
+            <xpath expr="//button[@name='202']" position="attributes">
                 <attribute name="groups">fertinova_addons.group_tesoreria</attribute>
                 <attribute name="states">authorized</attribute>
             </xpath>            
             <!--Add new sequence to state after Authorized-->    
             <xpath expr="//button[@name='202']" position="attributes">                
-                <attribute name="states">open</attribute>
+                <attribute name="states">authorized</attribute>
             </xpath>                         
             <!-- Statusbar widget should also contain the new status of Authorized-->
             <field name="state" position="replace">
-                <field name="state" widget="statusbar" statusbar_visible="draft,authorized,open,paid,cancel"/>
+                <field name="state" widget="statusbar" statusbar_visible="draft,open,authorized,paid,cancel"/>
             </field>          
         </field>
     </record>
@@ -51,22 +51,22 @@
         <field name="inherit_id" ref="account.invoice_supplier_form" />
         <field name="arch" type="xml">                     
             <!--Add new button to indicate Authorized state-->    
-            <xpath expr="//button[@name='action_invoice_open']" position="after">
-                <button name="change_state_authorized" class="oe_highlight" states="draft" string="Authorize" type="object" groups="fertinova_addons.group_autorizacion"/>                
+            <xpath expr="//button[@name='202']" position="before">
+                <button name="change_state_authorized" class="oe_highlight" states="open" string="Authorize" type="object" groups="fertinova_addons.group_autorizacion"/>                
             </xpath>
-            <!--Avoid that some users cannot see Validate button in Clients > Invoices-->
-            <xpath expr="//button[@name='action_invoice_open']" position="attributes">
+            <!--Avoid that some users cannot see Register button in Providers > Bills-->
+            <xpath expr="//button[@name='202']" position="attributes">
                 <attribute name="groups">fertinova_addons.group_tesoreria</attribute>
                 <attribute name="states">authorized</attribute>
             </xpath>            
             <!--Add new sequence to state after Authorized-->    
             <xpath expr="//button[@name='202']" position="attributes">                
-                <attribute name="states">open</attribute>
+                <attribute name="states">authorized</attribute>
             </xpath>                         
             <!-- Statusbar widget should also contain the new status of Authorized-->
             <field name="state" position="replace">
-                <field name="state" widget="statusbar" statusbar_visible="draft,authorized,open,paid,cancel"/>
-            </field>          
+                <field name="state" widget="statusbar" statusbar_visible="draft,open,authorized,paid,cancel"/>
+            </field>           
         </field>
     </record>    
 
