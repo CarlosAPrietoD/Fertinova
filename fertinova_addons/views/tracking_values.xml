@@ -2,6 +2,8 @@
 <odoo>
     <data>
 
+        <!--=============================== Tracking account module ====================================-->
+
         <record id="tracking_journal" model="ir.ui.view">
             <field name="name">account.journal.tracking</field>
             <field name="model">account.journal</field>
@@ -268,6 +270,140 @@
             </field>
         </record>
 
+        <record id="tracking_payment_acquirer" model="ir.ui.view">
+            <field name="name">payment.acquirer.tracking</field>
+            <field name="model">payment.acquirer</field>
+            <field name="inherit_id" ref="payment.acquirer_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="after">
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="tracking_payment_token" model="ir.ui.view">
+            <field name="name">payment.token.tracking</field>
+            <field name="model">payment.token</field>
+            <field name="inherit_id" ref="payment.payment_token_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="after">
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="tracking_payment_icon" model="ir.ui.view">
+            <field name="name">payment.icon.tracking</field>
+            <field name="model">payment.icon</field>
+            <field name="inherit_id" ref="payment.payment_icon_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="after">
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+
+        <!--<record id="tracking_l10n_mx_edi_payment_method" model="ir.ui.view">
+            <field name="name">l10n_mx_edi.payment.method.tracking</field>
+            <field name="model">l10n_mx_edi.payment.method</field>
+            <field name="inherit_id" ref="l10n_mx_edi.view_l10n_mx_payment_method_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="after">
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </xpath>
+            </field>
+        </record>-->
+
+        <!--========================================================================================-->
+
+        <!--======================================Sales module======================================-->
+
+        <record id="tracking_product_pricelist" model="ir.ui.view">
+            <field name="name">product.pricelist.tracking</field>
+            <field name="model">product.pricelist</field>
+            <field name="inherit_id" ref="product.product_pricelist_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="after">
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="tracking_uom_category" model="ir.ui.view">
+            <field name="name">uom.category.tracking</field>
+            <field name="model">uom.category</field>
+            <field name="inherit_id" ref="uom.product_uom_categ_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group" position="after">
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="tracking_mail_activity_type" model="ir.ui.view">
+            <field name="name">mail.activity.type.tracking</field>
+            <field name="model">mail.activity.type</field>
+            <field name="inherit_id" ref="mail.mail_activity_type_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="after">
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="tracking_product_supplierinfo" model="ir.ui.view">
+            <field name="name">product.supplierinfo.tracking</field>
+            <field name="model">product.supplierinfo</field>
+            <field name="inherit_id" ref="product.product_supplierinfo_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group" position="after">
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="tracking_purchase_line" model="ir.ui.view">
+            <field name="name">purchase.order.line.tracking</field>
+            <field name="model">purchase.order.line</field>
+            <field name="inherit_id" ref="purchase.purchase_order_line_form2"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="after">
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        	
         
 
     </data>
