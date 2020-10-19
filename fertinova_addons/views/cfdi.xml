@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="xml_wo_condition" inherit_id="l10n_mx_edi.cfdiv33">
+            <xpath expr="//*[name()='cfdi:Comprobante']" position="attributes">
+                <attribute name="t-att-CondicionesDePago">False</attribute>
+            </xpath>
+        </template>
+    </data>
+</odoo>
