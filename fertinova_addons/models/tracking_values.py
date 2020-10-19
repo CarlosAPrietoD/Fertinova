@@ -1045,24 +1045,51 @@ class PurchaseOrderLine(models.Model):
     account_analytic_id = fields.Many2one(track_visibility='onchange')
     invoice_lines = fields.One2many(track_visibility='onchange')
     move_ids = fields.One2many(track_visibility='onchange')
+
+
+class StockMove(models.Model):
+    _name = 'stock.move'
+    _inherit = ['stock.move', 'mail.thread']
+
+
+    reference = fields.Char(track_visibility='onchange')
+    location_id = fields.Many2one(track_visibility='onchange')
+    location_dest_id = fields.Many2one(track_visibility='onchange')
+    product_id = fields.Many2one(track_visibility='onchange')
+    product_uom_qty = fields.Float(track_visibility='onchange')
+    product_uom = fields.Many2one(track_visibility='onchange')
+    origin = fields.Char(track_visibility='onchange')
+    group_id = fields.Many2one(track_visibility='onchange')
+    procure_method = fields.Selection([
+        ('make_to_stock', 'Default: Take From Stock'),
+        ('make_to_order', 'Advanced: Apply Procurement Rules')], track_visibility='onchange')
+    purchase_line_id = fields.Many2one(track_visibility='onchange')
+    move_orig_ids = fields.Many2many(track_visibility='onchange')
+    move_dest_ids = fields.Many2many(track_visibility='onchange')
+    state = fields.Selection([
+        ('draft', 'New'), ('cancel', 'Cancelled'),
+        ('cancel', 'Cancelled'),
+        ('waiting', 'Waiting Another Move'),
+        ('confirmed', 'Waiting Availability'),
+        ('partially_available', 'Partially Available'),
+        ('assigned', 'Available'),
+        ('done', 'Done')], track_visibility='onchange')
+
+
+class PurchaseRequisitionType(models.Model):
+    _name = 'purchase.requisition.type'
+    _inherit = ['purchase.requisition.type', 'mail.thread']
+
+    name = fields.Char(track_visibility='onchange')
+    exclusive = fields.Selection([
+        ('exclusive', 'Select only one RFQ (exclusive)'), ('multiple', 'Select multiple RFQ')], track_visibility='onchange')
+    line_copy = fields.Selection([
+        ('copy', 'Use lines of agreement'), ('none', 'Do not create RfQ lines automatically')], track_visibility='onchange')
+    quantity_copy = fields.Selection([
+        ('copy', 'Use quantities of agreement'), ('none', 'Set quantities manually')], track_visibility='onchange')
+    
+    
     '''(track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
     (track_visibility='onchange')
     (track_visibility='onchange')
     (track_visibility='onchange')
