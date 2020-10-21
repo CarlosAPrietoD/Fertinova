@@ -53,13 +53,12 @@ class LogisticsTrips(models.Model):
     trip_number_tag   = fields.Char(string='Trip Number (Analytic Tag)', track_visibility='always')
     contracts_id      = fields.Many2one('logistics.contracts', string='Contracts', track_visibility='always')
     sales_order_id    = fields.Many2one('sale.order', string='Sales Order', track_visibility='always')
-    opportunity_id    = fields.Many2one('crm.lead', string='Lead', track_visibility='always')
     client_id         = fields.Many2one('res.partner', string='Client', track_visibility='always')
     vehicle_id        = fields.Many2one('fleet.vehicle', string='Vehicle')    
     analytic_accnt_id = fields.Many2one('account.analytic.account', string='Analytic Account', track_visibility='always')
     operator_id       = fields.Many2one('res.partner',string='Operator', track_visibility='always')
     route_id          = fields.Many2one('account.analytic.tag',string='Route', track_visibility='always', domain=[('analytic_tag_type', '=', "route")])
-    advance_id        = fields.Many2one('hr.expense.sheet',string='Advance', track_visibility='always')
+    advance_id        = fields.Many2many('hr.expense.sheet',string='Advance', track_visibility='always')
     start_date        = fields.Date(string='Start Date', track_visibility='always')
     upload_date       = fields.Date(string='Upload Date', track_visibility='always')
     estimated_qty     = fields.Float(string='Estimated Quantity', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always')
@@ -77,9 +76,9 @@ class LogisticsTrips(models.Model):
     @api.one
     def set_status(self):
         '''Set up state in base a which fields are filled up'''
-        if self.trip_number_tag and self.contracts_id and self.sales_order_id and self.opportunity_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route_id and self.advance_id and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty and self.download_date and self.real_download_qty and self.conformity and self.checked:
+        if self.trip_number_tag and self.contracts_id and self.sales_order_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route_id and self.advance_id and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty and self.download_date and self.real_download_qty and self.conformity and self.checked:
            self.state = 'discharged'
-        elif self.trip_number_tag and self.contracts_id and self.sales_order_id and self.opportunity_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route_id and self.advance_id and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty:
+        elif self.trip_number_tag and self.contracts_id and self.sales_order_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route_id and self.advance_id and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty:
             self.state = 'route'
         else:
             self.state = 'assigned'
@@ -97,6 +96,17 @@ class LogisticsTrips(models.Model):
            from driver_id taken from vehicle_id's input'''
         self.operator_id = self.env['fleet.vehicle'].search([('id', '=', self.vehicle_id.id)]).driver_id.id
         self.analytic_accnt_id = self.env['account.analytic.account'].search([('vehicle_id', '=', self.vehicle_id.id)], limit=1).id
+
+
+    @api.model
+    def create_invoice(self, vals):  
+        #Create a new invoice according to data in trip's info:
+        name_sl_ord = self.env['sale.order'].search([('id', '=', self.sales_order_id.id)]).name
+        invoice = {
+            'state': 'draft',
+            'origin': name_sl_ord
+            }
+        record = self.env['account.invoice'].create(invoice)              
 
  
 

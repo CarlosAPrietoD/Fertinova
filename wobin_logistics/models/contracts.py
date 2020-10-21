@@ -32,8 +32,8 @@ class LogisticsContracts(models.Model):
 
 
     def create_trip(self):
+        """This method intends to display a Form View of Trips"""
         #action_id = self.env['ir.model.data'].xmlid_to_res_id('wobin_logistics.view_logistics_trips_form', 
-
         return {
             #'name':_("Products to Process"),
             'view_mode': 'form',
@@ -47,3 +47,18 @@ class LogisticsContracts(models.Model):
             'domain': '[]',
             'context': {'default_contracts_id': self.id}
         }
+
+
+
+class SaleOrder(models.Model):
+    _inherit = "sale.order"
+
+    @api.multi
+    def _action_confirm(self):
+        #Normal Logic of method "action_confirm" of Sales Order:
+        sale_order = super(SaleOrder, self)._action_confirm()
+        #Create a new contract in Wobin Logistics triggered by 
+        #a confirmation in Sales Order:
+        contract = {'client_id': self.partner_id.id}
+        record = self.env['logistics.contracts'].create(contract)        
+        return sale_order        

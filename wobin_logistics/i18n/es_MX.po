@@ -111,6 +111,11 @@ msgid "Covenanted Quantity"
 msgstr "Cantidad Pactada"
 
 #. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.view_logistics_trips_form
+msgid "Create Invoice"
+msgstr "Crear Factura"
+
+#. module: wobin_logistics
 #: model_terms:ir.ui.view,arch_db:wobin_logistics.view_logistics_contracts_form
 msgid "Create Trip"
 msgstr "Crear Viaje"
