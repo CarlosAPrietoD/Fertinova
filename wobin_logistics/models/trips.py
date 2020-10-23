@@ -106,7 +106,22 @@ class LogisticsTrips(models.Model):
             'state': 'draft',
             'origin': name_sl_ord
             }
-        record = self.env['account.invoice'].create(invoice)              
+        record = self.env['account.invoice'].create(invoice)      
+
+        #Return a new form view from Trips in order user can interact with it:
+        return {
+            #'name':_("Products to Process"),
+            'view_mode': 'form',
+            'view_id': False,
+            'view_type': 'form',
+            'res_model': 'account.invoice',
+            'res_id': record.id,
+            'type': 'ir.actions.act_window',
+            'nodestroy': True,
+            'target': 'current',
+            'domain': '[]',
+            #'context': {'default_id': record.id}
+        }                
 
  
 

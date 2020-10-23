@@ -72,11 +72,6 @@ msgid "Attachment Count"
 msgstr "Conteo de archivos adjuntos"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__carrier
-msgid "Carrier"
-msgstr "Porteador"
-
-#. module: wobin_logistics
 #: model:ir.actions.report,name:wobin_logistics.report_contract
 msgid "Carrying Letter"
 msgstr "Carta Porte"
@@ -420,6 +415,7 @@ msgstr "Cantidad de Orden de Venta"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__sales_order_id
+#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__sales_order_id
 msgid "Sales Order"
 msgstr "Pedido de venta"
 

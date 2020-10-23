@@ -17,18 +17,18 @@ class LogisticsContracts(models.Model):
         result = super(LogisticsContracts, self).create(vals)
         return result    
 
-    name         = fields.Char(string="Contract", readonly=True, required=True, copy=False, default='New')
-    client_id    = fields.Many2one('res.partner', string='Client')
-    product_id   = fields.Many2one('product.template', string="Product")
-    covenant_qty = fields.Float(string='Covenanted Quantity', digits=dp.get_precision('Product Unit of Measure'))
-    tariff       = fields.Float(string='Tariff', digits=dp.get_precision('Product Unit of Measure'))
-    origin       = fields.Char(string='Origin')
-    destiny      = fields.Char(string='Destiny')
-    remitter     = fields.Char(string='Remitter')
-    recipient    = fields.Char(string='Recipient')
-    carrier      = fields.Char(string='Carrier')
-    shipping     = fields.Char(string='Shipping')
-    observations = fields.Html('Observations')
+    name           = fields.Char(string="Contract", readonly=True, required=True, copy=False, default='New')
+    client_id      = fields.Many2one('res.partner', string='Client')
+    sales_order_id = fields.Many2one('sale.order', string='Sales Order')
+    product_id     = fields.Many2one('product.template', string="Product")
+    covenant_qty   = fields.Float(string='Covenanted Quantity', digits=dp.get_precision('Product Unit of Measure'))
+    tariff         = fields.Float(string='Tariff', digits=dp.get_precision('Product Unit of Measure'))
+    origin         = fields.Many2one('account.analytic.tag', string='Origin', domain=[('analytic_tag_type', '=', 'route')])
+    destiny        = fields.Many2one('account.analytic.tag', string='Destiny', domain=[('analytic_tag_type', '=', 'route')])
+    remitter       = fields.Char(string='Remitter')
+    recipient      = fields.Char(string='Recipient')
+    shipping       = fields.Char(string='Shipping')
+    observations   = fields.Html('Observations')
 
 
     def create_trip(self):
@@ -59,6 +59,7 @@ class SaleOrder(models.Model):
         sale_order = super(SaleOrder, self)._action_confirm()
         #Create a new contract in Wobin Logistics triggered by 
         #a confirmation in Sales Order:
-        contract = {'client_id': self.partner_id.id}
+        contract = {'client_id': self.partner_id.id,
+                    'sales_order_id': self.id}
         record = self.env['logistics.contracts'].create(contract)        
         return sale_order        

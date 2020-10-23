@@ -60,7 +60,7 @@
 
                         <p class="text-justify"> 
                             <strong>SEGUNDA: </strong>  
-                            Para los efectos del presente contrato de transporte se denomina "Porteador" (<span t-field="doc.carrier"/>) al
+                            Para los efectos del presente contrato de transporte se denomina "Porteador" al
                             transportista y "Remitente" (<span t-field="doc.remitter"/>) al usuario que contrata el servicio. "Destinatario" (<span t-field="doc.recipient"/>) es la persona física o
                             moral a la que va a dirigida el "Envío" transportado y "Envío" (<span t-field="doc.shipping"/>) es la mercancía que documenta el
                             "Remitente".                          
