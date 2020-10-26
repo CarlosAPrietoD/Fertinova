@@ -83,7 +83,14 @@ class LogisticsTrips(models.Model):
         else:
             self.state = 'assigned'
 
-    
+
+    @api.onchange('contracts_id')
+    def _onchange_contract(self):
+        '''Authomatic assignation for field "sales_order_id" from contracts_id's input'''
+        self.sales_order_id = self.env['logistics.contracts'].search([('id', '=', self.contracts_id.id)]).sales_order_id.id         
+        self.client_id      = self.env['logistics.contracts'].search([('id', '=', self.contracts_id.id)]).client_id.id 
+
+
     @api.onchange('sales_order_id')
     def _onchange_sales_order(self):
         '''Authomatic assignation for field "client_id" from sales_order's input'''

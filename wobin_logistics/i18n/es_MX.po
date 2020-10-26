@@ -130,11 +130,6 @@ msgid "Created on"
 msgstr "Creado el"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__destiny
-msgid "Destiny"
-msgstr "Destino"
-
-#. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_sale_order__difference_qty
 msgid "Difference Qty"
 msgstr "Cant. Restante"
@@ -345,9 +340,9 @@ msgid "Operator"
 msgstr "Operador"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__origin
-msgid "Origin"
-msgstr "Origen"
+#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__origin_destiny
+msgid "Origin & Destiny"
+msgstr "Origen y Destino"
 
 #. module: wobin_logistics
 #: selection:logistics.contracts,activity_state:0

@@ -23,8 +23,7 @@ class LogisticsContracts(models.Model):
     product_id     = fields.Many2one('product.template', string="Product")
     covenant_qty   = fields.Float(string='Covenanted Quantity', digits=dp.get_precision('Product Unit of Measure'))
     tariff         = fields.Float(string='Tariff', digits=dp.get_precision('Product Unit of Measure'))
-    origin         = fields.Many2one('account.analytic.tag', string='Origin', domain=[('analytic_tag_type', '=', 'route')])
-    destiny        = fields.Many2one('account.analytic.tag', string='Destiny', domain=[('analytic_tag_type', '=', 'route')])
+    origin_destiny = fields.Many2many('account.analytic.tag', string='Origin & Destiny', domain=[('analytic_tag_type', '=', 'route')])
     remitter       = fields.Char(string='Remitter')
     recipient      = fields.Char(string='Recipient')
     shipping       = fields.Char(string='Shipping')
@@ -58,8 +57,9 @@ class SaleOrder(models.Model):
         #Normal Logic of method "action_confirm" of Sales Order:
         sale_order = super(SaleOrder, self)._action_confirm()
         #Create a new contract in Wobin Logistics triggered by 
-        #a confirmation in Sales Order:
-        contract = {'client_id': self.partner_id.id,
+        #a confirmation in Sales Order:       
+        contract = {'name': self.env['ir.sequence'].next_by_code('self.contract'),
+                    'client_id': self.partner_id.id,
                     'sales_order_id': self.id}
         record = self.env['logistics.contracts'].create(contract)        
         return sale_order        
