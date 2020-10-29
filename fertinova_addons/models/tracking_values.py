@@ -1088,30 +1088,56 @@ class PurchaseRequisitionType(models.Model):
     quantity_copy = fields.Selection([
         ('copy', 'Use quantities of agreement'), ('none', 'Set quantities manually')], track_visibility='onchange')
     
+
+class StockPicking(models.Model):
+    _inherit = 'stock.picking'
+    
+    partner_id = fields.Many2one(track_visibility='onchange')
+    picking_type_id = fields.Many2one(track_visibility='onchange')
+    location_id = fields.Many2one(track_visibility='onchange')
+    location_dest_id = fields.Many2one(track_visibility='onchange')
+    x_studio_aplica_flete = fields.Boolean(track_visibility='onchange')
+    schedule_date = fields.Datetime(track_visibility='onchange')
+    origin = fields.Char(track_visibility='onchange')
+    move_ids_without_package = fields.One2many(track_visibility='onchange')
+    move_type = fields.Selection([
+        ('direct', 'As soon as possible'), ('one', 'When all products are ready')], track_visibility='onchange')
+    company_id = fields.Many2one(track_visibility='onchange')
+    group_id = fields.Many2one(track_visibility='onchange')
+    note = fields.Text(track_visibility='onchange')
+    state = fields.Selection([
+        ('draft', 'Draft'),
+        ('waiting', 'Waiting Another Operation'),
+        ('confirmed', 'Waiting'),
+        ('assigned', 'Ready'),
+        ('done', 'Done'),
+        ('cancel', 'Cancelled'),
+    ], track_visibility='onchange')
+
+
+class StockInventory(models.Model):
+    _name = 'stock.inventory'
+    _inherit = ['stock.inventory', 'mail.thread']
+
+    name = fields.Char(track_visibility='onchange')
+    location_id = fields.Many2one(track_visibility='onchange')
+    filter = fields.Selection([
+            ('none', 'All products'),
+            ('category', 'One product category'),
+            ('product', 'One product only'),
+            ('partial', 'Select products manually')], track_visibility='onchange')
+    date = fields.Datetime(track_visibility='onchange')
+    accounting_date = fields.Date(track_visibility='onchange')
+    company_id = fields.Many2one(track_visibility='onchange')
+    exhausted = fields.Boolean(track_visibility='onchange')
+    state = fields.Selection([
+        ('draft', 'Draft'),
+        ('cancel', 'Cancelled'),
+        ('confirm', 'In Progress'),
+        ('done', 'Validated')], track_visibility='onchange')
+    
     
     '''(track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
-    (track_visibility='onchange')
     (track_visibility='onchange')
     (track_visibility='onchange')
     (track_visibility='onchange')
