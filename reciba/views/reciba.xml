@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+        <record model="ir.actions.act_window" id="reciba_ticket_action">
+            <field name="name">Boletas</field>
+            <field name="res_model">reciba.ticket</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">Create the first cycle
+                </p>
+            </field>
+        </record>
+
+        <!-- Top menu item -->
+        <menuitem name="Reciba" id="menu_reciba_root" sequence="40"/>
+
+        <menuitem id="inventory_menu" name="Inventario" parent="menu_reciba_root" sequence="1"/>
+
+        <menuitem id="inventory_ticket_menu" name="Boletas" parent="inventory_menu" action="reciba_ticket_action" sequence="1"/>
+
+    </data>
+</odoo>
