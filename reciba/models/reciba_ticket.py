@@ -148,6 +148,7 @@ class RecibaQuality(models.Model):
 
 class RecibaQualityParams(models.Model):
     _name = 'reciba.quality.params'
+    _description = 'Parametros de calidad de Reciba'
 
     name = fields.Char(string="Nombre")
     quality_id = fields.Many2one('reciba.quality')
