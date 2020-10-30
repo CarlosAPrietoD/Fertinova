@@ -1,2 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_reciba_reciba,reciba.reciba,model_reciba_reciba,,1,0,0,0
+access_reciba_liquidaciones,reciba.reciba_liquidaciones,model_reciba_liquidaciones,,1,1,1,1
+access_reciba_prestamos,reciba.reciba_prestamos,model_reciba_prestamos,,1,1,1,1
