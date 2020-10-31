@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 import datetime
 import pytz
@@ -22,12 +23,12 @@ class RecibaPrestamos(models.Model):
 
     def _set_hora_mx(self):
         #Get User Timezone e.g. MEXICO/GENERAL:
-        user_timezone = pytz.timezone(self.env.context.get('tz') or self.env.user.tz)
+        #user_timezone = pytz.timezone(self.env.context.get('tz') or self.env.user.tz)
         #Obtain current system time:
         time_system_current = fields.datetime.now()     
         #Convert system time into mexican time:   
-        time_converted = pytz.utc.localize(time_system_current).astimezone(user_timezone)  
-        hora_prestamo_aux = time_converted.strftime('%H:%M:%S')
+        #time_converted = pytz.utc.localize(time_system_current).astimezone(user_timezone)  
+        hora_prestamo_aux = time_system_current.strftime('%H:%M:%S')
         return hora_prestamo_aux
 
 
@@ -50,14 +51,14 @@ class RecibaPrestamos(models.Model):
         #Set up "settled" state:
         self.estado = 'settled'        
         #Get User Timezone e.g. MEXICO/GENERAL:
-        user_timezone = pytz.timezone(self.env.context.get('tz') or self.env.user.tz)
+        #user_timezone = pytz.timezone(self.env.context.get('tz') or self.env.user.tz)
         #Obtain current system time:
         time_system_current = fields.datetime.now()     
         #Convert system time into mexican time:   
-        time_converted = pytz.utc.localize(time_system_current).astimezone(user_timezone)  
-        fecha_cobro_aux = time_converted.strftime('%Y-%m-%d')
+        #time_converted = pytz.utc.localize(time_system_current).astimezone(user_timezone)  
+        fecha_cobro_aux = time_system_current.strftime('%Y-%m-%d')
         self.fecha_cobro = fecha_cobro_aux
-        hora_cobro_aux = time_converted.strftime('%H:%M:%S')        
+        hora_cobro_aux = time_system_current.strftime('%H:%M:%S')        
         self.hora_cobro = hora_cobro_aux
 
 
