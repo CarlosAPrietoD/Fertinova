@@ -2,32 +2,36 @@
 {
     'name': "Reciba",
 
-    'summary': """
-        Short (1 phrase/line) summary of the module's purpose, used as
-        subtitle on modules listing or apps.openerp.com""",
+    'summary': """Módulo para la gestión de Recepción de grano y control de inventarios, calidad, liquidaciones e informes""",
 
-    'description': """
-        Long description of module's purpose
-    """,
+    'description': """Este módulo procura facilitar la administración de la Recepción de grano
+                      de los productores, fomentar un mayor control de calidad, asignación de
+                      almacenes o ubicaciones; así como la administración de liquidaciones y 
+                      visualización de informes""",
 
-    'author': "My Company",
-    'website': "http://www.yourcompany.com",
+    'author': "WOBIN simple cloud",
+    'website': "https://fertinova.odoo.com/web",
 
     # Categories can be used to filter modules in modules listing
     # Check https://github.com/odoo/odoo/blob/12.0/odoo/addons/base/data/ir_module_category_data.xml
     # for the full list
     'category': 'Uncategorized',
-    'version': '0.1',
+    'version': '12.0.1.0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base'],
+    'depends': ['base', 'account'],
 
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
-        'views/views.xml',
+        #security
+        'security/ir.model.access.csv',
+        
+        #views
+        'views/reciba.xml',  
+        'views/prestamos.xml',               
+        'views/liquidaciones.xml',               
         'views/templates.xml',
-        'views/reciba.xml',
+        'views/views.xml',        
     ],
     # only loaded in demonstration mode
     'demo': [
