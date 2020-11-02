@@ -159,6 +159,15 @@ class RecibaTicket(models.Model):
         self.state='cancel'
 
 
+    @api.multi
+    @api.returns('self', lambda value: value.id)
+    def copy(self, default=None):
+        order = super(RecibaTicket, self).copy(default)
+        
+        order.number = self._default_number()
+        
+        return order
+
 
 class RecibaTicketParams(models.Model):
     _name = 'reciba.ticket.params'
