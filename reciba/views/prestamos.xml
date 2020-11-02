@@ -46,7 +46,7 @@
             <form> 
                 <header>
                     <button name="marcar_saldado" type="object" string="Marcar como Saldado" class="btn-primary" icon="fa-file-text" attrs="{'invisible':[('state','=','settled')]}"/>
-                    <button name="cancelar" type="object" string="Cancelar" class="btn-primary" attrs="{'invisible':['state','=','open')]}"/>
+                    <button name="cancelar" type="object" string="Cancelar" class="btn-primary" attrs="{'invisible':[('state','=','open')]}"/>
                     <field name="state" widget="statusbar" statusbar_visible="open,settled"/>
                 </header>
                 <sheet> 
