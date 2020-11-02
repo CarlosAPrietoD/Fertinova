@@ -21,9 +21,10 @@ class RecibaLiquidaciones(models.Model):
         print('\n\n\n facturas ids: ', facturas)
         _logger.info('\n\n\n facturas ids: \n%s', facturas)
 
-        prestamos = self.env['reciba.prestamos'].search([('state', '=', 'open')]).id
+        prestamos = self.env['reciba.prestamos'].search([('state', '=', 'open')])
         print('\n\n\n prestamos ids: ', prestamos)
         _logger.info('\n\n\n prestamos ids: \n%s', prestamos)
+        _logger.info('\n\n\n prestamos ids con .ids: \n%s', prestamos.ids)
 
         #Obtain and Iterate recordsets from Invoices and Loans in order to fill model of Liquidaciones:
         facturas_recordsets = self.env['account.invoice'].browse(facturas.ids)
