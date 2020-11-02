@@ -9,7 +9,7 @@ from odoo.addons import decimal_precision as dp
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'    
-    
+    #FIELD to consider    
     deudor_titular_id = fields.Many2one('res.partner', string='Deudor Titular') 
 
 
