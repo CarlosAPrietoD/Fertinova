@@ -6,6 +6,13 @@ from odoo import models, fields, api
 from odoo.addons import decimal_precision as dp
 
 
+class ResPartner(models.Model):
+    _inherit = 'res.partner'    
+    
+    deudor_titular_id = fields.Many2one('res.partner', string='Deudor Titular') 
+
+
+
 class RecibaPrestamos(models.Model):
     _name = 'reciba.prestamos'
     _description = 'Préstamos de Reciba'

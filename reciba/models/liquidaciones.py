@@ -68,10 +68,3 @@ class RecibaLiquidaciones(models.Model):
     cantidad       = fields.Float(string='Cantidad', digits=dp.get_precision('Product Unit of Measure'))   
     fecha          = fields.Date(string='Fecha')
     estado         = fields.Char(string='Estado')
-
-
-
-class ResPartner(models.Model):
-    _inherit = 'res.partner'    
-    
-    deudor_titular_id = fields.Many2one('res.partner', string='Deudor Titular') 
