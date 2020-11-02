@@ -94,4 +94,4 @@ class ResPartner(models.Model):
         return self.id          
         
     
-    deudor_titular_id = fields.Many2one('res.partner', string='Deudor Titular', default=_set_deudor) 
+    deudor_titular_id = fields.Many2one('res.partner', string='Deudor Titular', compute='_set_deudor') 
