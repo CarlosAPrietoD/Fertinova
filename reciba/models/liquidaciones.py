@@ -75,6 +75,7 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
 
     
+    """
     @api.model
     def write(self, vals):    
         res = super(RecibaLiquidaciones, self).write(vals)                    
@@ -82,7 +83,7 @@ class ResPartner(models.Model):
             vals = {'deudor_titular_id': self.id}
             self.env['reciba.liquidaciones'].write(vals)
         return res
-            
+    """        
 
     #@api.depends('name')
     #def _set_deudor(self):
