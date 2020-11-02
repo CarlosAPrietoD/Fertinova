@@ -21,7 +21,7 @@ class RecibaLiquidaciones(models.Model):
         print('\n\n\n facturas ids: ', facturas)
         _logger.info('\n\n\n facturas ids: \n%s', facturas)
 
-        prestamos = self.env['reciba.prestamos'].search([('estado', '=', 'open')])
+        prestamos = self.env['reciba.prestamos'].search([('state', '=', 'open')]).id
         print('\n\n\n prestamos ids: ', prestamos)
         _logger.info('\n\n\n prestamos ids: \n%s', prestamos)
 
@@ -51,7 +51,7 @@ class RecibaLiquidaciones(models.Model):
         prestamos_recordsets = self.env['reciba.prestamos'].browse(prestamos.ids)
         for prestamo in prestamos_recordsets:
             #Retrieve deudor_titular from contacto_id:
-            contacto_titular = self.env['res.partner'].search([('id','=',factura.partner_id.id)]).deudor_titular_id.id             
+            contacto_titular = self.env['res.partner'].search([('id', '=', prestamo.contacto_id.id)]).deudor_titular_id.id             
             
             liquidaciones_pendientes = {
                 'tipo_operacion': 'Préstamo',
