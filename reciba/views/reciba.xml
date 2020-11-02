@@ -17,23 +17,23 @@
                             <group>
                                 <field name="number" readonly="1"/>
                                 <field name="date" readonly="1"/>
-                                <field name="partner_id"/>
-                                <field name="product_id"/>
+                                <field name="partner_id"  attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="product_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                             </group>
                         </group>
                         <group>
-                            <field name="quality_id" string="Norma de calidad"/>
+                            <field name="quality_id" string="Norma de calidad"  attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                         </group>
                         <group>
                             <group>
-                                <field name="humidity"/>
-                                <field name="impurity"/>
+                                <field name="humidity"  attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="impurity"  attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                             </group>
                             <group>
                                 <field name="humidity_discount"/>
                                 <field name="impurity_discount"/>
                             </group>
-                            <field name="params_id">
+                            <field name="params_id"  attrs="{'readonly':[('state', '!=', 'draft')]}">
                                 <tree editable="bottom">
                                     <field name="quality_params_id" readonly="True" force_save="1"/>
                                     <field name="max_value"/>
@@ -42,13 +42,13 @@
                             </field>
                         </group>
                         <group>
-                            <field name="reception"/>
+                            <field name="reception"  attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                         </group>
 
                         <group>
                             <group>
-                                <field name="gross_weight"/>
-                                <field name="location_id"/>
+                                <field name="gross_weight"  attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="location_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                             </group>
                             <group>
                                 <field name="gross_date"/>
@@ -57,8 +57,8 @@
                         </group>
                         <group>
                             <group>
-                                <field name="tare_weight"/>
-                                <field name="net_weight"/>
+                                <field name="tare_weight" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="net_weight"  attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                             </group>
                             <group>
                                 <field name="tare_date"/>
@@ -69,8 +69,8 @@
                             <group>
                                 <field name="humidity_total_discount"/>
                                 <field name="impurity_total_discount"/>
-                                <field name="price"/>
-                                <field name="currency_id"/>
+                                <field name="price"  attrs="{'readonly':[('state', '!=', 'draft')], 'required':[('reception', '=', 'price')]}"/>
+                                <field name="currency_id"  attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                             </group>
                             <group>
                                 <field name="sub"/>
@@ -94,6 +94,13 @@
                     <field name="number"/>
                     <field name="partner_id"/>
                     <field name="product_id"/>
+                    <field name="net_weight"/>
+                    <field name="discount"/>
+                    <field name="price"/>
+                    <field name="quality_id"/>
+                    <field name="reception"/>
+                    <field name="state"/>
+                    <field name="location_id"/>
                 </tree>
             </field>
         </record>
