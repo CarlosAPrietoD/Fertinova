@@ -7,6 +7,11 @@
             <field name="model">reciba.ticket</field>
             <field name="arch" type="xml">
                 <form string="Reciba Form">
+                    <header>
+                        <button name="confirm_reciba" type="object" states="draft" string="Confirmar"/>
+                        <button name="cancel_reciba" type="object" states="draft" string="Cancelar"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,invoiced,cancel"/>
+                    </header>
                     <sheet>
                         <group>
                             <group>
@@ -30,7 +35,7 @@
                             </group>
                             <field name="params_id">
                                 <tree editable="bottom">
-                                    <field name="name"/>
+                                    <field name="quality_params_id" readonly="True" force_save="1"/>
                                     <field name="max_value"/>
                                     <field name="value"/>
                                 </tree>
@@ -62,14 +67,16 @@
                         </group>
                         <group>
                             <group>
-                                <field name="currency_id"/>
+                                <field name="humidity_total_discount"/>
+                                <field name="impurity_total_discount"/>
                                 <field name="price"/>
+                                <field name="currency_id"/>
                             </group>
                             <group>
                                 <field name="sub"/>
                                 <field name="discount"/>
                                 <field name="total_weight"/>
-                                <field name="total"/>
+                                <field name="total"  class="oe_subtotal_footer_separator"/>
                             </group>
                         </group>
                     </sheet>
