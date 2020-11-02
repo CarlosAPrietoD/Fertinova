@@ -89,9 +89,13 @@ class ResPartner(models.Model):
     #    if not self.deudor_titular_id:
     #        values = {'deudor_titular_id': self.id}
     #        self.write(values)
-    @api.one
-    def _set_deudor(self):        
-        return self.id          
+    @api.multi
+    def _set_deudor(self): 
+        for rec in self:       
+            if not self.deudor_titular_id:
+                values = {'deudor_titular_id': rec.id}            
+                rec.write(values) 
+
         
     
-    deudor_titular_id = fields.Many2one('res.partner', string='Deudor Titular', compute='_set_deudor') 
+    deudor_titular_id = fields.Many2one('res.partner', string='Deudor Titular', default=_set_deudor) 
