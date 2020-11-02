@@ -74,7 +74,7 @@ class RecibaLiquidaciones(models.Model):
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
-    '''
+    
     @api.model
     def write(self, vals):    
         res = super(RecibaLiquidaciones, self).write(vals)                    
@@ -82,16 +82,16 @@ class ResPartner(models.Model):
             vals = {'deudor_titular_id': self.id}
             self.env['reciba.liquidaciones'].write(vals)
         return res
-    '''        
+            
 
     #@api.depends('name')
     #def _set_deudor(self):
     #    if not self.deudor_titular_id:
     #        values = {'deudor_titular_id': self.id}
     #        self.write(values)
-    @api.one
-    def _set_deudor(self):        
-        return self.id          
+    #@api.one
+    #def _set_deudor(self):        
+    #    return self.id          
         
     
-    deudor_titular_id = fields.Many2one('res.partner', string='Deudor Titular', compute='_set_deudor') 
+    deudor_titular_id = fields.Many2one('res.partner', string='Deudor Titular') 
