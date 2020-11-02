@@ -14,18 +14,33 @@ class RecibaTicket(models.Model):
         tickets = self.env['reciba.ticket'].search([])
         return len(tickets)+1
 
-    @api.depends('humidity', 'net_weight')
+    @api.depends('humidity')
     def _get_humidity_discount(self):
         if self.humidity:
             if self.humidity > 14.5:
-                self.humidity_discount = ((self.humidity-14.5)*1.16)/100*self.net_weight
+                self.humidity_discount = ((self.humidity-14.5)*1.16)/100*1000
 
 
-    @api.depends('impurity', 'net_weight')
+    @api.depends('impurity')
     def _get_impurity_discount(self):
         if self.impurity:
             if self.impurity > 2:
-                self.impurity_discount = (self.impurity-2)/100*self.net_weight
+                self.impurity_discount = (self.impurity-2)/100*1000
+
+
+    @api.depends('humidity', 'net_weight')
+    def _get_humidity_total_discount(self):
+        if self.humidity:
+            if self.humidity > 14.5:
+                self.humidity_total_discount = ((self.humidity-14.5)*1.16)/100*self.net_weight
+
+
+    @api.depends('impurity', 'net_weight')
+    def _get_impurity_total_discount(self):
+        if self.impurity:
+            if self.impurity > 2:
+                self.impurity_total_discount = (self.impurity-2)/100*self.net_weight
+                
 
     @api.depends('gross_weight')
     def _default_gross_date(self):
@@ -62,9 +77,9 @@ class RecibaTicket(models.Model):
             self.sub = self.price*self.net_weight
 
     
-    @api.depends('humidity_discount', 'impurity_discount')
+    @api.depends('humidity_total_discount', 'impurity_total_discount')
     def _get_discount_total(self):
-        self.discount = self.humidity_discount+self.impurity_discount
+        self.discount = self.humidity_total_discount+self.impurity_total_discount
 
     @api.depends('net_weight', 'discount')
     def _get_total_weight(self):
@@ -75,6 +90,10 @@ class RecibaTicket(models.Model):
         self.total = self.total_weight*self.price
     
 
+    state = fields.Selection([('draft', 'Borrador'),
+    ('confirmed', 'Por facturar'), 
+    ('invoiced','Facturado'),
+    ('cancel', 'Cancelado')], default='draft')
     number = fields.Integer(string="Boleta No.", default=_default_number)
     date = fields.Datetime(string="Fecha y hora de llegada", default=lambda self: fields.datetime.now())
     partner_id = fields.Many2one('res.partner', string="Proveedor")
@@ -87,8 +106,7 @@ class RecibaTicket(models.Model):
     impurity_discount = fields.Float(string="Descuento (Kg)", compute='_get_impurity_discount')
     params_id = fields.One2many('reciba.ticket.params', 'ticket_id')
 
-    reception = fields.Selection([('price', 'Con precio por facturar'),
-    ('invoiced', 'Con precio facturada'),
+    reception = fields.Selection([('price', 'Con precio'),
     ('priceless', 'Sin precio')], string="Tipo de recepción")
     
     gross_weight = fields.Float(string="Peso bruto")
@@ -100,9 +118,11 @@ class RecibaTicket(models.Model):
     net_weight = fields.Float(string="Peso Neto", compute='_default_net_weight')
     net_date = fields.Datetime(string="Fecha y hora", compute='_default_net_date')
     
-    
-    currency_id = fields.Many2one('res.currency', default=_default_currency, string="Moneda")
+    humidity_total_discount = fields.Float(string="Descuento total de humedad (Kg)", compute='_get_humidity_total_discount')
+    impurity_total_discount = fields.Float(string="Descuento total de impureza (Kg)", compute='_get_impurity_total_discount')
     price = fields.Monetary(string="Precio")
+    currency_id = fields.Many2one('res.currency', default=_default_currency, string="Moneda")
+    
     
     sub = fields.Monetary(string="Subtotal", compute='_calcule_sub')
     discount = fields.Float(string="Descuento total (kg)", compute='_get_discount_total')
@@ -118,11 +138,17 @@ class RecibaTicket(models.Model):
             array_params = []
             
             for param in self.quality_id.params:
-                array_params.append((0,0,{'quality_params_id':param.id}))
+                array_params.append((0,0,{'quality_params_id':param.id, 'name': param.name, }))
             
             self.params_id = array_params
 
     
+    def confirm_reciba(self):
+        self.state='confirmed'
+
+    
+    def cancel_reciba(self):
+        self.state='cancel'
 
 
 
@@ -131,8 +157,7 @@ class RecibaTicketParams(models.Model):
     _description = 'Boletas'
 
     ticket_id = fields.Many2one('reciba.ticket')
-    quality_params_id = fields.Many2one('reciba.quality.params')
-    name = fields.Char(related='quality_params_id.name', string="Name")
+    quality_params_id = fields.Many2one('reciba.quality.params', 'Parametro de calidad')
     max_value = fields.Float(related='quality_params_id.value', string="Max value")
     value = fields.Float(string="Value")
 
