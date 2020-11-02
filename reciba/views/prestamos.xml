@@ -30,7 +30,7 @@
           <field name="fecha_prestamo"/>
           <field name="hora_prestamo"/>
           <field name="cantidad"/>
-          <field name="estado"/>                 
+          <field name="state"/>                 
         </tree>
       </field>
     </record>
@@ -45,9 +45,9 @@
         <field name="arch" type="xml"> 
             <form> 
                 <header>
-                    <button name="marcar_saldado" type="object" string="Marcar como Saldado" class="btn-primary" icon="fa-file-text" attrs="{'invisible':[('estado','=','settled')]}"/>
-                    <button name="cancelar" type="object" string="Cancelar" class="btn-primary" attrs="{'invisible':[('estado','=','open')]}"/>
-                    <field name="estado" widget="statusbar" statusbar_visible="open,settled"/>
+                    <button name="marcar_saldado" type="object" string="Marcar como Saldado" class="btn-primary" icon="fa-file-text" attrs="{'invisible':[('state','=','settled')]}"/>
+                    <button name="cancelar" type="object" string="Cancelar" class="btn-primary" attrs="{'invisible':['state','=','open')]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="open,settled"/>
                 </header>
                 <sheet> 
                     <div class="oe_left oe_title">
@@ -62,8 +62,8 @@
                             <field name="fecha_prestamo"/>
                             <field name="hora_prestamo"/>
                             <field name="cantidad"/>
-                            <field name="fecha_cobro" attrs="{'invisible':[('estado','=','open')]}"/>
-                            <field name="hora_cobro" attrs="{'invisible':[('estado','=','open')]}"/>                            
+                            <field name="fecha_cobro" attrs="{'invisible':[('state','=','open')]}"/>
+                            <field name="hora_cobro" attrs="{'invisible':[('state','=','open')]}"/>                            
                         </group>    
                     </group> 
                     <group>

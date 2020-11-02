@@ -50,14 +50,14 @@ class RecibaPrestamos(models.Model):
     hora_cobro      = fields.Char(string='Hora de Cobro')    
     cantidad        = fields.Float(string='Cantidad', digits=dp.get_precision('Product Unit of Measure'))   
     observaciones   = fields.Html('Observaciones')
-    estado          = fields.Selection(selection=[('open', 'Abierto'),
+    state           = fields.Selection(selection=[('open', 'Abierto'),
                                                   ('settled', 'Saldado')], 
                                                 string='Status', required=True, readonly=True, copy=False, track_visibility='onchange', default='open')
 
 
     def marcar_saldado(self):
         #Set up "settled" state:
-        self.estado = 'settled'        
+        self.state = 'settled'        
         #Get User Timezone e.g. MEXICO/GENERAL:
         #user_timezone = pytz.timezone(self.env.context.get('tz') or self.env.user.tz)
         #Obtain current system time:
@@ -71,6 +71,6 @@ class RecibaPrestamos(models.Model):
 
 
     def cancelar(self):
-        self.estado = 'open'   
+        self.state = 'open'   
         self.fecha_cobro = ''       
         self.hora_cobro = ''             
