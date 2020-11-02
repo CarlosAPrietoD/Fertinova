@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api
 from odoo.addons import decimal_precision as dp
+import logging
+_logger = logging.getLogger(__name__)
 
 
 class RecibaLiquidaciones(models.Model):
@@ -17,9 +19,11 @@ class RecibaLiquidaciones(models.Model):
                                                         '|', ('type','=','out_invoice'),
                                                              ('type','=','in_invoice')])
         print('\n\n\n facturas ids: ', facturas)
+        _logger.info('\n\n\n facturas ids: \n%s', facturas)
 
         prestamos = self.env['reciba.prestamos'].search([('estado', '=', 'open')])
         print('\n\n\n prestamos ids: ', prestamos)
+        _logger.info('\n\n\n prestamos ids: \n%s', prestamos)
 
         #Obtain and Iterate recordsets from Invoices and Loans in order to fill model of Liquidaciones:
         facturas_recordsets = self.env['account.invoice'].browse(facturas.ids)
@@ -32,6 +36,7 @@ class RecibaLiquidaciones(models.Model):
 
             #Retrieve deudor_titular from partner_id:
             contacto_titular = self.env['res.partner'].search([('id','=',factura.partner_id.id)]).deudor_titular_id.id                 
+            _logger.info('\n\n\n contacto_titular: \n%s', contacto_titular)
 
             liquidaciones_pendientes = {
                 'tipo_operacion': tipo,
