@@ -14,34 +14,35 @@ class RecibaTicket(models.Model):
         tickets = self.env['reciba.ticket'].search([])
         return len(tickets)+1
 
+    @api.one
     @api.depends('humidity')
     def _get_humidity_discount(self):
         if self.humidity:
             if self.humidity > 14.5:
                 self.humidity_discount = ((self.humidity-14.5)*1.16)/100*1000
 
-
+    @api.one
     @api.depends('impurity')
     def _get_impurity_discount(self):
         if self.impurity:
             if self.impurity > 2:
                 self.impurity_discount = (self.impurity-2)/100*1000
 
-
+    @api.one
     @api.depends('humidity', 'net_weight')
     def _get_humidity_total_discount(self):
         if self.humidity:
             if self.humidity > 14.5:
                 self.humidity_total_discount = ((self.humidity-14.5)*1.16)/100*self.net_weight
 
-
+    @api.one
     @api.depends('impurity', 'net_weight')
     def _get_impurity_total_discount(self):
         if self.impurity:
             if self.impurity > 2:
                 self.impurity_total_discount = (self.impurity-2)/100*self.net_weight
                 
-
+    @api.one
     @api.depends('gross_weight')
     def _default_gross_date(self):
         if self.gross_weight:
@@ -54,37 +55,44 @@ class RecibaTicket(models.Model):
             today = datetime.today()
             self.location_date = today
 
+    @api.one
     @api.depends('tare_weight')
     def _default_tare_date(self):
         if self.tare_weight:
             today = datetime.today()
             self.tare_date = today
 
+
+    @api.one
     @api.depends('net_weight')
     def _default_net_date(self):
         if self.net_weight:
             today = datetime.today()
             self.net_date = today
 
+    @api.one
     @api.depends('gross_weight', 'tare_weight')
     def _default_net_weight(self):
         if self.gross_weight and self.tare_weight:
             self.net_weight = self.gross_weight-self.tare_weight
 
+    @api.one
     @api.depends('price', 'net_weight')
     def _calcule_sub(self):
         if self.price and self.net_weight:
             self.sub = self.price*self.net_weight
 
-    
+    @api.one
     @api.depends('humidity_total_discount', 'impurity_total_discount')
     def _get_discount_total(self):
         self.discount = self.humidity_total_discount+self.impurity_total_discount
 
+    @api.one
     @api.depends('net_weight', 'discount')
     def _get_total_weight(self):
         self.total_weight = self.net_weight-self.discount
 
+    @api.one
     @api.depends('total_weight', 'price')
     def _get_total(self):
         self.total = self.total_weight*self.price
@@ -150,6 +158,15 @@ class RecibaTicket(models.Model):
     def cancel_reciba(self):
         self.state='cancel'
 
+
+    @api.multi
+    @api.returns('self', lambda value: value.id)
+    def copy(self, default=None):
+        order = super(RecibaTicket, self).copy(default)
+        
+        order.number = self._default_number()
+        
+        return order
 
 
 class RecibaTicketParams(models.Model):
