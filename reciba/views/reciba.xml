@@ -42,25 +42,25 @@
                             </field>
                         </group>
                         <group>
-                            <field name="reception"  attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                            <field name="reception"  attrs="{'readonly':['|',('state', '=', 'cancel'),('state', '=', 'invoiced')]}"/>
                         </group>
 
                         <group>
                             <group>
-                                <field name="gross_weight"  attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 <field name="location_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                             </group>
                             <group>
-                                <field name="gross_date"/>
                                 <field name="location_date"/>
                             </group>
                         </group>
                         <group>
                             <group>
+                                <field name="gross_weight"  attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 <field name="tare_weight" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 <field name="net_weight"  attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                             </group>
                             <group>
+                                <field name="gross_date"/>
                                 <field name="tare_date"/>
                                 <field name="net_date"/>
                             </group>
@@ -69,13 +69,13 @@
                             <group>
                                 <field name="humidity_total_discount"/>
                                 <field name="impurity_total_discount"/>
-                                <field name="price"  attrs="{'readonly':[('state', '!=', 'draft')], 'required':[('reception', '=', 'price')]}"/>
-                                <field name="currency_id"  attrs="{'readonly':[('state', '!=', 'draft')]}"/>
-                            </group>
-                            <group>
-                                <field name="sub"/>
                                 <field name="discount"/>
                                 <field name="total_weight"/>
+                            </group>
+                            <group>
+                                <field name="price"  attrs="{'readony':['|',('state', '=', 'cancel'),('state', '=', 'invoiced')], 'required':[('reception', '=', 'price')], 'invisible':[('reception', '=', 'priceless')]}"/>
+                                <field name="currency_id"  attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="sub"/>
                                 <field name="total"/>
                             </group>
                         </group>

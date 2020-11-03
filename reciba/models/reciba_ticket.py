@@ -117,10 +117,10 @@ class RecibaTicket(models.Model):
     reception = fields.Selection([('price', 'Con precio'),
     ('priceless', 'Sin precio')], string="Tipo de recepción")
     
-    gross_weight = fields.Float(string="Peso bruto")
-    gross_date = fields.Datetime(string="Fecha y hora", compute='_default_gross_date')
     location_id = fields.Many2one('stock.location', string="Ubicación de descarga")
     location_date = fields.Datetime(string="Fecha y hora", compute='_default_location_date')
+    gross_weight = fields.Float(string="Peso bruto")
+    gross_date = fields.Datetime(string="Fecha y hora", compute='_default_gross_date')
     tare_weight = fields.Float(string="Peso tara")
     tare_date = fields.Datetime(string="Fecha y hora", compute='_default_tare_date')
     net_weight = fields.Float(string="Peso Neto", compute='_default_net_weight')
@@ -134,7 +134,7 @@ class RecibaTicket(models.Model):
     
     sub = fields.Monetary(string="Subtotal", compute='_calcule_sub')
     discount = fields.Float(string="Descuento total (kg)", compute='_get_discount_total')
-    total_weight = fields.Float(string="Peso con descuentos", compute='_get_total_weight')
+    total_weight = fields.Float(string="Peso neto analizado", compute='_get_total_weight')
     total = fields.Monetary(string="Total", compute='_get_total')
 
 
@@ -167,6 +167,12 @@ class RecibaTicket(models.Model):
         order.number = self._default_number()
         
         return order
+
+
+    @api.onchange('reception')
+    def get_reception_change(self):
+        if self.reception != 'price':
+            self.price = 0
 
 
 class RecibaTicketParams(models.Model):
