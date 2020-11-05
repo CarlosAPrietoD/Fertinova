@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+    <!--LIQUIDACIONES-Inheritance for deudor titular-->
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+    <record id="res_partner_reciba_form_inherit" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='company_id']" position="after">
+                <field name="deudor_titular_id" readonly="False"/>
+            </xpath>          
+        </field>
+    </record>
+
+
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+    <!-- LIQUIDACIONES - LIST VIEW                  -->
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->    
+    <record id="view_reciba_liquidaciones_list" model="ir.ui.view">
+      <field name="name">Liquidaciones</field>
+      <field name="model">reciba.liquidaciones</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="contacto_id"/>
+          <field name="saldo"/>   
+        </tree>
+      </field>
+    </record>
+
+
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+    <!-- LIQUIDACIONES - FORM VIEW                  -->
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->  
+    <record id="form_all_customers" model="ir.ui.view"> 
+        <field name="name">Liquidaciones</field> 
+        <field name="model">reciba.liquidaciones</field> 
+        <field name="arch" type="xml">        
+            <form> 
+                <sheet>
+                    <!--Título-->
+                    <div class="oe_title">
+                        <label for="contacto_id" class="oe_edit_only" string="Contacto" />
+                        <h1><field name="contacto_id" readonly="True"/></h1>
+                    </div>
+                    <!--Sección de Facturas de Cliente-->
+                    <separator string="Cuentas Cliente" colspan="2" />
+                    <field name="facturas_clientes_ids">
+                        <tree>
+                            <field name="number"/>
+                            <field name="date_invoice"/>
+                            <field name="state"/>
+                            <field name="amount_total" sum="Total Cliente"/>                            
+                        </tree>
+                    </field> 
+                    <!--Sección de Deudores-->  
+                    <separator string="Cuentas Deudor" colspan="2" />
+                    <field name="deudores_ids">
+                        <tree>
+                            <field name="name"/>
+                            <field name="payment_date"/>
+                            <field name="journal_id"/>
+                            <field name="destination_journal_id"/>
+                            <field name="communication"/>
+                            <field name="state"/>
+                            <field name="amount" sum="Total Deudor"/>
+                        </tree>
+                    </field>                      
+                    <!--Sección de Facturas de Proveedor-->                      
+                    <separator string="Cuentas Proveedor" colspan="2" />
+                    <field name="facturas_proveedores_ids">
+                        <tree>
+                            <field name="number"/>
+                            <field name="date_invoice"/>
+                            <field name="state"/>
+                            <field name="amount_total" sum="Total Proveedor"/>
+                        </tree>
+                    </field>  
+                    <!--Sección de Acreedores-->    
+                    <separator string="Cuentas Acreedor" colspan="2" />
+                    <field name="acreedores_ids">
+                        <tree>
+                            <field name="name"/>
+                            <field name="payment_date"/>
+                            <field name="journal_id"/>
+                            <field name="destination_journal_id"/>
+                            <field name="communication"/>
+                            <field name="state"/>
+                            <field name="amount" sum="Total Acreedor"/>
+                        </tree>
+                    </field> 
+                    <!--Sección de saldo--> 
+                    <group class="oe_subtotal_footer oe_right">
+                        <field name="saldo"/>
+                    </group>                                       
+                </sheet>                
+            </form> 
+        </field> 
+    </record>    
+
+
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+    <!-- LIQUIDACIONES - SEARCH VIEW                -->
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->  
+    <record id="view_reciba_liquidaciones_search" model="ir.ui.view"> 
+        <field name="name">Liquidaciones</field>
+        <field name="model">reciba.liquidaciones</field>
+        <field name="arch" type="xml"> 
+            <search> 
+                <field name="contacto_id"/>          
+                <field name="saldo"/> 
+            </search> 
+        </field> 
+    </record>    
+
+
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+    <!-- LIQUIDACIONES - ACTION                         -->
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->          
+    <record id="reciba_liquidaciones_action" model="ir.actions.act_window">
+        <field name="name">Liquidaciones</field>
+        <field name="res_model">reciba.liquidaciones</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_reciba_liquidaciones_search" />
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Crea el primer préstamo
+            </p>
+        </field>
+    </record>
+
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+    <!-- LIQUIDACIONES - MENUITEMS                  -->
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+    <menuitem id="contactos_menu" name="Contactos" parent="menu_reciba_root" sequence="2"/>    
+    <menuitem id="contactos_liquidaciones_menu" name="Liquidaciones" parent="reciba.contactos_menu" action="reciba_liquidaciones_action" sequence="1"/>    
+
+  </data>  
+</odoo> 

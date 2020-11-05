@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="reciba_ticket_form_view">
+            <field name="name">reciba.ticket.form</field>
+            <field name="model">reciba.ticket</field>
+            <field name="arch" type="xml">
+                <form string="Reciba Form">
+                    <header>
+                        <button name="confirm_reciba" type="object" states="draft" string="Confirmar"/>
+                        <button name="cancel_reciba" type="object" states="draft" string="Cancelar"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,invoiced,cancel"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="number" readonly="1"/>
+                                <field name="date" readonly="1"/>
+                                <field name="partner_id"  attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="product_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="quality_id" string="Norma de calidad"  attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="humidity"  attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="impurity"  attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                            </group>
+                            <group>
+                                <field name="humidity_discount"/>
+                                <field name="impurity_discount"/>
+                            </group>
+                            <field name="params_id"  attrs="{'readonly':[('state', '!=', 'draft')]}">
+                                <tree editable="bottom">
+                                    <field name="quality_params_id" readonly="True" force_save="1"/>
+                                    <field name="max_value"/>
+                                    <field name="value"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <group>
+                            <field name="reception"  attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                        </group>
+
+                        <group>
+                            <group>
+                                <field name="gross_weight"  attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="location_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                            </group>
+                            <group>
+                                <field name="gross_date"/>
+                                <field name="location_date"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="tare_weight" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="net_weight"  attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                            </group>
+                            <group>
+                                <field name="tare_date"/>
+                                <field name="net_date"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="humidity_total_discount"/>
+                                <field name="impurity_total_discount"/>
+                                <field name="price"  attrs="{'readonly':[('state', '!=', 'draft')], 'required':[('reception', '=', 'price')]}"/>
+                                <field name="currency_id"  attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                            </group>
+                            <group>
+                                <field name="sub"/>
+                                <field name="discount"/>
+                                <field name="total_weight"/>
+                                <field name="total"  class="oe_subtotal_footer_separator"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+
+        <record model="ir.ui.view" id="reciba_ticket_tree_view">
+            <field name="name">reciba.ticket.tree</field>
+            <field name="model">reciba.ticket</field>
+            <field name="arch" type="xml">
+                <tree string="Reciba Tree">
+                    <field name="number"/>
+                    <field name="partner_id"/>
+                    <field name="product_id"/>
+                    <field name="net_weight"/>
+                    <field name="discount"/>
+                    <field name="price"/>
+                    <field name="quality_id"/>
+                    <field name="reception"/>
+                    <field name="state"/>
+                    <field name="location_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="reciba_ticket_action">
+            <field name="name">Boletas</field>
+            <field name="res_model">reciba.ticket</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">Create the first ticket
+                </p>
+            </field>
+        </record>
+
+
+
+        <!-- Top menu item -->
+        <menuitem name="Reciba" id="menu_reciba_root" sequence="40"/>
+
+        <menuitem id="inventory_menu" name="Inventario" parent="menu_reciba_root" sequence="1"/>
+
+        <menuitem id="inventory_ticket_menu" name="Boletas" parent="inventory_menu" action="reciba_ticket_action" sequence="1"/>
+
+
+        <record model="ir.ui.view" id="reciba_quality_form_view">
+            <field name="name">reciba.quality.form</field>
+            <field name="model">reciba.quality</field>
+            <field name="arch" type="xml">
+                <form string="Reciba Form">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="product_id"/>
+                        </group>
+                        <group>
+                            <field name="params">
+                                <tree string="Quality Tree" editable="bottom">
+                                    <field name="name"/>
+                                    <field name="value"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="reciba_quality_tree_view">
+            <field name="name">reciba.quality.tree</field>
+            <field name="model">reciba.quality</field>
+            <field name="arch" type="xml">
+                <tree string="Quality Tree">
+                    <field name="name"/>
+                    <field name="product_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="reciba_quality_action">
+            <field name="name">Parametros de calidad</field>
+            <field name="res_model">reciba.quality</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">Create the first Param
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="inventory_quality_menu" name="Parametros de calidad" parent="inventory_menu" action="reciba_quality_action" sequence="2"/>
+
+    </data>
+</odoo>

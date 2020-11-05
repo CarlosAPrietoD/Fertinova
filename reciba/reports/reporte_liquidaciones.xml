@@ -1,0 +1,127 @@
+<odoo>
+
+    <report
+        id="reporte_liquidaciones"
+        model="reciba.liquidaciones"
+        string="Estado de cuenta"
+        name="reciba.reporte_liquidaciones"
+        file="reciba.reporte_liquidaciones"
+        report_type="qweb-pdf" />
+
+    <template id="reporte_liquidaciones">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <!--Sección de título-->                   
+                        <h1 class="text-left font-weight-bold mt-3" t-field="doc.contacto_id"/>
+                        <!--Sección de facturas de cliente-->
+                        <div>
+                            <h4 class="font-italic mt-3">Cuentas Cliente</h4>
+                        </div>
+                        <table class="table table-condensed" style="font-size: 12px; height: 60px;">
+                            <tr>
+                                <th class="table-info">Factura</th>
+                                <th class="table-info">Fecha</th>
+                                <th class="table-info">Monto</th>
+                            </tr>                        
+                            <tr t-foreach='doc.facturas_clientes_ids' t-as='line'>
+                                <td><span t-esc="line.number"/></td>
+                                <td><span t-esc="line.date_invoice"/></td>
+                                <td><span t-esc="line.amount_total"/></td>                                
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <strong><t t-esc="sum(line.amount_total for line in doc.facturas_clientes_ids)"/></strong>
+                                </td>                                
+                            </tr>                                                   
+                        </table>
+                        <!--Sección de deudores-->
+                        <div>
+                            <h4 class="font-italic mt-3">Cuentas Deudor</h4>
+                        </div>
+                        <table class="table table-condensed" style="font-size: 12px; height: 60px;">
+                            <tr>
+                                <th class="table-info">Movimiento</th>
+                                <th class="table-info">Fecha</th>
+                                <th class="table-info">Circular</th>
+                                <th class="table-info">Monto</th>
+                            </tr>                        
+                            <tr t-foreach='doc.deudores_ids' t-as='line'>
+                                <td><span t-esc="line.name"/></td>
+                                <td><span t-esc="line.payment_date"/></td>
+                                <td><span t-esc="line.communication"/></td>
+                                <td><span t-esc="line.amount"/></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <strong><t t-esc="sum(line.amount for line in doc.deudores_ids)"/></strong>
+                                </td>                                
+                            </tr>                                                  
+                        </table>                        
+                        <!--Sección de facturas de proveedores-->
+                        <div>
+                            <h4 class="font-italic mt-3">Cuentas Proveedor</h4>
+                        </div>
+                        <table class="table table-condensed" style="font-size: 12px; height: 60px;">
+                            <tr>
+                                <th class="table-info">Factura</th>
+                                <th class="table-info">Fecha</th>
+                                <th class="table-info">Monto</th>
+                            </tr>                        
+                            <tr t-foreach='doc.facturas_proveedores_ids' t-as='line'>
+                                <td><span t-esc="line.number"/></td>
+                                <td><span t-esc="line.date_invoice"/></td>
+                                <td><span t-esc="line.amount_total"/></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <strong><t t-esc="sum(line.amount_total for line in doc.facturas_proveedores_ids)"/></strong>
+                                </td>                                
+                            </tr>                                                    
+                        </table>                        
+                        <!--Sección de acreedores-->
+                        <div>
+                            <h4 class="font-italic mt-3">Cuentas Acreedor</h4>
+                        </div>
+                        <table class="table table-condensed" style="font-size: 12px; height: 60px;">
+                            <tr>
+                                <th class="table-info">Movimiento</th>
+                                <th class="table-info">Fecha</th>
+                                <th class="table-info">Circular</th>
+                                <th class="table-info">Monto</th>
+                            </tr>                        
+                            <tr t-foreach='doc.acreedores_ids' t-as='line'>
+                                <td><span t-esc="line.name"/></td>
+                                <td><span t-esc="line.payment_date"/></td>
+                                <td><span t-esc="line.communication"/></td>
+                                <td><span t-esc="line.amount"/></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <strong><t t-esc="sum(line.amount for line in doc.acreedores_ids)"/></strong>
+                                </td>                                
+                            </tr>                                                   
+                        </table>
+                        <!--Sección de saldo final-->
+                        <div class="bg-primary mt-4 p-2 text-right text-white">
+                            <span class="text-bold" style="font-size: 18px;">Saldo:</span>
+                            <span class="text-bold" t-field="doc.saldo"/>
+                        </div>                                                 
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>
