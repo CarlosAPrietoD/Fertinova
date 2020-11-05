@@ -9,6 +9,8 @@ class RecibaTicket(models.Model):
     def _default_currency(self):
         return self.env.ref('base.main_company').currency_id
 
+
+    
     @api.model
     def _default_number(self):
         tickets = self.env['reciba.ticket'].search([])
@@ -102,7 +104,9 @@ class RecibaTicket(models.Model):
     ('confirmed', 'Por facturar'), 
     ('invoiced','Facturado'),
     ('cancel', 'Cancelado')], default='draft')
-    number = fields.Integer(string="Boleta No.", default=_default_number)
+    
+    name = fields.Char(string="Boleta", default="Boleta Borrador")
+    #number = fields.Integer(string="Boleta No.", default=_default_number)
     date = fields.Datetime(string="Fecha y hora de llegada", default=lambda self: fields.datetime.now())
     partner_id = fields.Many2one('res.partner', string="Proveedor")
     product_id = fields.Many2one('product.product', string="Producto")
@@ -113,6 +117,11 @@ class RecibaTicket(models.Model):
     impurity = fields.Float(string="Impurity 2%")
     impurity_discount = fields.Float(string="Descuento (Kg)", compute='_get_impurity_discount')
     params_id = fields.One2many('reciba.ticket.params', 'ticket_id')
+
+    driver = fields.Char(string="Chofer nombre completo")
+    weigher = fields.Char(string="Pesador nombre completo")
+    plate_tracto = fields.Char(string="Placas tracto")
+    plate_trailer = fields.Char(string="Placas remolque")
 
     reception = fields.Selection([('price', 'Con precio'),
     ('priceless', 'Sin precio')], string="Tipo de recepción")
@@ -148,10 +157,22 @@ class RecibaTicket(models.Model):
             for param in self.quality_id.params:
                 array_params.append((0,0,{'quality_params_id':param.id, 'name': param.name, }))
             
-            self.params_id = array_params
+            self.params_id = array_params       
 
     
     def confirm_reciba(self):
+        
+        if self.location_id:
+                tickets = self.env['reciba.ticket'].search(['&',('location_id','=',self.location_id.id),('state','=','confirmed')], order="id desc",limit=1)
+                if tickets:
+                    name_location = self.location_id.name[:2]
+                    if tickets.name:
+                        number = str(int(tickets.name[2:])+1)
+                        self.name=name_location.upper()+number
+
+                else:
+                    self.name = self.location_id.name[:2].upper()+"1"
+
         self.state='confirmed'
 
     
@@ -162,11 +183,20 @@ class RecibaTicket(models.Model):
     @api.multi
     @api.returns('self', lambda value: value.id)
     def copy(self, default=None):
-        order = super(RecibaTicket, self).copy(default)
+        ticket = super(RecibaTicket, self).copy(default)
         
-        order.number = self._default_number()
+        ticket.name = "Boleta Borrador"
+        ticket.state = 'draft'
+
+        if ticket.quality_id:
+            array_params = []
+            
+            for n,param in enumerate(ticket.quality_id.params):
+                array_params.append((0,0,{'quality_params_id':param.id, 'name': param.name, 'value': self.params_id[n].value }))
+            
+            ticket.params_id = array_params
         
-        return order
+        return ticket
 
 
     @api.onchange('reception')
@@ -201,3 +231,24 @@ class RecibaQualityParams(models.Model):
     name = fields.Char(string="Nombre")
     quality_id = fields.Many2one('reciba.quality')
     value = fields.Float(string="Máximo %")
+
+
+class ReportRecibaTicket(models.AbstractModel):
+    _name = 'report.reciba.report_ticket'
+
+    @api.model
+    def _get_report_values(self, docids, data=None): 
+        tickets = self.env['reciba.ticket'].browse(docids)
+
+        docs=[]
+        for ticket in tickets:
+            doc={'ticket': ticket
+            }
+            docs.append(doc)
+            
+        
+        return {
+            'doc_ids': docids,
+            'doc_model': 'res.partner',
+            'docs': docs
+        }     
