@@ -28,10 +28,12 @@
         
         #views
         'views/reciba.xml',  
-        'views/prestamos.xml',               
         'views/liquidaciones.xml',               
         'views/templates.xml',
-        'views/views.xml',        
+        'views/views.xml',
+
+        #reports
+        'reports/reporte_liquidaciones.xml',        
     ],
     # only loaded in demonstration mode
     'demo': [
