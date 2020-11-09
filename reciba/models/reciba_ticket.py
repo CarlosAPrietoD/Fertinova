@@ -183,7 +183,7 @@ class RecibaTicket(models.Model):
         if self.reception == 'priceless':
             picking_type = self.env['stock.picking.type'].search([('name','ilike','recepciones')], limit=1)
             values={
-            'picking_type_id': 1,
+            'picking_type_id': picking_type.id,
             'location_id': self.location_id,
             'location_dest_id' : self.location_id,
             'scheduled_date': self.date,
