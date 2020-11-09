@@ -46,8 +46,9 @@
                         <label for="contacto_id" class="oe_edit_only" string="Contacto" />
                         <h1><field name="contacto_id" readonly="True"/></h1>
                     </div>
+
                     <!--Sección de Facturas de Cliente-->
-                    <separator string="Cuentas Cliente" colspan="2" />
+                    <separator style="margin-top: 30px;" string="Cuentas Cliente" colspan="2" />
                     <field name="facturas_clientes_ids">
                         <tree>
                             <field name="number"/>
@@ -55,10 +56,13 @@
                             <field name="state"/>
                             <field name="amount_total" sum="Total Cliente"/>                            
                         </tree>
-                    </field> 
+                    </field>
+
                     <!--Sección de Deudores-->  
-                    <separator string="Cuentas Deudor" colspan="2" />
-                    <field name="deudores_ids">
+                    <separator style="margin-top: 30px;" string="Cuentas Deudor" colspan="2" />
+                    <p></p>
+                    <h5 class="font-italic">Abonos</h5>
+                    <field name="deudores_ids_abonos">
                         <tree>
                             <field name="name"/>
                             <field name="payment_date"/>
@@ -66,22 +70,50 @@
                             <field name="destination_journal_id"/>
                             <field name="communication"/>
                             <field name="state"/>
-                            <field name="amount" sum="Total Deudor"/>
+                            <field name="amount"/>
                         </tree>
-                    </field>                      
+                    </field>
+                        <!--Sección de saldo--> 
+                    <div class="oe_subtotal_footer oe_right font-weight-bold">
+                        <field name="saldo_deudores_abonos"/>
+                    </div>                      
+                    <h5 class="font-italic">Préstamos</h5>                    
+                    <field name="deudores_ids_prestamos">
+                        <tree>
+                            <field name="name"/>
+                            <field name="payment_date"/>
+                            <field name="journal_id"/>
+                            <field name="destination_journal_id"/>
+                            <field name="communication"/>
+                            <field name="state"/>
+                            <field name="amount"/>
+                        </tree>
+                    </field>   
+                        <!--Sección de saldo--> 
+                    <div class="oe_subtotal_footer oe_right font-weight-bold">
+                        <field name="saldo_deudores_prestamos"/>
+                    </div> 
+
                     <!--Sección de Facturas de Proveedor-->                      
-                    <separator string="Cuentas Proveedor" colspan="2" />
+                    <separator style="margin-top: 30px;" string="Cuentas Proveedor" colspan="2" />
                     <field name="facturas_proveedores_ids">
                         <tree>
                             <field name="number"/>
                             <field name="date_invoice"/>
                             <field name="state"/>
-                            <field name="amount_total" sum="Total Proveedor"/>
+                            <field name="amount_total"/>
                         </tree>
                     </field>  
+                        <!--Sección de saldo--> 
+                    <div class="oe_subtotal_footer oe_right font-weight-bold">
+                        <field name="saldo_facturas_proveedores"/>
+                    </div>                     
+
                     <!--Sección de Acreedores-->    
-                    <separator string="Cuentas Acreedor" colspan="2" />
-                    <field name="acreedores_ids">
+                    <separator style="margin-top: 30px;" string="Cuentas Acreedor" colspan="2" />
+                    <p></p>
+                    <h5 class="font-italic">Abonos</h5>
+                    <field name="acreedores_ids_abonos">
                         <tree>
                             <field name="name"/>
                             <field name="payment_date"/>
@@ -89,13 +121,49 @@
                             <field name="destination_journal_id"/>
                             <field name="communication"/>
                             <field name="state"/>
-                            <field name="amount" sum="Total Acreedor"/>
+                            <field name="amount"/>
                         </tree>
                     </field> 
-                    <!--Sección de saldo--> 
-                    <group class="oe_subtotal_footer oe_right">
+                        <!--Sección de saldo--> 
+                    <div class="oe_subtotal_footer oe_right font-weight-bold">
+                        <field name="saldo_acreedores_abonos"/>
+                    </div>                      
+                    <h5 class="font-italic">Préstamos</h5>
+                    <field name="acreedores_ids_prestamos">
+                        <tree>
+                            <field name="name"/>
+                            <field name="payment_date"/>
+                            <field name="journal_id"/>
+                            <field name="destination_journal_id"/>
+                            <field name="communication"/>
+                            <field name="state"/>
+                            <field name="amount"/>
+                        </tree>
+                    </field>  
+                        <!--Sección de saldo--> 
+                    <div class="oe_subtotal_footer oe_right font-weight-bold">
+                        <field name="saldo_acreedores_prestamos"/>
+                    </div> 
+
+                    <!--Sección de saldo global--> 
+                    <group style="margin-top: 50px; margin-bottom: 50px;" class="oe_subtotal_footer oe_right">
                         <field name="saldo"/>
-                    </group>                                       
+                    </group>  
+
+                    <!--Sección de mensaje de advertencia de deuda-->                                     
+                    <t t-set="saldo" t-value="doc.saldo"/>
+                    <t t-esc="saldo"/>
+                    <div t-set="saldo" t-value="doc.saldo" t-esc="saldo" t-if="saldo gt 0" style="margin-top: 90px; font-size: 20px;" class="p-3 bg-primary text-white text-center font-weight-bold">
+                        <span><field class="text-white" name="contacto_id"/></span><span> debe $ <field name="saldo"/></span>
+                    </div> 
+                    <div t-set="saldo" t-value="doc.saldo" t-esc="saldo" t-if="saldo lt 0" style="margin-top: 90px; font-size: 20px;" class="p-3 bg-danger text-white text-center font-weight-bold">
+                        <span>Empresa </span>
+                        <!--<t t-set="company" t-value="o.company_id"></t>                      
+                        <span t-esc="o.company_id.name"/>-->
+                        <span t-esc="res_company.name"/>
+                        <span> debe $ </span><field name="saldo"/>                        
+                    </div>                                        
+
                 </sheet>                
             </form> 
         </field> 
