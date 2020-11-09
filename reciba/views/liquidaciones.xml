@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+    <!--LIQUIDACIONES-Inheritance for deudor titular-->
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+    <record id="res_partner_reciba_form_inherit" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='company_id']" position="after">
+                <field name="deudor_titular_id" readonly="False"/>
+            </xpath>          
+        </field>
+    </record>
+
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+    <!-- LIQUIDACIONES - LIST VIEW                  -->
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->    
+    <record id="view_reciba_liquidaciones_list" model="ir.ui.view">
+      <field name="name">Liquidaciones</field>
+      <field name="model">reciba.liquidaciones</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="tipo_operacion"/>
+          <field name="referencia"/>
+          <field name="contacto_id"/>          
+          <field name="cantidad"/>          
+          <field name="fecha"/>
+          <field name="estado"/>   
+        </tree>
+      </field>
+    </record>
+
+
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+    <!-- LIQUIDACIONES - SEARCH VIEW                -->
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->  
+    <record id="view_reciba_liquidaciones_search" model="ir.ui.view"> 
+        <field name="name">Liquidaciones</field>
+        <field name="model">reciba.liquidaciones</field>
+        <field name="arch" type="xml"> 
+            <search> 
+                <field name="tipo_operacion"/>
+                <field name="referencia"/>
+                <field name="contacto_id"/>          
+                <field name="cantidad"/>          
+                <field name="fecha"/>
+                <field name="estado"/> 
+            </search> 
+        </field> 
+    </record>    
+
+
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+    <!-- LIQUIDACIONES - ACTION                         -->
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->          
+    <record id="reciba_liquidaciones_action" model="ir.actions.act_window">
+        <field name="name">Liquidaciones</field>
+        <field name="res_model">reciba.liquidaciones</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree</field>
+        <field name="context">{'group_by':['contacto_id', 'tipo_operacion']}</field>
+        <field name="search_view_id" ref="view_reciba_liquidaciones_search" />
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Crea el primer préstamo
+            </p>
+        </field>
+    </record>
+
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+    <!-- LIQUIDACIONES - MENUITEMS                      -->
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+    <menuitem id="contactos_liquidaciones_menu" name="Liquidaciones" parent="reciba.contactos_menu" action="reciba_liquidaciones_action" sequence="5"/>    
+
+  </data>  
+</odoo> 

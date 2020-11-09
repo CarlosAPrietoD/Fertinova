@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_reciba_quality_params,access_reciba_quality_params,model_reciba_quality_params,base.group_user,1,1,1,1
+access_reciba_quality,access_reciba_quality,model_reciba_quality,base.group_user,1,1,1,1
+access_reciba_ticket_params,access_reciba_ticket_params,model_reciba_ticket_params,base.group_user,1,1,1,1
+access_reciba_ticket,access_reciba_ticket,model_reciba_ticket,base.group_user,1,1,1,1
+access_reciba_liquidaciones,reciba.reciba_liquidaciones,model_reciba_liquidaciones,,1,1,1,1
+access_reciba_prestamos,reciba.reciba_prestamos,model_reciba_prestamos,,1,1,1,1
