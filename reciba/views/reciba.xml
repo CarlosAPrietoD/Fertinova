@@ -351,6 +351,8 @@
         </t>
     </template>
 
+    <report id="report_reciba_custom" string="Imprimir boleta" model="reciba.ticket" report_type="qweb-html"
+        name="reciba.report_ticket" />
 
 
 </odoo>
