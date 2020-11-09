@@ -17,41 +17,46 @@
                             <group>
                                 <field name="name" attrs="{'readonly':[('state', '!=', 'draft')]}" />
                                 <field name="date" readonly="1" />
-                                <field name="partner_id" attrs="{'readonly':[('state', '!=', 'draft')]}" />
-                                <field name="product_id" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                <field name="weigher" attrs="{'readonly':['|',('state', '!=', 'draft'),('name', '=', '')]}" />
+                                <field name="partner_id" attrs="{'readonly':['|',('state', '!=', 'draft'),('weigher', '=', False)]}" />
+                                <field name="product_id" attrs="{'readonly':['|',('state', '!=', 'draft'),('partner_id', '=', False)]}" />
                             </group>
                         </group>
                         <group>
                             <field name="quality_id" string="Norma de calidad"
-                                attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                attrs="{'readonly':['|', ('state', '!=', 'draft'),('product_id', '=', False)]}" />
                         </group>
                         <group>
                             <group>
-                                <field name="humidity" attrs="{'readonly':[('state', '!=', 'draft')]}" />
-                                <field name="impurity" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                <field name="humidity" attrs="{'readonly':['|', ('state', '!=', 'draft'),('quality_id', '=', False)]}" />
+                                <field name="impurity" attrs="{'readonly':['|',('state', '!=', 'draft'),('humidity', '=', 0)]}" />
                             </group>
                             <group>
                                 <field name="humidity_discount" />
                                 <field name="impurity_discount" />
                             </group>
-                            <field name="params_id" attrs="{'readonly':[('state', '!=', 'draft')]}">
-                                <tree editable="bottom">
+                            <field name="params_id" attrs="{'readonly':['|',('state', '!=', 'draft'),('impurity', '=', 0)]}">
+                                <tree editable="bottom" decoration-danger="value &gt; max_value">
                                     <field name="quality_params_id" readonly="True" force_save="1" />
                                     <field name="max_value" />
+                                    <field name="unit" />
                                     <field name="value" />
                                 </tree>
                             </field>
                         </group>
                         <group>
-                            <field name="driver" attrs="{'readonly':[('state', '!=', 'draft')]}" />
-                            <field name="weigher" attrs="{'readonly':[('state', '!=', 'draft')]}" />
-                            <field name="plate_tracto" attrs="{'readonly':[('state', '!=', 'draft')]}" />
-                            <field name="plate_trailer" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                            <field name="driver" attrs="{'readonly':['|',('state', '!=', 'draft'),('params_id', '=', 0)]}" />
+                            <field name="type_vehicle" attrs="{'readonly':['|', ('state', '!=', 'draft'),('driver', '=', False)]}" />
+                            <field name="plate_vehicle" attrs="{'readonly':['|',('state', '!=', 'draft'),('type_vehicle', '=', False)]}" />
+                            <field name="plate_trailer" attrs="{'readonly':[('state', '!=', 'draft')],
+                            'invisible':[('type_vehicle', '!=', 'trailer'),('type_vehicle', '!=', 'full')]}"/>
+                            <field name="plate_second_trailer" attrs="{'readonly':[('state', '!=', 'draft')],
+                            'invisible':[('type_vehicle', '!=', 'full')]}"/>
                         </group>
 
                         <group>
                             <field name="reception"
-                                attrs="{'readonly':['|',('state', '=', 'cancel'),('state', '=', 'invoiced')]}" />
+                                attrs="{'readonly':['|','|',('state', '=', 'cancel'),('state', '=', 'invoiced'),('plate_vehicle', '=', False)]}" />
                         </group>
 
                         <group>
@@ -66,7 +71,7 @@
                             <group>
                                 <field name="gross_weight" attrs="{'readonly':[('state', '!=', 'draft')]}" />
                                 <field name="tare_weight" attrs="{'readonly':[('state', '!=', 'draft')]}" />
-                                <field name="net_weight" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                <field name="net_weight"/>
                             </group>
                             <group>
                                 <field name="gross_date" />
@@ -87,6 +92,7 @@
                                 <field name="currency_id" attrs="{'readonly':[('state', '!=', 'draft')]}" />
                                 <field name="sub" />
                                 <field name="total" />
+                                <field name="picking_id" />
                             </group>
                         </group>
                     </sheet>
@@ -152,6 +158,7 @@
                                 <tree string="Quality Tree" editable="bottom">
                                     <field name="name" />
                                     <field name="value" />
+                                    <field name="unit" />
                                 </tree>
                             </field>
                         </group>
@@ -344,8 +351,6 @@
         </t>
     </template>
 
-    <report id="report_reciba_custom" string="Imprimir boleta" model="reciba.ticket" report_type="qweb-html"
-        name="reciba.report_ticket" />
 
 
 </odoo>
