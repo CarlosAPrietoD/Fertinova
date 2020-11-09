@@ -53,10 +53,10 @@ class RecibaLiquidaciones(models.Model):
         # Debtors Process:
 
         #Get IDs for BBVA Bank & Deudores Diversos (MXN):
-        journal_id_deudores = self.env['account.journal'].search([('name', '=ilike', 'Deudores diversos')])
+        journal_id_deudores = self.env['account.journal'].search([('name', 'ilike', 'Deudores diversos')])
         _logger.info('\n journal_id_deudores %s\n\n', journal_id_deudores)
 
-        journal_id_banco = self.env['account.journal'].search([('name', '=ilike', 'BBVA')])                                                                
+        journal_id_banco = self.env['account.journal'].search([('name', 'ilike', 'BBVA')])                                                                
         _logger.info('\n journal_id_banco %s\n\n', journal_id_banco)
 
         # Retrieve amounts grouped by x_studio_contacto_deudor_acreedor_1 
@@ -118,10 +118,10 @@ class RecibaLiquidaciones(models.Model):
         # Creditors Process:
 
         #Get IDs for BBVA Bank & Deudores Diversos (MXN):    
-        journal_id_acreedores = self.env['account.journal'].search([('name', '=ilike', 'Acreedores Diversos')])
+        journal_id_acreedores = self.env['account.journal'].search([('name', 'ilike', 'Acreedores Diversos')])
         _logger.info('\n journal_id_deudores %s\n\n', journal_id_deudores)
 
-        journal_id_banco = self.env['account.journal'].search([('name', '=ilike', 'BBVA')])                                                                
+        journal_id_banco = self.env['account.journal'].search([('name', 'ilike', 'BBVA')])                                                                
         _logger.info('\n journal_id_banco %s\n\n', journal_id_banco)
 
         # Retrieve amounts grouped by x_studio_contacto_deudor_acreedor_1 
@@ -221,10 +221,10 @@ class RecibaLiquidaciones(models.Model):
     @api.one
     @api.depends('contacto_id')
     def _set_deudores_abonos(self):
-        journal_id_deudores = self.env['account.journal'].search([('name', '=ilike', 'Deudores diversos')])
+        journal_id_deudores = self.env['account.journal'].search([('name', 'ilike', 'Deudores diversos')])
         _logger.info('\n journal_id_deudores %s\n\n', journal_id_deudores)
 
-        journal_id_banco = self.env['account.journal'].search([('name', '=ilike', 'BBVA')])                                                                
+        journal_id_banco = self.env['account.journal'].search([('name', 'ilike', 'BBVA')])                                                                
         _logger.info('\n journal_id_banco %s\n\n', journal_id_banco)
 
         abonos = self.env['account.payment'].search([('payment_type', '=', 'transfer'),
@@ -246,10 +246,10 @@ class RecibaLiquidaciones(models.Model):
     @api.one
     @api.depends('contacto_id')
     def _set_deudores_prestamos(self):
-        journal_id_deudores = self.env['account.journal'].search([('name', '=ilike', 'Deudores diversos')])
+        journal_id_deudores = self.env['account.journal'].search([('name', 'ilike', 'Deudores diversos')])
         _logger.info('\n journal_id_deudores %s\n\n', journal_id_deudores)
 
-        journal_id_banco = self.env['account.journal'].search([('name', '=ilike', 'BBVA')])                                                                
+        journal_id_banco = self.env['account.journal'].search([('name', 'ilike', 'BBVA')])                                                                
         _logger.info('\n journal_id_banco %s\n\n', journal_id_banco)
 
         prestamos = self.env['account.payment'].search([('payment_type', '=', 'transfer'),
@@ -288,10 +288,10 @@ class RecibaLiquidaciones(models.Model):
     @api.one
     @api.depends('contacto_id')
     def _set_acreedores_abonos(self):
-        journal_id_acreedores = self.env['account.journal'].search([('name', '=ilike', 'Acreedores Diversos')])
+        journal_id_acreedores = self.env['account.journal'].search([('name', 'ilike', 'Acreedores Diversos')])
         _logger.info('\n journal_id_acreedores %s\n\n', journal_id_acreedores)
 
-        journal_id_banco = self.env['account.journal'].search([('name', '=ilike', 'BBVA')])                                                                
+        journal_id_banco = self.env['account.journal'].search([('name', 'ilike', 'BBVA')])                                                                
         _logger.info('\n journal_id_banco %s\n\n', journal_id_banco)
 
         abonos = self.env['account.payment'].search([('payment_type', '=', 'transfer'),
@@ -313,10 +313,10 @@ class RecibaLiquidaciones(models.Model):
     @api.one
     @api.depends('contacto_id')
     def _set_acreedores_prestamos(self):
-        journal_id_acreedores = self.env['account.journal'].search([('name', '=ilike', 'Acreedores Diversos')])
+        journal_id_acreedores = self.env['account.journal'].search([('name', 'ilike', 'Acreedores Diversos')])
         _logger.info('\n journal_id_acreedores %s\n\n', journal_id_acreedores)
 
-        journal_id_banco = self.env['account.journal'].search([('name', '=ilike', 'BBVA')])                                                                
+        journal_id_banco = self.env['account.journal'].search([('name', 'ilike', 'BBVA')])                                                                
         _logger.info('\n journal_id_banco %s\n\n', journal_id_banco)
 
         prestamos = self.env['account.payment'].search([('payment_type', '=', 'transfer'),
