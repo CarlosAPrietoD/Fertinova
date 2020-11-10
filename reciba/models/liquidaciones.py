@@ -204,7 +204,7 @@ class RecibaLiquidaciones(models.Model):
     acreedores_ids_prestamos   = fields.One2many('account.payment', 'id', string='Acreedores (Préstamos)', compute='_set_acreedores_prestamos')
     saldo_acreedores_prestamos = fields.Float(string='Saldo Acreedores Préstamos', digits=(15,2), compute='_set_saldo_acreedores_prestamos')
     
-    saldo = fields.Float(string='Saldo', digits=(15,2), compute='_set_saldo')    
+    saldo = fields.Float(string='Saldo', digits=(15,2), compute='_set_saldo') 
 
 
 
@@ -361,4 +361,4 @@ class RecibaLiquidaciones(models.Model):
         total += sum(line.amount * -1 for line in self.acreedores_ids_prestamos)
         print('total 6',total)
                        
-        self.saldo = total                           
+        self.saldo = total        
