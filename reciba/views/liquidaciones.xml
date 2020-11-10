@@ -108,7 +108,9 @@
                     <div class="oe_subtotal_footer oe_right font-weight-bold">
                         <field name="saldo_facturas_proveedores"/>
                     </div>                     
-
+ 
+                    <separator style="margin-top: 30px;" string="Cuentas Acreedor" colspan="2" />
+                    <p></p>
                     <!--Sección de Acreedores-->                        
                     <h5 class="font-italic">Préstamos</h5>
                     <field name="acreedores_ids_prestamos">
@@ -125,9 +127,8 @@
                         <!--Sección de saldo--> 
                     <div class="oe_subtotal_footer oe_right font-weight-bold">
                         <field name="saldo_acreedores_prestamos"/>
-                    </div> 
-                    <separator style="margin-top: 30px;" string="Cuentas Acreedor" colspan="2" />
-                    <p></p>
+                    </div>
+                                        
                     <h5 class="font-italic">Abonos</h5>
                     <field name="acreedores_ids_abonos">
                         <tree>
