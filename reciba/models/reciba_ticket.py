@@ -241,6 +241,15 @@ class RecibaTicket(models.Model):
         self.plate_trailer = ''
         self.plate_second_trailer = ''
 
+    @api.multi
+    def write(self, values):
+        ticket = super(RecibaTicket, self).write(values)
+
+        if self.state == 'confirmed' and self.price > 0 and self.picking_id:
+            self.picking_id.unlink()
+
+        return ticket
+
 
 class RecibaTicketParams(models.Model):
     _name = 'reciba.ticket.params'
@@ -292,14 +301,9 @@ class ReportRecibaTicket(models.AbstractModel):
             'docs': docs
         }     
 
-'''class RecibaTicketWizard(models.TransientModel):
-    _name = 'reciba.ticket.wizard'
 
-    def _get_ticket_id(self):
-        return self.env['reciba.ticket'].browse(self.env.context.get('active_id'))
+class StockPicking(models.AbstractModel):
+    _inherit = 'stock.picking'
 
-    ticket_id = fields.Many2one('reciba.ticket', default=_get_ticket_id)
-
-    def confirm_ticket(self):
-        print("==============", self.ticket_id)
-        #self.ticket_id.state = 'confirmed' '''
+    x_studio_aplica_flete = fields.Boolean(string="Aplica flete")
+    reciba_qty = fields.Float(related='move_ids_without_package.product_uom_qty', string="Cantidad")

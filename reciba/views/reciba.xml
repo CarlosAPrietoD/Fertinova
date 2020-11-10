@@ -355,4 +355,15 @@
         name="reciba.report_ticket" />
 
 
+    <!--<record id="reciba_stock_picking" model="ir.ui.view">
+        <field name="name">stock.picking.tree.inherit</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.vpicktree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='scheduled_date']" position="after">
+                <field name="reciba_qty"/>
+            </xpath>          
+        </field>
+    </record>-->
+
 </odoo>
