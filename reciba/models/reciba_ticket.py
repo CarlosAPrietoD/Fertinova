@@ -181,15 +181,16 @@ class RecibaTicket(models.Model):
 
         
         if self.reception == 'priceless':
+            origin = self.env['stock.location'].search([('name','ilike','Proveedores')], limit=1)
             picking_type = self.env['stock.picking.type'].search(['|',('name','ilike','Recepciones'),('name','ilike','Receipts')], limit=1)
             uom = self.env['uom.uom'].search([('name','ilike','kg')], limit=1)
             
             values={
             'picking_type_id': picking_type.id,
-            'location_id': self.location_id.id,
+            'location_id': origin.id,
             'location_dest_id' : self.location_id.id,
             'scheduled_date': datetime.today(),
-            'state': 'draft',
+            'state': 'confirmed',
             'move_ids_without_package': [(0,0,{
                 'name': self.product_id.name,
                 'product_id': self.product_id.id,
@@ -292,14 +293,7 @@ class ReportRecibaTicket(models.AbstractModel):
             'docs': docs
         }     
 
-'''class RecibaTicketWizard(models.TransientModel):
-    _name = 'reciba.ticket.wizard'
-
-    def _get_ticket_id(self):
-        return self.env['reciba.ticket'].browse(self.env.context.get('active_id'))
-
-    ticket_id = fields.Many2one('reciba.ticket', default=_get_ticket_id)
-
-    def confirm_ticket(self):
-        print("==============", self.ticket_id)
-        #self.ticket_id.state = 'confirmed' '''
+'''class StockPicking(models.Model):
+    _inherit='stock.picking'
+    
+    x_studio_aplica_flete= fields.Boolean()'''
