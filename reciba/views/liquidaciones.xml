@@ -60,23 +60,7 @@
 
                     <!--Sección de Deudores-->  
                     <separator style="margin-top: 30px;" string="Cuentas Deudor" colspan="2" />
-                    <p></p>
-                    <h5 class="font-italic">Abonos</h5>
-                    <field name="deudores_ids_abonos">
-                        <tree>
-                            <field name="name"/>
-                            <field name="payment_date"/>
-                            <field name="journal_id"/>
-                            <field name="destination_journal_id"/>
-                            <field name="communication"/>
-                            <field name="state"/>
-                            <field name="amount"/>
-                        </tree>
-                    </field>
-                        <!--Sección de saldo--> 
-                    <div class="oe_subtotal_footer oe_right font-weight-bold">
-                        <field name="saldo_deudores_abonos"/>
-                    </div>                      
+                    <p></p>                     
                     <h5 class="font-italic">Préstamos</h5>                    
                     <field name="deudores_ids_prestamos">
                         <tree>
@@ -93,6 +77,22 @@
                     <div class="oe_subtotal_footer oe_right font-weight-bold">
                         <field name="saldo_deudores_prestamos"/>
                     </div> 
+                    <h5 class="font-italic">Abonos</h5>
+                    <field name="deudores_ids_abonos">
+                        <tree>
+                            <field name="name"/>
+                            <field name="payment_date"/>
+                            <field name="journal_id"/>
+                            <field name="destination_journal_id"/>
+                            <field name="communication"/>
+                            <field name="state"/>
+                            <field name="amount"/>
+                        </tree>
+                    </field>
+                        <!--Sección de saldo--> 
+                    <div class="oe_subtotal_footer oe_right font-weight-bold">
+                        <field name="saldo_deudores_abonos"/>
+                    </div>                     
 
                     <!--Sección de Facturas de Proveedor-->                      
                     <separator style="margin-top: 30px;" string="Cuentas Proveedor" colspan="2" />
@@ -109,7 +109,23 @@
                         <field name="saldo_facturas_proveedores"/>
                     </div>                     
 
-                    <!--Sección de Acreedores-->    
+                    <!--Sección de Acreedores-->                        
+                    <h5 class="font-italic">Préstamos</h5>
+                    <field name="acreedores_ids_prestamos">
+                        <tree>
+                            <field name="name"/>
+                            <field name="payment_date"/>
+                            <field name="journal_id"/>
+                            <field name="destination_journal_id"/>
+                            <field name="communication"/>
+                            <field name="state"/>
+                            <field name="amount"/>
+                        </tree>
+                    </field>  
+                        <!--Sección de saldo--> 
+                    <div class="oe_subtotal_footer oe_right font-weight-bold">
+                        <field name="saldo_acreedores_prestamos"/>
+                    </div> 
                     <separator style="margin-top: 30px;" string="Cuentas Acreedor" colspan="2" />
                     <p></p>
                     <h5 class="font-italic">Abonos</h5>
@@ -128,22 +144,6 @@
                     <div class="oe_subtotal_footer oe_right font-weight-bold">
                         <field name="saldo_acreedores_abonos"/>
                     </div>                      
-                    <h5 class="font-italic">Préstamos</h5>
-                    <field name="acreedores_ids_prestamos">
-                        <tree>
-                            <field name="name"/>
-                            <field name="payment_date"/>
-                            <field name="journal_id"/>
-                            <field name="destination_journal_id"/>
-                            <field name="communication"/>
-                            <field name="state"/>
-                            <field name="amount"/>
-                        </tree>
-                    </field>  
-                        <!--Sección de saldo--> 
-                    <div class="oe_subtotal_footer oe_right font-weight-bold">
-                        <field name="saldo_acreedores_prestamos"/>
-                    </div> 
 
                     <!--Sección de saldo global--> 
                     <group style="margin-top: 50px; margin-bottom: 50px;" class="oe_subtotal_footer oe_right">
