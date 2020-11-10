@@ -181,18 +181,22 @@ class RecibaTicket(models.Model):
 
         
         if self.reception == 'priceless':
-            picking_type = self.env['stock.picking.type'].search([('name','ilike','recepciones')], limit=1)
+            picking_type = self.env['stock.picking.type'].search(['|',('name','ilike','Recepciones'),('name','ilike','Receipts')], limit=1)
+            uom = self.env['uom.uom'].search([('name','ilike','kg')], limit=1)
+            
             values={
             'picking_type_id': picking_type.id,
-            'location_id': self.location_id,
-            'location_dest_id' : self.location_id,
-            'scheduled_date': self.date,
+            'location_id': self.location_id.id,
+            'location_dest_id' : self.location_id.id,
+            'scheduled_date': datetime.today(),
+            'state': 'draft',
             'move_ids_without_package': [(0,0,{
                 'name': self.product_id.name,
                 'product_id': self.product_id.id,
                 'product_uom_qty': self.net_weight,
-                'product_uom': 1
-                })]}
+                'product_uom': self.product_id.uom_po_id.id
+            })]}
+            
             picking = self.env['stock.picking'].create(values)
 
             self.picking_id = picking.id
