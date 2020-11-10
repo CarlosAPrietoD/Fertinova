@@ -243,6 +243,16 @@ class RecibaTicket(models.Model):
         self.plate_second_trailer = ''
 
 
+    @api.multi
+    def write(self, values):
+        ticket = super(RecibaTicket, self).write(values)
+
+        if self.state == 'confirmed' and self.price > 0 and self.picking_id:
+            self.picking_id.unlink()
+
+        return ticket
+
+
 class RecibaTicketParams(models.Model):
     _name = 'reciba.ticket.params'
     _description = 'Boletas'
