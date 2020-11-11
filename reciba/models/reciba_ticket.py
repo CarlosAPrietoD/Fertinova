@@ -194,13 +194,15 @@ class RecibaTicket(models.Model):
 
         
         if self.reception == 'priceless':
+            origin = self.env['stock.location'].search([('name','ilike','Proveedores')], limit=1)
             picking_type = self.env['stock.picking.type'].search(['|',('name','ilike','Recepciones'),('name','ilike','Receipts')], limit=1)
             
             values={
             'picking_type_id': picking_type.id,
-            'location_id': self.provider_location_id.id,
+            'location_id': origin.id,
             'location_dest_id' : self.location_id.id,
             'scheduled_date': datetime.today(),
+            'state': 'confirmed',
             'move_ids_without_package': [(0,0,{
                 'name': self.product_id.name,
                 'product_id': self.product_id.id,
@@ -307,6 +309,16 @@ class RecibaTicket(models.Model):
     
 
 
+    @api.multi
+    def write(self, values):
+        ticket = super(RecibaTicket, self).write(values)
+
+        if self.state == 'confirmed' and self.price > 0 and self.picking_id:
+            self.picking_id.unlink()
+
+        return ticket
+
+
 class RecibaTicketParams(models.Model):
     _name = 'reciba.ticket.params'
     _description = 'Boletas'
@@ -357,7 +369,7 @@ class ReportRecibaTicket(models.AbstractModel):
             'docs': docs
         }     
 
-class StockPicking(models.Model):
+'''class StockPicking(models.Model):
     _inherit='stock.picking'
     
-    x_studio_aplica_flete= fields.Boolean()
+    x_studio_aplica_flete= fields.Boolean()'''

@@ -186,7 +186,9 @@ class RecibaLiquidaciones(models.Model):
     # \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     #  MODEL  FIELDS
     # //////////////////////////////////////////////////////////////////////////
-    contacto_id           = fields.Many2one('res.partner', string='Contacto')
+    contacto_id = fields.Many2one('res.partner', string='Contacto')
+    compania_id = fields.Many2one('res.company', string='Compañía', compute='_set_compania')
+
     facturas_clientes_ids = fields.One2many('account.invoice', 'id', string='Facturas de Cliente', compute='_set_facturas_clientes')
     
     deudores_ids_abonos   = fields.One2many('account.payment', 'id', string='Deudores (Abonos)', compute='_set_deudores_abonos')
@@ -204,7 +206,14 @@ class RecibaLiquidaciones(models.Model):
     acreedores_ids_prestamos   = fields.One2many('account.payment', 'id', string='Acreedores (Préstamos)', compute='_set_acreedores_prestamos')
     saldo_acreedores_prestamos = fields.Float(string='Saldo Acreedores Préstamos', digits=(15,2), compute='_set_saldo_acreedores_prestamos')
     
-    saldo = fields.Float(string='Saldo', digits=(15,2), compute='_set_saldo')    
+    saldo = fields.Float(string='Saldo', digits=(15,2), compute='_set_saldo') 
+
+
+
+    @api.one
+    @api.depends('contacto_id')
+    def _set_compania(self):
+        self.compania_id = self.env['res.partner'].search([('id', '=', self.contacto_id.id)]).company_id.id
 
 
 
@@ -296,8 +305,8 @@ class RecibaLiquidaciones(models.Model):
 
         abonos = self.env['account.payment'].search([('payment_type', '=', 'transfer'),
                                                      ('x_studio_contacto_deudor_acreedor_1', '=', self.contacto_id.id),
-                                                     ('journal_id', 'in', journal_id_acreedores.ids),
-                                                     ('destination_journal_id', 'in', journal_id_banco.ids)])                                                     
+                                                     ('journal_id', 'in', journal_id_banco.ids),
+                                                     ('destination_journal_id', 'in', journal_id_acreedores.ids)])                                                                                                          
         self.acreedores_ids_abonos = abonos.ids  
 
 
@@ -321,8 +330,8 @@ class RecibaLiquidaciones(models.Model):
 
         prestamos = self.env['account.payment'].search([('payment_type', '=', 'transfer'),
                                                         ('x_studio_contacto_deudor_acreedor_1', '=', self.contacto_id.id),
-                                                        ('journal_id', 'in', journal_id_banco.ids),
-                                                        ('destination_journal_id', 'in', journal_id_acreedores.ids)])                                                       
+                                                        ('journal_id', 'in', journal_id_acreedores.ids),
+                                                        ('destination_journal_id', 'in', journal_id_banco.ids)])                                                       
         self.acreedores_ids_prestamos = prestamos.ids
         print('acreedores ids',self.acreedores_ids_prestamos) 
 
@@ -361,4 +370,4 @@ class RecibaLiquidaciones(models.Model):
         total += sum(line.amount * -1 for line in self.acreedores_ids_prestamos)
         print('total 6',total)
                        
-        self.saldo = total                           
+        self.saldo = total        
