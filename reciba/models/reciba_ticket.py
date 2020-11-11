@@ -51,6 +51,14 @@ class RecibaTicket(models.Model):
             today = datetime.today()
             self.gross_date = today
 
+    
+    @api.depends('provider_location_id')
+    def _default_provider_date(self):
+        if self.provider_location_id:
+            today = datetime.today()
+            self.provider_date = today
+
+    
     @api.depends('location_id')
     def _default_location_date(self):
         if self.location_id:
@@ -105,8 +113,9 @@ class RecibaTicket(models.Model):
     ('invoiced','Facturado'),
     ('cancel', 'Cancelado')], default='draft')
     
+    operation_type = fields.Selection([('in','Entrada'),
+    ('out','Salida')], string="Tipo de operacion")
     name = fields.Char(string="Boleta", default="Boleta Borrador")
-    #number = fields.Integer(string="Boleta No.", default=_default_number)
     date = fields.Datetime(string="Fecha y hora de llegada", default=lambda self: fields.datetime.now())
     weigher = fields.Char(string="Nombre del analista")
     partner_id = fields.Many2one('res.partner', string="Proveedor")
@@ -131,6 +140,8 @@ class RecibaTicket(models.Model):
     reception = fields.Selection([('price', 'Con precio'),
     ('priceless', 'Sin precio')], string="Tipo de recepción")
     
+    provider_location_id = fields.Many2one('stock.location', string="Ubicación proveedor")
+    provider_date = fields.Datetime(string="Fecha y hora", compute='_default_provider_date')
     location_id = fields.Many2one('stock.location', string="Ubicación de descarga")
     location_date = fields.Datetime(string="Fecha y hora", compute='_default_location_date')
     gross_weight = fields.Float(string="Peso bruto")
@@ -143,6 +154,7 @@ class RecibaTicket(models.Model):
     humidity_total_discount = fields.Float(string="Descuento total de humedad (Kg)", compute='_get_humidity_total_discount')
     impurity_total_discount = fields.Float(string="Descuento total de impureza (Kg)", compute='_get_impurity_total_discount')
     price = fields.Monetary(string="Precio")
+    price_flag = fields.Boolean(default=False)
     currency_id = fields.Many2one('res.currency', default=_default_currency, string="Moneda")
     
     
@@ -152,6 +164,7 @@ class RecibaTicket(models.Model):
     total = fields.Monetary(string="Total", compute='_get_total')
 
     picking_id = fields.Many2one('stock.picking', string="Transferencia")
+    po_id = fields.Many2one('purchase.order', string="Orden de compra")
 
 
     @api.onchange('quality_id')
@@ -181,29 +194,22 @@ class RecibaTicket(models.Model):
 
         
         if self.reception == 'priceless':
-            origin = self.env['stock.location'].search([('name','ilike','Proveedores')], limit=1)
             picking_type = self.env['stock.picking.type'].search(['|',('name','ilike','Recepciones'),('name','ilike','Receipts')], limit=1)
-            uom = self.env['uom.uom'].search([('name','ilike','kg')], limit=1)
             
             values={
             'picking_type_id': picking_type.id,
-            'location_id': origin.id,
+            'location_id': self.provider_location_id.id,
             'location_dest_id' : self.location_id.id,
             'scheduled_date': datetime.today(),
-            'state': 'confirmed',
             'move_ids_without_package': [(0,0,{
                 'name': self.product_id.name,
                 'product_id': self.product_id.id,
                 'product_uom_qty': self.net_weight,
                 'product_uom': self.product_id.uom_po_id.id
             })]}
-            
             picking = self.env['stock.picking'].create(values)
-
+            picking.state = 'confirmed'
             self.picking_id = picking.id
-
-        
-
 
         self.state='confirmed'
 
@@ -219,6 +225,8 @@ class RecibaTicket(models.Model):
         
         ticket.name = "Boleta Borrador"
         ticket.state = 'draft'
+        ticket.picking_id = 0
+        ticket.po_id = 0
 
         if ticket.quality_id:
             array_params = []
@@ -248,9 +256,46 @@ class RecibaTicket(models.Model):
         ticket = super(RecibaTicket, self).write(values)
 
         if self.state == 'confirmed' and self.price > 0 and self.picking_id:
-            self.picking_id.unlink()
+                self.picking_id.unlink()
 
+        if self.reception == 'price' and self.price > 0 and self.price_flag == False:
+            self.price_flag = True
+            
         return ticket
+
+
+    def create_purchase_order(self):
+        picking_type = self.env['stock.picking.type'].search(['|',('name','ilike','Recepciones'),('name','ilike','Receipts')], limit=1)
+        payment = self.env['account.payment.term'].search([('name','ilike','PUE')], limit=1)
+        analytic_account = self.env['account.analytic.account'].search([('name','ilike','POR ASIGNAR')], limit=1)
+        uom = self.env['uom.uom'].search([('name','ilike','kg')], limit=1)
+        
+        values={
+            'partner_id': self.partner_id.id,
+            'picking_type_id': picking_type.id,
+            'partner_ref': self.name,
+            'payment_term_id': payment.id
+        }
+            
+        purchase = self.env['purchase.order'].create(values)
+
+        description = self.product_id.name
+        if self.product_id.default_code:
+            description = "["+self.product_id.default_code+"] "+self.product_id.name
+        
+        purchase.order_line=[(0,0,{
+                'product_id': self.product_id.id,
+                'name': description,
+                'date_planned': purchase.date_order,
+                'account_analytic_id': analytic_account.id,
+                'product_qty': self.net_weight,
+                'price_unit': self.price,
+                'product_uom': self.product_id.uom_po_id.id
+            })]
+
+        self.po_id = purchase.id
+
+    
 
 
 class RecibaTicketParams(models.Model):
@@ -303,7 +348,7 @@ class ReportRecibaTicket(models.AbstractModel):
             'docs': docs
         }     
 
-'''class StockPicking(models.Model):
+class StockPicking(models.Model):
     _inherit='stock.picking'
     
-    x_studio_aplica_flete= fields.Boolean()'''
+    x_studio_aplica_flete= fields.Boolean()

@@ -8,28 +8,29 @@
             <field name="arch" type="xml">
                 <form string="Reciba Form">
                     <header>
-                        <button name="confirm_reciba" type="object" states="draft" string="Confirmar" />
+                        <button name="confirm_reciba" type="object" states="draft" string="Confirmar" class="btn-primary"/>
                         <button name="cancel_reciba" type="object" states="draft" string="Cancelar" />
+                        <button name="create_purchase_order" type="object" string="Crear PO" attrs="{'invisible':['|',('price_flag', '=', False),'|',('state', '!=', 'confirmed'),('po_id', '!=', False)]}" class="btn-primary"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,invoiced,cancel" />
                     </header>
                     <sheet>
                         <group>
                             <group>
-                                <field name="name" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                <field name="operation_type" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                <field name="name" readonly="1" force_save="1"/>
                                 <field name="date" readonly="1" />
-                                <field name="weigher" attrs="{'readonly':['|',('state', '!=', 'draft'),('name', '=', '')]}" />
+                                <field name="weigher" attrs="{'readonly':['|',('state', '!=', 'draft'),('operation_type', '=', False)]}" />
                                 <field name="partner_id" attrs="{'readonly':['|',('state', '!=', 'draft'),('weigher', '=', False)]}" />
                                 <field name="product_id" attrs="{'readonly':['|',('state', '!=', 'draft'),('partner_id', '=', False)]}" />
                             </group>
                         </group>
                         <group>
-                            <field name="quality_id" string="Norma de calidad"
-                                attrs="{'readonly':['|', ('state', '!=', 'draft'),('product_id', '=', False)]}" />
+                            <field name="quality_id" string="Norma de calidad" attrs="{'readonly':['|', ('state', '!=', 'draft'),('product_id', '=', False)]}" />
                         </group>
                         <group>
                             <group>
-                                <field name="humidity" attrs="{'readonly':['|', ('state', '!=', 'draft'),('quality_id', '=', False)]}" />
-                                <field name="impurity" attrs="{'readonly':['|',('state', '!=', 'draft'),('humidity', '=', 0)]}" />
+                                <field name="humidity" attrs="{'readonly':['|', ('state', '!=', 'draft'),('product_id', '=', False)]}" />
+                                <field name="impurity" attrs="{'readonly':['|',('state', '!=', 'draft'),('product_id', '=', False)]}" />
                             </group>
                             <group>
                                 <field name="humidity_discount" />
@@ -45,7 +46,7 @@
                             </field>
                         </group>
                         <group>
-                            <field name="driver" attrs="{'readonly':['|',('state', '!=', 'draft'),('params_id', '=', 0)]}" />
+                            <field name="driver" attrs="{'readonly':['|',('state', '!=', 'draft'),('product_id', '=', False)]}" />
                             <field name="type_vehicle" attrs="{'readonly':['|', ('state', '!=', 'draft'),('driver', '=', False)]}" />
                             <field name="plate_vehicle" attrs="{'readonly':['|',('state', '!=', 'draft'),('type_vehicle', '=', False)]}" />
                             <field name="plate_trailer" attrs="{'readonly':[('state', '!=', 'draft')],
@@ -55,22 +56,23 @@
                         </group>
 
                         <group>
-                            <field name="reception"
-                                attrs="{'readonly':['|','|',('state', '=', 'cancel'),('state', '=', 'invoiced'),('plate_vehicle', '=', False)]}" />
+                            <field name="reception" attrs="{'readonly':['|','|','|',('state', '=', 'cancel'),('state', '=', 'invoiced'),('plate_vehicle', '=', False),('price_flag', '=',True)]}" />
                         </group>
 
                         <group>
                             <group>
-                                <field name="location_id" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                <field name="provider_location_id" attrs="{'readonly':['|',('state', '!=', 'draft'),('reception', '=', False)]}" />
+                                <field name="location_id" attrs="{'readonly':['|',('state', '!=', 'draft'),('provider_location_id', '=', False)]}" />
                             </group>
                             <group>
+                                <field name="provider_date"/>
                                 <field name="location_date" />
                             </group>
                         </group>
                         <group>
                             <group>
-                                <field name="gross_weight" attrs="{'readonly':[('state', '!=', 'draft')]}" />
-                                <field name="tare_weight" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                <field name="gross_weight" attrs="{'readonly':['|',('state', '!=', 'draft'),('location_id', '=', False)]}" />
+                                <field name="tare_weight" attrs="{'readonly':['|',('state', '!=', 'draft'),('gross_weight', '=', 0)]}" />
                                 <field name="net_weight"/>
                             </group>
                             <group>
@@ -87,13 +89,17 @@
                                 <field name="total_weight" />
                             </group>
                             <group>
-                                <field name="price"
-                                    attrs="{'readony':['|',('state', '=', 'cancel'),('state', '=', 'invoiced')], 'required':[('reception', '=', 'price')], 'invisible':[('reception', '=', 'priceless')]}" />
+                                <field name="price" attrs="{'readonly':['|','|',('state', '=', 'cancel'),('state', '=', 'invoiced'),('price_flag','=',True)], 'required':[('reception', '=', 'price')], 
+                                'invisible':[('reception', '!=', 'price')]}" />
+                                <field name="price_flag" invisible="1"/>
                                 <field name="currency_id" attrs="{'readonly':[('state', '!=', 'draft')]}" />
                                 <field name="sub" />
                                 <field name="total" />
-                                <field name="picking_id" />
                             </group>
+                        </group>
+                        <group>
+                            <field name="picking_id" readonly="1" force_save="1"/>
+                            <field name="po_id" readonly="1" force_save="1"/>
                         </group>
                     </sheet>
                 </form>
@@ -139,8 +145,7 @@
 
         <menuitem id="inventory_menu" name="Inventario" parent="menu_reciba_root" sequence="1" />
 
-        <menuitem id="inventory_ticket_menu" name="Boletas" parent="inventory_menu" action="reciba_ticket_action"
-            sequence="1" />
+        <menuitem id="inventory_ticket_menu" name="Boletas" parent="inventory_menu" action="reciba_ticket_action" sequence="1" />
 
 
         <record model="ir.ui.view" id="reciba_quality_form_view">
@@ -189,8 +194,7 @@
             </field>
         </record>
 
-        <menuitem id="inventory_quality_menu" name="Parametros de calidad" parent="inventory_menu"
-            action="reciba_quality_action" sequence="2" />
+        <menuitem id="inventory_quality_menu" name="Parametros de calidad" parent="inventory_menu" action="reciba_quality_action" sequence="2" />
 
     </data>
 
@@ -203,61 +207,48 @@
                     <div style="width: 100%;">
                         <table style="width: 100%; text-align: left;">
                             <tr>
-                                <th
-                                    style="width: 20%; padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
+                                <th style="width: 20%; padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
                                     Proveedor</th>
-                                <td
-                                    style="width: 30%;  padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
+                                <td style="width: 30%;  padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
                                     <t t-esc="ticket['ticket'].partner_id.name" />
                                 </td>
                                 <td style="width: 50%;" rowspan="7">
-                                    <div
-                                        style="width: 100%; height: 350px; border: 1px rgb(55, 55, 182) solid; border-radius: 10px;">
+                                    <div style="width: 100%; height: 350px; border: 1px rgb(55, 55, 182) solid; border-radius: 10px;">
                                     </div>
                                 </td>
                             </tr>
                             <tr>
-                                <th
-                                    style="width: 20%; padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
+                                <th style="width: 20%; padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
                                     Producto</th>
-                                <td
-                                    style="width: 30%;  padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
+                                <td style="width: 30%;  padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
                                     <t t-esc="ticket['ticket'].product_id.name" />
                                 </td>
                             </tr>
                             <tr>
-                                <th
-                                    style="width: 20%; padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
+                                <th style="width: 20%; padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
                                     Chofer</th>
-                                <td
-                                    style="width: 30%;  padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
+                                <td style="width: 30%;  padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
                                     <t t-esc="ticket['ticket'].driver" />
                                 </td>
                             </tr>
                             <tr>
-                                <th
-                                    style="width: 20%; padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
+                                <th style="width: 20%; padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
                                     Placas tracto</th>
-                                <td
-                                    style="width: 30%;  padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
+                                <td style="width: 30%;  padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
                                     <t t-esc="ticket['ticket'].plate_tracto" />
                                 </td>
                             </tr>
                             <tr>
-                                <th
-                                    style="width: 20%; padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
+                                <th style="width: 20%; padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
                                     Placas remolque</th>
-                                <td
-                                    style="width: 30%;  padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
+                                <td style="width: 30%;  padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
                                     <t t-esc="ticket['ticket'].plate_trailer" />
                                 </td>
                             </tr>
                             <tr>
-                                <th
-                                    style="width: 20%; padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
+                                <th style="width: 20%; padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
                                     Pesador</th>
-                                <td
-                                    style="width: 30%;  padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
+                                <td style="width: 30%;  padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
                                     <t t-esc="ticket['ticket'].weigher" />
                                 </td>
                             </tr>
@@ -292,17 +283,20 @@
                                         <tr>
                                             <th style="width: 30%;">Humedad</th>
                                             <td style="width: 15%; border-bottom: black 1px solid;">
-                                                <t t-esc="ticket['ticket'].humidity" /> %</td>
+                                                <t t-esc="ticket['ticket'].humidity" />
+                                            %</td>
                                         </tr>
                                         <tr>
                                             <th style="width: 30%;">Impureza</th>
                                             <td style="width: 15%; border-bottom: black 1px solid;">
-                                                <t t-esc="ticket['ticket'].impurity" /> %</td>
+                                                <t t-esc="ticket['ticket'].impurity" />
+                                            %</td>
                                         </tr>
                                         <tr>
                                             <th style="width: 30%;">Peso neto analizado</th>
                                             <td style="width: 15%; border-bottom: black 1px solid;">
-                                                <t t-esc="ticket['ticket'].total_weight" /> Kg</td>
+                                                <t t-esc="ticket['ticket'].total_weight" />
+                                            Kg</td>
                                         </tr>
                                         <tr>
                                             <th style="width: 35%;">Precio</th>
@@ -328,18 +322,15 @@
                         <table style="width: 100%; text-align: center;">
                             <tr>
                                 <th style="width: 33%; ">
-                                    <div
-                                        style="width: 94%; margin-left: 3%; margin-right: 3%; border-top: black 1px solid;">
+                                    <div style="width: 94%; margin-left: 3%; margin-right: 3%; border-top: black 1px solid;">
                                         Analista</div>
                                 </th>
                                 <th style="width: 33%; ">
-                                    <div
-                                        style="width: 94%; margin-left: 3%; margin-right: 3%; border-top: black 1px solid;">
+                                    <div style="width: 94%; margin-left: 3%; margin-right: 3%; border-top: black 1px solid;">
                                         Proveedor/Chofer</div>
                                 </th>
                                 <th style="width: 33%; ">
-                                    <div
-                                        style="width: 94%; margin-left: 3%; margin-right: 3%; border-top: black 1px solid;">
+                                    <div style="width: 94%; margin-left: 3%; margin-right: 3%; border-top: black 1px solid;">
                                         Sello</div>
                                 </th>
                             </tr>
@@ -351,8 +342,7 @@
         </t>
     </template>
 
-    <report id="report_reciba_custom" string="Imprimir boleta" model="reciba.ticket" report_type="qweb-html"
-        name="reciba.report_ticket" />
+    <report id="report_reciba_custom" string="Imprimir boleta" model="reciba.ticket" report_type="qweb-html" name="reciba.report_ticket" />
 
 
 </odoo>
