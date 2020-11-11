@@ -46,9 +46,8 @@
                     <div class="oe_title">
                         <label for="contacto_id" class="oe_edit_only" string="Contacto" />
                         <h1><field name="contacto_id" readonly="True"/></h1>
+                        <h3><field name="compania_id" readonly="True"/></h3>
                     </div>
-
-                    <h3><field name="compania_id" readonly="True"/></h3>
 
                     <!--Sección de Facturas de Cliente-->
                     <separator style="margin-top: 30px;" string="Cuentas Cliente" colspan="2" />
