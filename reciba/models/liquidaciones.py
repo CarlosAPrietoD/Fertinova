@@ -186,7 +186,9 @@ class RecibaLiquidaciones(models.Model):
     # \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     #  MODEL  FIELDS
     # //////////////////////////////////////////////////////////////////////////
-    contacto_id           = fields.Many2one('res.partner', string='Contacto')
+    contacto_id = fields.Many2one('res.partner', string='Contacto')
+    compania_id = fields.Many2one('res.company', string='Compañía', compute='_set_compania')
+
     facturas_clientes_ids = fields.One2many('account.invoice', 'id', string='Facturas de Cliente', compute='_set_facturas_clientes')
     
     deudores_ids_abonos   = fields.One2many('account.payment', 'id', string='Deudores (Abonos)', compute='_set_deudores_abonos')
@@ -205,6 +207,13 @@ class RecibaLiquidaciones(models.Model):
     saldo_acreedores_prestamos = fields.Float(string='Saldo Acreedores Préstamos', digits=(15,2), compute='_set_saldo_acreedores_prestamos')
     
     saldo = fields.Float(string='Saldo', digits=(15,2), compute='_set_saldo') 
+
+
+
+    @api.one
+    @api.depends('contacto_id')
+    def _set_deudores_abonos(self):
+        self.compania_id = self.env['res.company'].search([('id', '=', self.contacto_id.id)]).id
 
 
 
