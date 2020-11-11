@@ -305,8 +305,8 @@ class RecibaLiquidaciones(models.Model):
 
         abonos = self.env['account.payment'].search([('payment_type', '=', 'transfer'),
                                                      ('x_studio_contacto_deudor_acreedor_1', '=', self.contacto_id.id),
-                                                     ('journal_id', 'in', journal_id_acreedores.ids),
-                                                     ('destination_journal_id', 'in', journal_id_banco.ids)])                                                     
+                                                     ('journal_id', 'in', journal_id_banco.ids),
+                                                     ('destination_journal_id', 'in', journal_id_acreedores.ids)])                                                                                                          
         self.acreedores_ids_abonos = abonos.ids  
 
 
@@ -330,8 +330,8 @@ class RecibaLiquidaciones(models.Model):
 
         prestamos = self.env['account.payment'].search([('payment_type', '=', 'transfer'),
                                                         ('x_studio_contacto_deudor_acreedor_1', '=', self.contacto_id.id),
-                                                        ('journal_id', 'in', journal_id_banco.ids),
-                                                        ('destination_journal_id', 'in', journal_id_acreedores.ids)])                                                       
+                                                        ('journal_id', 'in', journal_id_acreedores.ids),
+                                                        ('destination_journal_id', 'in', journal_id_banco.ids)])                                                       
         self.acreedores_ids_prestamos = prestamos.ids
         print('acreedores ids',self.acreedores_ids_prestamos) 
 
