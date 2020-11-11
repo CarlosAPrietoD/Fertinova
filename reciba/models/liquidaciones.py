@@ -212,7 +212,7 @@ class RecibaLiquidaciones(models.Model):
 
     @api.one
     @api.depends('contacto_id')
-    def _set_deudores_abonos(self):
+    def _set_compania(self):
         self.compania_id = self.env['res.company'].search([('id', '=', self.contacto_id.id)]).id
 
 
