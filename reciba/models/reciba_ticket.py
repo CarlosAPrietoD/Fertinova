@@ -4,12 +4,6 @@ from datetime import date, datetime
 class RecibaTicket(models.Model):
     _name = 'reciba.ticket'
     _description = 'Boletas'
-
-    @api.model
-    def _default_currency(self):
-        return self.env.ref('base.main_company').currency_id
-
-
     
     @api.model
     def _default_number(self):
@@ -118,7 +112,8 @@ class RecibaTicket(models.Model):
     name = fields.Char(string="Boleta", default="Boleta Borrador")
     date = fields.Datetime(string="Fecha y hora de llegada", default=lambda self: fields.datetime.now())
     weigher = fields.Char(string="Nombre del analista")
-    partner_id = fields.Many2one('res.partner')
+    company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('your.module'))
+    partner_id = fields.Many2one('res.partner', domain="[('company_id','=',company_id)]")
     product_id = fields.Many2one('product.product', string="Producto")
 
     quality_id = fields.Many2one('reciba.quality', string="Norma de calidad", domain="[('product_id', '=', product_id)]")
@@ -155,7 +150,7 @@ class RecibaTicket(models.Model):
     impurity_total_discount = fields.Float(string="Descuento total de impureza (Kg)", compute='_get_impurity_total_discount')
     price = fields.Monetary(string="Precio")
     price_flag = fields.Boolean(default=False)
-    currency_id = fields.Many2one('res.currency', default=_default_currency, string="Moneda")
+    currency_id = fields.Many2one('res.currency', default=lambda self: self.env['res.company']._company_default_get('your.module').currency_id, string="Moneda")
     
     
     sub = fields.Monetary(string="Subtotal", compute='_calcule_sub')
@@ -225,6 +220,7 @@ class RecibaTicket(models.Model):
         
         ticket.name = "Boleta Borrador"
         ticket.state = 'draft'
+        ticket.price_flag = False
         ticket.picking_id = 0
         ticket.po_id = 0
 
@@ -269,6 +265,7 @@ class RecibaTicket(models.Model):
         payment = self.env['account.payment.term'].search([('name','ilike','PUE')], limit=1)
         analytic_account = self.env['account.analytic.account'].search([('name','ilike','POR ASIGNAR')], limit=1)
         uom = self.env['uom.uom'].search([('name','ilike','kg')], limit=1)
+        discount = self.env['product.product'].search([('name','ilike','Descuento sobre compra')], limit=1)
         
         values={
             'partner_id': self.partner_id.id,
@@ -291,6 +288,15 @@ class RecibaTicket(models.Model):
                 'product_qty': self.net_weight,
                 'price_unit': self.price,
                 'product_uom': self.product_id.uom_po_id.id
+            }),
+            (0,0,{
+                'product_id': discount.id,
+                'name': "Descuento por calidad",
+                'date_planned': purchase.date_order,
+                'account_analytic_id': analytic_account.id,
+                'product_qty': self.discount,
+                'price_unit': self.price*-1,
+                'product_uom': discount.uom_po_id.id
             })]
 
         self.po_id = purchase.id
