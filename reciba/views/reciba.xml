@@ -20,7 +20,8 @@
                                 <field name="name" readonly="1" force_save="1"/>
                                 <field name="date" readonly="1" />
                                 <field name="weigher" attrs="{'readonly':['|',('state', '!=', 'draft'),('operation_type', '=', False)]}" />
-                                <field name="partner_id" attrs="{'readonly':['|',('state', '!=', 'draft'),('weigher', '=', False)]}" />
+                                <field name="partner_id" string="Proveedor" attrs="{'readonly':['|',('state', '!=', 'draft'),('weigher', '=', False)],'invisible':[('operation_type', '!=', 'in')]}" />
+                                <field name="partner_id" string="Cliente" attrs="{'readonly':['|',('state', '!=', 'draft'),('weigher', '=', False)],'invisible':[('operation_type', '!=', 'out')]}" />
                                 <field name="product_id" attrs="{'readonly':['|',('state', '!=', 'draft'),('partner_id', '=', False)]}" />
                             </group>
                         </group>
