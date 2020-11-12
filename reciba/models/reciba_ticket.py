@@ -114,11 +114,11 @@ class RecibaTicket(models.Model):
     ('cancel', 'Cancelado')], default='draft')
     
     operation_type = fields.Selection([('in','Entrada'),
-    ('out','Salida')], string="Tipo de operacion")
+    ('out','Salida')], string="Tipo de operacion", default="in", required=True)
     name = fields.Char(string="Boleta", default="Boleta Borrador")
     date = fields.Datetime(string="Fecha y hora de llegada", default=lambda self: fields.datetime.now())
     weigher = fields.Char(string="Nombre del analista")
-    partner_id = fields.Many2one('res.partner', string="Proveedor")
+    partner_id = fields.Many2one('res.partner')
     product_id = fields.Many2one('product.product', string="Producto")
 
     quality_id = fields.Many2one('reciba.quality', string="Norma de calidad", domain="[('product_id', '=', product_id)]")
