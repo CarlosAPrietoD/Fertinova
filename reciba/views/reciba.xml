@@ -28,6 +28,7 @@
                         </group>
                         <group>
                             <field name="quality_id" string="Norma de calidad" attrs="{'readonly':['|', ('state', '!=', 'draft'),('product_id', '=', False)]}" />
+                            
                         </group>
                         <group>
                             <group>
@@ -35,8 +36,8 @@
                                 <field name="impurity" attrs="{'readonly':['|',('state', '!=', 'draft'),('product_id', '=', False)]}" />
                             </group>
                             <group>
-                                <field name="humidity_discount" />
-                                <field name="impurity_discount" />
+                                <field name="humidity_discount" attrs="{'invisible':[('apply_discount', '=', False)]}" force_save="1"/>
+                                <field name="impurity_discount" attrs="{'invisible':[('apply_discount', '=', False)]}" force_save="1"/>
                             </group>
                             <field name="params_id" attrs="{'readonly':['|',('state', '!=', 'draft'),('impurity', '=', 0)]}">
                                 <tree editable="bottom" decoration-danger="value &gt; max_value">
@@ -85,18 +86,19 @@
                         </group>
                         <group>
                             <group>
-                                <field name="humidity_total_discount" />
-                                <field name="impurity_total_discount" />
-                                <field name="discount" />
-                                <field name="total_weight" />
+                                <field name="apply_discount" />
+                                <field name="humidity_total_discount" attrs="{'invisible':[('apply_discount', '=', False)]}" force_save="1"/>
+                                <field name="impurity_total_discount" attrs="{'invisible':[('apply_discount', '=', False)]}" force_save="1"/>
+                                <field name="discount" attrs="{'invisible':[('apply_discount', '=', False)]}" force_save="1"/>
+                                <field name="total_weight" attrs="{'invisible':[('apply_discount', '=', False)]}" force_save="1"/>
                             </group>
                             <group>
                                 <field name="price" attrs="{'readonly':['|','|',('state', '=', 'cancel'),('state', '=', 'invoiced'),('price_flag','=',True)], 'required':[('reception', '=', 'price')], 
                                 'invisible':[('reception', '!=', 'price')]}" />
                                 <field name="price_flag" invisible="1"/>
-                                <field name="currency_id" attrs="{'readonly':[('state', '!=', 'draft')]}" />
-                                <field name="sub" />
-                                <field name="total" />
+                                <field name="currency_id" attrs="{'readonly':[('state', '!=', 'draft')], 'invisible':[('reception', '!=', 'price')]}" />
+                                <field name="sub" attrs="{'invisible':[('reception', '!=', 'price')]}"/>
+                                <field name="total" attrs="{'invisible':[('reception', '!=', 'price')]}"/>
                             </group>
                         </group>
                         <group>
@@ -116,15 +118,15 @@
             <field name="arch" type="xml">
                 <tree string="Reciba Tree">
                     <field name="name" />
-                    <field name="partner_id" />
+                    <field name="operation_type" />
                     <field name="product_id" />
-                    <field name="net_weight" />
-                    <field name="discount" />
-                    <field name="price" />
-                    <field name="quality_id" />
+                    <field name="provider_location_id" string="Ubicación origen"/>
+                    <field name="location_id" string="Ubicación destino"/>
                     <field name="reception" />
-                    <field name="state" />
-                    <field name="location_id" />
+                    <field name="net_weight" sum="Total"/>
+                    <field name="humidity_total_discount" sum="Total"/>
+                    <field name="impurity_total_discount" sum="Total"/>
+                    <field name="total_weight" sum="Total"/>
                 </tree>
             </field>
         </record>
@@ -200,6 +202,9 @@
 
     </data>
 
+    <!--==================================================================================================================
+    =============================================Boleta con precio========================================================
+    ===================================================================================================================-->
 
     <template id="report_ticket">
         <t t-call="web.html_container">
@@ -215,8 +220,7 @@
                                     <t t-esc="ticket['ticket'].partner_id.name" />
                                 </td>
                                 <td style="width: 50%;" rowspan="7">
-                                    <div style="width: 100%; height: 350px; border: 1px rgb(55, 55, 182) solid; border-radius: 10px;">
-                                    </div>
+                                   
                                 </td>
                             </tr>
                             <tr>
@@ -235,16 +239,23 @@
                             </tr>
                             <tr>
                                 <th style="width: 20%; padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
-                                    Placas tracto</th>
+                                    Placas unidad</th>
                                 <td style="width: 30%;  padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
-                                    <t t-esc="ticket['ticket'].plate_tracto" />
+                                    <t t-esc="ticket['ticket'].plate_vehicle" />
                                 </td>
                             </tr>
-                            <tr>
+                            <tr t-if="ticket['ticket'].type_vehicle == 'trailer' or ticket['ticket'].type_vehicle == 'full'">
                                 <th style="width: 20%; padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
-                                    Placas remolque</th>
+                                    Placas trailer</th>
                                 <td style="width: 30%;  padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
                                     <t t-esc="ticket['ticket'].plate_trailer" />
+                                </td>
+                            </tr>
+                            <tr t-if="ticket['ticket'].type_vehicle == 'full'">
+                                <th style="width: 20%; padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
+                                    Placas segundo trailer</th>
+                                <td style="width: 30%;  padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
+                                    <t t-esc="ticket['ticket'].plate_second_trailer" />
                                 </td>
                             </tr>
                             <tr>
@@ -271,11 +282,14 @@
                                 <td style="width: 50%;">
                                     <table style="width: 100%; text-align: left;">
                                         <tr t-foreach="ticket['ticket'].params_id" t-as="param">
-                                            <th style="width: 30%;">
+                                            <th style="width: 25%;">
                                                 <t t-esc="param.quality_params_id.name" />
                                             </th>
-                                            <td style="width: 15%; border-bottom: black 1px solid;">
+                                            <td style="width: 10%; border-bottom: black 1px solid;">
                                                 <t t-esc="param.value" />
+                                            </td>
+                                            <td style="width: 10%;">
+                                                <t t-esc="param.unit" />
                                             </td>
                                         </tr>
                                     </table>
@@ -283,25 +297,28 @@
                                 <td style="width: 50%;">
                                     <table style="width: 100%; text-align: left;">
                                         <tr>
-                                            <th style="width: 30%;">Humedad</th>
-                                            <td style="width: 15%; border-bottom: black 1px solid;">
+                                            <th style="width: 25%;">Humedad</th>
+                                            <td style="width: 10%; border-bottom: black 1px solid;">
                                                 <t t-esc="ticket['ticket'].humidity" />
-                                            %</td>
+                                            </td>
+                                            <td style="width: 10%;">%</td>
                                         </tr>
                                         <tr>
-                                            <th style="width: 30%;">Impureza</th>
-                                            <td style="width: 15%; border-bottom: black 1px solid;">
+                                            <th style="width: 25%;">Impureza</th>
+                                            <td style="width: 10%; border-bottom: black 1px solid;">
                                                 <t t-esc="ticket['ticket'].impurity" />
-                                            %</td>
+                                            </td>
+                                            <td style="width: 10%;">%</td>
                                         </tr>
                                         <tr>
-                                            <th style="width: 30%;">Peso neto analizado</th>
-                                            <td style="width: 15%; border-bottom: black 1px solid;">
+                                            <th style="width: 25%;">Peso neto analizado</th>
+                                            <td style="width: 10%; border-bottom: black 1px solid;">
                                                 <t t-esc="ticket['ticket'].total_weight" />
-                                            Kg</td>
+                                            </td>
+                                            <td style="width: 10%;">Kg</td>
                                         </tr>
                                         <tr>
-                                            <th style="width: 35%;">Precio</th>
+                                            <th style="width: 25%;">Precio</th>
                                             <t t-if="ticket['ticket'].price">
                                                 <td style="width: 15%; border-bottom: black 1px solid;">
                                                     $
@@ -344,8 +361,172 @@
         </t>
     </template>
 
-    <report id="report_reciba_custom" string="Imprimir boleta" model="reciba.ticket" report_type="qweb-html" name="reciba.report_ticket" />
+    <report id="report_reciba_custom" string="Imprimir boleta con precio" model="reciba.ticket" report_type="qweb-html" name="reciba.report_ticket" />
 
+    <!--==================================================================================================================
+    =============================================Boleta sin precio========================================================
+    ===================================================================================================================-->
+
+    <template id="report_ticket_priceless">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-foreach="docs" t-as="ticket">
+                    <br />
+                    <div style="width: 100%;">
+                        <table style="width: 100%; text-align: left;">
+                            <tr>
+                                <th style="width: 20%; padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
+                                    Proveedor</th>
+                                <td style="width: 30%;  padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
+                                    <t t-esc="ticket['ticket'].partner_id.name" />
+                                </td>
+                                <td style="width: 50%;" rowspan="7">
+                                   
+                                </td>
+                            </tr>
+                            <tr>
+                                <th style="width: 20%; padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
+                                    Producto</th>
+                                <td style="width: 30%;  padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
+                                    <t t-esc="ticket['ticket'].product_id.name" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th style="width: 20%; padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
+                                    Chofer</th>
+                                <td style="width: 30%;  padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
+                                    <t t-esc="ticket['ticket'].driver" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th style="width: 20%; padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
+                                    Placas unidad</th>
+                                <td style="width: 30%;  padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
+                                    <t t-esc="ticket['ticket'].plate_vehicle" />
+                                </td>
+                            </tr>
+                            <tr t-if="ticket['ticket'].type_vehicle == 'trailer' or ticket['ticket'].type_vehicle == 'full'">
+                                <th style="width: 20%; padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
+                                    Placas trailer</th>
+                                <td style="width: 30%;  padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
+                                    <t t-esc="ticket['ticket'].plate_trailer" />
+                                </td>
+                            </tr>
+                            <tr t-if="ticket['ticket'].type_vehicle == 'full'">
+                                <th style="width: 20%; padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
+                                    Placas segundo trailer</th>
+                                <td style="width: 30%;  padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
+                                    <t t-esc="ticket['ticket'].plate_second_trailer" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th style="width: 20%; padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
+                                    Pesador</th>
+                                <td style="width: 30%;  padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
+                                    <t t-esc="ticket['ticket'].weigher" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <br />
+                    <br />
+                    <label>Parametros de calidad</label>
+                    <br />
+
+                    <div style="display: flex; padding-top: 20px; width: 100%;">
+                        <table style="width: 100%;">
+                            <tr>
+                                <td style="width: 50%;">
+                                    <table style="width: 100%; text-align: left;">
+                                        <tr t-foreach="ticket['ticket'].params_id" t-as="param">
+                                            <th style="width: 25%;">
+                                                <t t-esc="param.quality_params_id.name" />
+                                            </th>
+                                            <td style="width: 10%; border-bottom: black 1px solid;">
+                                                <t t-esc="param.value" />
+                                            </td>
+                                            <td style="width: 10%;">
+                                                <t t-esc="param.unit" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td style="width: 50%;">
+                                    <table style="width: 100%; text-align: left;">
+                                        <tr>
+                                            <th style="width: 25%;">Humedad</th>
+                                            <td style="width: 10%; border-bottom: black 1px solid;">
+                                                <t t-esc="ticket['ticket'].humidity" />
+                                            </td>
+                                            <td style="width: 10%;">%</td>
+                                        </tr>
+                                        <tr>
+                                            <th style="width: 25%;">Impureza</th>
+                                            <td style="width: 10%; border-bottom: black 1px solid;">
+                                                <t t-esc="ticket['ticket'].impurity" />
+                                            </td>
+                                            <td style="width: 10%;">%</td>
+                                        </tr>
+                                        <tr>
+                                            <th style="width: 25%;">Peso neto analizado</th>
+                                            <td style="width: 10%; border-bottom: black 1px solid;">
+                                                <t t-esc="ticket['ticket'].total_weight" />
+                                            </td>
+                                            <td style="width: 10%;">Kg</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div style="width: 100%; padding-top: 150px;">
+                        <table style="width: 100%; text-align: center;">
+                            <tr>
+                                <th style="width: 33%; ">
+                                    <div style="width: 94%; margin-left: 3%; margin-right: 3%; border-top: black 1px solid;">
+                                        Analista</div>
+                                </th>
+                                <th style="width: 33%; ">
+                                    <div style="width: 94%; margin-left: 3%; margin-right: 3%; border-top: black 1px solid;">
+                                        Proveedor/Chofer</div>
+                                </th>
+                                <th style="width: 33%; ">
+                                    <div style="width: 94%; margin-left: 3%; margin-right: 3%; border-top: black 1px solid;">
+                                        Sello</div>
+                                </th>
+                            </tr>
+                        </table>
+                    </div>
+
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <report id="report_reciba_custom_priceless" string="Imprimir boleta sin precio" model="reciba.ticket" report_type="qweb-html" name="reciba.report_ticket_priceless" />
+
+    <!--==================================================================================================================
+    ======================================================Entregas========================================================
+    ===================================================================================================================-->
+
+    <record id="view_stock_picking_reciba" model="ir.ui.view">
+        <field name="name">view_stock_picking_reciba</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_toggle_is_locked']" position="after">
+                <button name="create_reciba" type="object" string="Crear boleta" class="btn-primary" attrs="{'invisible':['|',('state', '!=', 'done'),('reciba_id', '!=', False)]}"/>   
+            </xpath>
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="reciba_id" />
+            </xpath>
+        </field>
+    </record>
 
     <!--<record id="reciba_stock_picking" model="ir.ui.view">
         <field name="name">stock.picking.tree.inherit</field>
