@@ -364,7 +364,7 @@ msgstr "Cotizaciones"
 #: model:ir.actions.act_window,name:wobin_logistics.action_logistics_quotations
 #: model:ir.ui.menu,name:wobin_logistics.menuitem_quotations
 msgid "Quotations"
-msgstr "Presupuestos"
+msgstr "Cotizaciones"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__real_download_qty
