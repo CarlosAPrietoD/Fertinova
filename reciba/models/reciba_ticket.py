@@ -37,7 +37,8 @@ class RecibaTicket(models.Model):
         if self.impurity:
             if self.impurity > 2:
                 self.impurity_total_discount = (self.impurity-2)/100*self.net_weight
-                
+    
+             
     @api.one
     @api.depends('gross_weight')
     def _default_gross_date(self):
@@ -45,14 +46,14 @@ class RecibaTicket(models.Model):
             today = datetime.today()
             self.gross_date = today
 
-    
+    @api.one
     @api.depends('provider_location_id')
     def _default_provider_date(self):
         if self.provider_location_id:
             today = datetime.today()
             self.provider_date = today
 
-    
+    @api.one
     @api.depends('location_id')
     def _default_location_date(self):
         if self.location_id:
@@ -118,9 +119,9 @@ class RecibaTicket(models.Model):
 
     quality_id = fields.Many2one('reciba.quality', string="Norma de calidad", domain="[('product_id', '=', product_id)]")
     humidity = fields.Float(string="Humedad 14.5%")
-    humidity_discount = fields.Float(string="Descuento (Kg)", compute='_get_humidity_discount')
+    humidity_discount = fields.Float(string="Descuento (Kg)", compute='_get_humidity_discount', store=True)
     impurity = fields.Float(string="Impurity 2%")
-    impurity_discount = fields.Float(string="Descuento (Kg)", compute='_get_impurity_discount')
+    impurity_discount = fields.Float(string="Descuento (Kg)", compute='_get_impurity_discount', store=True)
     params_id = fields.One2many('reciba.ticket.params', 'ticket_id')
 
     driver = fields.Char(string="Nombre del operador")
@@ -136,27 +137,27 @@ class RecibaTicket(models.Model):
     ('priceless', 'Sin precio')], string="Tipo de recepción")
     
     provider_location_id = fields.Many2one('stock.location', string="Ubicación proveedor")
-    provider_date = fields.Datetime(string="Fecha y hora", compute='_default_provider_date')
+    provider_date = fields.Datetime(string="Fecha y hora", compute='_default_provider_date', store=True)
     location_id = fields.Many2one('stock.location', string="Ubicación de descarga")
-    location_date = fields.Datetime(string="Fecha y hora", compute='_default_location_date')
+    location_date = fields.Datetime(string="Fecha y hora", compute='_default_location_date', store=True)
     gross_weight = fields.Float(string="Peso bruto")
-    gross_date = fields.Datetime(string="Fecha y hora", compute='_default_gross_date')
+    gross_date = fields.Datetime(string="Fecha y hora", compute='_default_gross_date', store=True)
     tare_weight = fields.Float(string="Peso tara")
-    tare_date = fields.Datetime(string="Fecha y hora", compute='_default_tare_date')
-    net_weight = fields.Float(string="Peso Neto", compute='_default_net_weight')
-    net_date = fields.Datetime(string="Fecha y hora", compute='_default_net_date')
+    tare_date = fields.Datetime(string="Fecha y hora", compute='_default_tare_date', store=True)
+    net_weight = fields.Float(string="Peso Neto", compute='_default_net_weight', store=True)
+    net_date = fields.Datetime(string="Fecha y hora", compute='_default_net_date', store=True)
     
-    humidity_total_discount = fields.Float(string="Descuento total de humedad (Kg)", compute='_get_humidity_total_discount')
-    impurity_total_discount = fields.Float(string="Descuento total de impureza (Kg)", compute='_get_impurity_total_discount')
+    humidity_total_discount = fields.Float(string="Descuento total de humedad (Kg)", compute='_get_humidity_total_discount', store=True)
+    impurity_total_discount = fields.Float(string="Descuento total de impureza (Kg)", compute='_get_impurity_total_discount', store=True)
     price = fields.Monetary(string="Precio")
     price_flag = fields.Boolean(default=False)
     currency_id = fields.Many2one('res.currency', default=lambda self: self.env['res.company']._company_default_get('your.module').currency_id, string="Moneda")
     
     
-    sub = fields.Monetary(string="Subtotal", compute='_calcule_sub')
-    discount = fields.Float(string="Descuento total (kg)", compute='_get_discount_total')
-    total_weight = fields.Float(string="Peso neto analizado", compute='_get_total_weight')
-    total = fields.Monetary(string="Total", compute='_get_total')
+    sub = fields.Monetary(string="Subtotal", compute='_calcule_sub', store=True)
+    discount = fields.Float(string="Descuento total (kg)", compute='_get_discount_total', store=True)
+    total_weight = fields.Float(string="Peso neto analizado", compute='_get_total_weight', store=True)
+    total = fields.Monetary(string="Total", compute='_get_total', store=True)
 
     picking_id = fields.Many2one('stock.picking', string="Transferencia")
     po_id = fields.Many2one('purchase.order', string="Orden de compra")
@@ -353,7 +354,31 @@ class ReportRecibaTicket(models.AbstractModel):
             'doc_ids': docids,
             'doc_model': 'res.partner',
             'docs': docs
-        }     
+        }
+
+
+class ReportRecibaTicketPriceless(models.AbstractModel):
+    _name = 'report.reciba.report_ticket_priceless'
+
+    @api.model
+    def _get_report_values(self, docids, data=None): 
+        tickets = self.env['reciba.ticket'].browse(docids)
+
+        docs=[]
+        for ticket in tickets:
+            doc={'ticket': ticket
+            }
+            docs.append(doc)
+            
+        
+        return {
+            'doc_ids': docids,
+            'doc_model': 'res.partner',
+            'docs': docs
+        }
+
+
+
 
 '''class StockPicking(models.Model):
     _inherit='stock.picking'
