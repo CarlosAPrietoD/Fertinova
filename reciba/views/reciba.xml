@@ -28,6 +28,7 @@
                         </group>
                         <group>
                             <field name="quality_id" string="Norma de calidad" attrs="{'readonly':['|', ('state', '!=', 'draft'),('product_id', '=', False)]}" />
+                            
                         </group>
                         <group>
                             <group>
@@ -35,8 +36,8 @@
                                 <field name="impurity" attrs="{'readonly':['|',('state', '!=', 'draft'),('product_id', '=', False)]}" />
                             </group>
                             <group>
-                                <field name="humidity_discount" />
-                                <field name="impurity_discount" />
+                                <field name="humidity_discount" attrs="{'invisible':[('apply_discount', '=', False)]}" force_save="1"/>
+                                <field name="impurity_discount" attrs="{'invisible':[('apply_discount', '=', False)]}" force_save="1"/>
                             </group>
                             <field name="params_id" attrs="{'readonly':['|',('state', '!=', 'draft'),('impurity', '=', 0)]}">
                                 <tree editable="bottom" decoration-danger="value &gt; max_value">
@@ -85,18 +86,19 @@
                         </group>
                         <group>
                             <group>
-                                <field name="humidity_total_discount" />
-                                <field name="impurity_total_discount" />
-                                <field name="discount" />
-                                <field name="total_weight" />
+                                <field name="apply_discount" />
+                                <field name="humidity_total_discount" attrs="{'invisible':[('apply_discount', '=', False)]}" force_save="1"/>
+                                <field name="impurity_total_discount" attrs="{'invisible':[('apply_discount', '=', False)]}" force_save="1"/>
+                                <field name="discount" attrs="{'invisible':[('apply_discount', '=', False)]}" force_save="1"/>
+                                <field name="total_weight" attrs="{'invisible':[('apply_discount', '=', False)]}" force_save="1"/>
                             </group>
                             <group>
                                 <field name="price" attrs="{'readonly':['|','|',('state', '=', 'cancel'),('state', '=', 'invoiced'),('price_flag','=',True)], 'required':[('reception', '=', 'price')], 
                                 'invisible':[('reception', '!=', 'price')]}" />
                                 <field name="price_flag" invisible="1"/>
-                                <field name="currency_id" attrs="{'readonly':[('state', '!=', 'draft')]}" />
-                                <field name="sub" />
-                                <field name="total" />
+                                <field name="currency_id" attrs="{'readonly':[('state', '!=', 'draft')], 'invisible':[('reception', '!=', 'price')]}" />
+                                <field name="sub" attrs="{'invisible':[('reception', '!=', 'price')]}"/>
+                                <field name="total" attrs="{'invisible':[('reception', '!=', 'price')]}"/>
                             </group>
                         </group>
                         <group>
@@ -362,7 +364,7 @@
     <report id="report_reciba_custom" string="Imprimir boleta con precio" model="reciba.ticket" report_type="qweb-html" name="reciba.report_ticket" />
 
     <!--==================================================================================================================
-    =============================================Boleta con precio========================================================
+    =============================================Boleta sin precio========================================================
     ===================================================================================================================-->
 
     <template id="report_ticket_priceless">
@@ -508,6 +510,22 @@
 
     <report id="report_reciba_custom_priceless" string="Imprimir boleta sin precio" model="reciba.ticket" report_type="qweb-html" name="reciba.report_ticket_priceless" />
 
+    <!--==================================================================================================================
+    ======================================================Entregas========================================================
+    ===================================================================================================================-->
 
+    <record id="view_stock_picking_reciba" model="ir.ui.view">
+        <field name="name">view_stock_picking_reciba</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_toggle_is_locked']" position="after">
+                <button name="create_reciba" type="object" string="Crear boleta" class="btn-primary" attrs="{'invisible':['|',('state', '!=', 'done'),('reciba_id', '!=', False)]}"/>   
+            </xpath>
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="reciba_id" />
+            </xpath>
+        </field>
+    </record>
 
 </odoo>

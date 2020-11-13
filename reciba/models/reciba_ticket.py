@@ -13,30 +13,41 @@ class RecibaTicket(models.Model):
     @api.one
     @api.depends('humidity')
     def _get_humidity_discount(self):
-        if self.humidity:
-            if self.humidity > 14.5:
-                self.humidity_discount = ((self.humidity-14.5)*1.16)/100*1000
+        if self.apply_discount == True:
+            if self.humidity:
+                if self.humidity > 14.5:
+                    self.humidity_discount = ((self.humidity-14.5)*1.16)/100*1000
+        else:
+            self.humidity_discount = 0
 
     @api.one
     @api.depends('impurity')
     def _get_impurity_discount(self):
-        if self.impurity:
-            if self.impurity > 2:
-                self.impurity_discount = (self.impurity-2)/100*1000
+        if self.apply_discount == True:
+            if self.impurity:
+                if self.impurity > 2:
+                    self.impurity_discount = (self.impurity-2)/100*1000
+        else:
+            self.impurity_discount=0
 
     @api.one
     @api.depends('humidity', 'net_weight')
     def _get_humidity_total_discount(self):
-        if self.humidity:
-            if self.humidity > 14.5:
-                self.humidity_total_discount = ((self.humidity-14.5)*1.16)/100*self.net_weight
+        if self.apply_discount == True:
+            if self.humidity:
+                if self.humidity > 14.5:
+                    self.humidity_total_discount = ((self.humidity-14.5)*1.16)/100*self.net_weight
+        else: self.humidity_total_discount = 0
 
     @api.one
     @api.depends('impurity', 'net_weight')
     def _get_impurity_total_discount(self):
-        if self.impurity:
-            if self.impurity > 2:
-                self.impurity_total_discount = (self.impurity-2)/100*self.net_weight
+        if self.apply_discount == True:
+            if self.impurity:
+                if self.impurity > 2:
+                    self.impurity_total_discount = (self.impurity-2)/100*self.net_weight
+        else:
+            self.impurity_total_discount = 0
     
              
     @api.one
@@ -111,7 +122,7 @@ class RecibaTicket(models.Model):
     operation_type = fields.Selection([('in','Entrada'),
     ('out','Salida')], string="Tipo de operacion", default="in", required=True)
     name = fields.Char(string="Boleta", default="Boleta Borrador")
-    date = fields.Datetime(string="Fecha y hora de llegada", default=lambda self: fields.datetime.now())
+    date = fields.Datetime(string="Fecha y hora", default=lambda self: fields.datetime.now())
     weigher = fields.Char(string="Nombre del analista")
     company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('your.module'))
     partner_id = fields.Many2one('res.partner', domain="[('company_id','=',company_id)]")
@@ -133,12 +144,13 @@ class RecibaTicket(models.Model):
     plate_trailer = fields.Char(string="Placas remolque")
     plate_second_trailer = fields.Char(string="Placas segundo remolque")
 
+    delivery = fields.Selection
     reception = fields.Selection([('price', 'Con precio'),
     ('priceless', 'Sin precio')], string="Tipo de recepción")
     
-    provider_location_id = fields.Many2one('stock.location', string="Ubicación proveedor")
+    provider_location_id = fields.Many2one('stock.location', string="Ubicación origen")
     provider_date = fields.Datetime(string="Fecha y hora", compute='_default_provider_date', store=True)
-    location_id = fields.Many2one('stock.location', string="Ubicación de descarga")
+    location_id = fields.Many2one('stock.location', string="Ubicación destino")
     location_date = fields.Datetime(string="Fecha y hora", compute='_default_location_date', store=True)
     gross_weight = fields.Float(string="Peso bruto")
     gross_date = fields.Datetime(string="Fecha y hora", compute='_default_gross_date', store=True)
@@ -147,6 +159,7 @@ class RecibaTicket(models.Model):
     net_weight = fields.Float(string="Peso Neto", compute='_default_net_weight', store=True)
     net_date = fields.Datetime(string="Fecha y hora", compute='_default_net_date', store=True)
     
+    apply_discount = fields.Boolean(string="Aplicar descuento", default=True)
     humidity_total_discount = fields.Float(string="Descuento total de humedad (Kg)", compute='_get_humidity_total_discount', store=True)
     impurity_total_discount = fields.Float(string="Descuento total de impureza (Kg)", compute='_get_impurity_total_discount', store=True)
     price = fields.Monetary(string="Precio")
@@ -173,7 +186,12 @@ class RecibaTicket(models.Model):
             for param in self.quality_id.params:
                 array_params.append((0,0,{'quality_params_id':param.id, 'name': param.name, }))
             
-            self.params_id = array_params       
+            self.params_id = array_params  
+
+    @api.onchange('apply_discount')
+    def onchange_apply_discount(self):
+        self.humidity = self.humidity
+        self.impurity = self.impurity      
 
     
     def confirm_reciba(self):
@@ -383,3 +401,21 @@ class StockPicking(models.Model):
     _inherit='stock.picking'
     
     x_studio_aplica_flete= fields.Boolean()
+    reciba_id = fields.Many2one('reciba.ticket', string="Boleta reciba")
+
+    
+    def create_reciba(self):
+        
+        values={
+            'state': 'draft',
+            'operation_type': 'out',
+            'name': 'Boleta Borrador',
+            'partner_id': self.partner_id,
+            'product_id': self.move_ids_without_package[0].product_id.id,
+            'provider_location_id': self.location_id.id,
+            'location_id' : self.location_dest_id.id,
+            'scheduled_date': datetime.today()}
+        
+        ticket = self.env['reciba.ticket'].create(values)
+
+        self.reciba_id = ticket.id
