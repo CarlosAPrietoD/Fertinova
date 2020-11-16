@@ -94,20 +94,7 @@
                         <!--Sección de saldo--> 
                     <div class="oe_subtotal_footer oe_right font-weight-bold">
                         <field name="saldo_deudores_abonos"/>
-                    </div>     
-
-                    <field name="deudores_general">
-                        <tree>
-                            <field name="name"/>
-                            <field name="rec_abono_prestamo"/>
-                            <field name="payment_date"/>
-                            <field name="journal_id"/>
-                            <field name="destination_journal_id"/>
-                            <field name="communication"/>
-                            <field name="state"/>
-                            <field name="amount"/>
-                        </tree>
-                    </field>                                    
+                    </div>                                     
 
                     <!--Sección de Facturas de Proveedor-->                      
                     <separator style="margin-top: 30px;" string="Cuentas Proveedor" colspan="2" />
