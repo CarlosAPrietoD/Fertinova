@@ -12,6 +12,13 @@ class ResPartner(models.Model):
 
 
 
+class AccountPayment(models.Model):
+    _inherit = 'account.payment'    
+    
+    rec_abono_prestamo = fields.Char(string='Concepto de abono/préstamo para auxilio de Reciba')
+
+
+
 class RecibaLiquidaciones(models.Model):
     _name = 'reciba.liquidaciones'
     _description = 'Liquidaciones de Reciba'
@@ -48,36 +55,39 @@ class RecibaLiquidaciones(models.Model):
         #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         #  Get debtors & creditors:
 
-        #\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
-        #\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
-        # Debtors Process:
-
         #Get IDs for BBVA Bank & Deudores Diversos (MXN):
         journal_id_deudores = self.env['account.journal'].search([('name', 'ilike', 'Deudores diversos')])
         _logger.info('\n journal_id_deudores %s\n\n', journal_id_deudores)
 
-        journal_id_banco = self.env['account.journal'].search([('name', 'ilike', 'BBVA')])                                                                
+        journal_id_acreedores = self.env['account.journal'].search([('name', 'ilike', 'Deudores diversos')])
+        _logger.info('\n journal_id_acreedores %s\n\n', journal_id_deudores)        
+
+        journal_id_banco = self.env['account.journal'].search([('name', 'ilike', 'Bank')])                                                                
         _logger.info('\n journal_id_banco %s\n\n', journal_id_banco)
 
         # Retrieve amounts grouped by x_studio_contacto_deudor_acreedor_1 
         # BOTH FOR LOANS & PAYMENTS:        
         # !-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!
         
-        if journal_id_deudores and journal_id_banco:
+        if journal_id_deudores and journal_id_acreedores and journal_id_banco:
             # A PAYMENT IS WHEN JOURNAL_ID IS A DEBTOR BRINGING MONEY TO COMPANY
             #  DEBTOR ======={$ money}=======> > COMPANY'S BANK
-            grupo_abono = self.env['account.payment'].read_group(
-                domain=[('payment_type', '=', 'transfer'),
-                        '|', ('journal_id', 'in', journal_id_deudores.ids),
-                            ('destination_journal_id', 'in', journal_id_banco.ids)],
+            grupo_abono_prestamos = self.env['account.payment'].read_group(
+                domain=[('payment_type', '=', 'transfer'),                
+                         '|', ('journal_id', 'in', journal_id_deudores.ids),
+                         '|', ('journal_id', 'in', journal_id_acreedores.ids),
+                              ('journal_id', 'in', journal_id_banco.ids),                         
+                         '|', ('destination_journal_id', 'in', journal_id_deudores.ids),
+                         '|', ('destination_journal_id', 'in', journal_id_acreedores.ids),
+                              ('destination_journal_id', 'in', journal_id_banco.ids)],
                 fields=['payment_date', 'name', 'partner_id', 'journal_id', 'destination_journal_id', 'communication', 'amount:sum', 'state'], 
                 groupby=['partner_id'])
-            _logger.info('\n\n grupo_abono \n\n%s\n\n', grupo_abono)
+            _logger.info('\n\n grupo_abono_prestamos \n\n%s\n\n', grupo_abono_prestamos)
             #RESULT LOG:
             #[{'partner_id_count': 3, 'amount': 150.0, 'partner_id': (14, <odoo.tools.func.lazy object at 0x7fb0d4e1cc18>), '__domain': ['&', ('partner_id', '=', 14), '|', ('journal_id', 'in', [9]), ('destination_journal_id', 'in', [7])]}]
             
             #Put values into set in order to avoid repetitions:
-            for i in grupo_abono:
+            for i in grupo_abono_prestamos:
                 if isinstance(i.get('partner_id'), bool):
                     print("evitar error por conseguir FALSE")
                 else:            
@@ -85,91 +95,7 @@ class RecibaLiquidaciones(models.Model):
                     conjunto.add(debtor_id) 
                     print(debtor_id)
             _logger.info('\n\n\n conjunto: \n%s', conjunto)        
-
-            # !-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!
-            # A LOAN IS WHEN JOURNAL_ID IS A COMPANY'S BANK GIVING MONEY TO A DEBTOR 
-            #  COMPANY'S BANK ======={$ money}=======> > DEBTOR
-            grupo_prestamo = self.env['account.payment'].read_group(
-                domain=[('payment_type', '=', 'transfer'),
-                        '|', ('journal_id', 'in', journal_id_banco.ids),
-                            ('destination_journal_id', 'in', journal_id_deudores.ids)],
-                fields=['payment_date', 'name', 'partner_id', 'journal_id', 'destination_journal_id', 'communication', 'amount:sum', 'state'], 
-                groupby=['partner_id'])
-            _logger.info('\n\n grupo_prestamo \n\n%s\n\n', grupo_prestamo)
-            #RESULT LOG:
-            #[{'partner_id_count': 6, 'amount': 2738.42, 'partner_id': (14, <odoo.tools.func.lazy object at 0x7fb0d4c261f8>), '__domain': ['&', ('partner_id', '=', 14), '|', ('journal_id', 'in', [7]), ('destination_journal_id', 'in', [9])]}, 
-            # {'partner_id_count': 2, 'amount': 1275.0, 'partner_id': (10, <odoo.tools.func.lazy object at 0x7fb0d4c261b0>), '__domain': ['&', ('partner_id', '=', 10), '|', ('journal_id', 'in', [7]), ('destination_journal_id', 'in', [9])]}, 
-            # {'partner_id_count': 1, 'amount': 102.78, 'partner_id': False, '__domain': ['&', ('partner_id', '=', False), '|', ('journal_id', 'in', [7]), ('destination_journal_id', 'in', [9])]}]
-
-            #Put values into set in order to avoid repetitions:
-            for j in grupo_prestamo:
-                if isinstance(j.get('partner_id'), bool):
-                    print("evitar error por conseguir FALSE")
-                else:
-                    debtor_id = j.get('partner_id')[0] 
-                    conjunto.add(debtor_id) 
-                    print(debtor_id)   
-            _logger.info('\n\n\n conjunto: \n%s', conjunto)                               
-
-
-
-        #\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
-        #\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
-        # Creditors Process:
-
-        #Get IDs for BBVA Bank & Deudores Diversos (MXN):    
-        journal_id_acreedores = self.env['account.journal'].search([('name', 'ilike', 'Acreedores Diversos')])
-        _logger.info('\n journal_id_deudores %s\n\n', journal_id_deudores)
-
-        journal_id_banco = self.env['account.journal'].search([('name', 'ilike', 'BBVA')])                                                                
-        _logger.info('\n journal_id_banco %s\n\n', journal_id_banco)
-
-        # Retrieve amounts grouped by x_studio_contacto_deudor_acreedor_1 
-        # BOTH FOR LOANS & PAYMENTS:   
-
-        if journal_id_acreedores and journal_id_banco:     
-            # !-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!        
-            # A LOAN IS WHEN JOURNAL_ID IS THE COMPANY BRINGING MONEY TO CREDITOR
-            #  CREDITOR ======={$ money}=======> > COMPANY'S BANK               
-            grupo_prestamo = self.env['account.payment'].read_group(
-                domain=[('payment_type', '=', 'transfer'),
-                        '|', ('journal_id', 'in', journal_id_acreedores.ids),
-                            ('destination_journal_id', 'in', journal_id_banco.ids)],
-                fields=['payment_date', 'name', 'partner_id', 'journal_id', 'destination_journal_id', 'communication', 'amount:sum', 'state'], 
-                groupby=['partner_id'])
-            _logger.info('\n\n grupo_prestamo \n\n%s\n\n', grupo_prestamo)
-
-            #Put values into set in order to avoid repetitions:
-            for j in grupo_prestamo:
-                if isinstance(j.get('partner_id'), bool):
-                    print("evitar error por conseguir FALSE")
-                else:
-                    debtor_id = j.get('partner_id')[0] 
-                    conjunto.add(debtor_id) 
-                    print(debtor_id)   
-            _logger.info('\n\n\n conjunto: \n%s', conjunto)
-
-            # !-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!
-            # A PAYMENT IS WHEN JOURNAL_ID IS A COMPANY'S BANK GIVING MONEY TO A CREDITOR 
-            #  COMPANY'S BANK ======={$ money}=======> > CREDITOR 
-            grupo_abono = self.env['account.payment'].read_group(
-                domain=[('payment_type', '=', 'transfer'),
-                        '|', ('journal_id', 'in', journal_id_banco.ids),
-                            ('destination_journal_id', 'in', journal_id_acreedores.ids)],
-                fields=['payment_date', 'name', 'partner_id', 'journal_id', 'destination_journal_id', 'communication', 'amount:sum', 'state'], 
-                groupby=['partner_id'])
-            _logger.info('\n\n grupo_abono \n\n%s\n\n', grupo_abono)
-            
-            #Put values into set in order to avoid repetitions:
-            for i in grupo_abono:
-                if isinstance(i.get('partner_id'), bool):
-                    print("evitar error por conseguir FALSE")
-                else:            
-                    debtor_id = i.get('partner_id')[0]
-                    conjunto.add(debtor_id) 
-                    print(debtor_id)
-            _logger.info('\n\n\n conjunto: \n%s', conjunto)        
-
+                    
 
         #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!         
         #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -191,18 +117,18 @@ class RecibaLiquidaciones(models.Model):
 
     facturas_clientes_ids = fields.One2many('account.invoice', 'id', string='Facturas de Cliente', compute='_set_facturas_clientes')
     
-    deudores_ids_abonos   = fields.One2many('account.payment', 'id', string='Deudores (Abonos)', compute='_set_deudores_abonos')
-    saldo_deudores_abonos = fields.Float(string='Saldo Deudores Abonos', digits=(15,2), compute='_set_saldo_deudores_abonos')
-    
+    deudores_general         = fields.One2many('account.payment', 'id', string='Deudores (General)', compute='_set_deudores_general')    
+    deudores_ids_abonos      = fields.One2many('account.payment', 'id', string='Deudores (Abonos)', compute='_set_deudores_abonos')
+    saldo_deudores_abonos    = fields.Float(string='Saldo Deudores Abonos', digits=(15,2), compute='_set_saldo_deudores_abonos')    
     deudores_ids_prestamos   = fields.One2many('account.payment', 'id', string='Deudores (Préstamos)', compute='_set_deudores_prestamos')
     saldo_deudores_prestamos = fields.Float(string='Saldo Deudores Préstamos', digits=(15,2), compute='_set_saldo_deudores_prestamos')
     
     facturas_proveedores_ids   = fields.One2many('account.invoice', 'id', string='Facturas de Proveedores', compute='_set_facturas_proveedores')
-    saldo_facturas_proveedores = fields.Float(string='Saldo Facturas Proveedor', digits=(15,2), compute='_set_saldo_provedores')
+    saldo_facturas_proveedores = fields.Float(string='Saldo Facturas Proveedor', digits=(15,2), compute='_set_saldo_provedores')    
     
-    acreedores_ids_abonos   = fields.One2many('account.payment', 'id', string='Acreedores (Abonos)', compute='_set_acreedores_abonos')
-    saldo_acreedores_abonos = fields.Float(string='Saldo Acreedores Abonos', digits=(15,2), compute='_set_saldo_acreedores_abonos')
-    
+    acreedores_general         = fields.One2many('account.payment', 'id', string='Acreedores (General)', compute='_set_acreedores_general')    
+    acreedores_ids_abonos      = fields.One2many('account.payment', 'id', string='Acreedores (Abonos)', compute='_set_acreedores_abonos')
+    saldo_acreedores_abonos    = fields.Float(string='Saldo Acreedores Abonos', digits=(15,2), compute='_set_saldo_acreedores_abonos')    
     acreedores_ids_prestamos   = fields.One2many('account.payment', 'id', string='Acreedores (Préstamos)', compute='_set_acreedores_prestamos')
     saldo_acreedores_prestamos = fields.Float(string='Saldo Acreedores Préstamos', digits=(15,2), compute='_set_saldo_acreedores_prestamos')
     
@@ -224,6 +150,30 @@ class RecibaLiquidaciones(models.Model):
             rec.facturas_clientes_ids = self.env['account.invoice'].search([('state', '=', 'open'),
                                                                             ('type','=','out_invoice'),
                                                                             ('partner_id','=', rec.contacto_id.id)])
+
+
+
+    @api.one
+    @api.depends('contacto_id')
+    def _set_deudores_general(self):
+        journal_id_deudores = self.env['account.journal'].search([('name', 'ilike', 'Deudores diversos')])
+        _logger.info('\n journal_id_deudores %s\n\n', journal_id_deudores)
+
+        journal_id_banco = self.env['account.journal'].search([('name', 'ilike', 'Bank')])                                                                
+        _logger.info('\n journal_id_banco %s\n\n', journal_id_banco)
+
+        sql_query = """SELECT id, name, payment_date
+                         FROM account_payment 
+                        WHERE payment_type = 'transfer' AND
+                              x_studio_contacto_deudor_acreedor_1 = self.contacto_id.id AND
+                              (journal_id IN journal_id_deudores.ids OR 
+                               journal_id IN journal_id_banco.ids) AND
+                              (destination_journal_id IN journal_id_banco.ids OR 
+                               destination_journal_id IN journal_id_deudores.ids)
+                     ORDER BY payment_date;"""
+        self.env.cr.execute(sql_query)   
+        result = self.env.cr.fetchall()                 
+        _logger.info('\n\n\n SUPER QUERY %s\n\n', result)                                   
 
 
 
@@ -291,6 +241,13 @@ class RecibaLiquidaciones(models.Model):
     def _set_saldo_provedores(self):
         self.saldo_facturas_proveedores = sum(line.amount_total * -1 for line in self.facturas_proveedores_ids)
         print('self.saldo_facturas_proveedores', self.saldo_facturas_proveedores)
+
+
+
+    @api.one
+    @api.depends('contacto_id')
+    def _set_acreedores_general(self):
+        pass
 
 
 
