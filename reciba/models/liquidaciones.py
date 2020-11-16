@@ -15,7 +15,7 @@ class ResPartner(models.Model):
 class AccountPayment(models.Model):
     _inherit = 'account.payment'    
     
-    rec_abono_prestamo = fields.Char(string='Concepto de abono/préstamo para auxilio de Reciba')
+    rec_abono_prestamo = fields.Char(string='Concepto')
 
 
 
@@ -59,10 +59,10 @@ class RecibaLiquidaciones(models.Model):
         journal_id_deudores = self.env['account.journal'].search([('name', 'ilike', 'Deudores diversos')])
         _logger.info('\n journal_id_deudores %s\n\n', journal_id_deudores)
 
-        journal_id_acreedores = self.env['account.journal'].search([('name', 'ilike', 'Deudores diversos')])
+        journal_id_acreedores = self.env['account.journal'].search([('name', 'ilike', 'Acreedores diversos')])
         _logger.info('\n journal_id_acreedores %s\n\n', journal_id_deudores)        
 
-        journal_id_banco = self.env['account.journal'].search([('name', 'ilike', 'Bank')])                                                                
+        journal_id_banco = self.env['account.journal'].search([('name', 'ilike', 'BBVA')])                                                                
         _logger.info('\n journal_id_banco %s\n\n', journal_id_banco)
 
         # Retrieve amounts grouped by x_studio_contacto_deudor_acreedor_1 
@@ -117,21 +117,27 @@ class RecibaLiquidaciones(models.Model):
 
     facturas_clientes_ids = fields.One2many('account.invoice', 'id', string='Facturas de Cliente', compute='_set_facturas_clientes')
     
-    deudores_general         = fields.One2many('account.payment', 'id', string='Deudores (General)', compute='_set_deudores_general')    
     deudores_ids_abonos      = fields.One2many('account.payment', 'id', string='Deudores (Abonos)', compute='_set_deudores_abonos')
     saldo_deudores_abonos    = fields.Float(string='Saldo Deudores Abonos', digits=(15,2), compute='_set_saldo_deudores_abonos')    
+    
     deudores_ids_prestamos   = fields.One2many('account.payment', 'id', string='Deudores (Préstamos)', compute='_set_deudores_prestamos')
     saldo_deudores_prestamos = fields.Float(string='Saldo Deudores Préstamos', digits=(15,2), compute='_set_saldo_deudores_prestamos')
-    
+
+    deudores_general         = fields.One2many('account.payment', 'id', string='Deudores (General)', compute='_set_deudores_general')    
+    saldo_deudores_general   = fields.Float(string='Saldo Deudores General', digits=(15,2), compute='_set_saldo_deudores_general')    
+
     facturas_proveedores_ids   = fields.One2many('account.invoice', 'id', string='Facturas de Proveedores', compute='_set_facturas_proveedores')
     saldo_facturas_proveedores = fields.Float(string='Saldo Facturas Proveedor', digits=(15,2), compute='_set_saldo_provedores')    
-    
-    acreedores_general         = fields.One2many('account.payment', 'id', string='Acreedores (General)', compute='_set_acreedores_general')    
+
     acreedores_ids_abonos      = fields.One2many('account.payment', 'id', string='Acreedores (Abonos)', compute='_set_acreedores_abonos')
     saldo_acreedores_abonos    = fields.Float(string='Saldo Acreedores Abonos', digits=(15,2), compute='_set_saldo_acreedores_abonos')    
+    
     acreedores_ids_prestamos   = fields.One2many('account.payment', 'id', string='Acreedores (Préstamos)', compute='_set_acreedores_prestamos')
     saldo_acreedores_prestamos = fields.Float(string='Saldo Acreedores Préstamos', digits=(15,2), compute='_set_saldo_acreedores_prestamos')
-    
+
+    acreedores_general         = fields.One2many('account.payment', 'id', string='Acreedores (General)', compute='_set_acreedores_general')    
+    saldo_acreedores_general   = fields.Float(string='Saldo Acreedores General', digits=(15,2), compute='_set_saldo_acreedores_general')        
+
     saldo = fields.Float(string='Saldo', digits=(15,2), compute='_set_saldo') 
 
 
@@ -150,31 +156,7 @@ class RecibaLiquidaciones(models.Model):
             rec.facturas_clientes_ids = self.env['account.invoice'].search([('state', '=', 'open'),
                                                                             ('type','=','out_invoice'),
                                                                             ('partner_id','=', rec.contacto_id.id)])
-
-
-
-    @api.one
-    @api.depends('contacto_id')
-    def _set_deudores_general(self):
-        journal_id_deudores = self.env['account.journal'].search([('name', 'ilike', 'Deudores diversos')])
-        _logger.info('\n journal_id_deudores %s\n\n', journal_id_deudores)
-
-        journal_id_banco = self.env['account.journal'].search([('name', 'ilike', 'BBVA')])                                                                
-        _logger.info('\n journal_id_banco %s\n\n', journal_id_banco)
-
-        sql_query = """SELECT id, name, payment_date
-                         FROM account_payment 
-                        WHERE payment_type = 'transfer' AND
-                              x_studio_contacto_deudor_acreedor_1 = self.contacto_id.id AND
-                              (journal_id IN journal_id_deudores.ids OR 
-                               journal_id IN journal_id_banco.ids) AND
-                              (destination_journal_id IN journal_id_banco.ids OR 
-                               destination_journal_id IN journal_id_deudores.ids)
-                     ORDER BY payment_date;"""
-        self.env.cr.execute(sql_query)   
-        result = self.env.cr.fetchall()                 
-        _logger.info('\n\n\n SUPER QUERY %s\n\n', result)                                   
-
+                      
 
 
     @api.one
@@ -227,6 +209,52 @@ class RecibaLiquidaciones(models.Model):
 
 
 
+    @api.one
+    @api.depends('contacto_id')
+    def _set_deudores_general(self):
+        journal_id_deudores = self.env['account.journal'].search([('name', 'ilike', 'Deudores diversos')])
+        _logger.info('\n\n\n journal_id_deudores %s\n\n', journal_id_deudores)
+
+        journal_id_banco = self.env['account.journal'].search([('name', 'ilike', 'BBVA')])                                                                
+        _logger.info('\n\n\n\n journal_id_banco %s\n\n', journal_id_banco)
+        
+        domain = [('payment_type', '=', 'transfer'),
+                  ('x_studio_contacto_deudor_acreedor_1', '=', self.contacto_id.id),
+                  '|', ('journal_id', 'in', journal_id_deudores.ids),
+                       ('journal_id', 'in', journal_id_banco.ids),
+                  '|', ('destination_journal_id', 'in', journal_id_banco.ids),
+                       ('destination_journal_id', 'in', journal_id_deudores.ids)]
+
+        deudores_general = self.env['account.payment'].search(domain, order='payment_date asc')                
+        _logger.info('\n\n\n SUPER QUERY %s\n\n', deudores_general) 
+
+        deudores_recordset = self.env['account.payment'].browse(deudores_general.ids)
+        for deudor in deudores_recordset:
+            if deudor.journal_id.id in journal_id_deudores.ids and deudor.destination_journal_id.id in journal_id_banco.ids:
+                vals = {
+                    'rec_abono_prestamo': 'ABONO'
+                }
+                deudor.write(vals)
+            else:
+                vals = {
+                    'rec_abono_prestamo': 'PRÉSTAMO'
+                }
+                deudor.write(vals)
+
+        self.deudores_general = deudores_general.ids   
+
+
+
+    @api.one
+    @api.depends('contacto_id')
+    def _set_saldo_deudores_general(self):
+        total = 0.0       
+        total += sum(line.amount * -1 for line in self.deudores_ids_abonos)
+        total += sum(line.amount for line in self.deudores_ids_prestamos)       
+        self.saldo_deudores_general = total
+
+
+
     @api.multi
     @api.depends('contacto_id')
     def _set_facturas_proveedores(self):
@@ -236,18 +264,12 @@ class RecibaLiquidaciones(models.Model):
                                                                                ('partner_id','=', rec.contacto_id.id)])
 
 
+
     @api.one
     @api.depends('contacto_id')
     def _set_saldo_provedores(self):
         self.saldo_facturas_proveedores = sum(line.amount_total * -1 for line in self.facturas_proveedores_ids)
         print('self.saldo_facturas_proveedores', self.saldo_facturas_proveedores)
-
-
-
-    @api.one
-    @api.depends('contacto_id')
-    def _set_acreedores_general(self):
-        pass
 
 
 
@@ -304,6 +326,52 @@ class RecibaLiquidaciones(models.Model):
 
     @api.one
     @api.depends('contacto_id')
+    def _set_acreedores_general(self):
+        journal_id_acreedores = self.env['account.journal'].search([('name', 'ilike', 'Acreedores diversos')])
+        _logger.info('\n\n\n journal_id_acreedores %s\n\n', journal_id_acreedores)
+
+        journal_id_banco = self.env['account.journal'].search([('name', 'ilike', 'BBVA')])                                                                
+        _logger.info('\n\n\n\n journal_id_banco %s\n\n', journal_id_banco)
+        
+        domain = [('payment_type', '=', 'transfer'),
+                  ('x_studio_contacto_deudor_acreedor_1', '=', self.contacto_id.id),
+                  '|', ('journal_id', 'in', journal_id_acreedores.ids),
+                       ('journal_id', 'in', journal_id_banco.ids),
+                  '|', ('destination_journal_id', 'in', journal_id_banco.ids),
+                       ('destination_journal_id', 'in', journal_id_acreedores.ids)]
+
+        acreedores_general = self.env['account.payment'].search(domain, order='payment_date asc')                
+        _logger.info('\n\n\n SUPER QUERY %s\n\n', acreedores_general) 
+
+        acreedores_recordset = self.env['account.payment'].browse(acreedores_general.ids)
+        for acreedor in acreedores_recordset:
+            if acreedor.journal_id.id in journal_id_banco.ids and acreedor.destination_journal_id.id in journal_id_acreedores.ids:
+                vals = {
+                    'rec_abono_prestamo': 'ABONO'
+                }
+                acreedor.write(vals)
+            else:
+                vals = {
+                    'rec_abono_prestamo': 'PRÉSTAMO'
+                }
+                acreedor.write(vals)
+
+        self.acreedores_general = acreedores_general.ids
+
+
+
+    @api.one
+    @api.depends('contacto_id')
+    def _set_saldo_acreedores_general(self):
+        total = 0.0  
+        total += sum(line.amount for line in self.acreedores_ids_abonos)            
+        total += sum(line.amount * -1 for line in self.acreedores_ids_prestamos)     
+        self.saldo_acreedores_general = total
+
+
+
+    @api.one
+    @api.depends('contacto_id')
     def _set_saldo(self):
 
         total = 0.0
@@ -327,4 +395,4 @@ class RecibaLiquidaciones(models.Model):
         total += sum(line.amount * -1 for line in self.acreedores_ids_prestamos)
         print('total 6',total)
                        
-        self.saldo = total        
+        self.saldo = total     
