@@ -159,7 +159,7 @@ class RecibaLiquidaciones(models.Model):
         journal_id_deudores = self.env['account.journal'].search([('name', 'ilike', 'Deudores diversos')])
         _logger.info('\n journal_id_deudores %s\n\n', journal_id_deudores)
 
-        journal_id_banco = self.env['account.journal'].search([('name', 'ilike', 'Bank')])                                                                
+        journal_id_banco = self.env['account.journal'].search([('name', 'ilike', 'BBVA')])                                                                
         _logger.info('\n journal_id_banco %s\n\n', journal_id_banco)
 
         sql_query = """SELECT id, name, payment_date
