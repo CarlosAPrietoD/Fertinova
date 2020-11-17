@@ -54,7 +54,7 @@
                                 <th class="table-info">Circular</th>
                                 <th class="table-info">Monto</th>
                             </tr>                             
-                            <tr t-foreach='doc.deudores_ids_prestamos' t-as='line'>
+                            <tr t-foreach='doc.deudores_general' t-as='line'>
                                 <td><span t-esc="line.name"/></td>
                                 <td><span t-esc="line.rec_abono_prestamo"/></td>
                                 <td><span t-esc="line.payment_date"/></td>
@@ -108,7 +108,7 @@
                                 <th class="table-info">Circular</th>
                                 <th class="table-info">Monto</th>
                             </tr>                        
-                            <tr t-foreach='doc.acreedores_ids_prestamos' t-as='line'>
+                            <tr t-foreach='doc.acreedores_general' t-as='line'>
                                 <td><span t-esc="line.name"/></td>
                                 <td><span t-esc="line.rec_abono_prestamo"/></td>
                                 <td><span t-esc="line.payment_date"/></td>

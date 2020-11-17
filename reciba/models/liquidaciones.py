@@ -215,11 +215,11 @@ class RecibaLiquidaciones(models.Model):
         journal_id_deudores = self.env['account.journal'].search([('name', 'ilike', 'Deudores diversos')])
         _logger.info('\n\n\n journal_id_deudores %s\n\n', journal_id_deudores)
 
-        journal_id_banco = self.env['account.journal'].search([('name', 'ilike', 'BBVA')])                                                                
+        journal_id_banco = self.env['account.journal'].search([('name', 'ilike', 'Bank')])                                                                
         _logger.info('\n\n\n\n journal_id_banco %s\n\n', journal_id_banco)
-        
+        #x_studio_contacto_deudor_acreedor_1
         domain = [('payment_type', '=', 'transfer'),
-                  ('x_studio_contacto_deudor_acreedor_1', '=', self.contacto_id.id),
+                  ('partner_id', '=', self.contacto_id.id),
                   '|', ('journal_id', 'in', journal_id_deudores.ids),
                        ('journal_id', 'in', journal_id_banco.ids),
                   '|', ('destination_journal_id', 'in', journal_id_banco.ids),
