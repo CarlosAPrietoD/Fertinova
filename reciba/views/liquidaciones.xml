@@ -3,21 +3,6 @@
   <data>
 
     <!--::::::::::::::::::::::::::::::::::::::::::::-->
-    <!--LIQUIDACIONES-Inheritance for deudor titular-->
-    <!--::::::::::::::::::::::::::::::::::::::::::::-->
-    <record id="res_partner_reciba_form_inherit" model="ir.ui.view">
-        <field name="name">res.partner.form.inherit</field>
-        <field name="model">res.partner</field>
-        <field name="inherit_id" ref="base.view_partner_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='company_id']" position="after">
-                <field name="deudor_titular_id" readonly="False"/>
-            </xpath>          
-        </field>
-    </record>
-
-
-    <!--::::::::::::::::::::::::::::::::::::::::::::-->
     <!-- LIQUIDACIONES - LIST VIEW                  -->
     <!--::::::::::::::::::::::::::::::::::::::::::::-->    
     <record id="view_reciba_liquidaciones_list" model="ir.ui.view">
