@@ -5,20 +5,6 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
-class ResPartner(models.Model):
-    _inherit = 'res.partner'    
-    
-    deudor_titular_id = fields.Many2one('res.partner', string='Deudor Titular') 
-
-
-
-class AccountPayment(models.Model):
-    _inherit = 'account.payment'    
-    
-    rec_abono_prestamo = fields.Char(string='Concepto')
-
-
-
 class RecibaLiquidaciones(models.Model):
     _name = 'reciba.liquidaciones'
     _description = 'Liquidaciones de Reciba'
