@@ -224,7 +224,8 @@ class RecibaTicket(models.Model):
                 'name': self.product_id.name,
                 'product_id': self.product_id.id,
                 'product_uom_qty': self.net_weight,
-                'product_uom': self.product_id.uom_po_id.id
+                'product_uom': self.product_id.uom_po_id.id,
+                'reciba_id': self.id
             })]}
             picking = self.env['stock.picking'].create(values)
             picking.state = 'confirmed'
