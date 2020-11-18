@@ -213,15 +213,13 @@ class RecibaTicket(models.Model):
 
         
         if self.reception == 'priceless' and self.operation_type == 'in':
-            origin = self.env['stock.location'].search([('name','ilike','Proveedores')], limit=1)
             picking_type = self.env['stock.picking.type'].search(['|',('name','ilike','Recepciones'),('name','ilike','Receipts')], limit=1)
             
             values={
             'picking_type_id': picking_type.id,
-            'location_id': origin.id,
+            'location_id': self.provider_location_id.id,
             'location_dest_id' : self.location_id.id,
             'scheduled_date': datetime.today(),
-            'state': 'confirmed',
             'move_ids_without_package': [(0,0,{
                 'name': self.product_id.name,
                 'product_id': self.product_id.id,
