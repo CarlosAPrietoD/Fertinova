@@ -125,7 +125,6 @@
                     <field name="product_id" />
                     <field name="provider_location_id" string="Ubicación origen"/>
                     <field name="location_id" string="Ubicación destino"/>
-                    <field name="reception" />
                     <field name="net_weight" sum="Total"/>
                     <field name="humidity_total_discount" sum="Total"/>
                     <field name="impurity_total_discount" sum="Total"/>
