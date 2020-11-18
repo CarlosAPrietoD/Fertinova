@@ -151,9 +151,9 @@ class RecibaTicket(models.Model):
     reception = fields.Selection([('price', 'Con precio'),
     ('priceless', 'Sin precio')], string="Tipo de recepción")
     
-    provider_location_id = fields.Many2one('stock.location', string="Ubicación proveedor")
+    provider_location_id = fields.Many2one('stock.location', string="Ubicación origen")
     provider_date = fields.Datetime(string="Fecha y hora", compute='_default_provider_date', store=True)
-    location_id = fields.Many2one('stock.location', string="Ubicación de descarga")
+    location_id = fields.Many2one('stock.location', string="Ubicación destino")
     location_date = fields.Datetime(string="Fecha y hora", compute='_default_location_date', store=True)
     gross_weight = fields.Float(string="Peso bruto")
     gross_date = fields.Datetime(string="Fecha y hora", compute='_default_gross_date', store=True)
