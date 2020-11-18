@@ -45,18 +45,18 @@
                         <div>
                             <h4 class="font-italic mt-3">Cuentas Deudor</h4>
                         </div>
-                        <div>
-                            <h6 class="font-italic mt-3">Préstamos</h6>
-                        </div>                        
+
                         <table class="table table-condensed" style="font-size: 12px; height: 60px;">
                             <tr>
                                 <th class="table-info">Movimiento</th>
+                                <th class="table-info">Concepto</th>
                                 <th class="table-info">Fecha</th>
                                 <th class="table-info">Circular</th>
                                 <th class="table-info">Monto</th>
                             </tr>                             
-                            <tr t-foreach='doc.deudores_ids_prestamos' t-as='line'>
+                            <tr t-foreach='doc.deudores_general' t-as='line'>
                                 <td><span t-esc="line.name"/></td>
+                                <td><span t-esc="line.rec_abono_prestamo"/></td>
                                 <td><span t-esc="line.payment_date"/></td>
                                 <td><span t-esc="line.communication"/></td>
                                 <td><span t-esc="line.amount"/></td>
@@ -65,37 +65,12 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
+                                <td></td>
                                 <td>
-                                    <strong><span t-field="doc.saldo_deudores_prestamos"/></strong>
+                                    <strong><span t-field="doc.saldo_deudores_general"/></strong>
                                 </td>                                
                             </tr>                                                  
                         </table>   
-
-                        <div>
-                            <h6 class="font-italic mt-3">Abonos</h6>
-                        </div>                        
-                        <table class="table table-condensed" style="font-size: 12px; height: 60px;">
-                            <tr>
-                                <th class="table-info">Movimiento</th>
-                                <th class="table-info">Fecha</th>
-                                <th class="table-info">Circular</th>
-                                <th class="table-info">Monto</th>
-                            </tr>                             
-                            <tr t-foreach='doc.deudores_ids_abonos' t-as='line'>
-                                <td><span t-esc="line.name"/></td>
-                                <td><span t-esc="line.payment_date"/></td>
-                                <td><span t-esc="line.communication"/></td>
-                                <td><span t-esc="line.amount"/></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td>
-                                    <strong><span t-field="doc.saldo_deudores_abonos"/></strong>
-                                </td>                                
-                            </tr>                                                  
-                        </table>                            
 
                         <!--Sección de facturas de proveedores-->
                         <div>
@@ -124,19 +99,18 @@
                         <!--Sección de acreedores-->
                         <div>
                             <h4 class="font-italic mt-3">Cuentas Acreedor</h4>
-                        </div>
-                        <div>
-                            <h6 class="font-italic mt-3">Préstamos</h6>
-                        </div>                         
+                        </div>                        
                         <table class="table table-condensed" style="font-size: 12px; height: 60px;">
                             <tr>
                                 <th class="table-info">Movimiento</th>
+                                <th class="table-info">Concepto</th>
                                 <th class="table-info">Fecha</th>
                                 <th class="table-info">Circular</th>
                                 <th class="table-info">Monto</th>
                             </tr>                        
-                            <tr t-foreach='doc.acreedores_ids_prestamos' t-as='line'>
+                            <tr t-foreach='doc.acreedores_general' t-as='line'>
                                 <td><span t-esc="line.name"/></td>
+                                <td><span t-esc="line.rec_abono_prestamo"/></td>
                                 <td><span t-esc="line.payment_date"/></td>
                                 <td><span t-esc="line.communication"/></td>
                                 <td><span t-esc="line.amount"/></td>
@@ -145,38 +119,13 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
+                                <td></td>
                                 <td>
-                                    <strong><span t-field="doc.saldo_acreedores_prestamos"/></strong>
+                                    <strong><span t-field="doc.saldo_acreedores_general"/></strong>
                                 </td>                                
                             </tr>                                                   
                         </table>
-                                                
-                        <div>
-                            <h6 class="font-italic mt-3">Abonos</h6>
-                        </div>                         
-                        <table class="table table-condensed" style="font-size: 12px; height: 60px;">
-                            <tr>
-                                <th class="table-info">Movimiento</th>
-                                <th class="table-info">Fecha</th>
-                                <th class="table-info">Circular</th>
-                                <th class="table-info">Monto</th>
-                            </tr>                        
-                            <tr t-foreach='doc.acreedores_ids_abonos' t-as='line'>
-                                <td><span t-esc="line.name"/></td>
-                                <td><span t-esc="line.payment_date"/></td>
-                                <td><span t-esc="line.communication"/></td>
-                                <td><span t-esc="line.amount"/></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td>
-                                    <strong><span t-field="doc.saldo_acreedores_abonos"/></strong>
-                                </td>                                
-                            </tr>                                                   
-                        </table>
-
+                      
                         <!--Sección de saldo final-->
                         <div class="bg-primary mt-4 p-2 text-right text-white">
                             <span class="text-bold" style="font-size: 18px;">Saldo:</span>

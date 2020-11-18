@@ -29,11 +29,11 @@
         'views/cfdi.xml',
 
         #Wizards:
-        'wizard/account_move_inherited_view.xml',
-        'wizard/fuel_invoice.xml',     
+        #'wizard/account_move_inherited_view.xml',
+        #'wizard/fuel_invoice.xml',     
 
         #reports
-        'reports/trial_report.xml', 
+        #'reports/trial_report.xml', 
     ],
     # only loaded in demonstration mode
     'demo': [

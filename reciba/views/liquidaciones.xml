@@ -94,7 +94,7 @@
                         <!--Sección de saldo--> 
                     <div class="oe_subtotal_footer oe_right font-weight-bold">
                         <field name="saldo_deudores_abonos"/>
-                    </div>                     
+                    </div>                                     
 
                     <!--Sección de Facturas de Proveedor-->                      
                     <separator style="margin-top: 30px;" string="Cuentas Proveedor" colspan="2" />
