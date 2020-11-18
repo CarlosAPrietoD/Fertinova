@@ -16,7 +16,7 @@
                     <sheet>
                         <group>
                             <group>
-                                <field name="operation_type" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                <field name="operation_type" invisible="1" />
                                 <field name="name" readonly="1" force_save="1"/>
                                 <field name="date" readonly="1" />
                                 <field name="weigher" attrs="{'readonly':['|',('state', '!=', 'draft'),('operation_type', '=', False)]}" />
@@ -59,7 +59,8 @@
                         </group>
 
                         <group>
-                            <field name="reception" attrs="{'readonly':['|','|','|',('state', '=', 'cancel'),('state', '=', 'invoiced'),('plate_vehicle', '=', False),('price_flag', '=',True)]}" />
+                            <field name="reception" attrs="{'readonly':['|','|','|',('state', '=', 'cancel'),('state', '=', 'invoiced'),('plate_vehicle', '=', False),('price_flag', '=',True)]
+                            ,'invisible':[('operation_type', '=', 'out')]}" />
                         </group>
 
                         <group>
@@ -77,6 +78,7 @@
                                 <field name="gross_weight" attrs="{'readonly':['|',('state', '!=', 'draft'),('location_id', '=', False)]}" />
                                 <field name="tare_weight" attrs="{'readonly':['|',('state', '!=', 'draft'),('gross_weight', '=', 0)]}" />
                                 <field name="net_weight"/>
+                                <field name="net_expected" readonly="1" attrs="{'invisible':[('operation_type', '!=', 'out')]}"/>
                             </group>
                             <group>
                                 <field name="gross_date" />
@@ -103,7 +105,8 @@
                         </group>
                         <group>
                             <field name="picking_id" readonly="1" force_save="1"/>
-                            <field name="po_id" readonly="1" force_save="1"/>
+                            <field name="po_id" readonly="1" force_save="1" attrs="{'invisible':[('operation_type', '!=', 'in')]}"/>
+                            <field name="so_id" readonly="1" force_save="1" attrs="{'invisible':[('operation_type', '!=', 'out')]}"/>
                         </group>
                     </sheet>
                 </form>
@@ -322,7 +325,7 @@
                                             <t t-if="ticket['ticket'].price">
                                                 <td style="width: 15%; border-bottom: black 1px solid;">
                                                     $
-                                                    <t t-esc="ticket['ticket'].total_weight" />
+                                                    <t t-esc="ticket['ticket'].price" />
                                                 </td>
                                             </t>
                                             <t t-else="">
@@ -519,11 +522,12 @@
         <field name="model">stock.picking</field>
         <field name="inherit_id" ref="stock.view_picking_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//button[@name='action_toggle_is_locked']" position="after">
-                <button name="create_reciba" type="object" string="Crear boleta" class="btn-primary" attrs="{'invisible':['|',('state', '!=', 'done'),('reciba_id', '!=', False)]}"/>   
-            </xpath>
             <xpath expr="//field[@name='origin']" position="after">
                 <field name="reciba_id" />
+                <!--<field name="sale_id" />-->
+            </xpath>
+            <xpath expr="//button[@name='action_toggle_is_locked']" position="after">
+                <button name="create_reciba" type="object" string="Crear boleta" class="btn-primary" attrs="{'invisible':['|',('state', '!=', 'done'),('reciba_id', '!=', False)]}"/>   
             </xpath>
         </field>
     </record>
