@@ -115,7 +115,7 @@ class RecibaTicket(models.Model):
     
 
     state = fields.Selection([('draft', 'Borrador'),
-    ('confirmed', 'Por facturar'), 
+    ('confirmed', 'Relacionado a un pedido'), 
     ('invoiced','Facturado'),
     ('cancel', 'Cancelado')], default='draft')
     
@@ -174,6 +174,7 @@ class RecibaTicket(models.Model):
 
     picking_id = fields.Many2one('stock.picking', string="Transferencia")
     po_id = fields.Many2one('purchase.order', string="Orden de compra")
+    so_id = fields.Many2one('sale.order', string="Orden de venta")
 
 
     @api.onchange('quality_id')
@@ -407,7 +408,7 @@ class StockPicking(models.Model):
     def create_reciba(self):
         
         values={
-            'state': 'draft',
+            'state': 'confirmed',
             'operation_type': 'out',
             'name': 'Boleta Borrador',
             'partner_id': self.partner_id,
