@@ -34,7 +34,7 @@
         'views/views.xml',
 
         #reports
-        'reports/reporte_liquidaciones.xml',        
+        #'reports/reporte_liquidaciones.xml',        
     ],
     # only loaded in demonstration mode
     'demo': [
