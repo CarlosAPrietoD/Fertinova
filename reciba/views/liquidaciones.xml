@@ -38,8 +38,8 @@
                     <separator style="margin-top: 30px;" string="Cuentas Cliente" colspan="2" />
                     <field name="facturas_clientes_ids">
                         <tree>
-                            <field name="number"/>
-                            <field name="date_invoice"/>
+                            <field name="date_invoice" widget="date"/>                        
+                            <field name="number"/>                            
                             <field name="state"/>
                             <field name="amount_total" sum="Total Cliente"/>                            
                         </tree>
@@ -51,11 +51,10 @@
                     <h5 class="font-italic">Préstamos</h5>                    
                     <field name="deudores_ids_prestamos">
                         <tree>
-                            <field name="name"/>
-                            <field name="payment_date"/>
+                            <field name="payment_date" widget="date"/>
+                            <field name="name"/>                            
                             <field name="journal_id"/>
                             <field name="destination_journal_id"/>
-                            <field name="communication"/>
                             <field name="state"/>
                             <field name="amount"/>
                         </tree>
@@ -67,11 +66,10 @@
                     <h5 class="font-italic">Abonos</h5>
                     <field name="deudores_ids_abonos">
                         <tree>
+                            <field name="payment_date" widget="date"/>
                             <field name="name"/>
-                            <field name="payment_date"/>
                             <field name="journal_id"/>
                             <field name="destination_journal_id"/>
-                            <field name="communication"/>
                             <field name="state"/>
                             <field name="amount"/>
                         </tree>
@@ -85,8 +83,8 @@
                     <separator style="margin-top: 30px;" string="Cuentas Proveedor" colspan="2" />
                     <field name="facturas_proveedores_ids">
                         <tree>
+                            <field name="date_invoice" widget="date"/>
                             <field name="number"/>
-                            <field name="date_invoice"/>
                             <field name="state"/>
                             <field name="amount_total"/>
                         </tree>
@@ -102,11 +100,10 @@
                     <h5 class="font-italic">Préstamos</h5>
                     <field name="acreedores_ids_prestamos">
                         <tree>
+                            <field name="payment_date" widget="date"/>                        
                             <field name="name"/>
-                            <field name="payment_date"/>
                             <field name="journal_id"/>
                             <field name="destination_journal_id"/>
-                            <field name="communication"/>
                             <field name="state"/>
                             <field name="amount"/>
                         </tree>
@@ -119,11 +116,10 @@
                     <h5 class="font-italic">Abonos</h5>
                     <field name="acreedores_ids_abonos">
                         <tree>
+                            <field name="payment_date" widget="date"/>
                             <field name="name"/>
-                            <field name="payment_date"/>
                             <field name="journal_id"/>
                             <field name="destination_journal_id"/>
-                            <field name="communication"/>
                             <field name="state"/>
                             <field name="amount"/>
                         </tree>
