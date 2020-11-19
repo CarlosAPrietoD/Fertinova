@@ -28,6 +28,7 @@
         
         #views
         'views/reciba.xml',  
+        'views/prestamos_abonos.xml', 
         'views/liquidaciones.xml',               
         'views/templates.xml',
         'views/views.xml',
