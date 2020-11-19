@@ -15,25 +15,25 @@
     # always loaded
     'data': [
         #Security Files:
-        #'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
         'security/account_security.xml',
         
         #Views:
-        #'views/account_move.xml',        
-        #'views/account_payments_inherited_view.xml',         
-        #'views/product_template_inherited_view.xml',
-        #'views/purchase_inherited_view.xml',
-        #'views/sale_inherited_view.xml',       
-        #'views/stock_move_inherited_view.xml',
-        #'views/stock_picking_inherited_view.xml',
-        #'views/cfdi.xml',
+        'views/account_move.xml',        
+        'views/account_payments_inherited_view.xml',         
+        'views/product_template_inherited_view.xml',
+        'views/purchase_inherited_view.xml',
+        'views/sale_inherited_view.xml',       
+        'views/stock_move_inherited_view.xml',
+        'views/stock_picking_inherited_view.xml',
+        'views/cfdi.xml',
 
         #Wizards:
-        #'wizard/account_move_inherited_view.xml',
-        #'wizard/fuel_invoice.xml',     
+        'wizard/account_move_inherited_view.xml',
+        'wizard/fuel_invoice.xml',     
 
         #reports
-        #'reports/trial_report.xml', 
+        'reports/trial_report.xml', 
     ],
     # only loaded in demonstration mode
     'demo': [

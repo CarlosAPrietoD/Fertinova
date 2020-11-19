@@ -90,7 +90,10 @@ class RecibaTicket(models.Model):
     @api.depends('gross_weight', 'tare_weight')
     def _default_net_weight(self):
         if self.gross_weight and self.tare_weight:
-            self.net_weight = self.gross_weight-self.tare_weight
+            if self.operation_type == 'in':
+                self.net_weight = self.gross_weight-self.tare_weight
+            else:
+                self.net_weight = (self.gross_weight-self.tare_weight)*-1
 
     @api.one
     @api.depends('price', 'net_weight')
@@ -115,7 +118,7 @@ class RecibaTicket(models.Model):
     
 
     state = fields.Selection([('draft', 'Borrador'),
-    ('confirmed', 'Por facturar'), 
+    ('confirmed', 'Relacionado a un pedido'), 
     ('invoiced','Facturado'),
     ('cancel', 'Cancelado')], default='draft')
     
@@ -148,9 +151,9 @@ class RecibaTicket(models.Model):
     reception = fields.Selection([('price', 'Con precio'),
     ('priceless', 'Sin precio')], string="Tipo de recepción")
     
-    provider_location_id = fields.Many2one('stock.location', string="Ubicación proveedor")
+    provider_location_id = fields.Many2one('stock.location', string="Ubicación origen")
     provider_date = fields.Datetime(string="Fecha y hora", compute='_default_provider_date', store=True)
-    location_id = fields.Many2one('stock.location', string="Ubicación de descarga")
+    location_id = fields.Many2one('stock.location', string="Ubicación destino")
     location_date = fields.Datetime(string="Fecha y hora", compute='_default_location_date', store=True)
     gross_weight = fields.Float(string="Peso bruto")
     gross_date = fields.Datetime(string="Fecha y hora", compute='_default_gross_date', store=True)
@@ -158,6 +161,7 @@ class RecibaTicket(models.Model):
     tare_date = fields.Datetime(string="Fecha y hora", compute='_default_tare_date', store=True)
     net_weight = fields.Float(string="Peso Neto", compute='_default_net_weight', store=True)
     net_date = fields.Datetime(string="Fecha y hora", compute='_default_net_date', store=True)
+    net_expected = fields.Float(string="Peso neto esperado") 
     
     apply_discount = fields.Boolean(string="Aplicar descuento", default=True)
     humidity_total_discount = fields.Float(string="Descuento total de humedad (Kg)", compute='_get_humidity_total_discount', store=True)
@@ -173,7 +177,8 @@ class RecibaTicket(models.Model):
     total = fields.Monetary(string="Total", compute='_get_total', store=True)
 
     picking_id = fields.Many2one('stock.picking', string="Transferencia")
-    po_id = fields.Many2one('purchase.order', string="Orden de compra")
+    po_id = fields.Many2one('purchase.order', string="Orden de Compra")
+    so_id = fields.Many2one('sale.order', string="Orden de Venta")
 
 
     @api.onchange('quality_id')
@@ -207,21 +212,20 @@ class RecibaTicket(models.Model):
                 self.name = self.location_id.name[:2].upper()+"1"
 
         
-        if self.reception == 'priceless':
-            origin = self.env['stock.location'].search([('name','ilike','Proveedores')], limit=1)
+        if self.reception == 'priceless' and self.operation_type == 'in':
             picking_type = self.env['stock.picking.type'].search(['|',('name','ilike','Recepciones'),('name','ilike','Receipts')], limit=1)
             
             values={
             'picking_type_id': picking_type.id,
-            'location_id': origin.id,
+            'location_id': self.provider_location_id.id,
             'location_dest_id' : self.location_id.id,
             'scheduled_date': datetime.today(),
-            'state': 'confirmed',
             'move_ids_without_package': [(0,0,{
                 'name': self.product_id.name,
                 'product_id': self.product_id.id,
                 'product_uom_qty': self.net_weight,
-                'product_uom': self.product_id.uom_po_id.id
+                'product_uom': self.product_id.uom_po_id.id,
+                'reciba_id': self.id
             })]}
             picking = self.env['stock.picking'].create(values)
             picking.state = 'confirmed'
@@ -403,8 +407,7 @@ class StockPicking(models.Model):
     _inherit='stock.picking'
     
     x_studio_aplica_flete= fields.Boolean()
-    reciba_id = fields.Many2one('reciba.ticket', string="Boleta reciba")
-
+    reciba_id = fields.Many2one('reciba.ticket', string="Boleta de análisis")
     
     def create_reciba(self):
         
@@ -412,11 +415,15 @@ class StockPicking(models.Model):
             'state': 'draft',
             'operation_type': 'out',
             'name': 'Boleta Borrador',
-            'partner_id': self.partner_id,
+            'partner_id': self.partner_id.id,
             'product_id': self.move_ids_without_package[0].product_id.id,
             'provider_location_id': self.location_id.id,
             'location_id' : self.location_dest_id.id,
-            'scheduled_date': datetime.today()}
+            'scheduled_date': datetime.today(),
+            'so_id': self.sale_id.id,
+            'net_expected': self.move_ids_without_package[0].quantity_done,
+            'picking_id': self.id,
+            'reception': 'priceless'}
         
         ticket = self.env['reciba.ticket'].create(values)
 

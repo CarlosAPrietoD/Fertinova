@@ -23,13 +23,13 @@
                         </div>
                         <table class="table table-condensed" style="font-size: 12px; height: 60px;">
                             <tr>
+                                <th class="table-info">Fecha</th>                            
                                 <th class="table-info">Factura</th>
-                                <th class="table-info">Fecha</th>
                                 <th class="table-info">Monto</th>
                             </tr>                        
                             <tr t-foreach='doc.facturas_clientes_ids' t-as='line'>
+                                <td><span t-esc="line.date_invoice.strftime('%d/%m/%Y')"/></td>                            
                                 <td><span t-esc="line.number"/></td>
-                                <td><span t-esc="line.date_invoice"/></td>
                                 <td><span t-esc="line.amount_total"/></td>                                
                             </tr>
                             <tr>
@@ -48,21 +48,18 @@
 
                         <table class="table table-condensed" style="font-size: 12px; height: 60px;">
                             <tr>
+                                <th class="table-info">Fecha</th>                            
                                 <th class="table-info">Movimiento</th>
                                 <th class="table-info">Concepto</th>
-                                <th class="table-info">Fecha</th>
-                                <th class="table-info">Circular</th>
                                 <th class="table-info">Monto</th>
                             </tr>                             
                             <tr t-foreach='doc.deudores_general' t-as='line'>
+                                <td><span t-esc="line.payment_date.strftime('%d/%m/%Y')"/></td>                            
                                 <td><span t-esc="line.name"/></td>
                                 <td><span t-esc="line.rec_abono_prestamo"/></td>
-                                <td><span t-esc="line.payment_date"/></td>
-                                <td><span t-esc="line.communication"/></td>
                                 <td><span t-esc="line.amount"/></td>
                             </tr>
                             <tr>
-                                <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -78,13 +75,13 @@
                         </div>
                         <table class="table table-condensed" style="font-size: 12px; height: 60px;">
                             <tr>
+                                <th class="table-info">Fecha</th>                            
                                 <th class="table-info">Factura</th>
-                                <th class="table-info">Fecha</th>
                                 <th class="table-info">Monto</th>
                             </tr>                        
                             <tr t-foreach='doc.facturas_proveedores_ids' t-as='line'>
+                                <td><span t-esc="line.date_invoice.strftime('%d/%m/%Y')"/></td>                            
                                 <td><span t-esc="line.number"/></td>
-                                <td><span t-esc="line.date_invoice"/></td>
                                 <td><span t-esc="line.amount_total"/></td>
                             </tr>
                             <tr>
@@ -102,21 +99,18 @@
                         </div>                        
                         <table class="table table-condensed" style="font-size: 12px; height: 60px;">
                             <tr>
+                                <th class="table-info">Fecha</th>                            
                                 <th class="table-info">Movimiento</th>
                                 <th class="table-info">Concepto</th>
-                                <th class="table-info">Fecha</th>
-                                <th class="table-info">Circular</th>
                                 <th class="table-info">Monto</th>
                             </tr>                        
                             <tr t-foreach='doc.acreedores_general' t-as='line'>
+                                <td><span t-esc="line.payment_date.strftime('%d/%m/%Y')"/></td>                            
                                 <td><span t-esc="line.name"/></td>
                                 <td><span t-esc="line.rec_abono_prestamo"/></td>
-                                <td><span t-esc="line.payment_date"/></td>
-                                <td><span t-esc="line.communication"/></td>
                                 <td><span t-esc="line.amount"/></td>
                             </tr>
                             <tr>
-                                <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
