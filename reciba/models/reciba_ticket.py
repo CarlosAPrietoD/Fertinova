@@ -122,8 +122,8 @@ class RecibaTicket(models.Model):
     ('invoiced','Facturado'),
     ('cancel', 'Cancelado')], default='draft')
     
-    operation_type = fields.Selection([('in','Entrada'),
-    ('out','Salida')], string="Tipo de operacion", default="in", required=True)
+    operation_type = fields.Selection([('in','Recepción'),
+    ('out','Entrega')], string="Tipo de operacion", default="in", required=True)
     name = fields.Char(string="Boleta", default="Boleta Borrador")
     date = fields.Datetime(string="Fecha y hora", default=lambda self: fields.datetime.now())
     weigher = fields.Char(string="Nombre del analista")
@@ -134,7 +134,7 @@ class RecibaTicket(models.Model):
     quality_id = fields.Many2one('reciba.quality', string="Norma de calidad", domain="[('product_id', '=', product_id)]")
     humidity = fields.Float(string="Humedad 14.5%")
     humidity_discount = fields.Float(string="Descuento (Kg)", compute='_get_humidity_discount', store=True)
-    impurity = fields.Float(string="Impurity 2%")
+    impurity = fields.Float(string="Impureza 2%")
     impurity_discount = fields.Float(string="Descuento (Kg)", compute='_get_impurity_discount', store=True)
     params_id = fields.One2many('reciba.ticket.params', 'ticket_id')
 
@@ -149,7 +149,7 @@ class RecibaTicket(models.Model):
 
     delivery = fields.Selection
     reception = fields.Selection([('price', 'Con precio'),
-    ('priceless', 'Sin precio')], string="Tipo de recepción")
+    ('priceless', 'Sin precio')], string="Tipo de recepción", default="priceless")
     
     provider_location_id = fields.Many2one('stock.location', string="Ubicación origen")
     provider_date = fields.Datetime(string="Fecha y hora", compute='_default_provider_date', store=True)
@@ -180,6 +180,12 @@ class RecibaTicket(models.Model):
     po_id = fields.Many2one('purchase.order', string="Orden de Compra")
     so_id = fields.Many2one('sale.order', string="Orden de Venta")
 
+
+    @api.onchange('so_id')
+    def so_onchange(self):
+        if self.so_id:
+            self.product_id = self.so_id.order_line[0].product_id.id
+            self.net_expected = self.so_id.order_line[0].product_uom_qty
 
     @api.onchange('quality_id')
     def get_quality_params(self):
@@ -220,6 +226,7 @@ class RecibaTicket(models.Model):
             'location_id': self.provider_location_id.id,
             'location_dest_id' : self.location_id.id,
             'scheduled_date': datetime.today(),
+            'reciba_id': self.id,
             'move_ids_without_package': [(0,0,{
                 'name': self.product_id.name,
                 'product_id': self.product_id.id,
@@ -232,6 +239,26 @@ class RecibaTicket(models.Model):
             self.picking_id = picking.id
 
         self.state='confirmed'
+
+    
+    def create_transfer(self):
+        picking_type = self.env['stock.picking.type'].search(['|',('name','ilike','Órdenes de entrega'),('name','ilike','Delivery Orders')], limit=1)
+            
+        values={
+        'picking_type_id': picking_type.id,
+        'location_id': self.provider_location_id.id,
+        'location_dest_id' : self.location_id.id,
+        'scheduled_date': datetime.today(),
+        'reciba_id': self.id,
+        'sale_id': self.so_id.id,
+        'move_ids_without_package': [(0,0,{
+            'name': self.product_id.name,
+            'product_id': self.product_id.id,
+            'product_uom_qty': (self.net_weight)*-1,
+            'product_uom': self.product_id.uom_po_id.id
+        })]}
+        picking = self.env['stock.picking'].create(values)
+        self.picking_id = picking.id
 
     
     def cancel_reciba(self):
@@ -343,7 +370,7 @@ class RecibaQuality(models.Model):
     _name = 'reciba.quality'
     _description = 'Parametros de calidad'
 
-    name = fields.Char(string="Nombre")
+    name = fields.Char(string="Norma")
     product_id = fields.Many2one('product.product', string="Producto")
     params = fields.One2many('reciba.quality.params', 'quality_id')
 
@@ -408,6 +435,8 @@ class StockPicking(models.Model):
     
     x_studio_aplica_flete= fields.Boolean()
     reciba_id = fields.Many2one('reciba.ticket', string="Boleta de análisis")
+    
+    
     
     def create_reciba(self):
         
