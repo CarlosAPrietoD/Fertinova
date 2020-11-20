@@ -136,7 +136,10 @@ class RecibaTicket(models.Model):
     humidity_discount = fields.Float(string="Descuento (Kg)", compute='_get_humidity_discount', store=True)
     impurity = fields.Float(string="Impureza 2%")
     impurity_discount = fields.Float(string="Descuento (Kg)", compute='_get_impurity_discount', store=True)
+    density = fields.Float(string="Densidad")
+    temperature = fields.Float(string="Temperatura")
     params_id = fields.One2many('reciba.ticket.params', 'ticket_id')
+    
 
     driver = fields.Char(string="Nombre del operador")
     type_vehicle = fields.Selection([('van','Camioneta'),

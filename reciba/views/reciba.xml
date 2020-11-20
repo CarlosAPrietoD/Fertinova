@@ -36,6 +36,8 @@
                             <group>
                                 <field name="humidity" attrs="{'readonly':['|', ('state', '!=', 'draft'),('product_id', '=', False)]}" />
                                 <field name="impurity" attrs="{'readonly':['|',('state', '!=', 'draft'),('product_id', '=', False)]}" />
+                                <field name="density" attrs="{'readonly':['|',('state', '!=', 'draft'),('product_id', '=', False)]}" />
+                                <field name="temperature" attrs="{'readonly':['|',('state', '!=', 'draft'),('product_id', '=', False)]}" />
                             </group>
                             <group>
                                 <field name="humidity_discount" attrs="{'invisible':[('apply_discount', '=', False)]}" force_save="1"/>
