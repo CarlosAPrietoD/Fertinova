@@ -6,17 +6,17 @@ class RecibaTicket(models.Model):
     _description = 'Boletas'
     
     @api.model
-    def _default_number(self):
-        tickets = self.env['reciba.ticket'].search([])
-        return len(tickets)+1
+    def _default_location(self):
+        location = self.env['stock.location'].search([('name','ilike','Proveedores')], limit=1).id
+        return location
 
     @api.one
     @api.depends('humidity')
     def _get_humidity_discount(self):
         if self.apply_discount == True:
             if self.humidity:
-                if self.humidity > 14.5:
-                    self.humidity_discount = ((self.humidity-14.5)*1.16)/100*1000
+                if self.humidity > 14:
+                    self.humidity_discount = ((self.humidity-14)*1.16)/100*1000
         else:
             self.humidity_discount = 0
 
@@ -35,8 +35,8 @@ class RecibaTicket(models.Model):
     def _get_humidity_total_discount(self):
         if self.apply_discount == True:
             if self.humidity:
-                if self.humidity > 14.5:
-                    self.humidity_total_discount = ((self.humidity-14.5)*1.16)/100*self.net_weight
+                if self.humidity > 14:
+                    self.humidity_total_discount = ((self.humidity-14)*1.16)/100*self.net_weight
         else: self.humidity_total_discount = 0
 
     @api.one
@@ -132,7 +132,7 @@ class RecibaTicket(models.Model):
     product_id = fields.Many2one('product.product', string="Producto")
 
     quality_id = fields.Many2one('reciba.quality', string="Norma de calidad", domain="[('product_id', '=', product_id)]")
-    humidity = fields.Float(string="Humedad 14.5%")
+    humidity = fields.Float(string="Humedad 14%")
     humidity_discount = fields.Float(string="Descuento (Kg)", compute='_get_humidity_discount', store=True)
     impurity = fields.Float(string="Impureza 2%")
     impurity_discount = fields.Float(string="Descuento (Kg)", compute='_get_impurity_discount', store=True)
@@ -151,7 +151,7 @@ class RecibaTicket(models.Model):
     reception = fields.Selection([('price', 'Con precio'),
     ('priceless', 'Sin precio')], string="Tipo de recepción", default="priceless")
     
-    provider_location_id = fields.Many2one('stock.location', string="Ubicación origen")
+    provider_location_id = fields.Many2one('stock.location', string="Ubicación origen", default=_default_location)
     provider_date = fields.Datetime(string="Fecha y hora", compute='_default_provider_date', store=True)
     location_id = fields.Many2one('stock.location', string="Ubicación destino")
     location_date = fields.Datetime(string="Fecha y hora", compute='_default_location_date', store=True)
@@ -202,7 +202,19 @@ class RecibaTicket(models.Model):
     @api.onchange('apply_discount')
     def onchange_apply_discount(self):
         self.humidity = self.humidity
-        self.impurity = self.impurity      
+        self.impurity = self.impurity
+
+
+    @api.onchange('operation_type')
+    def onchange_operation_type(self):
+        if self.operation_type == 'in':
+            location = self.env['stock.location'].search([('name','ilike','Proveedores')], limit=1).id
+            self.provider_location_id=location
+            self.location_id = False
+        else:
+            location = self.env['stock.location'].search([('name','ilike','Clientes')], limit=1).id
+            self.provider_location_id=False
+            self.location_id = location
 
     
     def confirm_reciba(self):
