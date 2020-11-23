@@ -198,8 +198,8 @@
     <!--::::::::::::::::::::::::::::::::::::::::::::-->
     <!-- LIQUIDACIONES - MENUITEMS                  -->
     <!--::::::::::::::::::::::::::::::::::::::::::::-->
-    <menuitem id="contactos_menu" name="Contactos" parent="menu_reciba_root" sequence="2"/>    
-    <menuitem id="contactos_liquidaciones_menu" name="Liquidaciones" parent="reciba.contactos_menu" action="reciba_liquidaciones_action" sequence="1"/>    
+    <menuitem id="contactos_menu" name="Contactos" parent="menu_reciba_root" sequence="2" groups="reciba.grupo_reciba_general"/>    
+    <menuitem id="contactos_liquidaciones_menu" name="Liquidaciones" parent="reciba.contactos_menu" action="reciba_liquidaciones_action" sequence="1" groups="reciba.grupo_reciba_general"/>    
 
   </data>  
 </odoo> 
