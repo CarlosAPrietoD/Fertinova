@@ -25,16 +25,14 @@
     'data': [
         #security
         'security/ir.model.access.csv',
+        'security/grupos_reciba.xml',
 
         #reports
-        'reports/reporte_liquidaciones.xml',         
-        
-        #reports
-        'reports/reporte_liquidaciones.xml',           
+        'reports/reporte_liquidaciones.xml',                      
         
         #views
         'views/reciba.xml',  
-        'views/prestamos_abonos.xml', 
+        #'views/prestamos_abonos.xml', 
         'views/liquidaciones.xml',               
         'views/templates.xml',
         'views/views.xml',     

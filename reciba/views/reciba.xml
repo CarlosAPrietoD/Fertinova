@@ -204,7 +204,7 @@
             </field>
         </record>
 
-        <menuitem id="inventory_quality_menu" name="Parametros de calidad" parent="inventory_menu" action="reciba_quality_action" sequence="2" />
+        <menuitem id="inventory_quality_menu" name="Parametros de calidad" parent="inventory_menu" action="reciba_quality_action" sequence="2" groups="reciba.grupo_reciba_general,reciba.grupo_reciba_boletas"/>
 
     </data>
 
