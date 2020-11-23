@@ -115,6 +115,31 @@ class RecibaTicket(models.Model):
     @api.depends('total_weight', 'price')
     def _get_total(self):
         self.total = self.total_weight*self.price
+
+    
+    @api.one
+    @api.depends('params_id')
+    def _get_total_damage(self):
+        total = 0
+
+        for data in self.params_id:
+            if data.quality_params_id.damage:
+                total += data.value
+
+        self.sum_damage = total
+
+    
+    @api.one
+    @api.depends('params_id')
+    def _get_total_broken(self):
+        total = 0
+
+        for data in self.params_id:
+            if data.quality_params_id.broken:
+                total += data.value
+
+        self.sum_broken = total
+
     
 
     state = fields.Selection([('draft', 'Borrador'),
@@ -136,9 +161,11 @@ class RecibaTicket(models.Model):
     humidity_discount = fields.Float(string="Descuento (Kg)", compute='_get_humidity_discount', store=True)
     impurity = fields.Float(string="Impureza 2%")
     impurity_discount = fields.Float(string="Descuento (Kg)", compute='_get_impurity_discount', store=True)
-    density = fields.Float(string="Densidad")
-    temperature = fields.Float(string="Temperatura")
+    density = fields.Float(string="Densidad g/L 720-100")
+    temperature = fields.Float(string="Temperatura °C")
     params_id = fields.One2many('reciba.ticket.params', 'ticket_id')
+    sum_damage = fields.Float(string="Suma daños", compute='_get_total_damage', store=True)
+    sum_broken = fields.Float(string="Suma quebrados", compute='_get_total_broken', store=True)
     
 
     driver = fields.Char(string="Nombre del operador")
@@ -398,6 +425,8 @@ class RecibaQualityParams(models.Model):
     quality_id = fields.Many2one('reciba.quality')
     value = fields.Float(string="Máximo")
     unit = fields.Char(string="Unidad de medida")
+    damage = fields.Boolean(string="Sumar daño")
+    broken = fields.Boolean(string="Sumar quebrado")
 
 
 class ReportRecibaTicket(models.AbstractModel):
