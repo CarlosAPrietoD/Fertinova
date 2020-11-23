@@ -149,9 +149,9 @@
         <!-- Top menu item -->
         <menuitem name="Reciba" id="menu_reciba_root" sequence="40" />
 
-        <menuitem id="inventory_menu" name="Inventario" parent="menu_reciba_root" sequence="1" />
+        <menuitem id="inventory_menu" name="Inventario" parent="menu_reciba_root" sequence="1" groups="reciba.grupo_reciba_general,reciba.grupo_reciba_boletas"/>
 
-        <menuitem id="inventory_ticket_menu" name="Boletas" parent="inventory_menu" action="reciba_ticket_action" sequence="1" />
+        <menuitem id="inventory_ticket_menu" name="Boletas" parent="inventory_menu" action="reciba_ticket_action" sequence="1" groups="reciba.grupo_reciba_general,reciba.grupo_reciba_boletas"/>
 
 
         <record model="ir.ui.view" id="reciba_quality_form_view">

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="grupo_reciba_general" model="res.groups">
+            <field name="name">RECIBA - Visualización General de Menús</field>
+            <field name="category_id" ref="base.module_category_hidden"/>
+        </record>   
+        
+        <record id="grupo_reciba_boletas" model="res.groups">
+            <field name="name">RECIBA - Visualización de Boletas</field>
+            <field name="category_id" ref="base.module_category_hidden"/>
+        </record>   
+
+    </data>
+</odoo>
