@@ -305,6 +305,28 @@
                                                 <t t-esc="param.unit" />
                                             </td>
                                         </tr>
+                                        <tr>
+                                            <th style="width: 25%;">
+                                                Suma de daños
+                                            </th>
+                                            <td style="width: 10%; border-bottom: black 1px solid;">
+                                                <t t-esc="ticket['ticket'].sum_damage" />
+                                            </td>
+                                            <td style="width: 10%;">
+                                                %
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th style="width: 25%;">
+                                                Suma de quebrados
+                                            </th>
+                                            <td style="width: 10%; border-bottom: black 1px solid;">
+                                                <t t-esc="ticket['ticket'].sum_broken" />
+                                            </td>
+                                            <td style="width: 10%;">
+                                                %
+                                            </td>
+                                        </tr>
                                     </table>
                                 </td>
                                 <td style="width: 50%;">
@@ -464,6 +486,28 @@
                                             </td>
                                             <td style="width: 10%;">
                                                 <t t-esc="param.unit" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th style="width: 25%;">
+                                                Suma de daños
+                                            </th>
+                                            <td style="width: 10%; border-bottom: black 1px solid;">
+                                                <t t-esc="ticket['ticket'].sum_damage" />
+                                            </td>
+                                            <td style="width: 10%;">
+                                                %
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th style="width: 25%;">
+                                                Suma de quebrados
+                                            </th>
+                                            <td style="width: 10%; border-bottom: black 1px solid;">
+                                                <t t-esc="ticket['ticket'].sum_broken" />
+                                            </td>
+                                            <td style="width: 10%;">
+                                                %
                                             </td>
                                         </tr>
                                     </table>
