@@ -161,7 +161,7 @@ class RecibaTicket(models.Model):
     humidity_discount = fields.Float(string="Descuento (Kg)", compute='_get_humidity_discount', store=True)
     impurity = fields.Float(string="Impureza 2%")
     impurity_discount = fields.Float(string="Descuento (Kg)", compute='_get_impurity_discount', store=True)
-    density = fields.Float(string="Densidad g/L 720-100")
+    density = fields.Float(string="Densidad g/L 720-1000")
     temperature = fields.Float(string="Temperatura °C")
     params_id = fields.One2many('reciba.ticket.params', 'ticket_id')
     sum_damage = fields.Float(string="Suma daños", compute='_get_total_damage', store=True)
