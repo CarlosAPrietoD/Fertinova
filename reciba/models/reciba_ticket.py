@@ -248,19 +248,28 @@ class RecibaTicket(models.Model):
 
     
     def confirm_reciba(self):
-        #===================================================================================================
-        #===================================================================================================
-        #==================================Nombre de boleta================================================
+
         if self.operation_type == 'in':
             if self.location_id:
-                tickets = self.env['reciba.ticket'].search(['|','&',('location_id','=',self.location_id.id),('provider_location_id','=',self.location_id.id),('state','=','confirmed')])
+                tickets = self.env['reciba.ticket'].search(['|','&',('location_id','=',self.location_id.id),('provider_location_id','=',self.location_id.id),('state','=','confirmed')], order="id desc",limit=1)
                 if tickets:
-                    name_location = self.location_id.name
+                    name_location = self.location_id.name + '/' + self.location_id.location_id.name
                     if tickets.name:
-                        number = str(count(tickets)+1)
-                        self.name=name_location+number
+                        number = str(int(tickets.name[-4:])+1).zfill(4)
+                        self.name=name_location + '/' + number
                 else:
-                    self.name = self.location_id.name+"0001"
+                    self.name = self.location_id.name + '/' + self.location_id.location_id.name + '/' + '0001'
+        
+        elif self.operation_type == 'out':
+            if self.provider_location_id:
+                tickets = self.env['reciba.ticket'].search(['|','&',('location_id','=',self.provider_location_id.id),('provider_location_id','=',self.provider_location_id.id),('state','=','confirmed')], order="id desc",limit=1)
+                if tickets:
+                    name_location = self.provider_location_id.name + '/' + self.provider_location_id.location_id.name
+                    if tickets.name:
+                        number = str(int(tickets.name[-4:])+1).zfill(4)
+                        self.name=name_location + '/' + number
+                else:
+                    self.name = self.provider_location_id.name + '/' + self.provider_location_id.location_id.name + '/' + '0001'
 
         
         if self.reception == 'priceless' and self.operation_type == 'in':
