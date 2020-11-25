@@ -25,6 +25,7 @@
     'data': [
         #security
         'security/ir.model.access.csv',
+        'security/reciba_domain_security.xml',
         
         #views
         'views/reciba.xml',  
