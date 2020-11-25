@@ -27,6 +27,8 @@ class AccountPayment(models.Model):
     @api.one
     @api.depends('journal_id')
     def _set_tipo(self):
+        pass
+        """
         #Get IDs for BBVA Bank & Deudores Diversos (MXN):
         journal_id_deudores = self.env['account.journal'].search([('name', 'ilike', 'Deudores diversos')])
         _logger.info('\n journal_id_deudores %s\n\n', journal_id_deudores)
@@ -47,7 +49,8 @@ class AccountPayment(models.Model):
             self.tipo_movimiento = 'abono_acreedor'
 
         elif self.destination_journal_id.id in journal_id_acreedores.ids and self.journal_id.id in journal_id_banco.ids:                     
-            self.tipo_movimiento = 'prestamo_acreedor'                
+            self.tipo_movimiento = 'prestamo_acreedor'   
+        """             
     
     
     @api.one
