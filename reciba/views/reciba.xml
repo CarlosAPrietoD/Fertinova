@@ -96,7 +96,7 @@
                         </group>
                         <group>
                             <group>
-                                <field name="apply_discount" />
+                                <field name="apply_discount" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 <field name="humidity_total_discount" attrs="{'invisible':[('apply_discount', '=', False)]}" force_save="1"/>
                                 <field name="impurity_total_discount" attrs="{'invisible':[('apply_discount', '=', False)]}" force_save="1"/>
                                 <field name="discount" attrs="{'invisible':[('apply_discount', '=', False)]}" force_save="1"/>

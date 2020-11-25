@@ -215,7 +215,7 @@ class RecibaTicket(models.Model):
     def so_onchange(self):
         if self.so_id:
             self.product_id = self.so_id.order_line[0].product_id.id
-            self.net_expected = self.so_id.order_line[0].product_uom_qty
+            self.net_expected = self.so_id.order_line[0].product_uom_qty - self.so_id.order_line[0].qty_delivered
 
     @api.onchange('quality_id')
     def get_quality_params(self):
@@ -248,16 +248,19 @@ class RecibaTicket(models.Model):
 
     
     def confirm_reciba(self):
-        
-        if self.location_id:
-            tickets = self.env['reciba.ticket'].search(['&',('location_id','=',self.location_id.id),('state','=','confirmed')], order="id desc",limit=1)
-            if tickets:
-                name_location = self.location_id.name[:2]
-                if tickets.name:
-                    number = str(int(tickets.name[2:])+1)
-                    self.name=name_location.upper()+number
-            else:
-                self.name = self.location_id.name[:2].upper()+"1"
+        #===================================================================================================
+        #===================================================================================================
+        #==================================Nombre de boleta================================================
+        if self.operation_type == 'in':
+            if self.location_id:
+                tickets = self.env['reciba.ticket'].search(['|','&',('location_id','=',self.location_id.id),('provider_location_id','=',self.location_id.id),('state','=','confirmed')])
+                if tickets:
+                    name_location = self.location_id.name
+                    if tickets.name:
+                        number = str(count(tickets)+1)
+                        self.name=name_location+number
+                else:
+                    self.name = self.location_id.name+"0001"
 
         
         if self.reception == 'priceless' and self.operation_type == 'in':
@@ -284,8 +287,9 @@ class RecibaTicket(models.Model):
 
     
     def create_transfer(self):
-        picking_type = self.env['stock.picking.type'].search(['|',('name','ilike','Órdenes de entrega'),('name','ilike','Delivery Orders')], limit=1)
-            
+        picking_type = self.env['stock.picking.type'].search(['|',('name','ilike','Órdenes de entrega'),('name','ilike','Delivery Orders')], limit=1)  
+        sale_group = self.env['procurement.group'].search([('name','ilike', self.so_id.name)], limit=1)
+
         values={
         'picking_type_id': picking_type.id,
         'location_id': self.provider_location_id.id,
@@ -293,13 +297,19 @@ class RecibaTicket(models.Model):
         'scheduled_date': datetime.today(),
         'reciba_id': self.id,
         'sale_id': self.so_id.id,
+        'origin': self.so_id.name,
+        'partner_id': self.partner_id.id,
         'move_ids_without_package': [(0,0,{
             'name': self.product_id.name,
             'product_id': self.product_id.id,
             'product_uom_qty': (self.net_weight)*-1,
-            'product_uom': self.product_id.uom_po_id.id
+            'product_uom': self.product_id.uom_po_id.id,
+            'sale_line_id': self.so_id.order_line[0].id
         })]}
         picking = self.env['stock.picking'].create(values)
+        picking.group_id = sale_group.id
+        picking.move_ids_without_package[0].sale_line_id = self.so_id.order_line[0].id
+        
         self.picking_id = picking.id
 
     
