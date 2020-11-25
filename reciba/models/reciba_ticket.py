@@ -201,10 +201,10 @@ class RecibaTicket(models.Model):
     currency_id = fields.Many2one('res.currency', default=lambda self: self.env['res.company']._company_default_get('your.module').currency_id, string="Moneda")
     
     
-    sub = fields.Monetary(string="Subtotal", compute='_calcule_sub', store=True)
+    sub = fields.Monetary(string="Importe PN", compute='_calcule_sub', store=True)
     discount = fields.Float(string="Descuento total (kg)", compute='_get_discount_total', store=True)
     total_weight = fields.Float(string="Peso neto analizado", compute='_get_total_weight', store=True)
-    total = fields.Monetary(string="Total", compute='_get_total', store=True)
+    total = fields.Monetary(string="Importe PNA", compute='_get_total', store=True)
 
     picking_id = fields.Many2one('stock.picking', string="Transferencia")
     po_id = fields.Many2one('purchase.order', string="Orden de Compra")
@@ -215,7 +215,7 @@ class RecibaTicket(models.Model):
     def so_onchange(self):
         if self.so_id:
             self.product_id = self.so_id.order_line[0].product_id.id
-            self.net_expected = self.so_id.order_line[0].product_uom_qty
+            self.net_expected = self.so_id.order_line[0].product_uom_qty - self.so_id.order_line[0].qty_delivered
 
     @api.onchange('quality_id')
     def get_quality_params(self):
@@ -248,16 +248,28 @@ class RecibaTicket(models.Model):
 
     
     def confirm_reciba(self):
+
+        if self.operation_type == 'in':
+            if self.location_id:
+                tickets = self.env['reciba.ticket'].search(['&',('name','ilike',self.location_id.display_name),('state','=','confirmed')], order="id desc",limit=1)
+                if tickets:
+                    name_location = self.location_id.display_name
+                    if tickets.name:
+                        number = str(int(tickets.name[-4:])+1).zfill(4)
+                        self.name=name_location + '/' + number
+                else:
+                    self.name = self.location_id.display_name + '/' + '0001'
         
-        if self.location_id:
-            tickets = self.env['reciba.ticket'].search(['&',('location_id','=',self.location_id.id),('state','=','confirmed')], order="id desc",limit=1)
-            if tickets:
-                name_location = self.location_id.name[:2]
-                if tickets.name:
-                    number = str(int(tickets.name[2:])+1)
-                    self.name=name_location.upper()+number
-            else:
-                self.name = self.location_id.name[:2].upper()+"1"
+        elif self.operation_type == 'out':
+            if self.provider_location_id:
+                tickets = self.env['reciba.ticket'].search(['&',('name','ilike',self.provider_location_id.display_name),('state','=','confirmed')], order="id desc",limit=1)
+                if tickets:
+                    name_location = self.provider_location_id.display_name
+                    if tickets.name:
+                        number = str(int(tickets.name[-4:])+1).zfill(4)
+                        self.name=name_location + '/' + number
+                else:
+                    self.name = self.provider_location_id.display_name + '/' + '0001'
 
         
         if self.reception == 'priceless' and self.operation_type == 'in':
@@ -284,8 +296,8 @@ class RecibaTicket(models.Model):
 
     
     def create_transfer(self):
-        picking_type = self.env['stock.picking.type'].search(['|',('name','ilike','Órdenes de entrega'),('name','ilike','Delivery Orders')], limit=1)
-            
+        picking_type = self.env['stock.picking.type'].search(['|',('name','ilike','Órdenes de entrega'),('name','ilike','Delivery Orders')], limit=1)  
+
         values={
         'picking_type_id': picking_type.id,
         'location_id': self.provider_location_id.id,
@@ -293,13 +305,17 @@ class RecibaTicket(models.Model):
         'scheduled_date': datetime.today(),
         'reciba_id': self.id,
         'sale_id': self.so_id.id,
+        'origin': self.so_id.name,
+        'partner_id': self.partner_id.id,
         'move_ids_without_package': [(0,0,{
             'name': self.product_id.name,
             'product_id': self.product_id.id,
             'product_uom_qty': (self.net_weight)*-1,
-            'product_uom': self.product_id.uom_po_id.id
+            'product_uom': self.product_id.uom_po_id.id,
+            'sale_line_id': self.so_id.order_line[0].id
         })]}
         picking = self.env['stock.picking'].create(values)
+        
         self.picking_id = picking.id
 
     
@@ -355,19 +371,19 @@ class RecibaTicket(models.Model):
 
 
     def create_purchase_order(self):
-        picking_type = self.env['stock.picking.type'].search(['|',('name','ilike','Recepciones'),('name','ilike','Receipts')], limit=1)
+        #picking_type = self.env['stock.picking.type'].search(['|',('name','ilike','Recepciones'),('name','ilike','Receipts')], limit=1)
         payment = self.env['account.payment.term'].search([('name','ilike','PUE')], limit=1)
         analytic_account = self.env['account.analytic.account'].search([('name','ilike','POR ASIGNAR')], limit=1)
         uom = self.env['uom.uom'].search([('name','ilike','kg')], limit=1)
         discount = self.env['product.product'].search([('name','ilike','Descuento sobre compra')], limit=1)
-        
+        picking_type = self.env['stock.picking.type'].search(['|',('name','ilike','Recepciones'),('name','ilike','Receipts'),('default_location_dest_id.name','=',self.location_id.location_id.name)], limit=1)
+
         values={
             'partner_id': self.partner_id.id,
             'picking_type_id': picking_type.id,
             'partner_ref': self.name,
             'payment_term_id': payment.id
-        }
-            
+        }  
         purchase = self.env['purchase.order'].create(values)
 
         description = self.product_id.name

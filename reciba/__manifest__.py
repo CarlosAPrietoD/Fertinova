@@ -26,6 +26,7 @@
         #security
         'security/ir.model.access.csv',
         'security/grupos_reciba.xml',
+        'security/reciba_domain_security.xml',
 
         #reports
         'reports/reporte_liquidaciones.xml',                      
