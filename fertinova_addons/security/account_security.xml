@@ -7,7 +7,6 @@
             <field name="category_id" ref="base.module_category_hidden"/>
         </record>
 
-        <!--
         <record id="group_tesoreria" model="res.groups">
             <field name="name">Restricción de Confirmación Tesorería</field>
             <field name="category_id" ref="base.module_category_hidden"/>
@@ -16,8 +15,7 @@
         <record id="group_autorizacion" model="res.groups">
             <field name="name">Restricción de Autorización Tesorería</field>
             <field name="category_id" ref="base.module_category_hidden"/>
-        </record>  
-        -->      
+        </record>        
 
     </data>
 </odoo>
