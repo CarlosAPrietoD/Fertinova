@@ -153,7 +153,7 @@ class RecibaTicket(models.Model):
     date = fields.Datetime(string="Fecha y hora", default=lambda self: fields.datetime.now())
     weigher = fields.Char(string="Nombre del analista")
     company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('your.module'))
-    partner_id = fields.Many2one('res.partner', domain="[('company_id','=',company_id)]")
+    partner_id = fields.Many2one('res.partner', domain="[('company_id','=',company_id)]", string="Contacto")
     product_id = fields.Many2one('product.product', string="Producto")
 
     quality_id = fields.Many2one('reciba.quality', string="Norma de calidad", domain="[('product_id', '=', product_id)]")
