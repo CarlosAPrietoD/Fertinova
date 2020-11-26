@@ -133,7 +133,7 @@
                     <field name="date"/>
                     <field name="operation_type"/>
                     <field name="product_id"/>
-                    <field name="partner_id"/>
+                    <field name="partner_id" string="Contacto"/>
                     <field name="provider_location_id" string="Ubicación origen"/>
                     <field name="location_id" string="Ubicación destino"/>
                     <field name="net_weight" string="Peso neto (Kg)" sum="Total"/>
