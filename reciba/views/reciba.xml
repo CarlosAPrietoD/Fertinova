@@ -159,7 +159,7 @@
 
 
         <!-- Top menu item -->
-        <menuitem name="Reciba" id="menu_reciba_root" sequence="40" />
+        <menuitem name="Reciba" id="menu_reciba_root" sequence="40" web_icon="reciba,static/description/icon.png"/>
 
         <menuitem id="inventory_menu" name="Inventario" parent="menu_reciba_root" sequence="1" groups="reciba.grupo_reciba_general,reciba.grupo_reciba_boletas"/>
 
