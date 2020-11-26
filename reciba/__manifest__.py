@@ -19,19 +19,24 @@
     'version': '12.0.1.0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'account'],
+    'depends': ['base', 'account', 'stock', 'sale'],
 
     # always loaded
     'data': [
         #security
         'security/ir.model.access.csv',
+        'security/grupos_reciba.xml',
+        'security/reciba_domain_security.xml',
+
+        #reports
+        'reports/reporte_liquidaciones.xml',                      
         
         #views
         'views/reciba.xml',  
-        'views/prestamos.xml',               
+        #'views/prestamos_abonos.xml', 
         'views/liquidaciones.xml',               
         'views/templates.xml',
-        'views/views.xml',        
+        'views/views.xml',     
     ],
     # only loaded in demonstration mode
     'demo': [
