@@ -375,7 +375,7 @@
                                         <tr>
                                             <th style="width: 25%;">Peso neto analizado</th>
                                             <td style="width: 10%; border-bottom: black 1px solid;">
-                                                <t t-esc="ticket['ticket'].total_weight" />
+                                                <t t-esc="ticket['total_format']" />
                                             </td>
                                             <td style="width: 10%;">Kg</td>
                                         </tr>
@@ -582,7 +582,7 @@
                                         <tr>
                                             <th style="width: 25%;">Peso neto analizado</th>
                                             <td style="width: 10%; border-bottom: black 1px solid;">
-                                                <t t-esc="ticket['ticket'].total_weight" />
+                                                <t t-esc="ticket['total_format']" />
                                             </td>
                                             <td style="width: 10%;">Kg</td>
                                         </tr>

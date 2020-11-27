@@ -454,7 +454,9 @@ class ReportRecibaTicket(models.AbstractModel):
 
         docs=[]
         for ticket in tickets:
-            doc={'ticket': ticket
+            
+            doc={'ticket': ticket,
+                'total_format': f'{ticket.total_weight:,.2f}'
             }
             docs.append(doc)
             
@@ -476,7 +478,8 @@ class ReportRecibaTicketPriceless(models.AbstractModel):
 
         docs=[]
         for ticket in tickets:
-            doc={'ticket': ticket
+            doc={'ticket': ticket,
+                'total_format': f'{ticket.total_weight:,.2f}'
             }
             docs.append(doc)
             
