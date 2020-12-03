@@ -59,8 +59,8 @@
                         </group>
                         <group>
                             <field name="driver" attrs="{'readonly':['|',('state', '!=', 'draft'),('product_id', '=', False)]}" />
-                            <field name="type_vehicle" attrs="{'readonly':['|', ('state', '!=', 'draft'),('driver', '=', False)]}" />
-                            <field name="plate_vehicle" attrs="{'readonly':['|',('state', '!=', 'draft'),('type_vehicle', '=', False)]}" />
+                            <field name="type_vehicle" attrs="{'readonly':['|', ('state', '!=', 'draft'),('driver', '=', False)]}" required="1"/>
+                            <field name="plate_vehicle" attrs="{'readonly':['|',('state', '!=', 'draft'),('type_vehicle', '=', False)]}" required="1"/>
                             <field name="plate_trailer" attrs="{'readonly':[('state', '!=', 'draft')],
                             'invisible':[('type_vehicle', '!=', 'trailer'),('type_vehicle', '!=', 'full')]}"/>
                             <field name="plate_second_trailer" attrs="{'readonly':[('state', '!=', 'draft')],
