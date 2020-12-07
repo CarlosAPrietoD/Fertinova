@@ -273,7 +273,7 @@ class RecibaTicket(models.Model):
 
         
         if self.reception == 'priceless' and self.operation_type == 'in':
-            picking_type = self.env['stock.picking.type'].search(['|',('name','ilike','Recepciones'),('name','ilike','Receipts')], limit=1)
+            picking_type = self.env['stock.picking.type'].search(['|',('name','=','Recepciones'),('name','=','Receipts'),('default_location_dest_id.name','=',self.location_id.location_id.name)], limit=1)
             
             values={
             'picking_type_id': picking_type.id,
@@ -296,7 +296,7 @@ class RecibaTicket(models.Model):
 
     
     def create_transfer(self):
-        picking_type = self.env['stock.picking.type'].search(['|',('name','ilike','Órdenes de entrega'),('name','ilike','Delivery Orders')], limit=1)  
+        picking_type = self.env['stock.picking.type'].search(['|',('name','=','Órdenes de entrega'),('name','=','Delivery Orders'),('default_location_dest_id.name','=',self.provider_location_id.location_id.name)], limit=1)  
 
         values={
         'picking_type_id': picking_type.id,
