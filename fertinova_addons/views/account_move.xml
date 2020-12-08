@@ -36,5 +36,17 @@
             </field>
         </record>
 
+
+        <record id="sale_order_add_inv" model="ir.ui.view">
+            <field name="name">sale.order.check</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button" position="after">
+                    <button name="get_invoiced_own" type="object" string="Agregar factura" />
+                </xpath>
+            </field>
+        </record>
+
     </data>
 </odoo>   
