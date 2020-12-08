@@ -58,12 +58,17 @@ class SaleOrder(models.Model):
         sale_order = super(SaleOrder, self)._action_confirm()
         #Create a new contract in Wobin Logistics triggered by 
         #a confirmation in Sales Order:  
-        sequence = self.env['ir.sequence'].next_by_code('self.contract')  
-        #Retrieved  --> CONTR000011
-        numerical_part = int(sequence[5:])
-        numerical_part += 1
-        #After number has increased, fill with zeros to 6 digits
-        sequence_aux = str(numerical_part).zfill(6)
+        sequence = self.env['ir.sequence'].next_by_code('self.contract')
+        if not sequence:
+            numerical_part = 1
+            #After number has increased, fill with zeros to 6 digits
+            sequence_aux = str(numerical_part).zfill(6)
+        else: 
+            #Retrieved  --> CONTR000011
+            numerical_part = int(sequence[5:])
+            numerical_part += 1
+            #After number has increased, fill with zeros to 6 digits
+            sequence_aux = str(numerical_part).zfill(6)
 
         contract = {'name': 'CONTR' + sequence_aux,
                     'client_id': self.partner_id.id,
