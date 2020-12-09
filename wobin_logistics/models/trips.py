@@ -160,7 +160,7 @@ class SaleOrder(models.Model):
            trips assigned to a given sale order'''
         trips_lst = []
             
-        sql_query = """SELECT trip_number_tag 
+        sql_query = """SELECT name 
                          FROM logistics_trips 
                         WHERE sales_order_id = %s;"""
         self.env.cr.execute(sql_query, (self.id,))
