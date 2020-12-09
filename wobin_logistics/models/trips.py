@@ -15,56 +15,32 @@ class LogisticsTrips(models.Model):
 
 
     @api.model
-    def create(self, vals):                  
-        '''This method intends to create a sequence for a given trip and a new analytic tag'''         
-        tag = self.env['account.analytic.tag'].search([('analytic_tag_type', '=', 'trip')], order="write_date desc", limit=1).name
-        _logger.info("\n\n\ntag: %s\n\n\n", tag)
-        if tag:
-            #Split to get numeric part of string e.g. "V: 005"
-            numeric_part = int(tag[3:])
-            _logger.info("\n\n\nnumeric_part: %s\n\n\n", numeric_part)
-            #Increase number of trip tag:
-            tag_to_create = numeric_part + 1        
-            #After retrieve the last tag it's important create a new one:
-            name_aux = 'V: ' + str(tag_to_create)   
-            _logger.info("\n\n\nname_aux: %s\n\n\n", name_aux)     
-            values = {
-                    'name': name_aux,
-                    'analytic_tag_type': 'trip'
-                }
-            new_tag = self.env['account.analytic.tag'].create(values)
-        else:
-            msg = _('Make sure you have assigned analytic tag types previously')
-            raise UserError(msg)            
-        
+    def create(self, vals):  
         #Change of sequence (if it isn't stored is shown "New" else e.g VJ000005)  
-        #if vals.get('name', 'New') == 'New':
-        #   vals['name'] = self.env['ir.sequence'].next_by_code(
-        #        'self.trip') or 'New'
-        #    vals['trip_number_tag'] = name_aux                
-        vals['name'] = name_aux 
-        vals['trip_number_tag'] = name_aux 
+        if vals.get('name', 'New') == 'New':
+           vals['name'] = self.env['ir.sequence'].next_by_code(
+                'self.trip') or 'New'
         result = super(LogisticsTrips, self).create(vals)
         return result
 
 
-
     name              = fields.Char(string="Trip", readonly=True, required=True, copy=False, default='New')
-    trip_number_tag   = fields.Char(string='Trip Number (Analytic Tag)', track_visibility='always')
     contracts_id      = fields.Many2one('logistics.contracts', string='Contracts', track_visibility='always')
     sales_order_id    = fields.Many2one('sale.order', string='Sales Order', track_visibility='always')
     client_id         = fields.Many2one('res.partner', string='Client', track_visibility='always')
     vehicle_id        = fields.Many2one('fleet.vehicle', string='Vehicle')    
     analytic_accnt_id = fields.Many2one('account.analytic.account', string='Analytic Account', track_visibility='always')
     operator_id       = fields.Many2one('res.partner',string='Operator', track_visibility='always')
-    route_id          = fields.Many2one('account.analytic.tag',string='Route', track_visibility='always', domain=[('analytic_tag_type', '=', "route")])
+    route             = fields.Char(string='Route', track_visibility='always')
     advance_id        = fields.Many2many('hr.expense.sheet',string='Advance', track_visibility='always')
     start_date        = fields.Date(string='Start Date', track_visibility='always')
     upload_date       = fields.Date(string='Upload Date', track_visibility='always')
     estimated_qty     = fields.Float(string='Estimated Quantity', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always')
     real_upload_qty   = fields.Float(string='Real Upload Quantity', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always')
+    attachment_upload = fields.Binary(string='Upload Attachments', track_visibility='always')
     download_date     = fields.Date(string='Download Date', track_visibility='always')
     real_download_qty = fields.Float(string='Real Download Quantity', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always')
+    attachment_downld = fields.Binary(string='Download Attachments', track_visibility='always')
     conformity        = fields.Binary(string='Conformity and Settlement', track_visibility='always')
     checked           = fields.Boolean(string=" ")
     state             = fields.Selection(selection=[('assigned', 'Assigned'),
@@ -76,9 +52,9 @@ class LogisticsTrips(models.Model):
     @api.one
     def set_status(self):
         '''Set up state in base a which fields are filled up'''
-        if self.trip_number_tag and self.contracts_id and self.sales_order_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route_id and self.advance_id and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty and self.download_date and self.real_download_qty and self.conformity and self.checked:
+        if self.contracts_id and self.sales_order_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route and self.advance_id and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty and self.download_date and self.real_download_qty and self.conformity and self.checked:
            self.state = 'discharged'
-        elif self.trip_number_tag and self.contracts_id and self.sales_order_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route_id and self.advance_id and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty:
+        elif self.contracts_id and self.sales_order_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route and self.advance_id and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty:
             self.state = 'route'
         else:
             self.state = 'assigned'
@@ -88,7 +64,19 @@ class LogisticsTrips(models.Model):
     def _onchange_contract(self):
         '''Authomatic assignation for field "sales_order_id" from contracts_id's input'''
         self.sales_order_id = self.env['logistics.contracts'].search([('id', '=', self.contracts_id.id)]).sales_order_id.id         
-        self.client_id      = self.env['logistics.contracts'].search([('id', '=', self.contracts_id.id)]).client_id.id 
+        self.client_id      = self.env['logistics.contracts'].search([('id', '=', self.contracts_id.id)]).client_id.id    
+        print('\n\n\n\n', self.contracts_id.id)
+        origin          = self.env['logistics.contracts'].search([('id', '=', self.contracts_id.id)]).origin_id.id    
+        print('\n\n\n\n', origin)
+        destination     = self.env['logistics.contracts'].search([('id', '=', self.contracts_id.id)]).destination_id.id
+        print('\n\n\n\n', destination)
+        origin_obj      = self.env['logistics.contracts'].browse(origin)    
+        destination_obj = self.env['logistics.contracts'].browse(destination)
+        if origin and destination:
+            self.route = origin_obj.name + ', ' + destination_obj.name
+            print('\n\n\n\n', )
+        else:
+            self.route = ""
 
 
     @api.onchange('sales_order_id')
@@ -102,7 +90,7 @@ class LogisticsTrips(models.Model):
         '''Authomatic assignation for fields "operator_id" & "analytic_accnt_id" 
            from driver_id taken from vehicle_id's input'''
         self.operator_id = self.env['fleet.vehicle'].search([('id', '=', self.vehicle_id.id)]).driver_id.id
-        self.analytic_accnt_id = self.env['account.analytic.account'].search([('vehicle_id', '=', self.vehicle_id.id)], limit=1).id
+        self.analytic_accnt_id = self.env['account.analytic.account'].search([('vehicle_id', '=', self.vehicle_id.id)], limit=1).id   
 
 
     @api.model

@@ -1,19 +1,5 @@
 <odoo>
   <data>
-
-    <!--::::::::::::::::::::::::::::::::::::::::::::-->
-    <!-- SEQUENCE for name of Logistics Contracts -->
-    <!--::::::::::::::::::::::::::::::::::::::::::::-->
-    <record id="sequence_logistics_trips" model="ir.sequence">
-      <field name="name">Logistics Contracts</field>
-      <field name="code">self.contract</field>
-      <field name="active">TRUE</field>
-      <field name="prefix">CONTR</field>
-      <field name="padding">6</field>
-      <field name="number_next">1</field>
-      <field name="number_increment">1</field>
-    </record>
-
     <!--::::::::::::::::::::::::::::::::::::::::::::-->
     <!-- VIEWS {LISTS, FORMS, SEARCH} -->
     <!--::::::::::::::::::::::::::::::::::::::::::::-->
@@ -30,7 +16,8 @@
           <field name="product_id"/>
           <field name="covenant_qty"/>
           <field name="tariff"/>
-          <field name="origin_destiny" widget="many2many_tags"/>
+          <field name="origin_id"/>
+          <field name="destination_id"/>
           <field name="remitter"/>
           <field name="recipient"/>
           <field name="shipping"/>                   
@@ -61,8 +48,9 @@
                             <field name="covenant_qty"/>
                             <field name="tariff"/>                    
                         </group>                                                 
-                        <group>
-                            <field name="origin_destiny" widget="many2many_tags"/>                       
+                        <group>                     
+                            <field name="origin_id"/>
+                            <field name="destination_id"/>
                             <field name="remitter"/>
                             <field name="recipient"/>
                             <field name="shipping"/>                                         

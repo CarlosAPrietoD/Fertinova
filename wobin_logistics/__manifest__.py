@@ -26,6 +26,7 @@
         'security/ir.model.access.csv',
 
         #views
+        'views/sequences.xml',
         'views/contracts.xml',
         'views/trips.xml',
         'views/views.xml',

@@ -1,7 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 from odoo.addons import decimal_precision as dp
+
+class LogisticsRoutes(models.Model):
+    _name = 'logistics.routes'
+    _description = 'Logistics Routes'
+
+    name = fields.Char(string="City to add for origins & destinations")
+
+
 
 class LogisticsContracts(models.Model):
     _name = 'logistics.contracts'
@@ -23,7 +31,8 @@ class LogisticsContracts(models.Model):
     product_id     = fields.Many2one('product.template', string="Product")
     covenant_qty   = fields.Float(string='Covenanted Quantity', digits=dp.get_precision('Product Unit of Measure'))
     tariff         = fields.Float(string='Tariff', digits=dp.get_precision('Product Unit of Measure'))
-    origin_destiny = fields.Many2many('account.analytic.tag', string='Origin & Destiny', domain=[('analytic_tag_type', '=', 'route')])
+    origin_id      = fields.Many2one('logistics.routes', string='Origin')
+    destination_id = fields.Many2one('logistics.routes', string='Destination')
     remitter       = fields.Char(string='Remitter')
     recipient      = fields.Char(string='Recipient')
     shipping       = fields.Char(string='Shipping')
@@ -59,11 +68,14 @@ class SaleOrder(models.Model):
         #Create a new contract in Wobin Logistics triggered by 
         #a confirmation in Sales Order:  
         sequence = self.env['ir.sequence'].next_by_code('self.contract')
+        print('\n\n\nsequence?', sequence)
         if not sequence:
+            print('\n\n\n¿entra opcion 1?\n\n\n')
             numerical_part = 1
             #After number has increased, fill with zeros to 6 digits
             sequence_aux = str(numerical_part).zfill(6)
         else: 
+            print('\n\n\n¿entra opcion 2?\n\n\n')
             #Retrieved  --> CONTR000011
             numerical_part = int(sequence[5:])
             numerical_part += 1

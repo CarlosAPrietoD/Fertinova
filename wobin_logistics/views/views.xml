@@ -33,7 +33,17 @@
         <field name="view_mode">tree,form</field>        
         <field name="view_id" ref="view_logs_trips_anlys_lst"/>
         <field name="domain"></field> 
+    </record>
+
+    <!-- ROUTES ANALYSIS {from Contract Assignments} - ACTION -->
+    <record id="action_logst_trps_routes_lst" model="ir.actions.act_window">
+        <field name="name">Routes</field>
+        <field name="res_model">logistics.contracts</field>
+        <field name="view_mode">tree</field>        
+        <field name="view_id" ref="view_logs_routes_lst"/>
+        <field name="domain"></field> 
     </record>         
+
 
 
     
@@ -47,17 +57,18 @@
               web_icon="wobin_logistics,static/description/icon.png"/>
 
     <!-- menu categories {SUB MENUITEMS} -->
-    <menuitem name="Quotationes" id="quotations_menu_1" parent="wobin_logistics.menu_root"/>
+    <!--<menuitem name="Quotationes" id="quotations_menu_1" parent="wobin_logistics.menu_root"/>-->
     <menuitem name="Contracts" id="contracts_menu_2" parent="wobin_logistics.menu_root"/>
     <menuitem name="Trips" id="trips_menu_3" parent="wobin_logistics.menu_root"/>
   
     <!-- actions of sub menuitems {DISPLAY OF GENERAL VIEWS} -->
-    <!-- QUOTATIONS -->    
+    <!-- QUOTATIONS 
     <menuitem name="Quotations" 
               id="wobin_logistics.menuitem_quotations" 
               parent="wobin_logistics.quotations_menu_1"
               action="wobin_logistics.action_logistics_quotations" 
-              sequence="1"/>               
+              sequence="1"/>    
+    -->                             
 
     <!-- CONTRACTS -->    
     <menuitem name="Contracts" 
@@ -77,6 +88,11 @@
               parent="wobin_logistics.trips_menu_3"
               action="wobin_logistics.action_logst_trps_anlys_lst" 
               sequence="2"/>
+    <menuitem name="Routes" 
+              id="wobin_logistics.sub_menuitem_routes" 
+              parent="wobin_logistics.trips_menu_3"
+              action="wobin_logistics.action_logst_trps_routes_lst" 
+              sequence="3"/>              
 
   </data>
 </odoo>

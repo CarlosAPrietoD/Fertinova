@@ -27,21 +27,17 @@
             </xpath>        
         </field>
     </record>      
-
-
-    <!--::::::::::::::::::::::::::::::::::::::::::::-->
-    <!-- SEQUENCE for name of Logistics Trips -->
-    <!--::::::::::::::::::::::::::::::::::::::::::::
-    <record id="sequence_logistics_trips" model="ir.sequence">
-      <field name="name">Logistics Trips</field>
-      <field name="code">self.trip</field>
-      <field name="active">TRUE</field>
-      <field name="prefix">VJ</field>
-      <field name="padding">6</field>
-      <field name="number_next">1</field>
-      <field name="number_increment">1</field>
-    </record>
-    -->
+    <!--Remove attribute "required" from Analytic Account field in model Sale Order-->
+    <record id="sale_order_form_acc_anltc_inherit" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <field name="analytic_account_id" position="attributes">
+                <attribute name="required">0</attribute>
+            </field>       
+        </field>
+    </record>     
 
 
     <!--::::::::::::::::::::::::::::::::::::::::::::-->
@@ -55,14 +51,13 @@
       <field name="arch" type="xml">
         <tree>
           <field name="name"/>
-          <field name="trip_number_tag"/>
           <field name="contracts_id"/>
           <field name="sales_order_id"/>
           <field name="client_id"/>
           <field name="vehicle_id"/>
           <field name="analytic_accnt_id"/>
           <field name="operator_id"/>          
-          <field name="route_id"/>
+          <field name="route"/>
           <field name="advance_id" widget="many2many_tags"/>
           <field name="start_date"/>
           <field name="upload_date"/>
@@ -92,14 +87,13 @@
                     </div>                
                     <group>
                         <group>
-                            <field name="trip_number_tag"/>
                             <field name="contracts_id"/>
                             <field name="sales_order_id"/>
                             <field name="client_id"/>
                             <field name="vehicle_id"/> 
                             <field name="analytic_accnt_id"/>                           
                             <field name="operator_id"/>
-                            <field name="route_id"/>  
+                            <field name="route"/>  
                             <field name="advance_id" widget="many2many_tags"/>                                           
                         </group>
                         <group>
@@ -107,8 +101,10 @@
                             <field name="upload_date"/>
                             <field name="estimated_qty"/>
                             <field name="real_upload_qty"/>
+                            <field name="attachment_upload"/>
                             <field name="download_date"/>
                             <field name="real_download_qty"/>
+                            <field name="attachment_downld"/>
                             <label for="conformity"/>
                             <div>
                                 <field name="conformity" class="oe_inline" style="padding-right: 10px"/>
@@ -142,6 +138,20 @@
         </tree>
       </field>
     </record>
+
+    <!-- ROUTES ANALYSIS from contract assignments - LIST VIEW -->
+    <record id="view_logs_routes_lst" model="ir.ui.view">
+      <field name="name">Routes</field>
+      <field name="model">logistics.contracts</field>
+      <field name="arch" type="xml">
+        <tree>          
+          <field name="origin_id"/>
+          <field name="destination_id"/>
+          <field name="name"/>
+          <field name="write_date"/>           
+        </tree>
+      </field>
+    </record>    
 
   </data>  
 </odoo>    
