@@ -61,6 +61,8 @@ class LogisticsContracts(models.Model):
 class SaleOrder(models.Model):
     _inherit = "sale.order"
 
+    analytic_account_id = fields.Many2one('account.analytic.account', 'Analytic Account', readonly=True, states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, help="The analytic account related to a sales order.", copy=False, oldname='project_id', required=False)
+
     @api.multi
     def _action_confirm(self):
         #Normal Logic of method "action_confirm" of Sales Order:
