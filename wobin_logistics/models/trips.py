@@ -65,13 +65,11 @@ class LogisticsTrips(models.Model):
         '''Authomatic assignation for field "sales_order_id" from contracts_id's input'''
         self.sales_order_id = self.env['logistics.contracts'].search([('id', '=', self.contracts_id.id)]).sales_order_id.id         
         self.client_id      = self.env['logistics.contracts'].search([('id', '=', self.contracts_id.id)]).client_id.id    
-        print('\n\n\n\n', self.contracts_id.id)
+        
         origin          = self.env['logistics.contracts'].search([('id', '=', self.contracts_id.id)]).origin_id.id    
-        print('\n\n\n\n', origin)
         destination     = self.env['logistics.contracts'].search([('id', '=', self.contracts_id.id)]).destination_id.id
-        print('\n\n\n\n', destination)
-        origin_obj      = self.env['logistics.contracts'].browse(origin)    
-        destination_obj = self.env['logistics.contracts'].browse(destination)
+        origin_obj      = self.env['logistics.routes'].browse(origin)    
+        destination_obj = self.env['logistics.routes'].browse(destination)
         if origin and destination:
             self.route = origin_obj.name + ', ' + destination_obj.name
             print('\n\n\n\n', )
