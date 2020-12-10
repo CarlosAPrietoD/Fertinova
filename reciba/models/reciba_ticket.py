@@ -1,5 +1,6 @@
 from odoo import models, fields, api
 from datetime import date, datetime
+from odoo.exceptions import UserError
 
 class RecibaTicket(models.Model):
     _name = 'reciba.ticket'
@@ -367,6 +368,14 @@ class RecibaTicket(models.Model):
         if self.reception == 'price' and self.price > 0 and self.price_flag == False:
             self.price_flag = True
             
+        return ticket
+
+    @api.multi
+    def unlink(self):
+        if self.state != 'draft':
+            msg = 'No se pueden eliminar boletas confirmadas'
+            raise UserError(msg)
+        ticket = super(RecibaTicket, self).unlink()
         return ticket
 
 
