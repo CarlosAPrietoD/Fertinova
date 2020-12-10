@@ -1,5 +1,6 @@
 from odoo import models, fields, api
 from datetime import date, datetime
+from odoo.exceptions import UserError
 
 class RecibaTicket(models.Model):
     _name = 'reciba.ticket'
@@ -185,9 +186,9 @@ class RecibaTicket(models.Model):
     provider_date = fields.Datetime(string="Fecha y hora", compute='_default_provider_date', store=True)
     location_id = fields.Many2one('stock.location', string="Ubicación destino")
     location_date = fields.Datetime(string="Fecha y hora", compute='_default_location_date', store=True)
-    gross_weight = fields.Float(string="Peso bruto")
+    gross_weight = fields.Float(string="Peso Bruto")
     gross_date = fields.Datetime(string="Fecha y hora", compute='_default_gross_date', store=True)
-    tare_weight = fields.Float(string="Peso tara")
+    tare_weight = fields.Float(string="Peso Tara")
     tare_date = fields.Datetime(string="Fecha y hora", compute='_default_tare_date', store=True)
     net_weight = fields.Float(string="Peso Neto", compute='_default_net_weight', store=True)
     net_date = fields.Datetime(string="Fecha y hora", compute='_default_net_date', store=True)
@@ -209,6 +210,13 @@ class RecibaTicket(models.Model):
     picking_id = fields.Many2one('stock.picking', string="Transferencia")
     po_id = fields.Many2one('purchase.order', string="Orden de Compra")
     so_id = fields.Many2one('sale.order', string="Orden de Venta")
+
+
+    @api.onchange('product_id')
+    def product_onchange(self):
+        if self.product_id.name == 'MAIZ GRANEL':
+            quality = self.env['reciba.quality'].search([('name','=','PROY-NMX-FF-034-SCFI-2019 (Grado II)')], limit=1).id
+            self.quality_id = quality
 
 
     @api.onchange('so_id')
@@ -248,6 +256,14 @@ class RecibaTicket(models.Model):
 
     
     def confirm_reciba(self):
+
+        if self.net_weight == 0:
+            msg = 'El peso neto ingresado no es valido'
+            raise UserError(msg)
+
+        if self.humidity == 0 or self.impurity == 0 or self.temperature == 0:
+            msg = 'Los valores de humedad, impureza y temperatura deben ser mayores a 0'
+            raise UserError(msg)
 
         if self.operation_type == 'in':
             if self.location_id:
