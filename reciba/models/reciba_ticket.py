@@ -385,6 +385,14 @@ class RecibaTicket(models.Model):
             
         return ticket
 
+    @api.multi
+    def unlink(self):
+        if self.state != 'draft':
+            msg = 'No se pueden eliminar boletas confirmadas'
+            raise UserError(msg)
+        ticket = super(RecibaTicket, self).unlink()
+        return ticket
+
 
     def create_purchase_order(self):
         #picking_type = self.env['stock.picking.type'].search(['|',('name','ilike','Recepciones'),('name','ilike','Receipts')], limit=1)
