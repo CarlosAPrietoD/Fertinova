@@ -150,7 +150,7 @@ class SaleOrder(models.Model):
     _inherit = "sale.order"
 
     trips              = fields.Char(string='Trips', compute='_set_trips')
-    sale_order_qty     = fields.Float(string='Sale Order Qty', digits=dp.get_precision('Product Unit of Measure'), compute='_set_sl_ord_qty')
+    covenant_qty       = fields.Float(string='Covenant Qty', digits=dp.get_precision('Product Unit of Measure'), compute='_set_covenant_qty')
     trip_delivered_qty = fields.Float(string='Trip Delivered Qty', digits=dp.get_precision('Product Unit of Measure'), compute='_set_trp_del_qty')
     difference_qty     = fields.Float(string='Difference Qty', digits=dp.get_precision('Product Unit of Measure'), compute='_set_dif_qty')
 
@@ -179,11 +179,25 @@ class SaleOrder(models.Model):
 
     @api.one   
     @api.depends('name')
-    def _set_sl_ord_qty(self):
-        '''This method intends to sum the value of qty_delivered in sales order lines'''
-        #for rec in self:
-        self.sale_order_qty = sum(line.qty_delivered for line in self.order_line) 
-        print('\n\n\n\n {2} self.trip_delivered_qty', self.sale_order_qty) 
+    def _set_covenant_qty(self):
+        '''This method intends to sum the value of covenant_qty in trips assigned to order lines'''
+        sum_covenant_qty = 0          
+        sql_query = """SELECT contracts_id 
+                         FROM logistics_trips 
+                        WHERE sales_order_id = %s;"""
+        self.env.cr.execute(sql_query, (self.id,))
+        result = self.env.cr.fetchall()
+
+        print('\n\n\n\n\n result', result)  
+
+        if result:                    
+            for contract in result:
+                if contract[0]:
+                    #Retrieve covenant_qty of contract which belongs to a given trip:
+                    sum_covenant_qty += self.env['logistics.contracts'].search([('id', '=', contract)]).covenant_qty
+        
+        self.covenant_qty = sum_covenant_qty
+        print('\n\n\n\n {2} self.covenant_qty',self.covenant_qty) 
 
 
     @api.one
@@ -208,5 +222,5 @@ class SaleOrder(models.Model):
     def _set_dif_qty(self):
         '''This method intends to show the difference between delivered qty 
            and discharged qty assigned to a given sale order'''
-        self.difference_qty = self.sale_order_qty - self.trip_delivered_qty
+        self.difference_qty = self.covenant_qty - self.trip_delivered_qty
         print('\n\n\n\n {4} , self.difference_qty', self.difference_qty)
