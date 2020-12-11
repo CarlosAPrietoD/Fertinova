@@ -96,25 +96,27 @@ class LogisticsTrips(models.Model):
         #Create a new invoice according to data in trip's info:
         name_sl_ord = self.env['sale.order'].search([('id', '=', self.sales_order_id.id)]).name
         invoice = {
+            'type': 'out_invoice',
             'state': 'draft',
             'origin': name_sl_ord
             }
-        record = self.env['account.invoice'].create(invoice)      
-
-        #Return a new form view from Trips in order user can interact with it:
+        self.env['account.invoice'].create(invoice) 
+        '''
         return {
             #'name':_("Products to Process"),
             'view_mode': 'form',
-            'view_id': False,
+            'view_id': account.invoice_form,  #action_invoice_tree1,
+            'views': [(account.invoice_form, "form")],
             'view_type': 'form',
             'res_model': 'account.invoice',
             'res_id': record.id,
             'type': 'ir.actions.act_window',
             'nodestroy': True,
             'target': 'current',
-            'domain': '[]',
-            #'context': {'default_id': record.id}
-        }                
+            'domain': [('type','=','out_invoice')],
+            'context': {'default_type':'out_invoice', 'type':'out_invoice', 'journal_type': 'sale'}
+        }        
+        '''       
 
  
 
@@ -148,9 +150,9 @@ class SaleOrder(models.Model):
     _inherit = "sale.order"
 
     trips              = fields.Char(string='Trips', compute='_set_trips')
-    sale_order_qty     = fields.Float(string='Sale Order Qty', digits=dp.get_precision('Product Unit of Measure'), compute='_set_sale_order_qty')
-    trip_delivered_qty = fields.Float(string='Trip Delivered Qty', digits=dp.get_precision('Product Unit of Measure'), compute='_set_trip_delivered_qty')
-    difference_qty     = fields.Float(string='Difference Qty', digits=dp.get_precision('Product Unit of Measure'), compute='_set_diff_qty')
+    sale_order_qty     = fields.Float(string='Sale Order Qty', digits=dp.get_precision('Product Unit of Measure'), compute='_set_sl_ord_qty')
+    trip_delivered_qty = fields.Float(string='Trip Delivered Qty', digits=dp.get_precision('Product Unit of Measure'), compute='_set_trp_del_qty')
+    difference_qty     = fields.Float(string='Difference Qty', digits=dp.get_precision('Product Unit of Measure'), compute='_set_dif_qty')
 
 
     @api.one
@@ -175,17 +177,18 @@ class SaleOrder(models.Model):
             self.trips = ""     
 
 
-    @api.multi      
+    @api.one   
     @api.depends('name')
-    def _set_sale_order_qty(self):
+    def _set_sl_ord_qty(self):
         '''This method intends to sum the value of qty_delivered in sales order lines'''
-        for rec in self:
-            rec.trip_delivered_qty = sum(line.qty_delivered for line in rec.order_line)  
+        #for rec in self:
+        self.sale_order_qty = sum(line.qty_delivered for line in self.order_line) 
+        print('\n\n\n\n {2} self.trip_delivered_qty', self.sale_order_qty) 
 
 
     @api.one
     @api.depends('name')
-    def _set_trip_delivered_qty(self):
+    def _set_trp_del_qty(self):
         '''This method intends to sum all discharges of multiple 
            trips assigned to a given sales order'''
         sql_query = """SELECT sum(real_download_qty) 
@@ -193,15 +196,17 @@ class SaleOrder(models.Model):
                         WHERE sales_order_id = %s"""
         self.env.cr.execute(sql_query, (self.id,))
         result = self.env.cr.fetchone()
-        _logger.info("\n\n\n result: %s\n\n\n", result)
-
+        _logger.info("\n\n\n\n\n result: %s\n\n\n", result)
+        print('\n\n\n ¿si estra?  \n\n')
         if result:                    
-            self.trips = result[0]
+            self.trip_delivered_qty = result[0]
+            print('\n\n\n\n {3} ,self.trip_delivered_qty', self.trip_delivered_qty)
 
 
     @api.one    
     @api.depends('name')
-    def _set_diff_qty(self):
+    def _set_dif_qty(self):
         '''This method intends to show the difference between delivered qty 
            and discharged qty assigned to a given sale order'''
         self.difference_qty = self.sale_order_qty - self.trip_delivered_qty
+        print('\n\n\n\n {4} , self.difference_qty', self.difference_qty)
