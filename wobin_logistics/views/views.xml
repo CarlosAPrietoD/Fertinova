@@ -12,12 +12,14 @@
       <field name="view_mode">tree,form</field>
     </record>
 
+
     <!-- CONTRACTS - GENERAL ACTION -->
     <record id="action_logistics_contracts" model="ir.actions.act_window">
       <field name="name">Contracts</field>
       <field name="res_model">logistics.contracts</field>
       <field name="view_mode">tree,form</field>
     </record>
+
 
     <!-- TRIPS - GENERAL ACTION -->
     <record id="action_logistics_trips" model="ir.actions.act_window">
@@ -26,15 +28,22 @@
       <field name="view_mode">tree,form</field>      
     </record>
     
-    <!-- TRIPS ANALYSIS - ACTION -->
-    <record id="action_logst_trps_anlys_lst" model="ir.actions.act_window">
-        <field name="name">Analysis</field>
+    <!-- TRIPS ANALYSIS according Sales Order - ACTION -->
+    <record id="action_logst_trps_sl_ord_anlys_lst" model="ir.actions.act_window">
+        <field name="name">Analysis (Sales Orders)</field>
         <field name="res_model">sale.order</field>
-        <field name="view_mode">tree,form</field>        
+        <field name="view_mode">tree</field>        
+        <field name="view_id" ref="view_logs_trips_anlys_sl_ord_lst"/>
+        <field name="domain"></field> 
+    </record>
+    <!-- TRIPS ANALYSIS according with trips model - ACTION -->
+    <record id="action_logst_trips_anlysis_lst" model="ir.actions.act_window">
+        <field name="name">Analysis (Trips)</field>
+        <field name="res_model">logistics.trips</field>
+        <field name="view_mode">tree</field>        
         <field name="view_id" ref="view_logs_trips_anlys_lst"/>
         <field name="domain"></field> 
     </record>
-
     <!-- ROUTES ANALYSIS {from Contract Assignments} - ACTION -->
     <record id="action_logst_trps_routes_lst" model="ir.actions.act_window">
         <field name="name">Routes</field>
@@ -83,16 +92,21 @@
               parent="wobin_logistics.trips_menu_3"
               action="wobin_logistics.action_logistics_trips" 
               sequence="1"/>
-    <menuitem name="Analysis" 
+    <menuitem name="Analysis (Sales Orders)" 
+              id="wobin_logistics.sub_menuitem_sl_ord_analysis" 
+              parent="wobin_logistics.trips_menu_3"
+              action="wobin_logistics.action_logst_trps_sl_ord_anlys_lst" 
+              sequence="2"/> 
+    <menuitem name="Analysis (Trips)" 
               id="wobin_logistics.sub_menuitem_analysis" 
               parent="wobin_logistics.trips_menu_3"
-              action="wobin_logistics.action_logst_trps_anlys_lst" 
-              sequence="2"/>
+              action="wobin_logistics.action_logst_trips_anlysis_lst" 
+              sequence="3"/>              
     <menuitem name="Routes" 
               id="wobin_logistics.sub_menuitem_routes" 
               parent="wobin_logistics.trips_menu_3"
               action="wobin_logistics.action_logst_trps_routes_lst" 
-              sequence="3"/>              
+              sequence="4"/>              
 
   </data>
 </odoo>

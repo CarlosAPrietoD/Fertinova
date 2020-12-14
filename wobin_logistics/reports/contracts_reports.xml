@@ -37,12 +37,12 @@
                             </tr>                                                        
                             <tr>
                                 <th scope="row">Origen</th>
-                                <td colspan="6"><span t-field="doc.origin"/></td>
+                                <td colspan="6"><span t-field="doc.origin_id"/></td>
                                 <td></td><td></td><td></td><td></td><td></td>                                                              
                             </tr>
                             <tr>
                                 <th scope="row">Destino</th>
-                                <td colspan="6"><span t-field="doc.destiny"/></td>
+                                <td colspan="6"><span t-field="doc.destination_id"/></td>
                                 <td></td><td></td><td></td><td></td><td></td>                                                             
                             </tr>
                         </tbody>

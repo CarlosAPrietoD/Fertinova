@@ -30,7 +30,7 @@ class LogisticsTrips(models.Model):
     client_id         = fields.Many2one('res.partner', string='Client', track_visibility='always')
     vehicle_id        = fields.Many2one('fleet.vehicle', string='Vehicle')    
     analytic_accnt_id = fields.Many2one('account.analytic.account', string='Analytic Account', track_visibility='always')
-    operator_id       = fields.Many2one('res.partner',string='Operator', track_visibility='always')
+    operator_id       = fields.Many2one('hr.employee',string='Operator', track_visibility='always')
     route             = fields.Char(string='Route', track_visibility='always')
     advance_id        = fields.Many2many('hr.expense.sheet',string='Advance', track_visibility='always')
     start_date        = fields.Date(string='Start Date', track_visibility='always')
@@ -47,12 +47,20 @@ class LogisticsTrips(models.Model):
                                                     ('route', 'En route'),
                                                     ('discharged', 'Discharged')], 
                                                     string='Status', required=True, readonly=True, copy=False, tracking=True, default='assigned', compute="set_status", track_visibility='always')
+    trip_taxes        = fields.Many2many('account.tax', string='Taxes', compute="_set_trip_taxes")
+    income_provisions = fields.Float(string='Income Provisions', digits=dp.get_precision('Product Unit of Measure'), compute='_set_income_prov')                                                    
+    invoice_status    =  fields.Selection([('draft','Draft'),
+                                           ('open', 'Open'),
+                                           ('in_payment', 'In Payment'),
+                                           ('paid', 'Paid'),
+                                           ('cancel', 'Cancelled'),
+                                          ], string='Status', index=True, readonly=True, default='draft', copy=False, compute='_set_inv_status')
     
     
     @api.one
     def set_status(self):
         '''Set up state in base a which fields are filled up'''
-        if self.contracts_id and self.sales_order_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route and self.advance_id and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty and self.download_date and self.real_download_qty and self.conformity and self.checked:
+        if self.contracts_id and self.sales_order_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route and self.advance_id and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty and self.download_date and self.real_download_qty and self.checked:
            self.state = 'discharged'
         elif self.contracts_id and self.sales_order_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route and self.advance_id and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty:
             self.state = 'route'
@@ -83,12 +91,30 @@ class LogisticsTrips(models.Model):
         self.client_id = self.env['sale.order'].search([('id', '=', self.sales_order_id.id)]).partner_id.id 
          
 
+    """    
     @api.onchange('vehicle_id')
     def _onchange_vehicle(self):
         '''Authomatic assignation for fields "operator_id" & "analytic_accnt_id" 
            from driver_id taken from vehicle_id's input'''
-        self.operator_id = self.env['fleet.vehicle'].search([('id', '=', self.vehicle_id.id)]).driver_id.id
+        #self.operator_id = self.env['fleet.vehicle'].search([('id', '=', self.vehicle_id.id)]).driver_id.id
         self.analytic_accnt_id = self.env['account.analytic.account'].search([('vehicle_id', '=', self.vehicle_id.id)], limit=1).id   
+    """
+
+
+    @api.one
+    def _set_trip_taxes(self):
+        self.trip_taxes = self.env['account.invoice.line'].search([('trips_id', '=', self.id)]).invoice_line_tax_ids.ids
+
+
+    @api.one
+    def _set_income_prov(self):
+        self.income_provisions = self.env['account.invoice.line'].search([('trips_id', '=', self.id)]).price_subtotal
+
+    
+    @api.one
+    def _set_inv_status(self):
+        invoice_id = self.env['account.invoice.line'].search([('trips_id', '=', self.id)]).invoice_id.id
+        self.invoice_status = self.env['account.invoice'].search([('id', '=', invoice_id)]).state
 
 
     @api.model
@@ -141,7 +167,18 @@ class AccountAnalyticTag(models.Model):
     analytic_tag_type = fields.Selection([('trip', 'Trip'),
                                           ('route', 'Route'),
                                           ('operator', 'Operator')],
-                                         'Analytic Tag Type')                                
+                                         'Analytic Tag Type')
+
+
+
+
+class AccountInvoiceLine(models.Model):
+    _inherit = "account.invoice.line"
+
+    #:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+    # Aggregation of a new many2one field of Trips in Customer Invoices
+    #:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  
+    trips_id = fields.Many2one('logistics.trips', string='Trip')    
 
 
 
@@ -205,7 +242,7 @@ class SaleOrder(models.Model):
     def _set_trp_del_qty(self):
         '''This method intends to sum all discharges of multiple 
            trips assigned to a given sales order'''
-        sql_query = """SELECT sum(real_download_qty) 
+        sql_query = """SELECT sum(real_upload_qty) 
                          FROM logistics_trips 
                         WHERE sales_order_id = %s"""
         self.env.cr.execute(sql_query, (self.id,))

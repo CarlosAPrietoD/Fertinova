@@ -26,7 +26,19 @@
                 <field name="vehicle_id"/>
             </xpath>        
         </field>
-    </record>   
+    </record>  
+    <!--Add a new many2one field of Trips into Account Invoice model-->
+    <record id="invoice_with_trips_form_inherit" model="ir.ui.view">
+        <field name="name">accnt.invoice.trips.form.inherit</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_form"/>
+        <field name="arch" type="xml">
+           <xpath expr="//tree/field[@name='product_id']" position="after">
+                <field name="trips_id"/>
+            </xpath>        
+        </field>
+    </record>     
+
     
     <!--Definition to display customer invoice form-->
     <record id="action_create_invoice" model="ir.actions.act_window">
@@ -123,9 +135,9 @@
         </field> 
     </record>
 
-    <!-- ANALYSIS (TRIPS) - LIST VIEW -->
-    <record id="view_logs_trips_anlys_lst" model="ir.ui.view">
-      <field name="name">Trips Analysis</field>
+    <!-- ANALYSIS (TRIPS) according to Sales Order - LIST VIEW -->
+    <record id="view_logs_trips_anlys_sl_ord_lst" model="ir.ui.view">
+      <field name="name">Trips Analysis according Sales Order</field>
       <field name="model">sale.order</field>
       <field name="arch" type="xml">
         <tree>
@@ -138,6 +150,22 @@
         </tree>
       </field>
     </record>
+
+    <!-- ANALYSIS (TRIPS) in accordance to trips - LIST VIEW --> 
+    <record id="view_logs_trips_anlys_lst" model="ir.ui.view">
+      <field name="name">Trips Analysis</field>
+      <field name="model">logistics.trips</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>  
+          <field name="contracts_id"/>
+          <field name="sales_order_id"/>
+          <field name="trip_taxes" widget="many2many_tags"/> 
+          <field name="income_provisions"/>
+          <field name="invoice_status"/>       
+        </tree>
+      </field>
+    </record>       
 
     <!-- ROUTES ANALYSIS from contract assignments - LIST VIEW -->
     <record id="view_logs_routes_lst" model="ir.ui.view">
