@@ -44,7 +44,7 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//button[@name='%(sale.343)d']" position="attributes">
+            <xpath expr="//button[@name='%(l10n_mx.343)d']" position="attributes">
                 <attribute name="groups">wobin_logistics.group_access_analysis</attribute>
             </xpath>        
         </field>
