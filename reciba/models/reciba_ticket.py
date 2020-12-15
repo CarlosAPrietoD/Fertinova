@@ -197,7 +197,7 @@ class RecibaTicket(models.Model):
     apply_discount = fields.Boolean(string="Aplicar descuento", default=True)
     humidity_total_discount = fields.Float(string="Descuento total de humedad (Kg)", compute='_get_humidity_total_discount', store=True)
     impurity_total_discount = fields.Float(string="Descuento total de impureza (Kg)", compute='_get_impurity_total_discount', store=True)
-    price = fields.Float(string="Precio", digits=(15,3))
+    price = fields.Float(string="Precio", digits=(15,4))
     price_flag = fields.Boolean(default=False)
     currency_id = fields.Many2one('res.currency', default=lambda self: self.env['res.company']._company_default_get('your.module').currency_id, string="Moneda")
     
