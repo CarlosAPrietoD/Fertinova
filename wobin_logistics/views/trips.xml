@@ -37,7 +37,19 @@
                 <field name="trips_id"/>
             </xpath>        
         </field>
-    </record>     
+    </record> 
+    <!--Add a new many2one field of Trips into Account Invoice model-->
+    <record id="restriction_create_invoice_sales_order" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='%(343)d']" position="attributes">
+                <attribute name="groups">wobin_logistics.group_access_analysis</attribute>
+            </xpath>        
+        </field>
+    </record>        
+
 
     
     <!--Definition to display customer invoice form-->
