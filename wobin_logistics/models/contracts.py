@@ -28,7 +28,7 @@ class LogisticsContracts(models.Model):
     name           = fields.Char(string="Contract", readonly=True, required=True, copy=False, default='New')
     client_id      = fields.Many2one('res.partner', string='Client')
     sales_order_id = fields.Many2one('sale.order', string='Sales Order')
-    product_id     = fields.Many2one('product.template', string="Product")
+    product_id     = fields.Char(string="Product")
     covenant_qty   = fields.Float(string='Covenanted Quantity', digits=dp.get_precision('Product Unit of Measure'))
     tariff         = fields.Float(string='Tariff', digits=dp.get_precision('Product Unit of Measure'))
     origin_id      = fields.Many2one('logistics.routes', string='Origin')
