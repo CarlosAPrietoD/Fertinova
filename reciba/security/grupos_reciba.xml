@@ -10,6 +10,10 @@
         <record id="grupo_reciba_boletas" model="res.groups">
             <field name="name">RECIBA - Visualización de Boletas</field>
             <field name="category_id" ref="base.module_category_hidden"/>
+        </record> 
+
+        <record id="grupo_reciba_cancel" model="res.groups">
+            <field name="name">RECIBA - Cancelar boletas</field>
         </record>   
 
     </data>
