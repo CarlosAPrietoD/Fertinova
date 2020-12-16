@@ -38,7 +38,7 @@
             </xpath>        
         </field>
     </record> 
-    <!--Add restriction for hiding action button of Create Invoice-->
+    <!--Add restriction for hiding action button of Create Invoice
     <record id="restriction_create_invoice_sales_order" model="ir.ui.view">
         <field name="name">sale.order.form.inherit</field>
         <field name="model">sale.order</field>
@@ -58,7 +58,7 @@
                     groups="wobin_logistics.group_access_analysis"/>
             </xpath>                   
         </field>
-    </record>      
+    </record>-->     
 
     
     <!--Definition to display customer invoice form-->
@@ -143,7 +143,7 @@
                                 <field name="conformity" class="oe_inline" style="padding-right: 10px"/>
                                 <field name="checked" class="oe_inline"/>
                             </div> 
-                            <button name="%(action_create_invoice)d" type="action" string="Create Invoice" class="btn-primary" icon="fa-file-text" attrs="{'invisible':[('checked', '=', False)]}"/>                        
+                            <button name="%(action_create_invoice)d" type="action" string="Create Invoice" class="btn-primary" icon="fa-file-text" attrs="{'invisible':[('checked', '=', False)]}" groups="wobin_logistics.group_access_analysis"/>                        
                         </group>
                     </group>
                 </sheet>              
