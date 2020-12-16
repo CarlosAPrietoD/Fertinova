@@ -32,7 +32,7 @@ class LogisticsTrips(models.Model):
     analytic_accnt_id = fields.Many2one('account.analytic.account', string='Analytic Account', track_visibility='always')
     operator_id       = fields.Many2one('hr.employee',string='Operator', track_visibility='always')
     route             = fields.Char(string='Route', track_visibility='always')
-    advance_id        = fields.Many2many('hr.expense.sheet',string='Advance', track_visibility='always')
+    advance_id        = fields.Many2many('hr.expense',string='Advance', track_visibility='always')
     start_date        = fields.Date(string='Start Date', track_visibility='always')
     upload_date       = fields.Date(string='Upload Date', track_visibility='always')
     estimated_qty     = fields.Float(string='Estimated Quantity', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always')
