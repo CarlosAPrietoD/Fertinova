@@ -58,7 +58,7 @@
                     groups="wobin_logistics.group_access_analysis"/>
             </xpath>                   
         </field>
-    </record>-->     
+    </record>-->       
 
     
     <!--Definition to display customer invoice form-->
@@ -143,7 +143,7 @@
                                 <field name="conformity" class="oe_inline" style="padding-right: 10px"/>
                                 <field name="checked" class="oe_inline"/>
                             </div> 
-                            <button name="%(action_create_invoice)d" type="action" string="Create Invoice" class="btn-primary" icon="fa-file-text" attrs="{'invisible':[('checked', '=', False)]}" groups="wobin_logistics.group_access_analysis"/>                        
+                            <button name="%(action_create_invoice)d" type="action" string="Create Invoice" class="btn-primary" icon="fa-file-text" attrs="{'invisible':[('checked', '=', False)]}"/>                        
                         </group>
                     </group>
                 </sheet>              
@@ -200,7 +200,20 @@
           <field name="write_date"/>           
         </tree>
       </field>
-    </record>    
+    </record> 
+
+    
+    <!--Add restriction for hiding action button of Create Invoice-->
+    <record id="restriction_create_invoice_sales_order" model="ir.ui.view">
+        <field name="name">logistics.trips.form.inherit</field>
+        <field name="model">logistics.trips</field>
+        <field name="inherit_id" ref="wobin_logistics.view_logistics_trips_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='%(action_create_invoice)d']" position="attributes">
+                <attribute name="groups">wobin_logistics.group_access_analysis</attribute>
+            </xpath>                    
+        </field>
+    </record>         
 
   </data>  
 </odoo>    
