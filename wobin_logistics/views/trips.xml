@@ -37,45 +37,13 @@
                 <field name="trips_id"/>
             </xpath>        
         </field>
-    </record> 
-    <!--Add restriction for hiding action button of Create Invoice
-    <record id="restriction_create_invoice_sales_order" model="ir.ui.view">
-        <field name="name">sale.order.form.inherit</field>
-        <field name="model">sale.order</field>
-        <field name="inherit_id" ref="sale.view_order_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//button[@name='%(sale.action_view_sale_advance_payment_inv)d']" position="attributes">
-                <attribute name="groups">wobin_logistics.group_access_analysis</attribute>
-            </xpath> 
-            <xpath expr="//button[@name='action_quotation_send']" position="before">
-                <button name="%(sale.action_view_sale_advance_payment_inv)d" string="Create Invoice"
-                    type="action" class="btn-primary"
-                    attrs="{'invisible': [('invoice_status', '!=', 'to invoice')]}"
-                    groups="wobin_logistics.group_access_analysis"/>
-                <button name="%(sale.action_view_sale_advance_payment_inv)d" string="Create Invoice"
-                    type="action" context="{'default_advance_payment_method': 'percentage'}"
-                    attrs="{'invisible': ['|',('invoice_status', '!=', 'no'), ('state', '!=', 'sale')]}"
-                    groups="wobin_logistics.group_access_analysis"/>
-            </xpath>                   
-        </field>
-    </record>-->       
-
-    
-    <!--Definition to display customer invoice form-->
-    <record id="action_create_invoice" model="ir.actions.act_window">
-        <field name="name">account.invoice.form.inherit</field>
-        <field name="res_model">account.invoice</field>
-        <field name="view_type">form</field>
-        <field name="view_mode">tree,form</field>
-        <field name="view_id" ref="account.invoice_form"/>
-        <field name="target">new</field>
-    </record>           
+    </record>                      
 
 
 
     <!--::::::::::::::::::::::::::::::::::::::::::::-->
     <!-- VIEWS {LISTS, FORMS, SEARCH} -->
-    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->   
 
     <!-- TRIPS - LIST VIEW -->
     <record id="view_logistics_trips_list" model="ir.ui.view">
@@ -91,7 +59,7 @@
           <field name="analytic_accnt_id"/>
           <field name="operator_id"/>          
           <field name="route"/>
-          <field name="advance_id" widget="many2many_tags"/>
+          <field name="advance_ids" widget="many2many_tags"/>
           <field name="start_date"/>
           <field name="upload_date"/>
           <field name="estimated_qty"/>
@@ -119,32 +87,64 @@
                         </h1>
                     </div>                
                     <group>
-                        <group>
-                            <field name="contracts_id"/>
-                            <field name="sales_order_id"/>
-                            <field name="client_id"/>
-                            <field name="vehicle_id"/> 
-                            <field name="analytic_accnt_id"/>                           
-                            <field name="operator_id"/>
-                            <field name="route"/>  
-                            <field name="advance_id" widget="many2many_tags"/>                                           
-                        </group>
-                        <group>
-                            <field name="start_date"/>
-                            <field name="upload_date"/>
-                            <field name="estimated_qty"/>
-                            <field name="real_upload_qty"/>
-                            <field name="attachment_upload"/>
-                            <field name="download_date"/>
-                            <field name="real_download_qty"/>
-                            <field name="attachment_downld"/>
-                            <label for="conformity"/>
-                            <div>
-                                <field name="conformity" class="oe_inline" style="padding-right: 10px"/>
-                                <field name="checked" class="oe_inline"/>
-                            </div> 
-                            <button name="%(action_create_invoice)d" type="action" string="Create Invoice" class="btn-primary" icon="fa-file-text" attrs="{'invisible':[('checked', '=', False)]}"/>                        
-                        </group>
+                        <div class="container border border-info m-2" style="border-radius: 10px;">
+                          <div style="margin-top: 27px !important;">
+                            <div style="padding-top: 30px !important;">
+                              <h3 style="background: #fff none repeat scroll 0 0; height: auto; margin-left: 20px; padding: 3px 5px; position: absolute; margin-top: -47px; border: 1px solid #337ab7; border-radius: 8px;"><strong>Datos Generales</strong></h3>                                
+                              <group>                         
+                                <field name="contracts_id"/>
+                                <field name="sales_order_id"/>
+                                <field name="client_id"/>
+                                <field name="vehicle_id"/> 
+                                <field name="analytic_accnt_id"/>                           
+                                <field name="operator_id"/>
+                                <field name="route"/>  
+                                <field name="advance_ids" widget="many2many_tags"/> 
+                              </group>
+                            </div>  
+                          </div> 
+                        </div> 
+
+                        <div class="container" style="text-align: center;">
+                          <group>
+                            <img src='/wobin_logistics/static/description/icon.png' alt="WOBIN Logistics" style="width:200px; height:200px;"/>
+                          </group>
+                        </div>                        
+                          
+                        <div class="container border border-info m-2" style="border-radius: 10px;">
+                          <div style="margin-top: 27px !important;">
+                            <div style="padding-top: 30px !important;">
+                              <h3 style="background: #fff none repeat scroll 0 0; height: auto; margin-left: 20px; padding: 3px 5px; position: absolute; margin-top: -47px; border: 1px solid #337ab7; border-radius: 8px;"><strong>Carga</strong></h3>                          
+                              <group>
+                                  <field name="start_date"/>
+                                  <field name="upload_date"/>
+                                  <field name="estimated_qty"/>
+                                  <field name="real_upload_qty"/>
+                                  <field name="attachment_upload"/>
+                              </group> 
+                            </div>  
+                          </div> 
+                        </div> 
+
+                        <div class="container border border-info m-2" style="border-radius: 10px;">
+                          <div style="margin-top: 27px !important;">
+                            <div style="padding-top: 30px !important;">
+                              <h3 style="background: #fff none repeat scroll 0 0; height: auto; margin-left: 20px; padding: 3px 5px; position: absolute; margin-top: -47px; border: 1px solid #337ab7; border-radius: 8px;"><strong>Descarga</strong></h3>                                
+                              <group>                           
+                                  <field name="download_date"/>
+                                  <field name="real_download_qty"/>
+                                  <field name="attachment_downld"/>
+                                  <field name="qty_to_bill"/>
+                                  <label for="conformity"/>
+                                  <div>
+                                      <field name="conformity" class="oe_inline" style="padding-right: 10px"/>
+                                      <field name="checked" class="oe_inline"/>
+                                  </div> 
+                              </group>
+                            </div>  
+                          </div> 
+                        </div> 
+
                     </group>
                 </sheet>              
                 <div class="oe_chatter">
@@ -154,38 +154,6 @@
                 </div>               
             </form> 
         </field> 
-    </record>
-
-    <!-- ANALYSIS (TRIPS) according to Sales Order - LIST VIEW -->
-    <record id="view_logs_trips_anlys_sl_ord_lst" model="ir.ui.view">
-      <field name="name">Trips Analysis according Sales Order</field>
-      <field name="model">sale.order</field>
-      <field name="arch" type="xml">
-        <tree>
-          <field name="name"/>          
-          <field name="trips" force_save="1"/>
-          <field name="covenant_qty" force_save="1"/>
-          <field name="trip_delivered_qty" force_save="1"/>
-          <field name="difference_qty" force_save="1"/>
-          <field name="state" invisible="1"/> 
-        </tree>
-      </field>
-    </record>
-
-    <!-- ANALYSIS (TRIPS) in accordance to trips - LIST VIEW --> 
-    <record id="view_logs_trips_anlys_lst" model="ir.ui.view">
-      <field name="name">Trips Analysis</field>
-      <field name="model">logistics.trips</field>
-      <field name="arch" type="xml">
-        <tree>
-          <field name="name"/>  
-          <field name="contracts_id"/>
-          <field name="sales_order_id"/>
-          <field name="trip_taxes" widget="many2many_tags"/> 
-          <field name="income_provisions"/>
-          <field name="invoice_status"/>       
-        </tree>
-      </field>
     </record>       
 
     <!-- ROUTES ANALYSIS from contract assignments - LIST VIEW -->
@@ -200,20 +168,7 @@
           <field name="write_date"/>           
         </tree>
       </field>
-    </record> 
-
-    
-    <!--Add restriction for hiding action button of Create Invoice-->
-    <record id="restriction_create_invoice_sales_order" model="ir.ui.view">
-        <field name="name">logistics.trips.form.inherit</field>
-        <field name="model">logistics.trips</field>
-        <field name="inherit_id" ref="wobin_logistics.view_logistics_trips_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//button[@name='%(action_create_invoice)d']" position="attributes">
-                <attribute name="groups">wobin_logistics.group_access_analysis</attribute>
-            </xpath>                    
-        </field>
-    </record>         
+    </record>       
 
   </data>  
 </odoo>    

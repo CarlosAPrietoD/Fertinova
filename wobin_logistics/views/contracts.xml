@@ -11,11 +11,11 @@
       <field name="arch" type="xml">
         <tree>
           <field name="name"/>
-          <field name="client_id"/>
-          <field name="sales_order_id"/>
+          <field name="client_id"/>          
           <field name="product_id"/>
           <field name="covenant_qty"/>
           <field name="tariff"/>
+          <field name="expected_income"/>
           <field name="origin_id"/>
           <field name="destination_id"/>
           <field name="remitter"/>
@@ -43,10 +43,10 @@
                     <group>
                         <group>
                             <field name="client_id"/>
-                            <field name="sales_order_id"/>
                             <field name="product_id"/>
                             <field name="covenant_qty"/>
-                            <field name="tariff"/>                    
+                            <field name="tariff"/>  
+                            <field name="expected_income"/>                  
                         </group>                                                 
                         <group>                     
                             <field name="origin_id"/>

@@ -30,6 +30,7 @@
         'views/sequences.xml',
         'views/contracts.xml',
         'views/trips.xml',
+        'views/reporting.xml',
         'views/views.xml',
 
         #reports

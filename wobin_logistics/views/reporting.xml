@@ -1,0 +1,73 @@
+<odoo>
+  <data>
+
+    <!-- ANALYSIS (TRIPS) according to Contract - LIST VIEW -->
+    <record id="view_trips_analysis_contract" model="ir.ui.view">
+      <field name="name">Trips Analysis according Contracts</field>
+      <field name="model">logistics.contracts</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>          
+          <field name="trips"/>
+          <field name="covenant_qty"/>
+          <field name="trip_delivered_qty"/>
+          <field name="difference_qty"/>       
+        </tree>
+      </field>
+    </record>
+
+    <!-- ANALYSIS (TRIPS) in accordance to trips - LIST VIEW --> 
+    <record id="view_trips_analysis" model="ir.ui.view">
+      <field name="name">Trips Analysis</field>
+      <field name="model">logistics.trips</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>  
+          <field name="contracts_id"/>
+          <field name="trip_taxes" widget="many2many_tags"/> 
+          <field name="income_provisions"/>
+          <field name="invoice_status"/>       
+        </tree>
+      </field>
+    </record>       
+
+    <!-- ANALYSIS Profitabilty Trips - LIST VIEW --> 
+    <record id="view_profitability_trips" model="ir.ui.view">
+      <field name="name">Trips Profitability</field>
+      <field name="model">logistics.trips</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>  
+          <field name="billed_income"/>  
+          <field name="expenses"/> 
+          <field name="profitability"/>           
+        </tree>
+      </field>
+    </record>
+
+    <!-- ANALYSIS Contracts Status- LIST VIEW --> 
+    <record id="view_contracts_status" model="ir.ui.view">
+      <field name="name">Contracts Status</field>
+      <field name="model">logistics.contracts</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>  
+          <field name="trip_status"/>        
+        </tree>
+      </field>
+    </record>
+
+    <!-- Discharged Trips - LIST VIEW --> 
+    <record id="view_discharged_trips" model="ir.ui.view">
+      <field name="name">Trips Analysis</field>
+      <field name="model">logistics.trips</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>  
+          <field name="state"/>
+        </tree>
+      </field>
+    </record>
+
+  </data>  
+</odoo>     
