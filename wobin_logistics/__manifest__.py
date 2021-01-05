@@ -21,8 +21,7 @@
     'depends': ['fleet', 'hr_expense', 'sale_management'],
 
     # always loaded
-    'data': [
-        
+    'data': [        
         #security
         'security/ir.model.access.csv',
         'security/logistics_groups.xml',

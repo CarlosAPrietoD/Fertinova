@@ -95,7 +95,15 @@
         <field name="view_mode">tree</field>        
         <field name="view_id" ref="wobin_logistics.view_discharged_trips"/>
         <field name="domain">[('state', '=', 'draft'), ('flag_trip', '=', True)]</field> 
-    </record>     
+    </record> 
+    <!-- SETTLEMENTS ANALYSIS Report - ACTION -->
+    <record id="action_trip_settlements" model="ir.actions.act_window">
+        <field name="name">Trips Analysis for Settlements</field>
+        <field name="res_model">logistics.trips</field>
+        <field name="view_mode">tree</field>        
+        <field name="view_id" ref="wobin_logistics.view_trip_settlements"/>
+        <field name="domain">[]</field> 
+    </record>         
         
 
 
@@ -108,8 +116,7 @@
     <!-- Top Menu Item {ROOT} -->
     <menuitem name="Wobin Logistics" 
               id="wobin_logistics.menu_root" 
-              web_icon="wobin_logistics,static/description/icon.png"
-              groups="wobin_logistics.group_wl_access_logistics"/>
+              web_icon="wobin_logistics,static/description/icon.png"/>
 
     <!-- Menu Categories {SUB MENUITEMS} -->
     <!--<menuitem name="Quotationes" id="quotations_menu_1" parent="wobin_logistics.menu_root"/>-->
@@ -150,32 +157,32 @@
               id="wobin_logistics.sub_menuitem_contract_analysis" 
               parent="wobin_logistics.reports_menu_4"
               action="wobin_logistics.action_logistics_contract_analysis" 
-              groups="wobin_logistics.group_wl_access_analysis"
               sequence="1"/>
     <menuitem name="Analysis (Trips)" 
               id="wobin_logistics.sub_menuitem_analysis" 
               parent="wobin_logistics.reports_menu_4"
               action="wobin_logistics.action_trips_analysis" 
-              groups="wobin_logistics.group_wl_access_analysis"
               sequence="2"/>    
     <menuitem name="Trips Profitability" 
               id="wobin_logistics.sub_menuitem_profitability" 
               parent="wobin_logistics.reports_menu_4"
               action="wobin_logistics.action_logistics_profit" 
-              groups="wobin_logistics.group_wl_access_analysis"
               sequence="3"/>                                          
     <menuitem name="Contract Status" 
               id="wobin_logistics.sub_menuitem_cont_status" 
               parent="wobin_logistics.reports_menu_4"
               action="wobin_logistics.action_logistics_contract_status" 
-              groups="wobin_logistics.group_wl_access_analysis"
               sequence="4"/>
     <menuitem name="Discharged Trips" 
               id="wobin_logistics.sub_menuitem_discharged_trips" 
               parent="wobin_logistics.reports_menu_4"
               action="wobin_logistics.action_logistics_discharge_trips" 
-              groups="wobin_logistics.group_wl_access_analysis"
-              sequence="5"/>                             
+              sequence="5"/>   
+    <menuitem name="Settlement" 
+              id="wobin_logistics.sub_menuitem_settlement" 
+              parent="wobin_logistics.reports_menu_4"
+              action="wobin_logistics.action_trip_settlements" 
+              sequence="5"/>                                          
 
   </data>
 </odoo>
