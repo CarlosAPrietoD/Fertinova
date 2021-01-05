@@ -59,12 +59,14 @@
 
     <!-- Discharged Trips - LIST VIEW --> 
     <record id="view_discharged_trips" model="ir.ui.view">
-      <field name="name">Trips Analysis</field>
-      <field name="model">logistics.trips</field>
+      <field name="name">Discharged Trips and Sale Orders to Process</field>
+      <field name="model">sale.order</field>
       <field name="arch" type="xml">
         <tree>
-          <field name="name"/>  
-          <field name="state"/>
+          <field name="trips_id"/>
+          <field name="name"/> 
+          <field name="state"/> 
+          <field name="flag_trip" invisible="True"/>           
         </tree>
       </field>
     </record>

@@ -57,56 +57,89 @@ class LogisticsTrips(models.Model):
         return result
 
 
-
+    # General Data / - / - / - / - / - / - / - / - / - /
     name              = fields.Char(string="Trip", readonly=True, required=True, copy=False, default='New')
-    image             = fields.Binary()
     trip_number_tag   = fields.Char(string='Trip Number (Analytic Tag)', track_visibility='always')
     contracts_id      = fields.Many2one('logistics.contracts', string='Contracts', track_visibility='always')
-    sales_order_id    = fields.Many2one('sale.order', string='Sales Order', track_visibility='always')
     client_id         = fields.Many2one('res.partner', string='Client', track_visibility='always')
     vehicle_id        = fields.Many2one('fleet.vehicle', string='Vehicle')    
     analytic_accnt_id = fields.Many2one('account.analytic.account', string='Analytic Account', track_visibility='always')
     operator_id       = fields.Many2one('hr.employee',string='Operator', track_visibility='always')
     route             = fields.Char(string='Route', track_visibility='always')
     advance_ids       = fields.Many2many('purchase.order',string='Related Expenses', track_visibility='always', compute='_set_purchase_orders')
+   
+    # Upload data / - / - / - / - / - / - / - / - / - / - /
     start_date        = fields.Date(string='Start Date', track_visibility='always')
     upload_date       = fields.Date(string='Upload Date', track_visibility='always')
     estimated_qty     = fields.Float(string='Estimated Quantity', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always')
     real_upload_qty   = fields.Float(string='Real Upload Quantity', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always')
     attachment_upload = fields.Binary(string='Upload Attachments', track_visibility='always')
+   
+    # Download Data / - / - / - / - / - / - / - / - / - / - /
     download_date     = fields.Date(string='Download Date', track_visibility='always')
     real_download_qty = fields.Float(string='Real Download Quantity', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always')
     attachment_downld = fields.Binary(string='Download Attachments', track_visibility='always')
     qty_to_bill       = fields.Float(string='Quantiy to bill', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always', compute='_set_qty_to_bill') 
     conformity        = fields.Binary(string='Conformity and Settlement', track_visibility='always')
     checked           = fields.Boolean(string=" ")
+    sales_order_id    = fields.Many2one('sale.order', string='Sales Order Generated', track_visibility='always')    
     state             = fields.Selection(selection=[('assigned', 'Assigned'),
                                                     ('route', 'En route'),
                                                     ('discharged', 'Discharged')], 
                                                     string='State', required=True, readonly=True, copy=False, tracking=True, default='assigned', compute="set_status", track_visibility='always')
-    trip_taxes        = fields.Many2many('account.tax', string='Taxes', compute="_set_trip_taxes")
-    income_provisions = fields.Float(string='Income Provisions', digits=dp.get_precision('Product Unit of Measure'), compute='_set_income_prov')                                                    
+
+    # Analysis Fields / - / - / - / - / - / - / - / - / - / - /
+    trip_taxes        = fields.Many2many('account.tax', string='Taxes', compute="_set_trip_taxes", track_visibility='always')
+    income_provisions = fields.Float(string='Income Provisions', digits=dp.get_precision('Product Unit of Measure'), compute='_set_income_prov', track_visibility='always')                                                    
+    billed_income     = fields.Float(string='Billed Income', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always', compute='_set_billed_income')                                      
+    expenses          = fields.Float(string='Expenses', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always', compute='_set_expenses')                                      
+    profitability     = fields.Float(string='Profitability', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always', compute='_set_profitability') 
     invoice_status    =  fields.Selection([('draft','Draft'),
                                            ('open', 'Open'),
                                            ('in_payment', 'In Payment'),
                                            ('paid', 'Paid'),
                                            ('cancel', 'Cancelled'),
-                                          ], string='Status', index=True, readonly=True, default='draft', copy=False, compute='_set_inv_status')
-    billed_income      = fields.Float(string='Billed Income', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always', compute='_set_billed_income')                                      
-    expenses           = fields.Float(string='Expenses', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always', compute='_set_expenses')                                      
-    profitability      = fields.Float(string='Profitability', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always', compute='_set_profitability')                                      
+                                          ], string='Status', index=True, readonly=True, default='draft', copy=False, compute='_set_inv_status', track_visibility='always')                                         
+    
    
         
     @api.one
     def set_status(self):
         '''Set up state in base a which fields are filled up'''
-        if self.contracts_id and self.sales_order_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route and self.advance_ids and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty and self.download_date and self.real_download_qty and self.checked:
-           self.state = 'discharged'
-        elif self.contracts_id and self.sales_order_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route and self.advance_ids and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty:
+        if self.contracts_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route and self.advance_ids and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty and self.download_date and self.real_download_qty and self.checked:
+            self.state = 'discharged'          
+        elif self.contracts_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route and self.advance_ids and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty:
             self.state = 'route'
         else:
             self.state = 'assigned'
     
+
+
+    def create_sale_order(self):
+        if self.sales_order_id:
+            #Raise an error because it's not possible to have more than one sale order per trip:
+            msg = _('You can just create one Sale Order per Trip')
+            raise UserError(msg)
+        else:
+            #Retrieve id of "SERVICIOS DE FLETE" and create a New Sale Order, 
+            #including some data in its order_lines:
+            flete_id = self.env['product.template'].search([('name', 'ilike', 'SERVICIO DE FLETE')], limit=1)
+            
+            vals = {
+                   'name': self.env['ir.sequence'].next_by_code('sale.order') or 'New', 
+                   'partner_id': self.client_id.id,
+                   'order_line': [(0, 0, {'product_id': flete_id.id, 'description': 'SERVICIO DE FLETE', 'price_unit': self.qty_to_bill, 'name': 'SERVICIO DE FLETE'}),
+                                  (0, 0, {'display_type': 'line_note', 'description': self.name, 'name': self.name})] 
+            }
+            record = self.env['sale.order'].create(vals) 
+
+            #Assignment of all new created sale order into field "sales_order_id" in Trips:
+            self.sales_order_id = record.id 
+            
+            #Assignment in Sale Order to indicate which is its corresponding trip:
+            sale_order_obj = self.env['sale.order'].browse(record.id)
+            sale_order_obj.update({'trips_id': self.id, 'flag_trip': True})
+
 
 
     @api.onchange('contracts_id')
@@ -120,17 +153,10 @@ class LogisticsTrips(models.Model):
         destination_obj = self.env['logistics.routes'].browse(destination)
         if origin and destination:
             self.route = origin_obj.name + ', ' + destination_obj.name
-            print('\n\n\n\n', )
         else:
             self.route = ""
-
-
-    @api.onchange('sales_order_id')
-    def _onchange_sales_order(self):
-        '''Authomatic assignation for field "client_id" from sales_order's input'''
-        self.client_id = self.env['sale.order'].search([('id', '=', self.sales_order_id.id)]).partner_id.id 
          
-
+        
     """    
     @api.onchange('vehicle_id')
     def _onchange_vehicle(self):
@@ -139,6 +165,7 @@ class LogisticsTrips(models.Model):
         #self.operator_id = self.env['fleet.vehicle'].search([('id', '=', self.vehicle_id.id)]).driver_id.id
         self.analytic_accnt_id = self.env['account.analytic.account'].search([('vehicle_id', '=', self.vehicle_id.id)], limit=1).id   
     """
+
 
     @api.one
     @api.depends('name')
@@ -172,9 +199,11 @@ class LogisticsTrips(models.Model):
         self.trip_taxes = self.env['account.invoice.line'].search([('trips_id', '=', self.id)]).invoice_line_tax_ids.ids
 
 
+
     @api.one
     def _set_income_prov(self):
         self.income_provisions = self.env['account.invoice.line'].search([('trips_id', '=', self.id)]).price_subtotal
+
 
 
     @api.one
@@ -183,45 +212,40 @@ class LogisticsTrips(models.Model):
         tariff = self.env['logistics.contracts'].search([('id', '=', self.contracts_id.id)]).tariff
         self.qty_to_bill = self.real_upload_qty * tariff
 
-    
+
+
     @api.one
     def _set_inv_status(self):
         invoice_id = self.env['account.invoice.line'].search([('trips_id', '=', self.id)]).invoice_id.id
         self.invoice_status = self.env['account.invoice'].search([('id', '=', invoice_id)]).state
 
 
+
     @api.one
+    @api.depends('name')
     def _set_billed_income(self):
-        pass
+        self.billed_income = self.env['account.invoice'].search([('origin', '=', self.sales_order_id.id)], limit=1).amount_total
+
 
 
     @api.one
+    @api.depends('name')
     def _set_expenses(self):
-        pass
+        billed_amount_po = 0.0
+
+        for pur_ord in self.advance_ids:
+            amount = self.env['account.invoice'].search([('origin', '=', pur_ord.id)]).amount_total
+            billed_amount_po += amount
+
+        self.expenses = billed_amount_po            
+
+
+
 
     @api.one
+    @api.depends('name')
     def _set_profitability(self):
-        pass
-
-
-    @api.onchange('state')
-    def _onchange_state(self):
-        print('¿si entra aquí?')
-        if self.state == 'discharged':
-            print('¿si entra aquí?')          
-            return {
-                'view_mode': 'form',
-                'view_id': False, 
-                'view_type': 'form',
-                'res_model': 'sale.order',
-                #'res_id': record.id,
-                'type': 'ir.actions.act_window',
-                'nodestroy': True,
-                'target': 'new',  
-                'domain': '[]',
-                'context': {}                              
-            }             
-
+        self.profitability = self.billed_income - self.expenses
 
 
     """
@@ -288,3 +312,15 @@ class AccountInvoiceLine(models.Model):
     # Aggregation of a new many2one field of Trips in Customer Invoices
     #:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  
     trips_id = fields.Many2one('logistics.trips', string='Trip')        
+
+
+
+
+class SaleOrder(models.Model):
+    _inherit = "sale.order"
+
+    #:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+    # Aggregation of a new many2one field of Trips in Customer Invoices
+    #:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  
+    trips_id = fields.Many2one('logistics.trips', string='Trip')     
+    flag_trip = fields.Boolean(string='Flag to indicate this sale order has trip')

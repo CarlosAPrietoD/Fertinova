@@ -90,11 +90,11 @@
     </record>   
     <!-- DISCHARGED TRIPS ANALYSIS Report - ACTION -->
     <record id="action_logistics_discharge_trips" model="ir.actions.act_window">
-        <field name="name">Discharged Trips Report</field>
-        <field name="res_model">logistics.trips</field>
+        <field name="name">Discharged Trips and Sale Orders to Process</field>
+        <field name="res_model">sale.order</field>
         <field name="view_mode">tree</field>        
         <field name="view_id" ref="wobin_logistics.view_discharged_trips"/>
-        <field name="domain">[('state', '=', 'discharged')]</field> 
+        <field name="domain">[('state', '=', 'draft'), ('flag_trip', '=', True)]</field> 
     </record>     
         
 

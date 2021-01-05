@@ -124,44 +124,22 @@ class LogisticsContracts(models.Model):
 
     @api.one
     def _set_trip_status(self):
-        pass
+        trips_related_lst = []
+        covenant_qty = 0.0
 
+        trips_related_lst = self.env['logistics.trips'].search([('contracts_id', '=', self.id)]).ids
+        print('\n\n\ncontrato actual: ', self.name, ' list de viajes \n', trips_related_lst)
 
-"""
-class SaleOrder(models.Model):
-    _inherit = "sale.order"
+        if not trips_related_lst:
+            self.trip_status = 'to_do'
+            print('NO HAY VIAJES RELACIONADOS PARA ESTE CONTRATO ', self.name)
+        else: 
+            for trip in trips_related_lst:
+                covenant_qty += self.env['logistics.trips'].search([('id', '=', trip)]).real_download_qty
+                print('\n\ncovenant qty por este viaje', covenant_qty)
+                print('\n\ncovenant de este contrato', self.covenant_qty)
 
-
-    @api.multi
-    def _action_confirm(self):
-        #Normal Logic of method "action_confirm" of Sales Order:
-        sale_order = super(SaleOrder, self)._action_confirm()
-
-        #Before creation of a new contract it's important to validate
-        #that the sales order contains in its lines "Servicio Flete":
-        flag = False
-        for line in self.order_line:
-            if operator.contains(line.name, "FLETE"): 
-                flag = True
-
-        #Create a new contract in Wobin Logistics triggered by 
-        #a confirmation in Sales Order:  
-        if flag == True:
-            sequence = self.env['ir.sequence'].next_by_code('self.contract')
-            if not sequence:
-                numerical_part = 1
-                #After number has increased, fill with zeros to 6 digits
-                sequence_aux = str(numerical_part).zfill(6)
-            else: 
-                #Retrieved  --> CONTR000011
-                numerical_part = int(sequence[5:])
-                numerical_part += 1
-                #After number has increased, fill with zeros to 6 digits
-                sequence_aux = str(numerical_part).zfill(6)
-
-            contract = {'name': 'CONTR' + sequence_aux,
-                        'client_id': self.partner_id.id,
-                        'sales_order_id': self.id}
-            self.env['logistics.contracts'].create(contract)        
-        return sale_order 
-""" 
+            if covenant_qty == self.covenant_qty:
+                self.trip_status = 'done'
+            else:
+                self.trip_status = 'doing'
