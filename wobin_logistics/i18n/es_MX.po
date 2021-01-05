@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-14 21:50+0000\n"
-"PO-Revision-Date: 2020-12-14 21:50+0000\n"
+"POT-Creation-Date: 2021-01-05 21:01+0000\n"
+"PO-Revision-Date: 2021-01-05 21:01+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -34,18 +34,18 @@ msgid "Activity State"
 msgstr "Estado de la actividad"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__advance_ids
-msgid "Related Expenses"
-msgstr "Gastos Relacionados"
+#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__advance_payment
+msgid "Advance Payment"
+msgstr "Anticipo"
 
 #. module: wobin_logistics
-#: model:ir.actions.act_window,name:wobin_logistics.action_logst_trps_sl_ord_anlys_lst
-#: model:ir.ui.menu,name:wobin_logistics.sub_menuitem_sl_ord_analysis
-msgid "Analysis (Sales Orders)"
-msgstr "Análisis (Órdenes de Venta)"
+#: model:ir.actions.act_window,name:wobin_logistics.action_logistics_contract_analysis
+#: model:ir.ui.menu,name:wobin_logistics.sub_menuitem_contract_analysis
+msgid "Analysis (Contracts)"
+msgstr "Análisis (Contratos)"
 
 #. module: wobin_logistics
-#: model:ir.actions.act_window,name:wobin_logistics.action_logst_trips_anlysis_lst
+#: model:ir.actions.act_window,name:wobin_logistics.action_trips_analysis
 #: model:ir.ui.menu,name:wobin_logistics.sub_menuitem_analysis
 msgid "Analysis (Trips)"
 msgstr "Análisis (Viajes)"
@@ -78,6 +78,11 @@ msgid "Attachment Count"
 msgstr "Conteo de archivos adjuntos"
 
 #. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__billed_income
+msgid "Billed Income"
+msgstr "Ingreso Facturado"
+
+#. module: wobin_logistics
 #: selection:logistics.trips,invoice_status:0
 msgid "Cancelled"
 msgstr "Cancelado"
@@ -99,11 +104,6 @@ msgid "Client"
 msgstr "Cliente"
 
 #. module: wobin_logistics
-#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
-msgid "Cliente"
-msgstr "Cliente"
-
-#. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__conformity
 msgid "Conformity and Settlement"
 msgstr "Conformidad y finiquito"
@@ -114,6 +114,16 @@ msgid "Contract"
 msgstr "Contrato"
 
 #. module: wobin_logistics
+#: model:ir.ui.menu,name:wobin_logistics.sub_menuitem_cont_status
+msgid "Contract Status"
+msgstr "Status del Contrato"
+
+#. module: wobin_logistics
+#: model:ir.actions.act_window,name:wobin_logistics.action_logistics_contract_status
+msgid "Contract Status Report"
+msgstr "Reporte de Status de Contratos"
+
+#. module: wobin_logistics
 #: model:ir.actions.act_window,name:wobin_logistics.action_logistics_contracts
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__contracts_id
 #: model:ir.ui.menu,name:wobin_logistics.contracts_menu_2
@@ -122,19 +132,14 @@ msgid "Contracts"
 msgstr "Contratos"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_sale_order__covenant_qty
-msgid "Covenant Qty"
-msgstr "Cant. Pactada"
-
-#. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__covenant_qty
 msgid "Covenanted Quantity"
 msgstr "Cantidad Pactada"
 
 #. module: wobin_logistics
 #: model_terms:ir.ui.view,arch_db:wobin_logistics.view_logistics_trips_form
-msgid "Create Invoice"
-msgstr "Crear Factura"
+msgid "Create Sale Order"
+msgstr "Crear Orden de Venta"
 
 #. module: wobin_logistics
 #: model_terms:ir.ui.view,arch_db:wobin_logistics.view_logistics_contracts_form
@@ -163,7 +168,7 @@ msgid "Destination"
 msgstr "Destino"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_sale_order__difference_qty
+#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__difference_qty
 msgid "Difference Qty"
 msgstr "Cant. Restante"
 
@@ -173,12 +178,32 @@ msgid "Discharged"
 msgstr "Descargado"
 
 #. module: wobin_logistics
+#: model:ir.ui.menu,name:wobin_logistics.sub_menuitem_discharged_trips
+msgid "Discharged Trips"
+msgstr "Viajes Descargados"
+
+#. module: wobin_logistics
+#: model:ir.actions.act_window,name:wobin_logistics.action_logistics_discharge_trips
+msgid "Discharged Trips and Sale Orders to Process"
+msgstr "Viajes Descargados y Ordenes de Venta por Procesar"
+
+#. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__display_name
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_quotations__display_name
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_routes__display_name
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__display_name
 msgid "Display Name"
 msgstr "Nombre mostrado"
+
+#. module: wobin_logistics
+#: selection:logistics.contracts,trip_status:0
+msgid "Doing"
+msgstr "En Curso"
+
+#. module: wobin_logistics
+#: selection:logistics.contracts,trip_status:0
+msgid "Done"
+msgstr "Terminado"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__attachment_downld
@@ -204,6 +229,21 @@ msgstr "En Ruta"
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__estimated_qty
 msgid "Estimated Quantity"
 msgstr "Cantidad Estimada"
+
+#. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__expected_income
+msgid "Expected Income"
+msgstr "Ingreso Esperado"
+
+#. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__expenses
+msgid "Expenses"
+msgstr "Gastos"
+
+#. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_sale_order__flag_trip
+msgid "Flag to indicate this sale order has trip"
+msgstr "Bandera para indicar que esta orden de venta tiene viaje"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__message_follower_ids
@@ -258,11 +298,6 @@ msgstr "En Pago"
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__income_provisions
 msgid "Income Provisions"
 msgstr "Provisiones de Ingreso"
-
-#. module: wobin_logistics
-#: model:ir.model,name:wobin_logistics.model_account_invoice
-msgid "Invoice"
-msgstr "Factura"
 
 #. module: wobin_logistics
 #: model:ir.model,name:wobin_logistics.model_account_invoice_line
@@ -434,6 +469,16 @@ msgid "Product"
 msgstr "Producto"
 
 #. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__profitability
+msgid "Profitability"
+msgstr "Rentabilidad"
+
+#. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__qty_to_bill
+msgid "Quantiy to bill"
+msgstr "Importe a Facturar"
+
+#. module: wobin_logistics
 #: model:ir.actions.act_window,name:wobin_logistics.action_logistics_quotations
 msgid "Quotations"
 msgstr "Cotizaciones"
@@ -454,9 +499,19 @@ msgid "Recipient"
 msgstr "Destinatario"
 
 #. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__advance_ids
+msgid "Related Expenses"
+msgstr "Gastos Relacionados"
+
+#. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__remitter
 msgid "Remitter"
 msgstr "Remitente"
+
+#. module: wobin_logistics
+#: model:ir.ui.menu,name:wobin_logistics.reports_menu_4
+msgid "Reports"
+msgstr "Informes"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__activity_user_id
@@ -471,7 +526,7 @@ msgid "Route"
 msgstr "Ruta"
 
 #. module: wobin_logistics
-#: model:ir.actions.act_window,name:wobin_logistics.action_logst_trps_routes_lst
+#: model:ir.actions.act_window,name:wobin_logistics.action_logistics_routes
 #: model:ir.ui.menu,name:wobin_logistics.sub_menuitem_routes
 msgid "Routes"
 msgstr "Rutas"
@@ -479,13 +534,18 @@ msgstr "Rutas"
 #. module: wobin_logistics
 #: model:ir.model,name:wobin_logistics.model_sale_order
 msgid "Sale Order"
-msgstr "Pedido de Venta"
+msgstr "Pedido de venta"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__sales_order_id
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__sales_order_id
-msgid "Sales Order"
-msgstr "Pedido de venta"
+msgid "Sales Order Generated"
+msgstr "Orden de Venta Generada"
+
+#. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__settlement
+#: model:ir.ui.menu,name:wobin_logistics.sub_menuitem_settlement
+msgid "Settlement"
+msgstr "Liquidaciones"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__shipping
@@ -498,8 +558,12 @@ msgid "Start Date"
 msgstr "Fecha de inicio"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__invoice_status
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__state
+msgid "State"
+msgstr "Estado"
+
+#. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__invoice_status
 msgid "Status"
 msgstr "Estado"
 
@@ -526,6 +590,11 @@ msgid "Taxes"
 msgstr "Impuestos"
 
 #. module: wobin_logistics
+#: selection:logistics.contracts,trip_status:0
+msgid "To Do"
+msgstr "Por Comenzar"
+
+#. module: wobin_logistics
 #: selection:logistics.contracts,activity_state:0
 #: selection:logistics.trips,activity_state:0
 msgid "Today"
@@ -535,21 +604,47 @@ msgstr "Hoy"
 #: selection:account.analytic.tag,analytic_tag_type:0
 #: model:ir.model.fields,field_description:wobin_logistics.field_account_invoice_line__trips_id
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__name
+#: model:ir.model.fields,field_description:wobin_logistics.field_sale_order__trips_id
 msgid "Trip"
 msgstr "Viaje"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_sale_order__trip_delivered_qty
+#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__trip_delivered_qty
 msgid "Trip Delivered Qty"
 msgstr "Cant. Entregada"
 
 #. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__trip_number_tag
+msgid "Trip Number (Analytic Tag)"
+msgstr "Número de Viaje (Etiqueta Analítica)"
+
+#. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__trip_status
+msgid "Trip Status"
+msgstr "Status del Viaje"
+
+#. module: wobin_logistics
 #: model:ir.actions.act_window,name:wobin_logistics.action_logistics_trips
-#: model:ir.model.fields,field_description:wobin_logistics.field_sale_order__trips
+#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__trips
 #: model:ir.ui.menu,name:wobin_logistics.sub_menuitem_trips
 #: model:ir.ui.menu,name:wobin_logistics.trips_menu_3
 msgid "Trips"
 msgstr "Viajes"
+
+#. module: wobin_logistics
+#: model:ir.actions.act_window,name:wobin_logistics.action_trip_settlements
+msgid "Trips Analysis for Settlements"
+msgstr "Análisis de Viajes para Liquidaciones"
+
+#. module: wobin_logistics
+#: model:ir.ui.menu,name:wobin_logistics.sub_menuitem_profitability
+msgid "Trips Profitability"
+msgstr "Rentabilidad de Viajes"
+
+#. module: wobin_logistics
+#: model:ir.actions.act_window,name:wobin_logistics.action_logistics_profit
+msgid "Trips Profitability Report"
+msgstr "Reporte de Rentabilidad de Viajes"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__message_unread
@@ -580,6 +675,11 @@ msgid "Vehicle"
 msgstr "Vehículo"
 
 #. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.view_logistics_trips_form
+msgid "WOBIN Logistics"
+msgstr "WOBIN Logística"
+
+#. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__website_message_ids
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__website_message_ids
 msgid "Website Messages"
@@ -595,3 +695,9 @@ msgstr "Historial de comunicaciones del sitio web"
 #: model:ir.ui.menu,name:wobin_logistics.menu_root
 msgid "Wobin Logistics"
 msgstr "Wobin Logística"
+
+#. module: wobin_logistics
+#: code:addons/wobin_logistics/models/trips.py:123
+#, python-format
+msgid "You can just create one Sale Order per Trip"
+msgstr "Usted sólo puede crear una Orden de Venta por Viaje"
