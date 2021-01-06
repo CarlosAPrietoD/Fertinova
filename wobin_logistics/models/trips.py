@@ -130,7 +130,7 @@ class LogisticsTrips(models.Model):
             vals = {
                    'name': self.env['ir.sequence'].next_by_code('sale.order') or 'New', 
                    'partner_id': self.client_id.id,
-                   'order_line': [(0, 0, {'product_id': flete_id.id, 'description': 'SERVICIO DE FLETE', 'price_unit': self.qty_to_bill, 'name': 'SERVICIO DE FLETE'}),
+                   'order_line': [(0, 0, {'product_id': flete_id.id, 'description': 'SERVICIO DE FLETE', 'price_unit': self.qty_to_bill, 'warehouse_id': 8, 'name': 'SERVICIO DE FLETE'}),
                                   (0, 0, {'display_type': 'line_note', 'description': self.name, 'name': self.name})] 
             }
             record = self.env['sale.order'].create(vals) 
