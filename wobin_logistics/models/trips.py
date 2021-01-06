@@ -82,7 +82,7 @@ class LogisticsTrips(models.Model):
     qty_to_bill       = fields.Float(string='Quantiy to bill', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always', compute='_set_qty_to_bill') 
     conformity        = fields.Binary(string='Conformity and Settlement', track_visibility='always')
     checked           = fields.Boolean(string=" ")
-    sales_order_id    = fields.Many2one('sale.order', string='Sales Order Generated', track_visibility='always')    
+    sales_order_id    = fields.Many2one('sale.order', string='Sales Order Generated', track_visibility='always', compute='_set_sale_order')    
     state             = fields.Selection(selection=[('assigned', 'Assigned'),
                                                     ('route', 'En route'),
                                                     ('discharged', 'Discharged')], 
@@ -117,6 +117,11 @@ class LogisticsTrips(models.Model):
     
 
 
+    @api.one
+    @api.depends('name')    
+    def _set_sale_order(self):
+        self.sales_order_id = self.env['sale.order'].search([('trips_id', '=', self.id)]).id
+    """
     def create_sale_order(self):
         if self.sales_order_id:
             #Raise an error because it's not possible to have more than one sale order per trip:
@@ -126,12 +131,11 @@ class LogisticsTrips(models.Model):
             #Retrieve id of "SERVICIOS DE FLETE" and create a New Sale Order, 
             #including some data in its order_lines:
             flete_id = self.env['product.template'].search([('name', 'ilike', 'SERVICIO DE FLETE')], limit=1)
-            almacen_id = self.env['stock.warehouse'].search([('name', 'ilike', 'ATOTONILCO')], limit=1)
             
             vals = {
                    'name': self.env['ir.sequence'].next_by_code('sale.order') or 'New', 
                    'partner_id': self.client_id.id,
-                   'order_line': [(0, 0, {'product_id': flete_id.id, 'description': 'SERVICIO DE FLETE', 'price_unit': self.qty_to_bill, 'warehouse_id': almacen_id.id, 'name': 'SERVICIO DE FLETE'}),
+                   'order_line': [(0, 0, {'product_id': flete_id.id, 'description': 'SERVICIO DE FLETE', 'price_unit': self.qty_to_bill, 'name': 'SERVICIO DE FLETE'}),
                                   (0, 0, {'display_type': 'line_note', 'description': self.name, 'name': self.name})] 
             }
             record = self.env['sale.order'].create(vals) 
@@ -142,6 +146,7 @@ class LogisticsTrips(models.Model):
             #Assignment in Sale Order to indicate which is its corresponding trip:
             sale_order_obj = self.env['sale.order'].browse(record.id)
             sale_order_obj.update({'trips_id': self.id, 'flag_trip': True})
+    """
 
 
 
@@ -339,4 +344,12 @@ class SaleOrder(models.Model):
     # Aggregation of a new many2one field of Trips in Customer Invoices
     #:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  
     trips_id = fields.Many2one('logistics.trips', string='Trip')     
-    flag_trip = fields.Boolean(string='Flag to indicate this sale order has trip')
+    flag_trip = fields.Boolean(string='Flag to indicate this sale order has trip', compute='_set_flag_trip')
+    
+
+    @api.depends('trips_id')
+    def _set_flag_trip(self):
+        if self.trips_id:
+            self.flag_trip = True
+        else:
+            self.flag_trip = False
