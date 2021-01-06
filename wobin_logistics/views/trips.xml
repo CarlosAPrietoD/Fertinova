@@ -38,7 +38,7 @@
             </xpath>        
         </field>
     </record> 
-    <!--Add a new many2one field of Trips into Sale Order Form-->
+    <!--Add a new many2one field of Trips into Sale Order Form
     <record id="invoice_with_trips_form_inherit" model="ir.ui.view">
         <field name="name">sale.order.form.inherit</field>
         <field name="model">sale.order</field>
@@ -48,7 +48,8 @@
                 <field name="trips_id" attrs="{'invisible': ['|', ('company_id', '=', 1), ('company_id', '=', 2), ('company_id', '=', 4), ('company_id', '=', 5)]}"/>
             </xpath>        
         </field>
-    </record>                         
+    </record>     
+    -->
 
 
 
