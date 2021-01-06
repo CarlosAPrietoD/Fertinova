@@ -21,7 +21,7 @@
                                 <field name="name" readonly="1" force_save="1"/>
                                 <field name="operation_type" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 <field name="partner_id" string="Cliente" attrs="{'readonly':['|',('state', '!=', 'draft')],'invisible':[('operation_type', '!=', 'out')]}" />
-                                <field name="so_id" force_save="1" attrs="{'invisible':[('operation_type', '!=', 'out')], 'readonly':[('state', '!=', 'draft')]}" domain="[('partner_id','=', partner_id),('invoice_status','=', 'to invoice')]"/>
+                                <field name="so_id" force_save="1" attrs="{'invisible':[('operation_type', '!=', 'out')], 'readonly':[('state', '!=', 'draft')]}" domain="[('partner_id','=', partner_id),'|',('invoice_status','=', 'to invoice'),('invoice_status','=', 'invoiced')]"/>
                                 <field name="date" readonly="1" />
                                 <field name="weigher" attrs="{'readonly':['|',('state', '!=', 'draft'),('operation_type', '=', False)]}" />
                                 <field name="company_id" invisible="1"/>
