@@ -97,8 +97,7 @@
                                 <field name="vehicle_id"/> 
                                 <field name="analytic_accnt_id"/>                           
                                 <field name="operator_id"/>
-                                <field name="route"/>  
-                                <field name="advance_ids" widget="many2many_tags"/> 
+                                <field name="route"/>                                  
                               </group>
                             </div>  
                           </div> 
@@ -138,7 +137,8 @@
                                   <div>
                                       <field name="conformity" class="oe_inline" style="padding-right: 10px"/>
                                       <field name="checked" class="oe_inline"/>
-                                  </div>                                   
+                                  </div>  
+                                  <field name="advance_ids" widget="many2many_tags"/>                                  
                                   <field name="sales_order_id" attrs="{'invisible': [('state', '!=', 'discharged')]}" readonly="True"/>
                                   <button type="object" name="create_sale_order" string="Create Sale Order" class="btn btn-danger"  attrs="{'invisible': [('state', '!=', 'discharged')]}" groups="wobin_logistics.group_wl_access_sales"/>
                               </group>
