@@ -38,14 +38,14 @@
             </xpath>        
         </field>
     </record> 
-    <!--Add new many2one and checkbox fields of Trips into Sale Order Form-->
+    <!--Add a new many2one field of Trips into Sale Order Form-->
     <record id="invoice_with_trips_form_inherit" model="ir.ui.view">
         <field name="name">sale.order.form.inherit</field>
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
            <xpath expr="//field[@name='payment_term_id']" position="after">
-                <field name="trips_id"/>
+                <field name="trips_id" attrs="{'invisible': ['|', ('company_id', '=', 1), ('company_id', '=', 2), ('company_id', '=', 4), ('company_id', '=', 5)]}"/>
             </xpath>        
         </field>
     </record>                         
