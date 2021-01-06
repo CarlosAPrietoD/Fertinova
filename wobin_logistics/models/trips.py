@@ -126,11 +126,12 @@ class LogisticsTrips(models.Model):
             #Retrieve id of "SERVICIOS DE FLETE" and create a New Sale Order, 
             #including some data in its order_lines:
             flete_id = self.env['product.template'].search([('name', 'ilike', 'SERVICIO DE FLETE')], limit=1)
+            almacen_id = self.env['stock.warehouse'].search([('name', 'ilike', 'ATOTONILCO')], limit=1)
             
             vals = {
                    'name': self.env['ir.sequence'].next_by_code('sale.order') or 'New', 
                    'partner_id': self.client_id.id,
-                   'order_line': [(0, 0, {'product_id': flete_id.id, 'description': 'SERVICIO DE FLETE', 'price_unit': self.qty_to_bill, 'warehouse_id': 8, 'name': 'SERVICIO DE FLETE'}),
+                   'order_line': [(0, 0, {'product_id': flete_id.id, 'description': 'SERVICIO DE FLETE', 'price_unit': self.qty_to_bill, 'warehouse_id': almacen_id.id, 'name': 'SERVICIO DE FLETE'}),
                                   (0, 0, {'display_type': 'line_note', 'description': self.name, 'name': self.name})] 
             }
             record = self.env['sale.order'].create(vals) 
