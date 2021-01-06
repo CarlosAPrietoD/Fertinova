@@ -139,8 +139,8 @@
                                       <field name="conformity" class="oe_inline" style="padding-right: 10px"/>
                                       <field name="checked" class="oe_inline"/>
                                   </div>                                   
-                                  <field name="sales_order_id" attrs="{'invisible': [('state', '!=', 'discharged')]}"/>
-                                  <button type="object" name="create_sale_order" string="Create Sale Order" class="btn btn-danger"  attrs="{'invisible': [('state', '!=', 'discharged')]}"/>
+                                  <field name="sales_order_id" attrs="{'invisible': [('state', '!=', 'discharged')]}" readonly="True"/>
+                                  <button type="object" name="create_sale_order" string="Create Sale Order" class="btn btn-danger"  attrs="{'invisible': [('state', '!=', 'discharged')]}" groups="wobin_logistics.group_wl_access_sales"/>
                               </group>
                             </div>  
                           </div> 

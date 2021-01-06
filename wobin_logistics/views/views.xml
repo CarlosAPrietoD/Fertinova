@@ -166,7 +166,8 @@
     <menuitem name="Trips Profitability" 
               id="wobin_logistics.sub_menuitem_profitability" 
               parent="wobin_logistics.reports_menu_4"
-              action="wobin_logistics.action_logistics_profit" 
+              action="wobin_logistics.action_logistics_profit"
+              groups="wobin_logistics.group_wl_access_analysis" 
               sequence="3"/>                                          
     <menuitem name="Contract Status" 
               id="wobin_logistics.sub_menuitem_cont_status" 
@@ -182,6 +183,7 @@
               id="wobin_logistics.sub_menuitem_settlement" 
               parent="wobin_logistics.reports_menu_4"
               action="wobin_logistics.action_trip_settlements" 
+              groups="wobin_logistics.group_wl_access_analysis"
               sequence="5"/>                                          
 
   </data>

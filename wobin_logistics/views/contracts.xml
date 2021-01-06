@@ -32,7 +32,7 @@
         <field name="arch" type="xml"> 
             <form> 
                 <header>
-                    <button name="create_trip" type="object" string="Create Trip" class="oe_highlight" attrs="{'invisible': [('name', '=', 'New')]}"/>
+                    <button name="create_trip" type="object" string="Create Trip" class="oe_highlight" attrs="{'invisible': [('name', '=', 'New')]}" groups="wobin_logistics.group_wl_access_logistics"/>
                 </header>
                 <sheet> 
                     <div class="oe_left oe_title">

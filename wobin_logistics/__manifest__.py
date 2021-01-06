@@ -32,6 +32,7 @@
         'views/trips.xml',
         'views/reporting.xml',
         'views/views.xml',
+        'views/privileges.xml',
 
         #reports
         'views/templates.xml',
