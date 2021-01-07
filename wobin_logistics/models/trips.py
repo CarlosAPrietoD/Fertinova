@@ -351,5 +351,6 @@ class SaleOrder(models.Model):
     def _set_flag_trip(self):
         if self.trips_id:
             self.flag_trip = True
+            
         else:
             self.flag_trip = False
