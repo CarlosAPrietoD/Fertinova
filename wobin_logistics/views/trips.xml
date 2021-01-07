@@ -48,7 +48,8 @@
                 <field name="trips_id" attrs="{'invisible': ['|', ('company_id', '=', 1), ('company_id', '=', 2), ('company_id', '=', 4), ('company_id', '=', 5)]}"/>
             </xpath>        
         </field>
-    </record>                         
+    </record>     
+    
 
 
 
