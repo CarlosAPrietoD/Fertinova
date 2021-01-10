@@ -36,7 +36,7 @@
 
         #reports
         'views/templates.xml',
-        'reports/contracts_reports.xml'
+        'reports/contracts_reports.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

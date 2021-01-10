@@ -347,10 +347,10 @@ class SaleOrder(models.Model):
     flag_trip = fields.Boolean(string='Flag to indicate this sale order has trip', compute='_set_flag_trip')
     
 
+    @api.one
     @api.depends('trips_id')
     def _set_flag_trip(self):
         if self.trips_id:
-            self.flag_trip = True
-            
+            self.flag_trip = True            
         else:
             self.flag_trip = False

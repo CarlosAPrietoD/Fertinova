@@ -40,6 +40,9 @@ class LogisticsContracts(models.Model):
     recipient       = fields.Char(string='Recipient', required=True)
     shipping        = fields.Char(string='Shipping', required=True)
     observations    = fields.Html('Observations', required=True)
+    state           = fields.Selection(selection=[('active', 'Active'),
+                                                  ('cancel', 'Canceled'),
+                                                 ], string='State', required=True, readonly=True, copy=False, tracking=True, default='active', track_visibility='always')    
     # -- These fields were created for analysis not to be shown in main view of contracts -- #
     trips              = fields.Char(string='Trips', compute='_set_trips')
     trip_delivered_qty = fields.Float(string='Trip Delivered Qty', digits=dp.get_precision('Product Unit of Measure'), compute='_set_trp_del_qty')
@@ -143,3 +146,15 @@ class LogisticsContracts(models.Model):
                 self.trip_status = 'done'
             else:
                 self.trip_status = 'doing'
+
+
+    def delete_contract(self):
+        return {
+                'name': 'Delete Contract',
+                'type': 'ir.actions.act_window',
+                'res_model': 'logistics.contract.delete',
+                'view_mode': 'form',
+                'view_type': 'form',
+                'nodestroy': True,
+                'target': 'new',
+               } 

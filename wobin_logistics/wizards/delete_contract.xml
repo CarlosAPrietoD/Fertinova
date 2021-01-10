@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <record id="view_delete_contract_popup" model="ir.ui.view">
+            <field name="name">Delete Contract</field>
+            <field name="model">logistics.contract.delete</field>
+            <field name="arch" type="xml">
+                <form string="Information related to deletion of this contract">
+                    <group>
+                        <field name="message" />
+                    </group>
+                    <footer>
+                        <button string="OK" special="cancel" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+</odoo>
