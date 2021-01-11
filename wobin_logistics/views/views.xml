@@ -110,7 +110,8 @@
     <record id="action_invoicing_report" model="ir.actions.act_window">
         <field name="name">Invoices Report related to Contract and Trips</field>
         <field name="res_model">account.invoice</field>
-        <field name="view_mode">tree,form</field>        
+        <field name="view_mode">tree,form</field> 
+        <field name="domain">[('trips_related_ids', '!=', '[]'), ('contracts_ids', '!=', '[]')]</field>        
         <field name="context">{'tree_view_ref': 'wobin_logistics.view_invoice_report_list', 'form_view_ref': 'wobin_logistics.view_invoice_report_form'}</field>                
       </record>              
         
