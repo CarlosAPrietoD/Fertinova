@@ -1,2 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_wobin_reciba_wobin_reciba,wobin_reciba.wobin_reciba,model_wobin_reciba_wobin_reciba,,1,0,0,0
+access_reciba_ticket,access_reciba_ticket,model_reciba_ticket,,1,1,1,1
+access_reciba_ticket_params,access_reciba_ticket_params,model_reciba_ticket_params,,1,1,1,1
+access_reciba_quality,access_reciba_quality,model_reciba_quality,,1,1,1,1
+access_reciba_quality_params,access_reciba_quality_params,model_reciba_quality_params,,1,1,1,1
