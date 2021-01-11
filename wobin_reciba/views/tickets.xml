@@ -8,10 +8,143 @@
             <field name="model">reciba.ticket</field>
             <field name="arch" type="xml">
                 <form string="Recepciones">
+                    <header>
+                        <!--<button name="confirm_reciba" type="object" states="draft" string="Confirmar" class="btn-primary"/>
+                        <button name="cancel_reciba" type="object" states="draft,confirmed" string="Cancelar" groups="reciba.grupo_reciba_cancel"/>-->
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,cancel" />
+                    </header>
                     <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button type="object" name="action_view_invoice" class="oe_stat_button" icon="fa-pencil-square-o">
+                                <field name="transfer_count" widget="statinfo" string="Transferencia"/>
+                                <!--<field name="invoice_ids" invisible="1"/>-->
+                            </button>
+                            <button type="object" name="action_view_invoice" class="oe_stat_button" icon="fa-pencil-square-o">
+                                <field name="ticket_count" widget="statinfo" string="Reversa"/>
+                                <!--<field name="invoice_ids" invisible="1"/>-->
+                            </button>
+                        </div>
                         <group>
-                            <field name="name"></field>
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
                         </group>
+                        <group>
+                            <group>
+                                <field name="company_id" invisible="1"/>
+                                <field name="date" readonly="True"/>
+                                <field name="operation_type" invisible="1"/>
+                                <field name="operation_type_id" domain="['|',('name','=','Receipts'),('name','=','Recepciones')]"/>
+                                <field name="weigher"/>
+                                <field name="product_id"/>
+                                <field name="purchase_id"/>
+                                <field name="partner_id" string="Proveedor"/>
+                                <field name="apply_discount"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Calidad" name="quality_page">
+                                <br/>
+                                <group>
+                                    <field name="quality_id" domain="[('product_id','=',product_id)]"/>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="humidity"/>
+                                        <field name="impurity"/>
+                                    </group>
+                                    <group>
+                                        <field name="humidity_discount"/>
+                                        <field name="impurity_discount"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="density"/>
+                                    </group>
+                                    <group>
+                                        <field name="temperature"/>
+                                    </group>
+                                </group>
+                                <br/>
+                                <field name="params_id">
+                                    <tree editable="bottom" decoration-danger="value &gt; max_value">
+                                        <field name="quality_params_id" readonly="True" force_save="1"/>
+                                        <field name="max_value"/>
+                                        <field name="unit"/>
+                                        <field name="value"/>
+                                    </tree>
+                                </field>
+                                <group>
+                                    <group>
+                                        <field name="sum_damage"/>
+                                    </group>
+                                    <group>
+                                        <field name="sum_broken"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Recepción" name="reception_page">
+                                <br/>
+                                <group>
+                                    <field name="reception"/>
+                                </group>
+                                <group>
+                                    <field name="driver"/>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="type_vehicle"/>
+                                        <field name="plate_vehicle"/>
+                                    </group>
+                                    <group>
+                                        <field name="plate_trailer"/>
+                                        <field name="plate_second_trailer"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="origin_id"/>
+                                        <field name="destination_id"/>
+                                    </group>
+                                    <group>
+                                        <field name="origin_date"/>
+                                        <field name="destination_date"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="gross_weight"/>
+                                        <field name="tare_weight"/>
+                                        <field name="net_weight"/>
+                                    </group>
+                                    <group>
+                                        <field name="gross_date"/>
+                                        <field name="tare_date"/>
+                                        <field name="net_date"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="price"/>
+                                        <field name="currency_id"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Descuentos" name="discount_page">
+                                <br/>
+                                <group>
+                                    <group>
+                                        <field name="humidity_total_discount"/>
+                                        <field name="discount"/>
+                                    </group>
+                                    <group>
+                                        <field name="impurity_total_discount"/>
+                                        <field name="total_weight"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
                     </sheet>
                 </form>
             </field>
@@ -21,7 +154,7 @@
             <field name="name">reciba.ticket.reception.tree</field>
             <field name="model">reciba.ticket</field>
             <field name="arch" type="xml">
-                <tree string="Tracking Value" delete="0" default_order="id desc">
+                <tree string="Recepciones" delete="0" default_order="id desc">
                     <field name="name"/>
                 </tree>
             </field>
@@ -31,10 +164,10 @@
             <field name="name">Recepciones</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">reciba.ticket</field>
-            <!--<field name="domain">['|',('field','=','credit_limit'),('field','=','grace_payment_days')]</field>-->
+            <field name="domain">[('operation_type','=','in')]</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
-            <field name="context">{'default_name': 'Holaaaa'}</field>
+            <field name="context">{'default_operation_type': 'in', 'default_apply_discount': True}</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
                 Click to add a track value.
@@ -42,16 +175,16 @@
             </field>
         </record>
 
-        <record id="reciba_tree_ticket_action" model="ir.actions.act_window.view">
-            <field name="act_window_id" ref="tickets_reception" />
-            <field name="view_id" ref="form_view_reception" />
-            <field name="view_mode">form</field>
-        </record>
-
-        <record id="reciba_tree_ticket_action" model="ir.actions.act_window.view">
+        <record id="reciba_tree_reception_ticket_action" model="ir.actions.act_window.view">
             <field name="act_window_id" ref="tickets_reception" />
             <field name="view_id" ref="tree_view_reception" />
             <field name="view_mode">tree</field>
+        </record>
+
+        <record id="reciba_form_reception_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="tickets_reception" />
+            <field name="view_id" ref="form_view_reception" />
+            <field name="view_mode">form</field>
         </record>
 
         <menuitem name="Reciba" id="reciba_root" sequence="40"/>
@@ -60,6 +193,123 @@
 
         <menuitem id="reception_ticket_menu" name="Recepcion" parent="operation_menu" action="tickets_reception" sequence="1" />
 
+
+        <!--=================================Entregas========================================-->
+        <record model="ir.ui.view" id="form_view_delivery">
+            <field name="name">reciba.ticket.form</field>
+            <field name="model">reciba.ticket</field>
+            <field name="arch" type="xml">
+                <form string="Recepciones">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="operation_type"/>
+                            <field name="operation_type_id"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="tree_view_delivery" model="ir.ui.view">
+            <field name="name">reciba.ticket.reception.tree</field>
+            <field name="model">reciba.ticket</field>
+            <field name="arch" type="xml">
+                <tree string="Entregas" delete="0" default_order="id desc">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="tickets_delivery" model="ir.actions.act_window">
+            <field name="name">Entregas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">reciba.ticket</field>
+            <field name="domain">[('operation_type','=','out')]</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'default_operation_type': 'out'}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a track value.
+                </p>
+            </field>
+        </record>
+
+        <record id="reciba_tree_delivery_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="tickets_delivery" />
+            <field name="view_id" ref="tree_view_delivery" />
+            <field name="view_mode">tree</field>
+        </record>
+
+        <record id="reciba_form_delivery_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="tickets_delivery" />
+            <field name="view_id" ref="form_view_delivery" />
+            <field name="view_mode">form</field>
+        </record>
+
+        <menuitem id="deliveries_ticket_menu" name="Entregas" parent="operation_menu" action="tickets_delivery" sequence="1" />
+
+        <!--==========================================Parametros de calidad=======================================-->
+
+        <record model="ir.ui.view" id="form_view_quality">
+            <field name="name">reciba.quality.form</field>
+            <field name="model">reciba.quality</field>
+            <field name="arch" type="xml">
+                <form string="Recepciones">
+                    <sheet>
+                        <group>
+                            <field name="name" />
+                            <field name="product_id" />
+                        </group>
+                        <group>
+                            <field name="params">
+                                <tree string="Quality Tree" editable="bottom">
+                                    <field name="name" />
+                                    <field name="value" />
+                                    <field name="unit" />
+                                    <field name="damage" />
+                                    <field name="broken" />
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="tree_view_quality" model="ir.ui.view">
+            <field name="name">reciba.quality.tree</field>
+            <field name="model">reciba.quality</field>
+            <field name="arch" type="xml">
+                <tree string="Calidad" delete="0" default_order="id desc">
+                    <field name="name"/>
+                    <field name="product_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="reciba_quality" model="ir.actions.act_window">
+            <field name="name">Parametros de calidad</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">reciba.quality</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click para agregar parametros de calidad.
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="configuration_menu" name="Configuración" parent="reciba_root" sequence="2"/>
+
+        <menuitem id="quality_menu" name="Parametros de calidad" parent="configuration_menu" action="reciba_quality" sequence="1" />
+
+
     </data>
+
+
+
 
 </odoo>
