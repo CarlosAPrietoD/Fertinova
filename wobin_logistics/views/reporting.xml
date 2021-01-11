@@ -57,6 +57,22 @@
       </field>
     </record>
 
+    <!-- Discharged Trips - SEARCH VIEW --> 
+    <record id="view_search_discharged_trips" model="ir.ui.view"> 
+        <field name="model">sale.order</field> 
+        <field name="arch" type="xml"> 
+            <search> 
+              <field name="name" /> 
+              <field name="trips_id"/>
+              <field name="name"/> 
+              <field name="state"/> 
+              <field name="flag_trip"/>                 
+              <filter name="pending" string="Sale Orders w/ trips" 
+                      domain="[('flag_trip', '=', True)]"/>
+            </search> 
+        </field> 
+    </record>
+
     <!-- Discharged Trips - LIST VIEW --> 
     <record id="view_discharged_trips" model="ir.ui.view">
       <field name="name">Discharged Trips and Sale Orders to Process</field>
@@ -86,7 +102,65 @@
           <field name="settlement"/>           
         </tree>
       </field>
-    </record>    
+    </record>
+
+    <!-- Billing/Invoices related to their Contracts & Trips - LIST VIEW --> 
+    <record id="view_invoice_report_list" model="ir.ui.view">
+      <field name="name">Invoices Report related to Contract and Trips</field>
+      <field name="model">account.invoice</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="id"/>           
+          <field name="name"/>  
+          <field name="contracts_ids"/> 
+          <field name="trips_related_ids" widget="many2many_tags"/> 
+          <field name="state" invisible="1"/>            
+        </tree>
+      </field>
+    </record> 
+    <!-- Billing/Invoices related to their Contracts & Trips - FORM VIEW --> 
+    <record id="view_invoice_report_form" model="ir.ui.view">
+      <field name="name">Invoices Report related to Contract and Trips</field>
+      <field name="model">account.invoice</field>
+      <field name="arch" type="xml">
+        <form>
+            <sheet>
+              <div class="oe_left oe_title">
+                <h1>
+                  <field name="name" readonly="True"/>
+                </h1>
+              </div>  
+              <group>                 
+                  <field name="contracts_ids">
+                    <tree string="Contract Related">
+                      <field name="name"/>
+                      <field name="tariff"/>
+                      <field name="origin_id"/>
+                      <field name="destination_id"/>                  
+                      <field name="remitter"/>
+                      <field name="recipient"/>
+                    </tree>
+                  </field>
+            
+                  <field name="trips_related_ids"> 
+                    <tree string="Trips Related">
+                      <field name="name"/>
+                      <field name="vehicle_id"/>
+                      <field name="operator_id"/> 
+                      <field name="upload_date"/> 
+                      <field name="real_upload_qty"/>
+                      <field name="download_date"/>
+                      <field name="real_download_qty"/>
+                    </tree>
+                  </field> 
+                                        
+                  <field name="state" invisible="1"/>  
+              </group>                         
+            </sheet>          
+        </form>
+      </field>
+    </record>      
+
 
   </data>  
 </odoo>     

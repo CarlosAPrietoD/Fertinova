@@ -94,7 +94,9 @@
         <field name="res_model">sale.order</field>
         <field name="view_mode">tree</field>        
         <field name="view_id" ref="wobin_logistics.view_discharged_trips"/>
+        <field name="search_view_id" ref="wobin_logistics.view_search_discharged_trips"/>
         <field name="domain">[('state', '=', 'draft'), ('flag_trip', '=', True)]</field> 
+        <field name="context">{'search_default_pending': 1}</field> 
     </record> 
     <!-- SETTLEMENTS ANALYSIS Report - ACTION -->
     <record id="action_trip_settlements" model="ir.actions.act_window">
@@ -103,7 +105,14 @@
         <field name="view_mode">tree</field>        
         <field name="view_id" ref="wobin_logistics.view_trip_settlements"/>
         <field name="domain">[]</field> 
-    </record>         
+    </record>
+    <!-- INVOICES ANALYSIS Report - ACTION -->
+    <record id="action_invoicing_report" model="ir.actions.act_window">
+        <field name="name">Invoices Report related to Contract and Trips</field>
+        <field name="res_model">account.invoice</field>
+        <field name="view_mode">tree,form</field>        
+        <field name="context">{'tree_view_ref': 'wobin_logistics.view_invoice_report_list', 'form_view_ref': 'wobin_logistics.view_invoice_report_form'}</field>                
+      </record>              
         
 
 
@@ -184,7 +193,13 @@
               parent="wobin_logistics.reports_menu_4"
               action="wobin_logistics.action_trip_settlements" 
               groups="wobin_logistics.group_wl_access_analysis"
-              sequence="5"/>                                          
+              sequence="6"/>  
+    <menuitem name="Invoicing Analysis" 
+              id="wobin_logistics.sub_menuitem_invoicing" 
+              parent="wobin_logistics.reports_menu_4"
+              action="wobin_logistics.action_invoicing_report" 
+              groups="wobin_logistics.group_wl_access_analysis"
+              sequence="7"/>                                                      
 
   </data>
 </odoo>

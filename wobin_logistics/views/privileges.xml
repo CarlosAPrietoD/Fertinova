@@ -235,7 +235,34 @@
                     <attribute name="delete">false</attribute>
                 </xpath>
             </field>
-        </record>  
+        </record> 
+
+        <!--Tree View Billing/Invoices Analysis-->
+        <record id="hide_view_tree_invoicing" model="ir.ui.view">
+        <field name="name">Invoices Report related to Contract and Trips</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="wobin_logistics.view_invoice_report_list"/>
+            <field name="arch" type="xml">
+                <xpath expr="/tree" position="attributes">
+                    <attribute name="create">false</attribute>
+                    <attribute name="edit">false</attribute>
+                    <attribute name="delete">false</attribute>
+                </xpath>
+            </field>
+        </record> 
+        <!--Form View Billing/Invoices Analysis-->
+        <record id="hide_view_form_invoicing" model="ir.ui.view">
+        <field name="name">Invoices Report related to Contract and Trips</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="wobin_logistics.view_invoice_report_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="/form" position="attributes">
+                    <attribute name="create">false</attribute>
+                    <attribute name="edit">false</attribute>
+                    <attribute name="delete">false</attribute>
+                </xpath>
+            </field>
+        </record>                  
 
     </data>
 </odoo>

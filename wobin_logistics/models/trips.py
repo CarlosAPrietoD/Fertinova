@@ -60,7 +60,7 @@ class LogisticsTrips(models.Model):
     # General Data / - / - / - / - / - / - / - / - / - /
     name              = fields.Char(string="Trip", readonly=True, required=True, copy=False, default='New')
     trip_number_tag   = fields.Char(string='Trip Number (Analytic Tag)', track_visibility='always')
-    contracts_id      = fields.Many2one('logistics.contracts', string='Contracts', track_visibility='always')
+    contracts_id      = fields.Many2one('logistics.contracts', string='Contracts', track_visibility='always', ondelete='set null')
     client_id         = fields.Many2one('res.partner', string='Client', track_visibility='always')
     vehicle_id        = fields.Many2one('fleet.vehicle', string='Vehicle')    
     analytic_accnt_id = fields.Many2one('account.analytic.account', string='Analytic Account', track_visibility='always')
@@ -82,7 +82,7 @@ class LogisticsTrips(models.Model):
     qty_to_bill       = fields.Float(string='Quantiy to bill', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always', compute='_set_qty_to_bill') 
     conformity        = fields.Binary(string='Conformity and Settlement', track_visibility='always')
     checked           = fields.Boolean(string=" ")
-    sales_order_id    = fields.Many2one('sale.order', string='Sales Order Generated', track_visibility='always', compute='_set_sale_order')    
+    sales_order_id    = fields.Many2one('sale.order', string='Sales Order Generated', track_visibility='always', compute='_set_sale_order', ondelete='set null')    
     state             = fields.Selection(selection=[('assigned', 'Assigned'),
                                                     ('route', 'En route'),
                                                     ('discharged', 'Discharged')], 
@@ -326,6 +326,35 @@ class AccountAnalyticTag(models.Model):
 
 
 
+class AccountInvoice(models.Model):
+    _inherit = "account.invoice"
+
+    #:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+    # Aggregation of new relational fields
+    #:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  
+    def _set_trips(self):
+        trips_list = set() #Set Declaration
+        # Get multiple sale orders from Invoices model:
+        sale_orders = self.env['sale.order'].search([('id', '=', self.origin)]).ids
+        #Iterate sale orders and retrieve related trips (set is for averting duplicate vals)
+        for order in sale_orders:
+            trips_list.add(self.env['logistics.trips'].search([('sales_order_id', '=', order)]).id)
+        # Assign multiple trips into many2many field:
+        self.trips_related_ids = [(6, 0, list(trips_list))]
+
+        # From last trip gotten, retrieve its releated contract:
+        trip_retrieved     = list(trips_list)[0]
+        contract_retrieved = self.env['logistics.trips'].search([('id', '=', trip_retrieved)]).contracts_id.id
+        self.trips_related_ids = [(4, 0, contract_retrieved)]
+
+
+
+    contracts_ids     = fields.One2many('logistics.contracts', 'id', string='Contracts Information')
+    trips_related_ids = fields.Many2many('logistics.trips', default=_set_trips, string='Related Trips')
+
+
+
+
 class AccountInvoiceLine(models.Model):
     _inherit = "account.invoice.line"
 
@@ -344,7 +373,7 @@ class SaleOrder(models.Model):
     # Aggregation of a new many2one field of Trips in Customer Invoices
     #:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  
     trips_id = fields.Many2one('logistics.trips', string='Trip')     
-    flag_trip = fields.Boolean(string='Flag to indicate this sale order has trip', compute='_set_flag_trip')
+    flag_trip = fields.Boolean(string='Flag to indicate this sale order has trip', compute='_set_flag_trip', store=True)
     
 
     @api.one

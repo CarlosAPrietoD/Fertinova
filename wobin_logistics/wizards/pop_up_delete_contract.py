@@ -5,4 +5,7 @@ class delete_contract_wizard(models.TransientModel):
     _name = 'logistics.contract.delete'
     _description = 'Delete Contract'
 
-    message = fields.Text(string="TEST about this pop up", readonly=True, store=True)
+    message = fields.Text(string="Are you sure you want to delete this contract?\n\nWhen you delete it, you will have to generate a new one to fill the amount pending delivery", readonly=True, store=True)
+
+    def deletion(self):
+        return {'type': 'ir.actions.act_window_close'}

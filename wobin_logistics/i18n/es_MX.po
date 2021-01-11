@@ -620,8 +620,8 @@ msgstr "Número de Viaje (Etiqueta Analítica)"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__trip_status
-msgid "Trip Status"
-msgstr "Status del Viaje"
+msgid "Supply Contract Status"
+msgstr "Status de surtimiento del contrato"
 
 #. module: wobin_logistics
 #: model:ir.actions.act_window,name:wobin_logistics.action_logistics_trips

@@ -6,12 +6,14 @@
             <field name="model">logistics.contract.delete</field>
             <field name="arch" type="xml">
                 <form string="Information related to deletion of this contract">
-                    <group>
-                        <field name="message" />
-                    </group>
+                    
+                    <p class="text-center">
+                        <field name="message"/>
+                    </p>
                     <footer>
-                        <button string="OK" special="cancel" class="oe_highlight"/>
+                        <button name="deletion" string="Ok" type="object" default_focus="1" class="oe_highlight"/> 
                     </footer>
+
                 </form>
             </field>
         </record>

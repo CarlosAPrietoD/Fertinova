@@ -50,7 +50,7 @@ class LogisticsContracts(models.Model):
     trip_status        =  fields.Selection([('to_do', 'To Do'),
                                             ('doing', 'Doing'),
                                             ('done', 'Done'),
-                                           ], string='Trip Status', index=True, readonly=True, default='to_do', copy=False, compute='_set_trip_status')    
+                                           ], string='Supply Contract Status', index=True, readonly=True, default='to_do', copy=False, compute='_set_trip_status')    
 
     
     @api.one
@@ -148,7 +148,7 @@ class LogisticsContracts(models.Model):
                 self.trip_status = 'doing'
 
 
-    def delete_contract(self):
+    def delete_contract(self):        
         return {
                 'name': 'Delete Contract',
                 'type': 'ir.actions.act_window',
