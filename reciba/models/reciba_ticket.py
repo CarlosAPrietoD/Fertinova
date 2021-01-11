@@ -147,7 +147,6 @@ class RecibaTicket(models.Model):
     ('confirmed', 'Relacionado a un pedido'), 
     ('invoiced','Facturado'),
     ('cancel', 'Cancelado')], default='draft')
-    
     operation_type = fields.Selection([('in','Recepción'),
     ('out','Entrega')], string="Tipo de operacion", default="in", required=True)
     name = fields.Char(string="Boleta", default="Boleta Borrador")
