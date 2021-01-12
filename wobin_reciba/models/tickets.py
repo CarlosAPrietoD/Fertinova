@@ -252,7 +252,7 @@ class RecibaTicket(models.Model):
                 self.name=name_location + '/' + number
             else:
                 self.name = self.destination_id.display_name + '/' + '0001'
-            
+        #Creacion y asignación de la transferencia
         values={
         'picking_type_id': self.operation_type_id.id,
         'location_id': self.origin_id.id,
