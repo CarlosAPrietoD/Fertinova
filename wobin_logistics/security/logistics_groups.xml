@@ -3,7 +3,7 @@
     <data noupdate="1">
 
         <record id="group_wl_access_logistics" model="res.groups">
-            <field name="name">Restricción de permisos para Logística de Wobin Logísticaa</field>
+            <field name="name">Restricción de permisos para Logística de Wobin Logística</field>
             <field name="category_id" ref="base.module_category_hidden"/>
         </record>   
         

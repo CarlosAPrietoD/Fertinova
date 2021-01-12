@@ -4,6 +4,7 @@ from odoo import models, fields, api, _
 from odoo.addons import decimal_precision as dp
 
 import logging
+import warnings
 _logger = logging.getLogger(__name__)   
 
 class LogisticsRoutes(models.Model):
@@ -148,13 +149,48 @@ class LogisticsContracts(models.Model):
                 self.trip_status = 'doing'
 
 
-    def delete_contract(self):        
+    def cancel_contract(self):
+        self.state = 'cancel'
+        
+
+    def delete_contract(self):  
+        #self.state = 'cancel' 
+
+        """ Hide product
+        return self.env['dialog.box.wizard'].open_dialog(
+            message='The product will be hided, <b>you cannot use again</b> '
+                    'but remain in sale order where yet present, <br/>'
+                    'confirm?',
+            action='self.env["product.product"].browse(%s).write('
+                '{"active": False})' % self.id,
+            title='Confirm request:',
+            mode='cancel_confirm',
+        ) """       
+        
+        #raise Warning("What is this?")
+
+        #return {
+        #    'value': {'other_id': arr_est},
+        #    'warning': {'title': "Warning", 'message': "What is this?"}
+        #}  
+        #message_id = self.env['message.wizard'].create({'message': _("Invitation is successfully sent")})   
+
+        #view = self.env.ref('wobin_logistics.view_delete_contract_popup').id
+        #view_id = view
+
+        context = dict(self._context)
+        context['message'] = "Are you sure you want to delete this contract?\n\nWhen you delete it, you will have to generate a new one to fill the amount pending delivery"
+
         return {
-                'name': 'Delete Contract',
+                'name': 'WARNING - Delete Contract',
                 'type': 'ir.actions.act_window',
+                'view_mode': 'form',                
                 'res_model': 'logistics.contract.delete',
-                'view_mode': 'form',
-                'view_type': 'form',
+                #'res_id': message_id.id,
+                #'views': [(view.id, 'form')],
+                #'view_id': view.id,
+                'view': 'wobin_logistics,view_delete_contract_popup',
                 'nodestroy': True,
                 'target': 'new',
+                'context': context,
                } 

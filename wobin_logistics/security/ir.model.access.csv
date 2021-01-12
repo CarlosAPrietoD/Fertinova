@@ -1,5 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_logistics_contracts,wobin_logistics.logistics_contracts,model_logistics_contracts,,1,1,1,1
+access_logis_contract_sale,wobin_logistics.logistics_contracts,model_logistics_contracts,wobin_logistics.group_wl_access_sales,1,0,1,0
 access_logistics_quotations,wobin_logistics.logistics_quotations,model_logistics_quotations,,1,1,1,1
 access_logistics_trips,wobin_logistics.logistics_trips,model_logistics_trips,,1,1,1,1
 access_logistics_routes,access_logistics_routes,model_logistics_routes,,1,1,1,1

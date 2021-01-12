@@ -332,20 +332,18 @@ class AccountInvoice(models.Model):
     #:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     # Aggregation of new relational fields
     #:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  
+    @api.one
+    @api.depends('number')
     def _set_trips(self):
-        trips_list = set() #Set Declaration
-        # Get multiple sale orders from Invoices model:
-        sale_orders = self.env['sale.order'].search([('id', '=', self.origin)]).ids
-        #Iterate sale orders and retrieve related trips (set is for averting duplicate vals)
-        for order in sale_orders:
-            trips_list.add(self.env['logistics.trips'].search([('sales_order_id', '=', order)]).id)
-        # Assign multiple trips into many2many field:
-        self.trips_related_ids = [(6, 0, list(trips_list))]
+        #Get trips assigned from invoice lines:
+        trip_list = [ inv.trips_id for inv in self.invoice_line_ids ]
+        self.trips_related_ids = [(6, 0, trip_list)] 
 
         # From last trip gotten, retrieve its releated contract:
-        trip_retrieved     = list(trips_list)[0]
-        contract_retrieved = self.env['logistics.trips'].search([('id', '=', trip_retrieved)]).contracts_id.id
-        self.trips_related_ids = [(4, 0, contract_retrieved)]
+        if trip_list:
+            trip_retrieved     = trip_list[0]
+            contract_retrieved = self.env['logistics.trips'].search([('id', '=', trip_retrieved)]).contracts_id.id
+            self.trips_related_ids = [(4, 0, contract_retrieved)]        
 
 
 
