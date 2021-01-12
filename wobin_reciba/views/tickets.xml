@@ -2,26 +2,23 @@
 <odoo>
     <data>
 
-        <!--=================================Recepciones========================================-->
+        <!--===========================================Recepciones============================================-->
         <record model="ir.ui.view" id="form_view_reception">
             <field name="name">reciba.ticket.form</field>
             <field name="model">reciba.ticket</field>
             <field name="arch" type="xml">
                 <form string="Recepciones">
                     <header>
-                        <!--<button name="confirm_reciba" type="object" states="draft" string="Confirmar" class="btn-primary"/>
-                        <button name="cancel_reciba" type="object" states="draft,confirmed" string="Cancelar" groups="reciba.grupo_reciba_cancel"/>-->
+                        <button name="confirm_receipt_ticket" type="object" states="draft" string="Confirmar" class="btn-primary"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,cancel" />
                     </header>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
                             <button type="object" name="action_view_invoice" class="oe_stat_button" icon="fa-pencil-square-o">
                                 <field name="transfer_count" widget="statinfo" string="Transferencia"/>
-                                <!--<field name="invoice_ids" invisible="1"/>-->
                             </button>
                             <button type="object" name="action_view_invoice" class="oe_stat_button" icon="fa-pencil-square-o">
                                 <field name="ticket_count" widget="statinfo" string="Reversa"/>
-                                <!--<field name="invoice_ids" invisible="1"/>-->
                             </button>
                         </div>
                         <group>
@@ -52,23 +49,17 @@
                                     <group>
                                         <field name="humidity"/>
                                         <field name="impurity"/>
+                                        <field name="density"/>
+                                        <field name="temperature"/>
                                     </group>
                                     <group>
                                         <field name="humidity_discount"/>
                                         <field name="impurity_discount"/>
                                     </group>
                                 </group>
-                                <group>
-                                    <group>
-                                        <field name="density"/>
-                                    </group>
-                                    <group>
-                                        <field name="temperature"/>
-                                    </group>
-                                </group>
                                 <br/>
                                 <field name="params_id">
-                                    <tree editable="bottom" decoration-danger="value &gt; max_value">
+                                    <tree editable="bottom" decoration-danger="value &gt; max_value" delete="0">
                                         <field name="quality_params_id" readonly="True" force_save="1"/>
                                         <field name="max_value"/>
                                         <field name="unit"/>
@@ -126,12 +117,12 @@
                                 </group>
                                 <group>
                                     <group>
-                                        <field name="price"/>
-                                        <field name="currency_id"/>
+                                        <field name="price_po" attrs="{'invisible':[('reception', '!=', 'price')]}"/>
+                                        <field name="currency_id" attrs="{'invisible':[('reception', '!=', 'price')]}"/>
                                     </group>
                                 </group>
                             </page>
-                            <page string="Descuentos" name="discount_page">
+                            <page string="Descuentos" name="discount_page" attrs="{'invisible':[('apply_discount', '!=', True)]}">
                                 <br/>
                                 <group>
                                     <group>
@@ -305,6 +296,24 @@
         <menuitem id="configuration_menu" name="Configuración" parent="reciba_root" sequence="2"/>
 
         <menuitem id="quality_menu" name="Parametros de calidad" parent="configuration_menu" action="reciba_quality" sequence="1" />
+
+
+        <!--==============================================Transferencias====================================-->
+
+        <record id="reciba_transfer" model="ir.actions.act_window">
+            <field name="name">Recepciones</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">stock.picking</field>
+            <!--<field name="domain">[('operation_type','=','in')]</field>-->
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <!--<field name="context">{'default_operation_type': 'in', 'default_apply_discount': True}</field>-->
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a track value.
+                </p>
+            </field>
+        </record>
 
 
     </data>
