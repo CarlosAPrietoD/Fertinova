@@ -211,7 +211,7 @@ class RecibaTicket(models.Model):
     impurity_total_discount = fields.Float(string="Descuento total de impureza (Kg)", compute='_get_impurity_total_discount', store=True)
     discount = fields.Float(string="Descuento total (kg)", compute='_get_discount_total', store=True)
     total_weight = fields.Float(string="Peso neto analizado", compute='_get_total_weight', store=True)
-    price = fields.Float(string="Precio", digits=(15,4))
+    price_po = fields.Float(related='purchase_id.order_line.price_unit', string="Precio", digits=(15,4))
     currency_id = fields.Many2one('res.currency', default=lambda self: self.env['res.company']._company_default_get('your.module').currency_id, string="Moneda")
 
 
@@ -235,39 +235,52 @@ class RecibaTicket(models.Model):
                 array_params.append((0,0,{'quality_params_id':param.id, 'name': param.name, }))
             self.params_id = array_params
 
+    def confirm_receipt_ticket(self):
+        #Metodo para confirmar la boleta
+        if self.net_weight == 0:
+            msg = 'El peso neto ingresado no es valido'
+            raise UserError(msg)
+        if self.humidity == 0 or self.impurity == 0 or self.temperature == 0:
+            msg = 'Los valores de humedad, impureza y temperatura deben ser mayores a 0'
+            raise UserError(msg)
+        #Asignacion del nombre de acuerdo 
+        if self.destination_id:
+            tickets = self.env['reciba.ticket'].search(['&',('destination_id','=',self.destination_id.id),('state','=','confirmed')])
+            if tickets:
+                name_location = self.destination_id.display_name
+                number = str(len(tickets)+1).zfill(4)
+                self.name=name_location + '/' + number
+            else:
+                self.name = self.destination_id.display_name + '/' + '0001'
+            
+        values={
+        'picking_type_id': self.operation_type_id.id,
+        'location_id': self.origin_id.id,
+        'location_dest_id' : self.destination_id.id,
+        'scheduled_date': datetime.today(),
+        'reciba_id': self.id,
+        'move_ids_without_package': [(0,0,{
+            'name': self.product_id.name,
+            'product_id': self.product_id.id,
+            'product_uom_qty': self.net_weight,
+            'quantity_done': self.net_weight,
+            'product_uom': self.product_id.uom_po_id.id,
+            'purchase_line_id': self.purchase_id.order_line[0].id,
+        })]}
+        picking = self.env['stock.picking'].create(values)
+        picking.state = 'done'
+        self.transfer_id = picking.id
+        self.transfer_count += 1
+        self.state='confirmed'
+        
 
     @api.multi
     def action_view_invoice(self):
         #Metodo para ver transferencias relacionadas
-        print("====================")
-        
-        '''action = self.env.ref('account.action_vendor_bill_template')
+        action = self.env.ref('wobin_reciba.reciba_transfer')
         result = action.read()[0]
-        create_bill = self.env.context.get('create_bill', False)
-        # override the context to get rid of the default filtering
-        result['context'] = {
-            'type': 'in_invoice',
-            'default_purchase_id': self.id,
-            'default_currency_id': self.currency_id.id,
-            'default_company_id': self.company_id.id,
-            'company_id': self.company_id.id
-        }
-        # choose the view_mode accordingly
-        if len(self.invoice_ids) > 1 and not create_bill:
-            result['domain'] = "[('id', 'in', " + str(self.invoice_ids.ids) + ")]"
-        else:
-            res = self.env.ref('account.invoice_supplier_form', False)
-            form_view = [(res and res.id or False, 'form')]
-            if 'views' in result:
-                result['views'] = form_view + [(state,view) for state,view in action['views'] if view != 'form']
-            else:
-                result['views'] = form_view
-            # Do not set an invoice_id if we want to create a new bill.
-            if not create_bill:
-                result['res_id'] = self.invoice_ids.id or False
-        result['context']['default_origin'] = self.name
-        result['context']['default_reference'] = self.partner_ref
-        return result'''
+        result['domain'] = [('id','=', self.transfer_id.id)]
+        return result
 
 class RecibaTicketParams(models.Model):
     #Parametros de calidad de boleta
@@ -307,3 +320,4 @@ class StockPicking(models.Model):
     _inherit='stock.picking'
     
     x_studio_aplica_flete= fields.Boolean()
+    reciba_id = fields.Many2one('reciba.ticket', string="Reciba")
