@@ -151,10 +151,13 @@ class LogisticsContracts(models.Model):
 
     def cancel_contract(self):
         self.state = 'cancel'
-        
+
 
     def delete_contract(self):  
+        pass
+
         #self.state = 'cancel' 
+
 
         """ Hide product
         return self.env['dialog.box.wizard'].open_dialog(
@@ -165,7 +168,8 @@ class LogisticsContracts(models.Model):
                 '{"active": False})' % self.id,
             title='Confirm request:',
             mode='cancel_confirm',
-        ) """       
+        ) """    
+
         
         #raise Warning("What is this?")
 
@@ -177,7 +181,9 @@ class LogisticsContracts(models.Model):
 
         #view = self.env.ref('wobin_logistics.view_delete_contract_popup').id
         #view_id = view
+        
 
+        """
         context = dict(self._context)
         context['message'] = "Are you sure you want to delete this contract?\n\nWhen you delete it, you will have to generate a new one to fill the amount pending delivery"
 
@@ -194,3 +200,4 @@ class LogisticsContracts(models.Model):
                 'target': 'new',
                 'context': context,
                } 
+        """

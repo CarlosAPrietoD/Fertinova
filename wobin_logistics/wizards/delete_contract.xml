@@ -1,21 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-        <record id="view_delete_contract_popup" model="ir.ui.view">
-            <field name="name">Delete Contract</field>
-            <field name="model">logistics.contract.delete</field>
+        <record id="wizard_delete_contract" model="ir.ui.view">
+            <field name="name">wizard.form</field>
+            <field name="model">wizard.delete.contract</field>
             <field name="arch" type="xml">
-                <form string="Information related to deletion of this contract">                    
-                    <p class="text-center">
-                        <field name="message"/>
-                    </p>
+                <form string="Information related to deletion of this contract"> 
+                    <sheet>
+                        <group>
+                            <field name="message"/>
+                            <field name="message2"/>
+                        </group>
+                    </sheet>                                                                        
                     <footer>
-                        <button name="deletion" string="Ok" type="object" default_focus="1" class="oe_highlight"/> 
-                        <button name="action_ok" string="Ok" type="object" class="oe_highlight"/> 
-                        <button data-dismiss="modal" string="Close"/>
+                        <button name="deletion" string="OK" type="object" default_focus="1" class="oe_highlight"/> 
+                        <button special="cancel" string="Cancel"/>
                     </footer>
                 </form>
             </field>
         </record>
+
+        <act_window id="delete_contract_wizard"
+                    name="Contract Deletion"
+                    src_model="logistics.contracts"
+                    res_model="wizard.delete.contract"
+                    view_mode="form"
+                    target="new"
+                    key2="client_action_multi"/>
 
 </odoo>

@@ -33,6 +33,7 @@
         'views/reporting.xml',
         'views/views.xml',
         'views/privileges.xml',
+        'wizards/delete_contract.xml',
 
         #reports
         'views/templates.xml',
