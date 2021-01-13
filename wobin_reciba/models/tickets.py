@@ -165,6 +165,7 @@ class RecibaTicket(models.Model):
     ticket_count = fields.Integer("Boletas", default=0)
     sale_id = fields.Many2one('sale.order', string="Orden de venta")
     purchase_id = fields.Many2one('purchase.order', string="Pedido de compra", domain="[('company_id','=',company_id)]")
+    purchase_invoice_status = fields.Selection(related='purchase_id.invoice_status')
     partner_id = fields.Many2one('res.partner', string="Contacto")
     list_production_id = fields.Many2one('mrp.bom', string="Lista de materiales")
     qty_produce = fields.Float(string="Cantidad a producir")
