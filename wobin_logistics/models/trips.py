@@ -332,23 +332,36 @@ class AccountInvoice(models.Model):
     #:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     # Aggregation of new relational fields
     #:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  
-    contracts_ids     = fields.One2many('logistics.contracts', 'id', string='Contracts Information')
-    trips_related_ids = fields.Many2many('logistics.trips', compute='_set_trips', string='Related Trips')
+    contracts_ids     = fields.Many2many('logistics.contracts', compute='_set_contract', string='Contracts Information', store=True)
+    trips_related_ids = fields.Many2many('logistics.trips', compute='_set_trips', string='Related Trips', store=True)
+    flag_cont_trip    = fields.Boolean(string='Flag for contract and trip', compute='_set_flag_ct', default=False, store=True)
+
 
     @api.one
     @api.depends('number')
     def _set_trips(self):
         #Get trips assigned from invoice lines:        
         trip_list = [ inv.trips_id.id for inv in self.invoice_line_ids ]
-        if trip_list:
-            trip_retrieved     = trip_list[0]
-            print('\n\n\n trip_retrieved: ', trip_retrieved)
-            contract_retrieved = self.env['logistics.trips'].search([('id', '=', trip_retrieved)]).contracts_id.id
-            print('\n\n\n contract_retrieved: ', contract_retrieved)
-            if contract_retrieved:            
-                self.contracts_ids = [(4, 0, contract_retrieved)]
+        self.trips_related_ids = [(6, 0, trip_list)]         
 
-        self.trips_related_ids = [(6, 0, trip_list)] 
+
+    @api.one
+    @api.depends('number')
+    def _set_contract(self): 
+        contract_list = [ trip.id for trip in self.trips_related_ids ]
+        self.contracts_ids = [(6, 0, contract_list)]  
+
+
+    @api.one
+    @api.depends('number')
+    def _set_flag_ct(self):
+        print('\n\n\n LABEL contracts_ids; CONTENT: ', self.contracts_ids)
+        self.flag_cont_trip = False
+
+        if self.contracts_ids:
+            if self.contracts_ids.ids:
+                self.flag_cont_trip = True
+        
 
 
 

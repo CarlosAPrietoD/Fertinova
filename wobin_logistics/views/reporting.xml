@@ -114,9 +114,10 @@
           <field name="number"/>  
           <field name="contracts_ids"/> 
           <field name="trips_related_ids"/> 
+          <field name="flag_cont_trip" />
           <field name="state" invisible="1"/>
-          <filter name="contracts" string="Con Contrato" 
-                  domain="[('contracts_ids', '=', 'True')]" />                      
+          <filter name="flag_ct" string="With Contract" 
+                  domain="[('flag_cont_trip', '=', True)]" />                      
         </search>
       </field>
     </record> 
@@ -127,7 +128,7 @@
       <field name="arch" type="xml">
         <tree>          
           <field name="number"/>  
-          <field name="contracts_ids"/> 
+          <field name="contracts_ids" widget="many2many_tags"/> 
           <field name="trips_related_ids" widget="many2many_tags"/> 
           <field name="state" invisible="1"/>            
         </tree>
