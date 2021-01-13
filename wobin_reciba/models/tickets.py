@@ -138,6 +138,7 @@ class RecibaTicket(models.Model):
     company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('your.module'))
     state = fields.Selection([('draft', 'Borrador'),
     ('confirmed', 'Confirmado'),
+    ('reverse','Reversa'),
     ('cancel', 'Cancelado')], default='draft')
     transfer_id = fields.Many2one('stock.picking', string="Transferencia")
     transfer_count = fields.Integer("Transferencias", default=0)
@@ -277,7 +278,7 @@ class RecibaTicket(models.Model):
         self.state='confirmed'
 
     def reverse_receipt_ticket(self):
-        #Metodo para cdar reversa a la boleta de entrada
+        #Metodo para dar reversa a la boleta de entrada
         operation = self.env['stock.picking.type'].search([('name','=','Devolucion de Recepciones'),('warehouse_id','=',self.transfer_id.picking_type_id.warehouse_id.id)]).id
         values={
         'picking_type_id': operation,
@@ -292,14 +293,50 @@ class RecibaTicket(models.Model):
             'quantity_done': self.net_weight,
             'product_uom': self.product_id.uom_po_id.id,
             'purchase_line_id': self.purchase_id.order_line[0].id,
-            'to_refund': True
-        })]}
+            'to_refund': True})]
+        }
         picking = self.env['stock.picking'].create(values)
         picking.state = 'done'
         self.purchase_id.order_line[0].qty_received = self.purchase_id.order_line[0].qty_received-self.net_weight
         self.transfer_reverse_id = picking.id
         self.transfer_reverse_count += 1
-        self.state='cancel'
+        #Creacion de nueva boleta borrador
+        values={
+            'state': 'draft',
+            'operation_type': self.operation_type,
+            'operation_type_id': self.operation_type_id.id,
+            'weigher': self.weigher,
+            'product_id': self.product_id.id,
+            'purchase_id': self.purchase_id.id,
+            'partner_id': self.partner_id.id,
+            'apply_discount': self.apply_discount,
+            'quality_id': self.quality_id.id,
+            'humidity': self.humidity,
+            'impurity': self.impurity,
+            'density': self.density,
+            'temperature': self.temperature,
+            'reception': self.reception,
+            'driver': self.driver,
+            'type_vehicle': self.type_vehicle,
+            'plate_vehicle': self.plate_vehicle,
+            'plate_trailer': self.plate_trailer,
+            'plate_second_trailer': self.plate_second_trailer,
+            'origin_id': self.origin_id.id,
+            'destination_id': self.destination_id.id,
+            'gross_weight': self.gross_weight,
+            'tare_weight': self.tare_weight
+        }
+        ticket = self.env['reciba.ticket'].create(values)
+        params = []
+        for i,param in enumerate(self.params_id):
+            params.append([0,0,{'ticket_id': ticket.id, 
+                                    'quality_params_id': param.quality_params_id.id,
+                                    'value': param.value}])
+        ticket.params_id = params
+        self.ticket_id = ticket.id
+        self.ticket_count = 1
+        self.state='reverse'
+        
         
 
     @api.multi
@@ -316,6 +353,14 @@ class RecibaTicket(models.Model):
         action = self.env.ref('wobin_reciba.reciba_transfer')
         result = action.read()[0]
         result['domain'] = [('id','=', self.transfer_reverse_id.id)]
+        return result
+
+    @api.multi
+    def action_view_ticket(self):
+        #Metodo para ver boletas relacionadas
+        action = self.env.ref('wobin_reciba.tickets_reception')
+        result = action.read()[0]
+        result['domain'] = [('id','=', self.ticket_id.id)]
         return result
 
 class RecibaTicketParams(models.Model):
