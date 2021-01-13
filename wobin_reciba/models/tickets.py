@@ -141,6 +141,8 @@ class RecibaTicket(models.Model):
     ('cancel', 'Cancelado')], default='draft')
     transfer_id = fields.Many2one('stock.picking', string="Transferencia")
     transfer_count = fields.Integer("Transferencias", default=0)
+    transfer_reverse_id = fields.Many2one('stock.picking', string="Reversa")
+    transfer_reverse_count = fields.Integer("Transferencias", default=0)
 
     #-------------------------------------Datos generales----------------------------------
     name = fields.Char(string="Boleta", default="Boleta borrador")
@@ -236,7 +238,7 @@ class RecibaTicket(models.Model):
             self.params_id = array_params
 
     def confirm_receipt_ticket(self):
-        #Metodo para confirmar la boleta
+        #Metodo para confirmar la boleta de entrada
         if self.net_weight == 0:
             msg = 'El peso neto ingresado no es valido'
             raise UserError(msg)
@@ -272,14 +274,46 @@ class RecibaTicket(models.Model):
         self.transfer_id = picking.id
         self.transfer_count += 1
         self.state='confirmed'
+
+    def reverse_receipt_ticket(self):
+        #Metodo para cdar reversa a la boleta de entrada
+        operation = self.env['stock.picking.type'].search([('name','=','Devolucion de Recepciones'),('warehouse_id','=',self.transfer_id.picking_type_id.warehouse_id.id)]).id
+        values={
+        'picking_type_id': operation,
+        'location_id': self.destination_id.id,
+        'location_dest_id' : self.origin_id.id,
+        'scheduled_date': datetime.today(),
+        'reciba_id': self.id,
+        'move_ids_without_package': [(0,0,{
+            'name': self.product_id.name,
+            'product_id': self.product_id.id,
+            'product_uom_qty': self.net_weight,
+            'quantity_done': self.net_weight,
+            'product_uom': self.product_id.uom_po_id.id,
+            'purchase_line_id': self.purchase_id.order_line[0].id,
+            'to_refund': True
+        })]}
+        picking = self.env['stock.picking'].create(values)
+        picking.state = 'done'
+        self.transfer_reverse_id = picking.id
+        self.transfer_reverse_count += 1
+        self.state='cancel'
         
 
     @api.multi
-    def action_view_invoice(self):
+    def action_view_transfer(self):
         #Metodo para ver transferencias relacionadas
         action = self.env.ref('wobin_reciba.reciba_transfer')
         result = action.read()[0]
         result['domain'] = [('id','=', self.transfer_id.id)]
+        return result
+    
+    @api.multi
+    def action_view_reverse(self):
+        #Metodo para ver transferencias de reversa
+        action = self.env.ref('wobin_reciba.reciba_transfer')
+        result = action.read()[0]
+        result['domain'] = [('id','=', self.transfer_reverse_id.id)]
         return result
 
 class RecibaTicketParams(models.Model):
