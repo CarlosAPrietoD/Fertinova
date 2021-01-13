@@ -39,6 +39,7 @@
                                 <field name="weigher"/>
                                 <field name="product_id"/>
                                 <field name="purchase_id"/>
+                                <field name="purchase_invoice_status"/>
                                 <field name="partner_id" string="Proveedor"/>
                                 <field name="apply_discount"/>
                             </group>
