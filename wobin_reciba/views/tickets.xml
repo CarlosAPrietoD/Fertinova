@@ -11,7 +11,7 @@
                     <header>
                         <button name="confirm_receipt_ticket" type="object" states="draft" string="Confirmar" class="btn-primary"/>
                         <button name="reverse_receipt_ticket" type="object" states="confirmed" string="Reversa" class="btn-primary"/>
-                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,cancel" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed" />
                     </header>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
@@ -21,7 +21,7 @@
                             <button type="object" name="action_view_reverse" class="oe_stat_button" icon="fa-rotate-left">
                                 <field name="transfer_reverse_count" widget="statinfo" string="Reversa"/>
                             </button>
-                            <button type="object" name="action_view_invoice" class="oe_stat_button" icon="fa-file-text-o">
+                            <button type="object" name="action_view_ticket" class="oe_stat_button" icon="fa-file-text-o">
                                 <field name="ticket_count" widget="statinfo" string="Boleta relacionada"/>
                             </button>
                         </div>
