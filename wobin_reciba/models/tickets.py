@@ -271,8 +271,9 @@ class RecibaTicket(models.Model):
         })]}
         picking = self.env['stock.picking'].create(values)
         picking.state = 'done'
+        self.purchase_id.order_line[0] = self.purchase_id.order_line[0]+self.net_weight
         self.transfer_id = picking.id
-        self.transfer_count += 1
+        self.transfer_count = 1
         self.state='confirmed'
 
     def reverse_receipt_ticket(self):
@@ -295,6 +296,7 @@ class RecibaTicket(models.Model):
         })]}
         picking = self.env['stock.picking'].create(values)
         picking.state = 'done'
+        self.purchase_id.order_line[0] = self.purchase_id.order_line[0]-self.net_weight
         self.transfer_reverse_id = picking.id
         self.transfer_reverse_count += 1
         self.state='cancel'
