@@ -271,7 +271,7 @@ class RecibaTicket(models.Model):
         })]}
         picking = self.env['stock.picking'].create(values)
         picking.state = 'done'
-        self.purchase_id.order_line[0] = self.purchase_id.order_line[0]+self.net_weight
+        self.purchase_id.order_line[0].qty_received = self.purchase_id.order_line[0].qty_received+self.net_weight
         self.transfer_id = picking.id
         self.transfer_count = 1
         self.state='confirmed'
@@ -296,7 +296,7 @@ class RecibaTicket(models.Model):
         })]}
         picking = self.env['stock.picking'].create(values)
         picking.state = 'done'
-        self.purchase_id.order_line[0] = self.purchase_id.order_line[0]-self.net_weight
+        self.purchase_id.order_line[0].qty_received = self.purchase_id.order_line[0].qty_received-self.net_weight
         self.transfer_reverse_id = picking.id
         self.transfer_reverse_count += 1
         self.state='cancel'
