@@ -10,15 +10,19 @@
                 <form string="Recepciones">
                     <header>
                         <button name="confirm_receipt_ticket" type="object" states="draft" string="Confirmar" class="btn-primary"/>
+                        <button name="reverse_receipt_ticket" type="object" states="confirmed" string="Reversa" class="btn-primary"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,cancel" />
                     </header>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
-                            <button type="object" name="action_view_invoice" class="oe_stat_button" icon="fa-pencil-square-o">
+                            <button type="object" name="action_view_transfer" class="oe_stat_button" icon="fa-archive">
                                 <field name="transfer_count" widget="statinfo" string="Transferencia"/>
                             </button>
-                            <button type="object" name="action_view_invoice" class="oe_stat_button" icon="fa-pencil-square-o">
-                                <field name="ticket_count" widget="statinfo" string="Reversa"/>
+                            <button type="object" name="action_view_reverse" class="oe_stat_button" icon="fa-rotate-left">
+                                <field name="transfer_reverse_count" widget="statinfo" string="Reversa"/>
+                            </button>
+                            <button type="object" name="action_view_invoice" class="oe_stat_button" icon="fa-file-text-o">
+                                <field name="ticket_count" widget="statinfo" string="Boleta relacionada"/>
                             </button>
                         </div>
                         <group>
@@ -304,13 +308,11 @@
             <field name="name">Recepciones</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">stock.picking</field>
-            <!--<field name="domain">[('operation_type','=','in')]</field>-->
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
-            <!--<field name="context">{'default_operation_type': 'in', 'default_apply_discount': True}</field>-->
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
-                Click to add a track value.
+                Click to add a Picking.
                 </p>
             </field>
         </record>
