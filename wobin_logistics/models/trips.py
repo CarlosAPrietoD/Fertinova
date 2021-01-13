@@ -332,23 +332,23 @@ class AccountInvoice(models.Model):
     #:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     # Aggregation of new relational fields
     #:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  
+    contracts_ids     = fields.One2many('logistics.contracts', 'id', string='Contracts Information')
+    trips_related_ids = fields.Many2many('logistics.trips', compute='_set_trips', string='Related Trips')
+
     @api.one
     @api.depends('number')
     def _set_trips(self):
-        #Get trips assigned from invoice lines:
-        trip_list = [ inv.trips_id for inv in self.invoice_line_ids ]
-        self.trips_related_ids = [(6, 0, trip_list)] 
-
-        # From last trip gotten, retrieve its releated contract:
+        #Get trips assigned from invoice lines:        
+        trip_list = [ inv.trips_id.id for inv in self.invoice_line_ids ]
         if trip_list:
             trip_retrieved     = trip_list[0]
+            print('\n\n\n trip_retrieved: ', trip_retrieved)
             contract_retrieved = self.env['logistics.trips'].search([('id', '=', trip_retrieved)]).contracts_id.id
-            self.trips_related_ids = [(4, 0, contract_retrieved)]        
+            print('\n\n\n contract_retrieved: ', contract_retrieved)
+            if contract_retrieved:            
+                self.contracts_ids = [(4, 0, contract_retrieved)]
 
-
-
-    contracts_ids     = fields.One2many('logistics.contracts', 'id', string='Contracts Information')
-    trips_related_ids = fields.Many2many('logistics.trips', default=_set_trips, string='Related Trips')
+        self.trips_related_ids = [(6, 0, trip_list)] 
 
 
 

@@ -104,13 +104,28 @@
       </field>
     </record>
 
-    <!-- Billing/Invoices related to their Contracts & Trips - LIST VIEW --> 
+    <!-- Billing related to their Contracts & Trips - SEARCH VIEW --> 
+    <record id="view_invoice_report_search" model="ir.ui.view">
+      <field name="name">Invoices Report related to Contract and Trips</field>
+      <field name="model">account.invoice</field>
+      <field name="arch" type="xml">
+        <search> 
+          <field name="id"/>           
+          <field name="number"/>  
+          <field name="contracts_ids"/> 
+          <field name="trips_related_ids"/> 
+          <field name="state" invisible="1"/>
+          <filter name="contracts" string="Con Contrato" 
+                  domain="[('contracts_ids', '=', 'True')]" />                      
+        </search>
+      </field>
+    </record> 
+    <!-- Billing related to their Contracts & Trips - LIST VIEW --> 
     <record id="view_invoice_report_list" model="ir.ui.view">
       <field name="name">Invoices Report related to Contract and Trips</field>
       <field name="model">account.invoice</field>
       <field name="arch" type="xml">
-        <tree>
-          <field name="id"/>           
+        <tree>          
           <field name="number"/>  
           <field name="contracts_ids"/> 
           <field name="trips_related_ids" widget="many2many_tags"/> 
@@ -118,7 +133,7 @@
         </tree>
       </field>
     </record> 
-    <!-- Billing/Invoices related to their Contracts & Trips - FORM VIEW --> 
+    <!-- Billing related to their Contracts & Trips - FORM VIEW --> 
     <record id="view_invoice_report_form" model="ir.ui.view">
       <field name="name">Invoices Report related to Contract and Trips</field>
       <field name="model">account.invoice</field>
