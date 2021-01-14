@@ -143,7 +143,9 @@ class RecibaTicket(models.Model):
     transfer_id = fields.Many2one('stock.picking', string="Transferencia")
     transfer_count = fields.Integer("Transferencias", default=0)
     transfer_reverse_id = fields.Many2one('stock.picking', string="Reversa")
-    transfer_reverse_count = fields.Integer("Transferencias", default=0)
+    transfer_reverse_count = fields.Integer("Reversa", default=0)
+    credit_id = fields.Many2one('account.invoice', "Nota de crédito por descuento")
+    credit_count = fields.Integer("Nota de crédito por descuento", default=0)
 
     #-------------------------------------Datos generales----------------------------------
     name = fields.Char(string="Boleta", default="Boleta borrador")
@@ -249,7 +251,7 @@ class RecibaTicket(models.Model):
             raise UserError(msg)
         #Asignacion del nombre de acuerdo 
         if self.destination_id:
-            tickets = self.env['reciba.ticket'].search(['&',('destination_id','=',self.destination_id.id),('state','=','confirmed')])
+            tickets = self.env['reciba.ticket'].search(['&',('destination_id','=',self.destination_id.id),'|',('state','=','confirmed'),('state','=','reverse')])
             if tickets:
                 name_location = self.destination_id.display_name
                 number = str(len(tickets)+1).zfill(4)
@@ -276,6 +278,26 @@ class RecibaTicket(models.Model):
         self.purchase_id.order_line[0].qty_received = self.purchase_id.order_line[0].qty_received+self.net_weight
         self.transfer_id = picking.id
         self.transfer_count = 1
+        #Se crea una nota de credito en caso de haber descuento
+        if self.apply_discount:
+            if self.discount > 0:
+                account = self.env['account.account'].search([('name','=','PROVEEDORES NACIONALES')], limit=1).id
+                values={
+                    'type': 'in_refund',
+                    'partner_id': self.partner_id.id,
+                    'date_invoice': date.today(),
+                    'invoice_line_ids': [(0,0,{
+                        'product_id': self.product_id.id,
+                        'name': self.product_id.display_name,
+                        'quantity': self.discount,
+                        'uom_id': self.product_id.uom_id.id,
+                        'price_unit': self.price_po,
+                        'account_id': account
+                    })]
+                    }
+                credit = self.env['account.invoice'].create(values)
+                self.credit_id = credit.id
+                self.credit_count = 1
         self.state='confirmed'
 
     def reverse_receipt_ticket(self):
@@ -364,11 +386,26 @@ class RecibaTicket(models.Model):
         result['domain'] = [('id','=', self.ticket_id.id)]
         return result
 
+    @api.multi
+    def action_view_credit(self):
+        #Metodo para ver notas de credito relacionadas
+        action = self.env.ref('wobin_reciba.reciba_credit')
+        result = action.read()[0]
+        result['domain'] = [('id','=', self.credit_id.id)]
+        return result
+
+    @api.multi
+    def unlink(self):
+        #Metodo para 
+        ticket = self.env['reciba.ticket'].search([('ticket_id','=',self.id)])
+        ticket.ticket_id = 0
+        ticket.ticket_count = 0
+        return super(RecibaTicket, self).unlink()
+
 class RecibaTicketParams(models.Model):
     #Parametros de calidad de boleta
     _name = 'reciba.ticket.params'
     _description = 'Boletas'
-
 
     ticket_id = fields.Many2one('reciba.ticket')
     quality_params_id = fields.Many2one('reciba.quality.params', 'Parametro de calidad')
