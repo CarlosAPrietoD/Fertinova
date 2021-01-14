@@ -15,6 +15,9 @@
                     </header>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
+                            <button type="object" name="action_view_credit" class="oe_stat_button" icon="fa-archive">
+                                <field name="credit_count" widget="statinfo" string="Nota de crédito por descuento"/>
+                            </button>
                             <button type="object" name="action_view_transfer" class="oe_stat_button" icon="fa-archive">
                                 <field name="transfer_count" widget="statinfo" string="Transferencia"/>
                             </button>
@@ -314,6 +317,21 @@
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
                 Click to add a Picking.
+                </p>
+            </field>
+        </record>
+
+        <!--==============================================Notas de credito====================================-->
+
+        <record id="reciba_credit" model="ir.actions.act_window">
+            <field name="name">Notas de crédito</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a Invoice.
                 </p>
             </field>
         </record>
