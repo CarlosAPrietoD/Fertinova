@@ -175,6 +175,7 @@ class RecibaTicket(models.Model):
     list_production_id = fields.Many2one('mrp.bom', string="Lista de materiales")
     qty_produce = fields.Float(string="Cantidad a producir")
     qty_process = fields.Float(string="Cantidad a procesar")
+    origin = fields.Char(string="Documento origen")
     
     #------------------------------------Datos de calidad---------------------------------
     quality_id = fields.Many2one('reciba.quality', string="Norma de calidad")
@@ -361,7 +362,8 @@ class RecibaTicket(models.Model):
             'origin_id': self.origin_id.id,
             'destination_id': self.destination_id.id,
             'gross_weight': self.gross_weight,
-            'tare_weight': self.tare_weight
+            'tare_weight': self.tare_weight,
+            'origin': self.name
         }
         ticket = self.env['reciba.ticket'].create(values)
         params = []
@@ -372,6 +374,8 @@ class RecibaTicket(models.Model):
         ticket.params_id = params
         self.ticket_id = ticket.id
         self.ticket_count = 1
+        self.credit_id = 0
+        self.credit_count = 0
         self.state='reverse'
         
         

@@ -47,6 +47,9 @@
                                 <field name="partner_id" string="Proveedor" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 <field name="apply_discount" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                             </group>
+                            <group>
+                                <field name="origin" readonly="1"/>
+                            </group>
                         </group>
                         <notebook>
                             <page string="Calidad" name="quality_page">
