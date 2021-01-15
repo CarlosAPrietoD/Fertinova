@@ -9,22 +9,22 @@
             <field name="arch" type="xml">
                 <form string="Recepciones">
                     <header>
-                        <button name="confirm_receipt_ticket" type="object" states="draft" string="Confirmar" class="btn-primary"/>
+                        <button name="confirm_receipt_ticket" type="object" states="draft,priceless" string="Confirmar" class="btn-primary"/>
                         <button name="reverse_receipt_ticket" type="object" states="confirmed" string="Reversa" class="btn-primary"/>
-                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,priceless,confirmed" />
                     </header>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
-                            <button type="object" name="action_view_credit" class="oe_stat_button" icon="fa-archive">
+                            <button type="object" name="action_view_credit" class="oe_stat_button" icon="fa-archive" attrs="{'invisible':[('credit_count', '=', 0)]}">
                                 <field name="credit_count" widget="statinfo" string="Nota de crédito por descuento"/>
                             </button>
                             <button type="object" name="action_view_transfer" class="oe_stat_button" icon="fa-archive">
                                 <field name="transfer_count" widget="statinfo" string="Transferencia"/>
                             </button>
-                            <button type="object" name="action_view_reverse" class="oe_stat_button" icon="fa-rotate-left">
+                            <button type="object" name="action_view_reverse" class="oe_stat_button" icon="fa-rotate-left" attrs="{'invisible':[('transfer_reverse_count', '=', 0)]}">
                                 <field name="transfer_reverse_count" widget="statinfo" string="Reversa"/>
                             </button>
-                            <button type="object" name="action_view_ticket" class="oe_stat_button" icon="fa-file-text-o">
+                            <button type="object" name="action_view_ticket" class="oe_stat_button" icon="fa-file-text-o" attrs="{'invisible':[('ticket_count', '=', 0)]}">
                                 <field name="ticket_count" widget="statinfo" string="Boleta relacionada"/>
                             </button>
                         </div>
@@ -41,8 +41,9 @@
                                 <field name="operation_type_id" domain="['|',('name','=','Receipts'),('name','=','Recepciones')]" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 <field name="weigher" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 <field name="product_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
-                                <field name="purchase_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
-                                <field name="purchase_invoice_status" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="reception" required="True" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')]}"/>
+                                <field name="purchase_id" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')], 'required':[('reception', '=', 'price')], 'invisible':[('reception', '=', 'priceless')]}"/>
+                                <field name="purchase_invoice_status" attrs="{'invisible':[('reception', '=', 'priceless')]}"/>
                                 <field name="partner_id" string="Proveedor" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 <field name="apply_discount" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                             </group>
@@ -51,14 +52,14 @@
                             <page string="Calidad" name="quality_page">
                                 <br/>
                                 <group>
-                                    <field name="quality_id" domain="[('product_id','=',product_id)]"/>
+                                    <field name="quality_id" domain="[('product_id','=',product_id)]" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 </group>
                                 <group>
                                     <group>
-                                        <field name="humidity"/>
-                                        <field name="impurity"/>
-                                        <field name="density"/>
-                                        <field name="temperature"/>
+                                        <field name="humidity" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="impurity" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="density" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="temperature" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                     </group>
                                     <group>
                                         <field name="humidity_discount" attrs="{'invisible':[('apply_discount', '!=', True)]}"/>
@@ -66,7 +67,7 @@
                                     </group>
                                 </group>
                                 <br/>
-                                <field name="params_id">
+                                <field name="params_id"  attrs="{'readonly':[('state', '!=', 'draft')]}">
                                     <tree editable="bottom" decoration-danger="value &gt; max_value" delete="0">
                                         <field name="quality_params_id" readonly="True" force_save="1"/>
                                         <field name="max_value"/>
@@ -86,35 +87,32 @@
                             <page string="Recepción" name="reception_page">
                                 <br/>
                                 <group>
-                                    <field name="reception"/>
-                                </group>
-                                <group>
-                                    <field name="driver"/>
+                                    <field name="driver" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 </group>
                                 <group>
                                     <group>
-                                        <field name="type_vehicle"/>
-                                        <field name="plate_vehicle"/>
+                                        <field name="type_vehicle" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="plate_vehicle" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                     </group>
                                     <group>
-                                        <field name="plate_trailer"/>
-                                        <field name="plate_second_trailer"/>
+                                        <field name="plate_trailer" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="plate_second_trailer" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                     </group>
                                 </group>
                                 <group>
                                     <group>
-                                        <field name="origin_id"/>
-                                        <field name="destination_id"/>
+                                        <field name="origin_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="destination_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                     </group>
                                     <group>
-                                        <field name="origin_date"/>
-                                        <field name="destination_date"/>
+                                        <field name="origin_date" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="destination_date" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                     </group>
                                 </group>
                                 <group>
                                     <group>
-                                        <field name="gross_weight"/>
-                                        <field name="tare_weight"/>
+                                        <field name="gross_weight" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="tare_weight" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                         <field name="net_weight"/>
                                     </group>
                                     <group>
@@ -125,8 +123,8 @@
                                 </group>
                                 <group>
                                     <group>
-                                        <field name="price_po" attrs="{'invisible':[('reception', '!=', 'price')]}"/>
-                                        <field name="currency_id" attrs="{'invisible':[('reception', '!=', 'price')]}"/>
+                                        <field name="price_po" attrs="{'invisible':[('reception', '=', 'priceless')]}"/>
+                                        <field name="currency_id" attrs="{'invisible':[('reception', '=', 'priceless')],'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')]}"/>
                                     </group>
                                 </group>
                             </page>
