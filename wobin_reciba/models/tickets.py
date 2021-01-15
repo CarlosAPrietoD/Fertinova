@@ -233,7 +233,7 @@ class RecibaTicket(models.Model):
         self.operation_type_id = operation_id
 
     @api.onchange('quality_id')
-    def get_quality_params(self):
+    def _get_quality_params(self):
         #Metodo para agregar los parametros de calidad a la boleta
         self.params_id = None
         if self.quality_id:
@@ -241,6 +241,12 @@ class RecibaTicket(models.Model):
             for param in self.quality_id.params:
                 array_params.append((0,0,{'quality_params_id':param.id, 'name': param.name, }))
             self.params_id = array_params
+
+    @api.onchange('reception')
+    def _get_reception_type(self):
+        #metodo para detectar cambios de tipo de recepcion
+        if self.reception == 'priceless':
+            self.purchase_id = 0
 
     def confirm_receipt_ticket(self):
         #Metodo para confirmar la boleta de entrada
