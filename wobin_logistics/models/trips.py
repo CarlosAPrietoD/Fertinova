@@ -232,7 +232,7 @@ class LogisticsTrips(models.Model):
     @api.one
     @api.depends('name')
     def _set_billed_income(self):
-        self.billed_income = self.env['account.invoice'].search([('origin', '=', self.sales_order_id.id)], limit=1).amount_total
+        self.billed_income = self.env['account.invoice.line'].search([('trips_id', '=', self.id)], limit=1).price_unit
 
 
 
@@ -241,9 +241,10 @@ class LogisticsTrips(models.Model):
     def _set_expenses(self):
         billed_amount_po = 0.0
 
-        for pur_ord in self.advance_ids:
-            amount = self.env['account.invoice'].search([('origin', '=', pur_ord.id)]).amount_total
-            billed_amount_po += amount
+        if self.advance_ids:
+            for pur_ord in self.advance_ids.ids:
+                amount = self.env['purchase.order'].search([('id', '=', pur_ord)]).amount_total
+                billed_amount_po += amount
 
         self.expenses = billed_amount_po            
 
