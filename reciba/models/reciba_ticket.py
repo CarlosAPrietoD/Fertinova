@@ -1,5 +1,6 @@
 from odoo import models, fields, api
 from datetime import date, datetime
+from odoo.exceptions import UserError
 
 class RecibaTicket(models.Model):
     _name = 'reciba.ticket'
@@ -196,7 +197,7 @@ class RecibaTicket(models.Model):
     apply_discount = fields.Boolean(string="Aplicar descuento", default=True)
     humidity_total_discount = fields.Float(string="Descuento total de humedad (Kg)", compute='_get_humidity_total_discount', store=True)
     impurity_total_discount = fields.Float(string="Descuento total de impureza (Kg)", compute='_get_impurity_total_discount', store=True)
-    price = fields.Monetary(string="Precio")
+    price = fields.Float(string="Precio", digits=(15,4))
     price_flag = fields.Boolean(default=False)
     currency_id = fields.Many2one('res.currency', default=lambda self: self.env['res.company']._company_default_get('your.module').currency_id, string="Moneda")
     
@@ -369,6 +370,14 @@ class RecibaTicket(models.Model):
             
         return ticket
 
+    @api.multi
+    def unlink(self):
+        if self.state != 'draft':
+            msg = 'No se pueden eliminar boletas confirmadas'
+            raise UserError(msg)
+        ticket = super(RecibaTicket, self).unlink()
+        return ticket
+
 
     def create_purchase_order(self):
         #picking_type = self.env['stock.picking.type'].search(['|',('name','ilike','Recepciones'),('name','ilike','Receipts')], limit=1)
@@ -397,7 +406,8 @@ class RecibaTicket(models.Model):
                 'account_analytic_id': analytic_account.id,
                 'product_qty': self.net_weight,
                 'price_unit': self.price,
-                'product_uom': self.product_id.uom_po_id.id
+                'product_uom': self.product_id.uom_po_id.id,
+                'taxes_id': [(4, self.product_id.supplier_taxes_id.id)]
             }),
             (0,0,{
                 'product_id': discount.id,
@@ -406,7 +416,8 @@ class RecibaTicket(models.Model):
                 'account_analytic_id': analytic_account.id,
                 'product_qty': self.discount,
                 'price_unit': self.price*-1,
-                'product_uom': discount.uom_po_id.id
+                'product_uom': discount.uom_po_id.id,
+                'taxes_id': [(4, discount.supplier_taxes_id.id)]
             })]
 
         self.po_id = purchase.id

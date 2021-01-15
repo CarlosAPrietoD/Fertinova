@@ -9,9 +9,9 @@
                 <form string="Reciba Form">
                     <header>
                         <button name="confirm_reciba" type="object" states="draft" string="Confirmar" class="btn-primary"/>
-                        <button name="cancel_reciba" type="object" states="draft" string="Cancelar" />
                         <button name="create_purchase_order" type="object" string="Crear PO" attrs="{'invisible':['|',('price_flag', '=', False),'|',('state', '!=', 'confirmed'),'|',('po_id', '!=', False),('operation_type', '!=', 'in')]}" class="btn-primary"/>
                         <button name="create_transfer" type="object" string="Crear entrega" attrs="{'invisible':['|','|',('state', '!=', 'confirmed'),('operation_type', '!=', 'out'),('picking_id', '!=', False)]}" class="btn-primary"/>
+                        <button name="cancel_reciba" type="object" states="draft,confirmed" string="Cancelar" groups="reciba.grupo_reciba_cancel"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,invoiced,cancel" />
                     </header>
                     <sheet>
