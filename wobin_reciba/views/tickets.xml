@@ -61,8 +61,8 @@
                                         <field name="temperature"/>
                                     </group>
                                     <group>
-                                        <field name="humidity_discount"/>
-                                        <field name="impurity_discount"/>
+                                        <field name="humidity_discount" attrs="{'invisible':[('apply_discount', '!=', True)]}"/>
+                                        <field name="impurity_discount" attrs="{'invisible':[('apply_discount', '!=', True)]}"/>
                                     </group>
                                 </group>
                                 <br/>
