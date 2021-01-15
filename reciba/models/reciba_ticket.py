@@ -406,7 +406,8 @@ class RecibaTicket(models.Model):
                 'account_analytic_id': analytic_account.id,
                 'product_qty': self.net_weight,
                 'price_unit': self.price,
-                'product_uom': self.product_id.uom_po_id.id
+                'product_uom': self.product_id.uom_po_id.id,
+                'taxes_id': self.product_id.supplier_taxes_id.id
             }),
             (0,0,{
                 'product_id': discount.id,
