@@ -186,7 +186,7 @@
             <field name="view_mode">form</field>
         </record>
 
-        <menuitem name="Reciba" id="reciba_root" sequence="40"/>
+        <menuitem name="Reciba" id="reciba_root" sequence="40" web_icon="wobin_reciba,static/description/reciba_icon.png"/>
 
         <menuitem id="operation_menu" name="Tipo de operación" parent="reciba_root" sequence="1"/>
 
