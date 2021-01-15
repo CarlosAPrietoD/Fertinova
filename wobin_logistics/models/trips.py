@@ -372,7 +372,8 @@ class AccountInvoiceLine(models.Model):
     #:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     # Aggregation of a new many2one field of Trips in Customer Invoices
     #:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  
-    trips_id = fields.Many2one('logistics.trips', string='Trip')        
+    trips_id = fields.Many2one('logistics.trips', string='Trip')    
+    
 
 
 
