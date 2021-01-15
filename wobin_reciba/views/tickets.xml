@@ -38,13 +38,13 @@
                                 <field name="company_id" invisible="1"/>
                                 <field name="date" readonly="True"/>
                                 <field name="operation_type" invisible="1"/>
-                                <field name="operation_type_id" domain="['|',('name','=','Receipts'),('name','=','Recepciones')]"/>
-                                <field name="weigher"/>
-                                <field name="product_id"/>
-                                <field name="purchase_id"/>
-                                <field name="purchase_invoice_status"/>
-                                <field name="partner_id" string="Proveedor"/>
-                                <field name="apply_discount"/>
+                                <field name="operation_type_id" domain="['|',('name','=','Receipts'),('name','=','Recepciones')]" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="weigher" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="product_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="purchase_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="purchase_invoice_status" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="partner_id" string="Proveedor" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="apply_discount" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                             </group>
                         </group>
                         <notebook>
