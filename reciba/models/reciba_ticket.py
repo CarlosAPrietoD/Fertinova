@@ -416,7 +416,8 @@ class RecibaTicket(models.Model):
                 'account_analytic_id': analytic_account.id,
                 'product_qty': self.discount,
                 'price_unit': self.price*-1,
-                'product_uom': discount.uom_po_id.id
+                'product_uom': discount.uom_po_id.id,
+                'taxes_id': [(4, discount.supplier_taxes_id.id)]
             })]
 
         self.po_id = purchase.id
