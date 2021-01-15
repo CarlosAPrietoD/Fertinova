@@ -137,6 +137,7 @@ class RecibaTicket(models.Model):
     #------------------------------------Datos---------------------------------------------
     company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('your.module'))
     state = fields.Selection([('draft', 'Borrador'),
+    ('priceless', 'Confirmado sin precio'),
     ('confirmed', 'Confirmado'),
     ('reverse','Reversa'),
     ('cancel', 'Cancelado')], default='draft')
@@ -158,6 +159,8 @@ class RecibaTicket(models.Model):
     ('transfer','Transferencias internas'),
     ('order','Ordenes de desconstruccion')], string="Tipo de operacion")
     operation_type_id = fields.Many2one('stock.picking.type', string="Tipo de operacion")
+    reception = fields.Selection([('price', 'Con precio'),
+    ('priceless', 'Sin precio')], string="Tipo de recepción", default='price', required=True)
     transfer_type = fields.Selection([('int', 'Misma sucursal'),
     ('in', 'Entrada'), 
     ('out','Salida')], string="Tipo de transferencia")
@@ -202,8 +205,6 @@ class RecibaTicket(models.Model):
     destination_date = fields.Datetime(string="Fecha y hora", compute='_default_destination_date', store=True)
 
     #-----------------------------------Datos de pesaje----------------------------------
-    reception = fields.Selection([('price', 'Con precio'),
-    ('priceless', 'Sin precio')], string="Tipo de recepción")
     gross_weight = fields.Float(string="Peso Bruto")
     gross_date = fields.Datetime(string="Fecha y hora", compute='_default_gross_date', store=True)
     tare_weight = fields.Float(string="Peso Tara")
@@ -243,62 +244,69 @@ class RecibaTicket(models.Model):
 
     def confirm_receipt_ticket(self):
         #Metodo para confirmar la boleta de entrada
+        #Condicionales para confirmar la boleta
         if self.net_weight == 0:
             msg = 'El peso neto ingresado no es valido'
             raise UserError(msg)
         if self.humidity == 0 or self.impurity == 0 or self.temperature == 0:
             msg = 'Los valores de humedad, impureza y temperatura deben ser mayores a 0'
             raise UserError(msg)
-        #Asignacion del nombre de acuerdo 
-        if self.destination_id:
-            tickets = self.env['reciba.ticket'].search(['&',('destination_id','=',self.destination_id.id),'|',('state','=','confirmed'),('state','=','reverse')])
-            if tickets:
-                name_location = self.destination_id.display_name
-                number = str(len(tickets)+1).zfill(4)
-                self.name=name_location + '/' + number
-            else:
-                self.name = self.destination_id.display_name + '/' + '0001'
-        #Creacion y asignación de la transferencia
-        values={
-        'picking_type_id': self.operation_type_id.id,
-        'location_id': self.origin_id.id,
-        'location_dest_id' : self.destination_id.id,
-        'scheduled_date': datetime.today(),
-        'reciba_id': self.id,
-        'move_ids_without_package': [(0,0,{
-            'name': self.product_id.name,
-            'product_id': self.product_id.id,
-            'product_uom_qty': self.net_weight,
-            'quantity_done': self.net_weight,
-            'product_uom': self.product_id.uom_po_id.id,
-            'purchase_line_id': self.purchase_id.order_line[0].id,
-        })]}
-        picking = self.env['stock.picking'].create(values)
-        picking.state = 'done'
-        self.purchase_id.order_line[0].qty_received = self.purchase_id.order_line[0].qty_received+self.net_weight
-        self.transfer_id = picking.id
-        self.transfer_count = 1
-        #Se crea una nota de credito en caso de haber descuento
-        if self.apply_discount:
-            if self.discount > 0:
-                account = self.env['account.account'].search([('name','=','PROVEEDORES NACIONALES')], limit=1).id
-                values={
-                    'type': 'in_refund',
-                    'partner_id': self.partner_id.id,
-                    'date_invoice': date.today(),
-                    'invoice_line_ids': [(0,0,{
-                        'product_id': self.product_id.id,
-                        'name': self.product_id.display_name,
-                        'quantity': self.discount,
-                        'uom_id': self.product_id.uom_id.id,
-                        'price_unit': self.price_po,
-                        'account_id': account
-                    })]
-                    }
-                credit = self.env['account.invoice'].create(values)
-                self.credit_id = credit.id
-                self.credit_count = 1
-        self.state='confirmed'
+        if self.state == 'draft':
+            #Asignacion del nombre de acuerdo al destino si esta en modo borrador
+            if self.destination_id:
+                tickets = self.env['reciba.ticket'].search(['&',('destination_id','=',self.destination_id.id),('state','!=','draft')])
+                if tickets:
+                    name_location = self.destination_id.display_name
+                    number = str(len(tickets)+1).zfill(4)
+                    self.name=name_location + '/' + number
+                else:
+                    self.name = self.destination_id.display_name + '/' + '0001'
+        
+        if self.reception == 'price':
+            #Creacion y asignación de la transferencia, si ya se tiene un precio asignado
+            values={
+            'picking_type_id': self.operation_type_id.id,
+            'location_id': self.origin_id.id,
+            'location_dest_id' : self.destination_id.id,
+            'scheduled_date': datetime.today(),
+            'reciba_id': self.id,
+            'move_ids_without_package': [(0,0,{
+                'name': self.product_id.name,
+                'product_id': self.product_id.id,
+                'product_uom_qty': self.net_weight,
+                'quantity_done': self.net_weight,
+                'product_uom': self.product_id.uom_po_id.id,
+                'purchase_line_id': self.purchase_id.order_line[0].id,
+            })]}
+            picking = self.env['stock.picking'].create(values)
+            picking.state = 'done'
+            self.purchase_id.order_line[0].qty_received = self.purchase_id.order_line[0].qty_received+self.net_weight
+            self.transfer_id = picking.id
+            self.transfer_count = 1
+            #Se crea una nota de credito en caso de haber descuento
+            if self.apply_discount:
+                if self.discount > 0:
+                    account = self.env['account.account'].search([('name','=','PROVEEDORES NACIONALES')], limit=1).id
+                    values={
+                        'type': 'in_refund',
+                        'partner_id': self.partner_id.id,
+                        'date_invoice': date.today(),
+                        'invoice_line_ids': [(0,0,{
+                            'product_id': self.product_id.id,
+                            'name': self.product_id.display_name,
+                            'quantity': self.discount,
+                            'uom_id': self.product_id.uom_id.id,
+                            'price_unit': self.price_po,
+                            'account_id': account
+                        })]
+                        }
+                    credit = self.env['account.invoice'].create(values)
+                    self.credit_id = credit.id
+                    self.credit_count = 1
+            self.state = 'confirmed'
+        if self.reception == 'priceless':
+            #Estado confirmado sin precio si no se tiene asignado
+            self.state = 'priceless'
 
     def reverse_receipt_ticket(self):
         #Metodo para dar reversa a la boleta de entrada
@@ -396,7 +404,7 @@ class RecibaTicket(models.Model):
 
     @api.multi
     def unlink(self):
-        #Metodo para 
+        #Metodo para eliminar la relacion de boletas cuando una es eliminada
         ticket = self.env['reciba.ticket'].search([('ticket_id','=',self.id)])
         ticket.ticket_id = 0
         ticket.ticket_count = 0
