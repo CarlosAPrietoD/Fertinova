@@ -139,7 +139,6 @@ class LogisticsTrips(models.Model):
                                   (0, 0, {'display_type': 'line_note', 'description': self.name, 'name': self.name})] 
             }
             record = self.env['sale.order'].create(vals) 
-
             #Assignment of all new created sale order into field "sales_order_id" in Trips:
             self.sales_order_id = record.id 
             
@@ -210,7 +209,7 @@ class LogisticsTrips(models.Model):
 
     @api.one
     def _set_income_prov(self):
-        self.income_provisions = self.env['account.invoice.line'].search([('trips_id', '=', self.id)]).price_subtotal
+        self.income_provisions = self.env['account.invoice.line'].search([('trips_id', '=', self.id)], limit=1).price_subtotal
 
 
 

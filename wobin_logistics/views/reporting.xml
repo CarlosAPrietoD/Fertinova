@@ -52,6 +52,7 @@
       <field name="arch" type="xml">
         <tree>
           <field name="name"/>  
+          <field name="status"/>
           <field name="trip_status"/>        
         </tree>
       </field>
@@ -89,14 +90,13 @@
 
     <!-- Settlements - LIST VIEW --> 
     <record id="view_trip_settlements" model="ir.ui.view">
-      <field name="name">Trips Analysis for Settlements</field>
+      <field name="name">Analysis for Operator's Settlements</field>
       <field name="model">logistics.trips</field>
       <field name="arch" type="xml">
         <tree>
           <field name="name"/> 
           <field name="state"/> 
           <field name="operator_id"/> 
-          <field name="income_provisions"/> 
           <field name="expenses"/> 
           <field name="advance_payment"/> 
           <field name="settlement"/>           

@@ -32,7 +32,7 @@
                             </tr>
                             <tr>
                                 <th scope="row">Producto</th>
-                                <td colspan="6"><span t-field="doc.product_id.name"/></td>
+                                <td colspan="6"><span t-field="doc.product_id"/></td>
                                 <td></td><td></td><td></td><td></td><td></td>                                
                             </tr>                                                        
                             <tr>

@@ -100,7 +100,7 @@
     </record> 
     <!-- SETTLEMENTS ANALYSIS Report - ACTION -->
     <record id="action_trip_settlements" model="ir.actions.act_window">
-        <field name="name">Trips Analysis for Settlements</field>
+        <field name="name">Analysis for Operator's Settlements</field>
         <field name="res_model">logistics.trips</field>
         <field name="view_mode">tree</field>        
         <field name="view_id" ref="wobin_logistics.view_trip_settlements"/>

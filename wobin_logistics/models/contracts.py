@@ -41,8 +41,8 @@ class LogisticsContracts(models.Model):
     recipient       = fields.Char(string='Recipient', required=True)
     shipping        = fields.Char(string='Shipping', required=True)
     observations    = fields.Html('Observations', required=True)
-    state           = fields.Selection(selection=[('active', 'Active'),
-                                                  ('cancel', 'Canceled'),
+    status          = fields.Selection(selection=[('active', 'Active'),
+                                                  ('close', 'Closed'),
                                                  ], string='State', required=True, readonly=True, copy=False, tracking=True, default='active', track_visibility='always')    
     # -- These fields were created for analysis not to be shown in main view of contracts -- #
     trips              = fields.Char(string='Trips', compute='_set_trips')
@@ -149,8 +149,8 @@ class LogisticsContracts(models.Model):
                 self.trip_status = 'doing'
 
 
-    def cancel_contract(self):
-        self.state = 'cancel'
+    def close_contract(self):
+        self.state = 'close'
 
 
     def delete_contract(self):  
