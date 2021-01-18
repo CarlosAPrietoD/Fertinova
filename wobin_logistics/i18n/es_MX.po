@@ -56,6 +56,11 @@ msgid "Analysis (Trips)"
 msgstr "Análisis (Viajes)"
 
 #. module: wobin_logistics
+#: model:ir.actions.act_window,name:wobin_logistics.action_trip_settlements
+msgid "Analysis for Operator's Settlements"
+msgstr "Análisis de Liquidación de Operadores"
+
+#. module: wobin_logistics
 #: model:ir.model,name:wobin_logistics.model_account_analytic_account
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__analytic_accnt_id
 msgid "Analytic Account"
