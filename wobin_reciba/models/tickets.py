@@ -169,8 +169,9 @@ class RecibaTicket(models.Model):
     ticket_id = fields.Many2one('wreciba.ticket', string="Boleta relacionada")
     ticket_count = fields.Integer("Boletas", default=0)
     sale_id = fields.Many2one('sale.order', string="Orden de venta")
+    sale_invoice_status = fields.Selection(related='sale_id.invoice_status', string="Estatus de facturación")
     purchase_id = fields.Many2one('purchase.order', string="Pedido de compra", domain="[('company_id','=',company_id)]")
-    purchase_invoice_status = fields.Selection(related='purchase_id.invoice_status')
+    purchase_invoice_status = fields.Selection(related='purchase_id.invoice_status', string="Estatus de facturación")
     partner_id = fields.Many2one('res.partner', string="Contacto")
     list_production_id = fields.Many2one('mrp.bom', string="Lista de materiales")
     qty_produce = fields.Float(string="Cantidad a producir")
@@ -194,7 +195,7 @@ class RecibaTicket(models.Model):
     type_vehicle = fields.Selection([('van','Camioneta'),
     ('torton','Torton'),
     ('trailer', 'Trailer sencillo'),
-    ('full','Trailer full')], string="Tipo de vehiculo")
+    ('full','Trailer full')], string="Tipo de vehiculo", default='van')
     plate_vehicle = fields.Char(string="Placas unidad")
     plate_trailer = fields.Char(string="Placas remolque")
     plate_second_trailer = fields.Char(string="Placas segundo remolque")
@@ -220,6 +221,7 @@ class RecibaTicket(models.Model):
     discount = fields.Float(string="Descuento total (kg)", compute='_get_discount_total', store=True)
     total_weight = fields.Float(string="Peso neto analizado", compute='_get_total_weight', store=True)
     price_po = fields.Float(related='purchase_id.order_line.price_unit', string="Precio", digits=(15,4))
+    price_so = fields.Float(related='sale_id.order_line.price_unit', string="Precio", digits=(15,4))
     currency_id = fields.Many2one('res.currency', default=lambda self: self.env['res.company']._company_default_get('your.module').currency_id, string="Moneda")
 
 
@@ -382,7 +384,107 @@ class RecibaTicket(models.Model):
         self.ticket_count = 1
         self.state='reverse'
         
+    def confirm_delivery_ticket(self):
+        #Metodo para confirmar la boleta de salida
+        #Condicionales para confirmar la boleta
+        if self.net_weight == 0:
+            msg = 'El peso neto ingresado no es valido'
+            raise UserError(msg)
+        if self.humidity == 0 or self.impurity == 0 or self.temperature == 0:
+            msg = 'Los valores de humedad, impureza y temperatura deben ser mayores a 0'
+            raise UserError(msg)
+        if self.state == 'draft':
+            #Asignacion del nombre de acuerdo al destino si esta en modo borrador
+            if self.origin_id:
+                tickets = self.env['reciba.ticket'].search(['&',('origin_id','=',self.origin_id.id),('state','!=','draft')])
+                if tickets:
+                    name_location = self.origin_id.display_name
+                    number = str(len(tickets)+1).zfill(4)
+                    self.name=name_location + '/' + number
+                else:
+                    self.name = self.origin_id.display_name + '/' + '0001'
         
+        #Creacion y asignación de la transferencia, si ya se tiene un precio asignado
+        values={
+        'picking_type_id': self.operation_type_id.id,
+        'location_id': self.origin_id.id,
+        'location_dest_id' : self.destination_id.id,
+        'scheduled_date': datetime.today(),
+        'reciba_id': self.id,
+        'move_ids_without_package': [(0,0,{
+            'name': self.product_id.name,
+            'product_id': self.product_id.id,
+            'product_uom_qty': self.net_weight,
+            'quantity_done': self.net_weight,
+            'product_uom': self.product_id.uom_po_id.id,
+            
+        })]}
+        picking = self.env['stock.picking'].create(values)
+        picking.state = 'done'
+        self.sale_id.order_line[0].qty_delivered = self.sale_id.order_line[0].qty_delivered+self.net_weight
+        self.transfer_id = picking.id
+        self.transfer_count = 1
+        self.state = 'confirmed'
+
+    def reverse_delivery_ticket(self):
+        #Metodo para dar reversa a la boleta de salida
+        operation = self.env['stock.picking.type'].search([('name','=','Devolucion de Órdenes de entrega'),('warehouse_id','=',self.transfer_id.picking_type_id.warehouse_id.id)]).id
+        values={
+        'picking_type_id': operation,
+        'location_id': self.destination_id.id,
+        'location_dest_id' : self.origin_id.id,
+        'scheduled_date': datetime.today(),
+        'reciba_id': self.id,
+        'move_ids_without_package': [(0,0,{
+            'name': self.product_id.name,
+            'product_id': self.product_id.id,
+            'product_uom_qty': self.net_weight,
+            'quantity_done': self.net_weight,
+            'product_uom': self.product_id.uom_po_id.id,
+            'to_refund': True})]
+        }
+        picking = self.env['stock.picking'].create(values)
+        picking.state = 'done'
+        self.sale_id.order_line[0].qty_delivered = self.sale_id.order_line[0].qty_delivered-self.net_weight
+        self.transfer_reverse_id = picking.id
+        self.transfer_reverse_count += 1
+        #Creacion de nueva boleta borrador
+        values={
+            'state': 'draft',
+            'operation_type': self.operation_type,
+            'operation_type_id': self.operation_type_id.id,
+            'weigher': self.weigher,
+            'product_id': self.product_id.id,
+            'purchase_id': self.purchase_id.id,
+            'partner_id': self.partner_id.id,
+            'apply_discount': self.apply_discount,
+            'quality_id': self.quality_id.id,
+            'humidity': self.humidity,
+            'impurity': self.impurity,
+            'density': self.density,
+            'temperature': self.temperature,
+            'reception': self.reception,
+            'driver': self.driver,
+            'type_vehicle': self.type_vehicle,
+            'plate_vehicle': self.plate_vehicle,
+            'plate_trailer': self.plate_trailer,
+            'plate_second_trailer': self.plate_second_trailer,
+            'origin_id': self.origin_id.id,
+            'destination_id': self.destination_id.id,
+            'gross_weight': self.gross_weight,
+            'tare_weight': self.tare_weight,
+            'origin': self.name
+        }
+        ticket = self.env['reciba.ticket'].create(values)
+        params = []
+        for i,param in enumerate(self.params_id):
+            params.append([0,0,{'ticket_id': ticket.id, 
+                                    'quality_params_id': param.quality_params_id.id,
+                                    'value': param.value}])
+        ticket.params_id = params
+        self.ticket_id = ticket.id
+        self.ticket_count = 1
+        self.state='reverse' 
 
     @api.multi
     def action_view_transfer(self):
