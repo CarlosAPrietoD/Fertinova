@@ -155,7 +155,19 @@
             <field name="model">reciba.ticket</field>
             <field name="arch" type="xml">
                 <tree string="Recepciones" delete="0" default_order="id desc">
+                    <field name="id"/>
                     <field name="name"/>
+                    <field name="date"/>
+                    <field name="reception"/>
+                    <field name="product_id"/>
+                    <field name="partner_id" string="Proveedor"/>
+                    <field name="origin_id"/>
+                    <field name="destination_id"/>
+                    <field name="net_weight"/>
+                    <field name="humidity_total_discount"/>
+                    <field name="impurity_total_discount"/>
+                    <field name="total_weight"/>
+                    <field name="state"/>
                 </tree>
             </field>
         </record>

@@ -374,8 +374,6 @@ class RecibaTicket(models.Model):
         ticket.params_id = params
         self.ticket_id = ticket.id
         self.ticket_count = 1
-        self.credit_id = 0
-        self.credit_count = 0
         self.state='reverse'
         
         
