@@ -98,8 +98,8 @@
                                         <field name="plate_vehicle" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                     </group>
                                     <group>
-                                        <field name="plate_trailer" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
-                                        <field name="plate_second_trailer" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="plate_trailer" attrs="{'readonly':[('state', '!=', 'draft')], 'invisible':['|',('type_vehicle', '=', 'van'),('type_vehicle', '=', 'torton')]}" />
+                                        <field name="plate_second_trailer" attrs="{'readonly':[('state', '!=', 'draft')], 'invisible':[('type_vehicle', '!=', 'full')]}"/>
                                     </group>
                                 </group>
                                 <group>

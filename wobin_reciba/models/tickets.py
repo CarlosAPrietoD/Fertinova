@@ -249,6 +249,12 @@ class RecibaTicket(models.Model):
         if self.reception == 'priceless':
             self.purchase_id = 0
 
+    @api.onchange('type_vehicle')
+    def _get_vehicle_type(self):
+        #metodo para detectar cambios de tipo de vehiculo
+        self.plate_trailer = ''
+        self.plate_second_trailer = ''
+
     def confirm_receipt_ticket(self):
         #Metodo para confirmar la boleta de entrada
         #Condicionales para confirmar la boleta
@@ -414,8 +420,9 @@ class RecibaTicket(models.Model):
     def unlink(self):
         #Metodo para eliminar la relacion de boletas cuando una es eliminada
         ticket = self.env['reciba.ticket'].search([('ticket_id','=',self.id)])
-        ticket.ticket_id = 0
-        ticket.ticket_count = 0
+        if ticket:
+            ticket.ticket_id = 0
+            ticket.ticket_count = 0
         return super(RecibaTicket, self).unlink()
 
 class RecibaTicketParams(models.Model):
@@ -456,3 +463,15 @@ class StockPicking(models.Model):
     
     x_studio_aplica_flete= fields.Boolean()
     reciba_id = fields.Many2one('reciba.ticket', string="Reciba")
+
+class AccountInvoice(models.Model):
+    _inherit='account.invoice'
+    
+    @api.multi
+    def unlink(self):
+        #Metodo para eliminar la relacion de notas de crédito cuando una es eliminada
+        ticket = self.env['reciba.ticket'].search([('credit_id','=',self.id)])
+        if ticket:
+            ticket.credit_id = 0
+            ticket.credit_count = 0
+        return super(AccountInvoice, self).unlink()
