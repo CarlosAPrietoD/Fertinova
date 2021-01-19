@@ -81,7 +81,7 @@
                                 <tr>
                                     <td class="w-25 table-info font-weight-bold">VEHÍCULO</td>
                                     <td class="w-20"><strong>Modelo: </strong><span t-field="doc.vehicle_id.model_id"/></td>
-                                    <td class="w-20"><strong>Placas: </strong><span t-field="doc.vehicle_id.vin_sn"/></td>
+                                    <td class="w-20"><strong>Placas: </strong><span t-field="doc.vehicle_id.license_plate"/></td>
                                     <td class="w-10"><strong>Año: </strong><span t-field="doc.vehicle_id.model_year"/></td>
                                 </tr>                               
                             </tbody>
