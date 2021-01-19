@@ -213,7 +213,7 @@ class RecibaTicket(models.Model):
     tare_date = fields.Datetime(string="Fecha y hora", compute='_default_tare_date', store=True)
     net_weight = fields.Float(string="Peso Neto", compute='_get_net_weight', store=True)
     net_date = fields.Datetime(string="Fecha y hora", compute='_default_net_date', store=True)
-    net_expected = fields.Float(related='sale_id.order_line.qty_to_deliver', string="Peso neto esperado")
+    net_expected = fields.Float(string="Peso neto esperado")
 
     #----------------------------------Datos de descuento-------------------------------
     apply_discount = fields.Boolean(string="Aplicar descuento")
@@ -234,6 +234,8 @@ class RecibaTicket(models.Model):
             operation_id = self.env['stock.picking.type'].search(['|',('name','=','Recepciones'),('name','=','Receipts')], limit=1).id
         elif self.operation_type=='out':
             operation_id = self.env['stock.picking.type'].search(['|',('name','=','Órdenes de entrega'),('name','=','Delivery Orders')], limit=1).id
+        elif self.operation_type=='dev_sale':
+            operation_id = self.env['stock.picking.type'].search([('name','=','Devolucion de Órdenes de entrega')], limit=1).id
         self.operation_type_id = operation_id
 
     @api.onchange('quality_id')
@@ -263,6 +265,7 @@ class RecibaTicket(models.Model):
         #metodo para detectar cambios orden de venta
         if self.sale_id:
             self.partner_id = self.sale_id.partner_id
+            self.net_expected = self.sale_id.product_uom_qty - self.sale_id.qty_delivered
 
     def confirm_receipt_ticket(self):
         #Metodo para confirmar la boleta de entrada
