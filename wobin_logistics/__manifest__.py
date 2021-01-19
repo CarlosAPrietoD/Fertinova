@@ -38,6 +38,7 @@
         #reports
         'views/templates.xml',
         'reports/contracts_reports.xml',
+        'reports/carta_porte.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
