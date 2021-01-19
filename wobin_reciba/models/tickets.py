@@ -213,6 +213,7 @@ class RecibaTicket(models.Model):
     tare_date = fields.Datetime(string="Fecha y hora", compute='_default_tare_date', store=True)
     net_weight = fields.Float(string="Peso Neto", compute='_get_net_weight', store=True)
     net_date = fields.Datetime(string="Fecha y hora", compute='_default_net_date', store=True)
+    net_expected = fields.Float(related='sale_id.order_line.qty_to_deliver', string="Peso neto esperado")
 
     #----------------------------------Datos de descuento-------------------------------
     apply_discount = fields.Boolean(string="Aplicar descuento")
@@ -257,6 +258,12 @@ class RecibaTicket(models.Model):
         self.plate_trailer = ''
         self.plate_second_trailer = ''
 
+    @api.onchange('sale_id')
+    def _get_sale_order(self):
+        #metodo para detectar cambios orden de venta
+        if self.sale_id:
+            self.partner_id = self.sale_id.partner_id
+
     def confirm_receipt_ticket(self):
         #Metodo para confirmar la boleta de entrada
         #Condicionales para confirmar la boleta
@@ -285,6 +292,7 @@ class RecibaTicket(models.Model):
             'location_dest_id' : self.destination_id.id,
             'scheduled_date': datetime.today(),
             'reciba_id': self.id,
+            'purchase_id': self.purchase_id.id,
             'move_ids_without_package': [(0,0,{
                 'name': self.product_id.name,
                 'product_id': self.product_id.id,
@@ -332,6 +340,7 @@ class RecibaTicket(models.Model):
         'location_dest_id' : self.origin_id.id,
         'scheduled_date': datetime.today(),
         'reciba_id': self.id,
+        'purchase_id': self.purchase_id.id,
         'move_ids_without_package': [(0,0,{
             'name': self.product_id.name,
             'product_id': self.product_id.id,
@@ -393,6 +402,9 @@ class RecibaTicket(models.Model):
         if self.humidity == 0 or self.impurity == 0 or self.temperature == 0:
             msg = 'Los valores de humedad, impureza y temperatura deben ser mayores a 0'
             raise UserError(msg)
+        if self.net_expected < self.net_weight:
+            msg = 'El peso neto es mayor a la cantidad pedida'
+            raise UserError(msg)
         if self.state == 'draft':
             #Asignacion del nombre de acuerdo al destino si esta en modo borrador
             if self.origin_id:
@@ -411,6 +423,7 @@ class RecibaTicket(models.Model):
         'location_dest_id' : self.destination_id.id,
         'scheduled_date': datetime.today(),
         'reciba_id': self.id,
+        'sale_id': self.sale_id.id,
         'move_ids_without_package': [(0,0,{
             'name': self.product_id.name,
             'product_id': self.product_id.id,
@@ -435,6 +448,7 @@ class RecibaTicket(models.Model):
         'location_dest_id' : self.origin_id.id,
         'scheduled_date': datetime.today(),
         'reciba_id': self.id,
+        'sale_id': self.sale_id.id,
         'move_ids_without_package': [(0,0,{
             'name': self.product_id.name,
             'product_id': self.product_id.id,
