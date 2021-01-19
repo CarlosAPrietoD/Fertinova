@@ -38,7 +38,7 @@
                                 </tr>
                                 <tr>
                                     <td class="table-info font-weight-bold">CANTIDAD DE CARGA</td>
-                                    <td><span t-field="doc.real_upload_qty"/></td>
+                                    <td><span t-field="doc.real_upload_qty"/> kg</td>
                                 </tr>
                                 <tr>
                                     <td class="table-info font-weight-bold">FECHA / HORA</td>
@@ -100,7 +100,7 @@
                         <table class="table w-50 float-right" style="font-size: 11px; padding: 2px;">
                             <tr>
                                 <td class="w-25 table-info font-weight-bold">IMPORTE</td>
-                                <td class="w-25"><span t-field="doc.qty_to_bill"/></td>
+                                <td class="w-25">$<span t-field="doc.qty_to_bill"/></td>
                             </tr>                              
                         </table>
 
