@@ -319,6 +319,7 @@
                                         <field name="gross_weight" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                         <field name="tare_weight" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                         <field name="net_weight"/>
+                                        <field name="net_expected"/>
                                     </group>
                                     <group>
                                         <field name="gross_date"/>
@@ -401,6 +402,201 @@
         </record>
 
         <menuitem id="deliveries_ticket_menu" name="Entregas" parent="operation_menu" action="tickets_delivery" sequence="1" />
+
+        <!--==========================================Devoluciones sobre ventas================================================-->
+        
+        <record model="ir.ui.view" id="form_view_sale_devolution">
+            <field name="name">reciba.ticket.form</field>
+            <field name="model">reciba.ticket</field>
+            <field name="arch" type="xml">
+                <form string="Devolución">
+                    <header>
+                        <button name="confirm_delivery_ticket" type="object" states="draft" string="Confirmar" class="btn-primary"/>
+                        <button name="reverse_delivery_ticket" type="object" states="confirmed" string="Reversa" class="btn-primary"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed" />
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button type="object" name="action_view_transfer" class="oe_stat_button" icon="fa-archive">
+                                <field name="transfer_count" widget="statinfo" string="Transferencia"/>
+                            </button>
+                            <button type="object" name="action_view_reverse" class="oe_stat_button" icon="fa-rotate-left" attrs="{'invisible':[('transfer_reverse_count', '=', 0)]}">
+                                <field name="transfer_reverse_count" widget="statinfo" string="Reversa"/>
+                            </button>
+                            <button type="object" name="action_view_ticket" class="oe_stat_button" icon="fa-file-text-o" attrs="{'invisible':[('ticket_count', '=', 0)]}">
+                                <field name="ticket_count" widget="statinfo" string="Boleta relacionada"/>
+                            </button>
+                        </div>
+                        <group>
+                            <h1>
+                                <field name="name" readonly="1" force_save="1"/>
+                            </h1>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="company_id" invisible="1"/>
+                                <field name="date" readonly="True"/>
+                                <field name="operation_type" invisible="1"/>
+                                <field name="operation_type_id" domain="['|',('name','=','Delivery Orders'),('name','=','Órdenes de entrega')]" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="weigher" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="product_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="sale_id" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')]}"/>
+                                <field name="sale_invoice_status"/>
+                                <field name="partner_id" string="Cliente" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                            </group>
+                            <group>
+                                <field name="origin" readonly="1"/>
+                                <field name="apply_discount" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Calidad" name="quality_page">
+                                <br/>
+                                <group>
+                                    <field name="quality_id" domain="[('product_id','=',product_id)]" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="humidity" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="impurity" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="density" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="temperature" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                    </group>
+                                    <group>
+                                        <field name="humidity_discount" attrs="{'invisible':[('apply_discount', '!=', True)]}"/>
+                                        <field name="impurity_discount" attrs="{'invisible':[('apply_discount', '!=', True)]}"/>
+                                    </group>
+                                </group>
+                                <br/>
+                                <field name="params_id"  attrs="{'readonly':[('state', '!=', 'draft')]}">
+                                    <tree editable="bottom" decoration-danger="value &gt; max_value" delete="0">
+                                        <field name="quality_params_id" readonly="True" force_save="1"/>
+                                        <field name="max_value"/>
+                                        <field name="unit"/>
+                                        <field name="value"/>
+                                    </tree>
+                                </field>
+                                <group>
+                                    <group>
+                                        <field name="sum_damage"/>
+                                    </group>
+                                    <group>
+                                        <field name="sum_broken"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Entrega" name="delivery_page">
+                                <br/>
+                                <group>
+                                    <field name="driver" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="type_vehicle" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="plate_vehicle" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                    </group>
+                                    <group>
+                                        <field name="plate_trailer" attrs="{'readonly':[('state', '!=', 'draft')], 'invisible':['|',('type_vehicle', '=', 'van'),('type_vehicle', '=', 'torton')]}" />
+                                        <field name="plate_second_trailer" attrs="{'readonly':[('state', '!=', 'draft')], 'invisible':[('type_vehicle', '!=', 'full')]}"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="origin_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="destination_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                    </group>
+                                    <group>
+                                        <field name="origin_date" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="destination_date" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="gross_weight" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="tare_weight" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="net_weight"/>
+                                    </group>
+                                    <group>
+                                        <field name="gross_date"/>
+                                        <field name="tare_date"/>
+                                        <field name="net_date"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="price_so" />
+                                        <field name="currency_id" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')]}"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Descuentos" name="discount_page" attrs="{'invisible':[('apply_discount', '!=', True)]}">
+                                <br/>
+                                <group>
+                                    <group>
+                                        <field name="humidity_total_discount"/>
+                                        <field name="discount"/>
+                                    </group>
+                                    <group>
+                                        <field name="impurity_total_discount"/>
+                                        <field name="total_weight"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="tree_view_sale_devolution" model="ir.ui.view">
+            <field name="name">reciba.ticket.reception.tree</field>
+            <field name="model">reciba.ticket</field>
+            <field name="arch" type="xml">
+                <tree string="Devolución" delete="0" default_order="id desc">
+                    <field name="id"/>
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="product_id"/>
+                    <field name="partner_id" string="Proveedor"/>
+                    <field name="origin_id"/>
+                    <field name="destination_id"/>
+                    <field name="net_weight"/>
+                    <field name="humidity_total_discount"/>
+                    <field name="impurity_total_discount"/>
+                    <field name="total_weight"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="sales_devolution" model="ir.actions.act_window">
+            <field name="name">Devoluciones sobre venta</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">reciba.ticket</field>
+            <field name="domain">[('operation_type','=','dev_sale')]</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'default_operation_type': 'dev_sale', 'default_apply_discount': False}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a track value.
+                </p>
+            </field>
+        </record>
+
+        <record id="reciba_tree_sale_devolution_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="sales_devolution" />
+            <field name="view_id" ref="tree_view_sale_devolution" />
+            <field name="view_mode">tree</field>
+        </record>
+
+        <record id="reciba_form_sale_devolution_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="sales_devolution" />
+            <field name="view_id" ref="form_view_sale_devolution" />
+            <field name="view_mode">form</field>
+        </record>
+
+        <menuitem id="devolution_sale_menu" name="Devoluciones sobre venta" parent="operation_menu" action="sales_devolution" sequence="1" />
 
         <!--==========================================Parametros de calidad=======================================-->
 
