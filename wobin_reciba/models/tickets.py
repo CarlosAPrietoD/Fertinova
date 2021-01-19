@@ -265,7 +265,7 @@ class RecibaTicket(models.Model):
         #metodo para detectar cambios orden de venta
         if self.sale_id:
             self.partner_id = self.sale_id.partner_id
-            self.net_expected = self.sale_id.product_uom_qty - self.sale_id.qty_delivered
+            self.net_expected = self.sale_id.order_line[0].product_uom_qty - self.sale_id.order_line[0].qty_delivered
 
     def confirm_receipt_ticket(self):
         #Metodo para confirmar la boleta de entrada
@@ -501,7 +501,50 @@ class RecibaTicket(models.Model):
         ticket.params_id = params
         self.ticket_id = ticket.id
         self.ticket_count = 1
-        self.state='reverse' 
+        self.state='reverse'
+
+    def confirm_dev_sale_ticket(self):
+        #Metodo para confirmar la boleta de devolucion sobre venta
+        #Condicionales para confirmar la boleta
+        if self.net_weight == 0:
+            msg = 'El peso neto ingresado no es valido'
+            raise UserError(msg)
+        if self.humidity == 0 or self.impurity == 0 or self.temperature == 0:
+            msg = 'Los valores de humedad, impureza y temperatura deben ser mayores a 0'
+            raise UserError(msg)
+        if self.state == 'draft':
+            #Asignacion del nombre de acuerdo al destino si esta en modo borrador
+            if self.origin_id:
+                tickets = self.env['reciba.ticket'].search(['&',('origin_id','=',self.origin_id.id),('state','!=','draft')])
+                if tickets:
+                    name_location = self.origin_id.display_name
+                    number = str(len(tickets)+1).zfill(4)
+                    self.name=name_location + '/' + number
+                else:
+                    self.name = self.origin_id.display_name + '/' + '0001'
+        
+        #Creacion y asignación de la transferencia
+        values={
+        'picking_type_id': self.operation_type_id.id,
+        'location_id': self.origin_id.id,
+        'location_dest_id' : self.destination_id.id,
+        'scheduled_date': datetime.today(),
+        'reciba_id': self.id,
+        'sale_id': self.sale_id.id,
+        'move_ids_without_package': [(0,0,{
+            'name': self.product_id.name,
+            'product_id': self.product_id.id,
+            'product_uom_qty': self.net_weight,
+            'quantity_done': self.net_weight,
+            'product_uom': self.product_id.uom_po_id.id,
+            
+        })]}
+        picking = self.env['stock.picking'].create(values)
+        picking.state = 'done'
+        self.sale_id.order_line[0].qty_delivered = self.sale_id.order_line[0].qty_delivered - self.net_weight
+        self.transfer_id = picking.id
+        self.transfer_count = 1
+        self.state = 'confirmed'
 
     @api.multi
     def action_view_transfer(self):

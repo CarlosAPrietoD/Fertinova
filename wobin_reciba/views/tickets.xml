@@ -411,8 +411,7 @@
             <field name="arch" type="xml">
                 <form string="Devolución">
                     <header>
-                        <button name="confirm_delivery_ticket" type="object" states="draft" string="Confirmar" class="btn-primary"/>
-                        <button name="reverse_delivery_ticket" type="object" states="confirmed" string="Reversa" class="btn-primary"/>
+                        <button name="confirm_dev_sale_ticket" type="object" states="draft" string="Confirmar" class="btn-primary"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,confirmed" />
                     </header>
                     <sheet>
@@ -437,7 +436,7 @@
                                 <field name="company_id" invisible="1"/>
                                 <field name="date" readonly="True"/>
                                 <field name="operation_type" invisible="1"/>
-                                <field name="operation_type_id" domain="['|',('name','=','Delivery Orders'),('name','=','Órdenes de entrega')]" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="operation_type_id" domain="[('name','=','Devolucion de Órdenes de entrega')]" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 <field name="weigher" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 <field name="product_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 <field name="sale_id" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')]}"/>
@@ -446,7 +445,6 @@
                             </group>
                             <group>
                                 <field name="origin" readonly="1"/>
-                                <field name="apply_discount" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                             </group>
                         </group>
                         <notebook>
@@ -461,10 +459,6 @@
                                         <field name="impurity" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                         <field name="density" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                         <field name="temperature" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
-                                    </group>
-                                    <group>
-                                        <field name="humidity_discount" attrs="{'invisible':[('apply_discount', '!=', True)]}"/>
-                                        <field name="impurity_discount" attrs="{'invisible':[('apply_discount', '!=', True)]}"/>
                                     </group>
                                 </group>
                                 <br/>
@@ -529,19 +523,6 @@
                                     </group>
                                 </group>
                             </page>
-                            <page string="Descuentos" name="discount_page" attrs="{'invisible':[('apply_discount', '!=', True)]}">
-                                <br/>
-                                <group>
-                                    <group>
-                                        <field name="humidity_total_discount"/>
-                                        <field name="discount"/>
-                                    </group>
-                                    <group>
-                                        <field name="impurity_total_discount"/>
-                                        <field name="total_weight"/>
-                                    </group>
-                                </group>
-                            </page>
                         </notebook>
                     </sheet>
                 </form>
@@ -576,7 +557,7 @@
             <field name="domain">[('operation_type','=','dev_sale')]</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
-            <field name="context">{'default_operation_type': 'dev_sale', 'default_apply_discount': False}</field>
+            <field name="context">{'default_operation_type': 'dev_sale'}</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
                 Click to add a track value.
