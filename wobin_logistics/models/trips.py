@@ -72,15 +72,15 @@ class LogisticsTrips(models.Model):
     # Upload data / - / - / - / - / - / - / - / - / - / - /
     start_date        = fields.Date(string='Start Date', track_visibility='always')
     upload_date       = fields.Date(string='Upload Date', track_visibility='always')
-    estimated_qty     = fields.Float(string='Estimated Quantity', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always')
-    real_upload_qty   = fields.Float(string='Real Upload Quantity', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always')
+    estimated_qty     = fields.Float(string='Estimated Quantity (kg)', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always')
+    real_upload_qty   = fields.Float(string='Real Upload Quantity (kg)', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always')
     attachment_upload = fields.Binary(string='Upload Attachments', track_visibility='always')
    
     # Download Data / - / - / - / - / - / - / - / - / - / - /
     download_date     = fields.Date(string='Download Date', track_visibility='always')
-    real_download_qty = fields.Float(string='Real Download Quantity', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always')
+    real_download_qty = fields.Float(string='Real Download Quantity (kg)', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always')
     attachment_downld = fields.Binary(string='Download Attachments', track_visibility='always')
-    qty_to_bill       = fields.Float(string='Quantiy to bill', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always', compute='_set_qty_to_bill') 
+    qty_to_bill       = fields.Float(string='Quantiy to bill $', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always', compute='_set_qty_to_bill') 
     conformity        = fields.Binary(string='Conformity and Settlement', track_visibility='always')
     checked           = fields.Boolean(string=" ")
     sales_order_id    = fields.Many2one('sale.order', string='Sales Order Generated', track_visibility='always', compute='_set_sale_order', ondelete='set null')    

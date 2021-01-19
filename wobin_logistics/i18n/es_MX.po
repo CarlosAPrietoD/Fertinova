@@ -178,8 +178,8 @@ msgstr "Información de Contratos"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__covenant_qty
-msgid "Covenanted Quantity"
-msgstr "Cantidad Pactada"
+msgid "Covenanted Quantity (kg)"
+msgstr "Cantidad Pactada (kg)"
 
 #. module: wobin_logistics
 #: model_terms:ir.ui.view,arch_db:wobin_logistics.view_logistics_contracts_form
@@ -276,13 +276,13 @@ msgstr "En Ruta"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__estimated_qty
-msgid "Estimated Quantity"
-msgstr "Cantidad Estimada"
+msgid "Estimated Quantity (kg)"
+msgstr "Cantidad Estimada (kg)"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__expected_income
-msgid "Expected Income"
-msgstr "Ingreso Esperado"
+msgid "Expected Income $"
+msgstr "Ingreso Esperado $"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__expenses
@@ -558,8 +558,8 @@ msgstr "Rentabilidad"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__qty_to_bill
-msgid "Quantiy to bill"
-msgstr "Importe a Facturar"
+msgid "Quantiy to bill $"
+msgstr "Importe a Facturar $"
 
 #. module: wobin_logistics
 #: model:ir.actions.act_window,name:wobin_logistics.action_logistics_quotations
@@ -568,13 +568,13 @@ msgstr "Cotizaciones"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__real_download_qty
-msgid "Real Download Quantity"
-msgstr "Cantidad Real de Descarga"
+msgid "Real Download Quantity (kg)"
+msgstr "Cantidad Real de Descarga (kg)"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__real_upload_qty
-msgid "Real Upload Quantity"
-msgstr "Cantidad Real de Carga"
+msgid "Real Upload Quantity (kg)"
+msgstr "Cantidad Real de Carga (kg)"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__recipient
@@ -680,8 +680,8 @@ msgstr "Status de Surtimiento del Contrato"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__tariff
-msgid "Tariff"
-msgstr "Tarifa"
+msgid "Tariff $"
+msgstr "Tarifa  $"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__trip_taxes
