@@ -109,9 +109,9 @@ class LogisticsTrips(models.Model):
     @api.one
     def set_status(self):
         '''Set up state in base a which fields are filled up'''
-        if self.contracts_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty and self.download_date and self.real_download_qty and self.checked:
+        if self.contracts_id and self.sucursal_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty and self.download_date and self.real_download_qty and self.checked:
             self.state = 'discharged'          
-        elif self.contracts_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty:
+        elif self.contracts_id and self.sucursal_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty:
             self.state = 'route'
         else:
             self.state = 'assigned'
