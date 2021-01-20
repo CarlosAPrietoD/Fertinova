@@ -236,6 +236,8 @@ class RecibaTicket(models.Model):
             operation_id = self.env['stock.picking.type'].search(['|',('name','=','Órdenes de entrega'),('name','=','Delivery Orders')], limit=1).id
         elif self.operation_type=='dev_sale':
             operation_id = self.env['stock.picking.type'].search([('name','=','Devolucion de Órdenes de entrega')], limit=1).id
+        elif self.operation_type=='dev_purchase':
+            operation_id = self.env['stock.picking.type'].search([('name','=','Devolucion de Recepciones')], limit=1).id
         self.operation_type_id = operation_id
 
     @api.onchange('quality_id')
@@ -276,6 +278,9 @@ class RecibaTicket(models.Model):
         if self.humidity == 0 or self.impurity == 0 or self.temperature == 0:
             msg = 'Los valores de humedad, impureza y temperatura deben ser mayores a 0'
             raise UserError(msg)
+        if (self.purchase_id.order_line[0].product_qty-self.purchase_id.order_line[0].qty_received) < self.net_weight:
+            msg = 'El peso neto es mayor a la cantidad faltante en la orden de compra'
+            raise UserError(msg)
         if self.state == 'draft':
             #Asignacion del nombre de acuerdo al destino si esta en modo borrador
             if self.destination_id:
@@ -296,6 +301,7 @@ class RecibaTicket(models.Model):
             'scheduled_date': datetime.today(),
             'reciba_id': self.id,
             'purchase_id': self.purchase_id.id,
+            'partner_id': self.partner_id.id,
             'move_ids_without_package': [(0,0,{
                 'name': self.product_id.name,
                 'product_id': self.product_id.id,
@@ -344,6 +350,7 @@ class RecibaTicket(models.Model):
         'scheduled_date': datetime.today(),
         'reciba_id': self.id,
         'purchase_id': self.purchase_id.id,
+        'partner_id': self.partner_id.id,
         'move_ids_without_package': [(0,0,{
             'name': self.product_id.name,
             'product_id': self.product_id.id,
@@ -406,7 +413,7 @@ class RecibaTicket(models.Model):
             msg = 'Los valores de humedad, impureza y temperatura deben ser mayores a 0'
             raise UserError(msg)
         if self.net_expected < self.net_weight:
-            msg = 'El peso neto es mayor a la cantidad pedida'
+            msg = 'El peso neto es mayor a la cantidad esperada'
             raise UserError(msg)
         if self.state == 'draft':
             #Asignacion del nombre de acuerdo al destino si esta en modo borrador
@@ -427,6 +434,7 @@ class RecibaTicket(models.Model):
         'scheduled_date': datetime.today(),
         'reciba_id': self.id,
         'sale_id': self.sale_id.id,
+        'partner_id': self.partner_id.id,
         'move_ids_without_package': [(0,0,{
             'name': self.product_id.name,
             'product_id': self.product_id.id,
@@ -452,6 +460,7 @@ class RecibaTicket(models.Model):
         'scheduled_date': datetime.today(),
         'reciba_id': self.id,
         'sale_id': self.sale_id.id,
+        'partner_id': self.partner_id.id,
         'move_ids_without_package': [(0,0,{
             'name': self.product_id.name,
             'product_id': self.product_id.id,
@@ -472,7 +481,7 @@ class RecibaTicket(models.Model):
             'operation_type_id': self.operation_type_id.id,
             'weigher': self.weigher,
             'product_id': self.product_id.id,
-            'purchase_id': self.purchase_id.id,
+            'sale_id': self.sale_id.id,
             'partner_id': self.partner_id.id,
             'apply_discount': self.apply_discount,
             'quality_id': self.quality_id.id,
@@ -512,6 +521,9 @@ class RecibaTicket(models.Model):
         if self.humidity == 0 or self.impurity == 0 or self.temperature == 0:
             msg = 'Los valores de humedad, impureza y temperatura deben ser mayores a 0'
             raise UserError(msg)
+        if self.sale_id.order_line[0].qty_delivered < self.net_weight:
+            msg = 'El peso neto es mayor a la cantidad entregada en la orden de venta'
+            raise UserError(msg)
         if self.state == 'draft':
             #Asignacion del nombre de acuerdo al destino si esta en modo borrador
             if self.origin_id:
@@ -531,6 +543,7 @@ class RecibaTicket(models.Model):
         'scheduled_date': datetime.today(),
         'reciba_id': self.id,
         'sale_id': self.sale_id.id,
+        'partner_id': self.partner_id.id,
         'move_ids_without_package': [(0,0,{
             'name': self.product_id.name,
             'product_id': self.product_id.id,
@@ -542,6 +555,53 @@ class RecibaTicket(models.Model):
         picking = self.env['stock.picking'].create(values)
         picking.state = 'done'
         self.sale_id.order_line[0].qty_delivered = self.sale_id.order_line[0].qty_delivered - self.net_weight
+        self.transfer_id = picking.id
+        self.transfer_count = 1
+        self.state = 'confirmed'
+
+    def confirm_dev_purchase_ticket(self):
+        #Metodo para confirmar la boleta de devolucion sobre compra
+        #Condicionales para confirmar la boleta
+        if self.net_weight == 0:
+            msg = 'El peso neto ingresado no es valido'
+            raise UserError(msg)
+        if self.humidity == 0 or self.impurity == 0 or self.temperature == 0:
+            msg = 'Los valores de humedad, impureza y temperatura deben ser mayores a 0'
+            raise UserError(msg)
+        if self.purchase_id.order_line[0].qty_received < self.net_weight:
+            msg = 'El peso neto es mayor a la cantidad entregada de la orden de compra'
+            raise UserError(msg)
+        if self.state == 'draft':
+            #Asignacion del nombre de acuerdo al destino si esta en modo borrador
+            if self.destination_id:
+                tickets = self.env['reciba.ticket'].search(['&',('origin_id','=',self.destination_id.id),('state','!=','draft')])
+                if tickets:
+                    name_location = self.destination_id.display_name
+                    number = str(len(tickets)+1).zfill(4)
+                    self.name=name_location + '/' + number
+                else:
+                    self.name = self.destination_id.display_name + '/' + '0001'
+        
+        #Creacion y asignación de la transferencia
+        values={
+        'picking_type_id': self.operation_type_id.id,
+        'location_id': self.origin_id.id,
+        'location_dest_id' : self.destination_id.id,
+        'scheduled_date': datetime.today(),
+        'reciba_id': self.id,
+        'purchase_id': self.purchase_id.id,
+        'partner_id': self.partner_id.id,
+        'move_ids_without_package': [(0,0,{
+            'name': self.product_id.name,
+            'product_id': self.product_id.id,
+            'product_uom_qty': self.net_weight,
+            'quantity_done': self.net_weight,
+            'product_uom': self.product_id.uom_po_id.id,
+            'purchase_line_id': self.purchase_id.order_line[0].id
+        })]}
+        picking = self.env['stock.picking'].create(values)
+        picking.state = 'done'
+        self.purchase_id.order_line[0].qty_received = self.purchase_id.order_line[0].qty_received - self.net_weight
         self.transfer_id = picking.id
         self.transfer_count = 1
         self.state = 'confirmed'
@@ -581,8 +641,8 @@ class RecibaTicket(models.Model):
     @api.multi
     def unlink(self):
         #Metodo para eliminar la relacion de boletas cuando una es eliminada
-        ticket = self.env['reciba.ticket'].search([('ticket_id','=',self.id)])
-        if ticket:
+        tickets = self.env['reciba.ticket'].search([('ticket_id','=',self.id)])
+        for ticket in tickets:
             ticket.ticket_id = 0
             ticket.ticket_count = 0
         return super(RecibaTicket, self).unlink()
@@ -632,8 +692,8 @@ class AccountInvoice(models.Model):
     @api.multi
     def unlink(self):
         #Metodo para eliminar la relacion de notas de crédito cuando una es eliminada
-        ticket = self.env['reciba.ticket'].search([('credit_id','=',self.id)])
-        if ticket:
+        tickets = self.env['reciba.ticket'].search([('credit_id','=',self.id)])
+        for ticket in tickets:
             ticket.credit_id = 0
             ticket.credit_count = 0
         return super(AccountInvoice, self).unlink()
