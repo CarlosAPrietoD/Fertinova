@@ -150,7 +150,7 @@ class LogisticsContracts(models.Model):
 
 
     def close_contract(self):
-        self.state = 'close'
+        self.status = 'close'
 
 
     def delete_contract(self):  
