@@ -528,14 +528,14 @@ class RecibaTicket(models.Model):
             raise UserError(msg)
         if self.state == 'draft':
             #Asignacion del nombre de acuerdo al destino si esta en modo borrador
-            if self.origin_id:
-                tickets = self.env['reciba.ticket'].search(['&',('origin_id','=',self.origin_id.id),('state','!=','draft')])
+            if self.destination_id:
+                tickets = self.env['reciba.ticket'].search(['&',('destination_id','=',self.destination_id.id),('state','!=','draft')])
                 if tickets:
-                    name_location = self.origin_id.display_name
+                    name_location = self.destination_id.display_name
                     number = str(len(tickets)+1).zfill(4)
                     self.name=name_location + '/' + number
                 else:
-                    self.name = self.origin_id.display_name + '/' + '0001'
+                    self.name = self.destination_id.display_name + '/' + '0001'
         
         #Creacion y asignación de la transferencia
         values={
@@ -575,14 +575,14 @@ class RecibaTicket(models.Model):
             raise UserError(msg)
         if self.state == 'draft':
             #Asignacion del nombre de acuerdo al destino si esta en modo borrador
-            if self.destination_id:
-                tickets = self.env['reciba.ticket'].search(['&',('origin_id','=',self.destination_id.id),('state','!=','draft')])
+            if self.origin_id:
+                tickets = self.env['reciba.ticket'].search(['&',('origin_id','=',self.origin_id.id),('state','!=','draft')])
                 if tickets:
-                    name_location = self.destination_id.display_name
+                    name_location = self.origin_id.display_name
                     number = str(len(tickets)+1).zfill(4)
                     self.name=name_location + '/' + number
                 else:
-                    self.name = self.destination_id.display_name + '/' + '0001'
+                    self.name = self.origin_id.display_name + '/' + '0001'
         
         #Creacion y asignación de la transferencia
         values={
@@ -621,16 +621,26 @@ class RecibaTicket(models.Model):
             msg = 'El peso neto es mayor a la cantidad entregada de la orden de compra'
             raise UserError(msg)
         if self.state == 'draft':
-            #Asignacion del nombre de acuerdo al destino si esta en modo borrador
-            if self.destination_id:
-                tickets = self.env['reciba.ticket'].search(['&',('origin_id','=',self.destination_id.id),('state','!=','draft')])
-                if tickets:
-                    name_location = self.destination_id.display_name
-                    number = str(len(tickets)+1).zfill(4)
-                    self.name=name_location + '/' + number
-                else:
-                    self.name = self.destination_id.display_name + '/' + '0001'
-        
+            #Asignacion del nombre de acuerdo al tipo de transferencia
+            if self.transfer_type == 'int' or self.transfer_type == 'in':
+                if self.destination_id:
+                    tickets = self.env['reciba.ticket'].search(['&',('destination_id','=',self.destination_id.id),('state','!=','draft')])
+                    if tickets:
+                        name_location = self.destination_id.display_name
+                        number = str(len(tickets)+1).zfill(4)
+                        self.name=name_location + '/' + number
+                    else:
+                        self.name = self.destination_id.display_name + '/' + '0001'
+            elif self.transfer_type == 'out':
+                if self.origin_id:
+                    tickets = self.env['reciba.ticket'].search([('origin_id','=',self.origin_id.id),('state','!=','draft'),('transfer_type','=','out')])
+                    if tickets:
+                        name_location = self.origin_id.display_name
+                        number = str(len(tickets)+1).zfill(4)
+                        self.name=name_location + '/' + number
+                    else:
+                        self.name = self.origin_id.display_name + '/' + '0001'
+
         #Creacion y asignación de la transferencia
         values={
         'picking_type_id': self.operation_type_id.id,
