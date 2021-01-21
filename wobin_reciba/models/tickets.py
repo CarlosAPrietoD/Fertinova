@@ -617,9 +617,6 @@ class RecibaTicket(models.Model):
         if self.humidity == 0 or self.impurity == 0 or self.temperature == 0:
             msg = 'Los valores de humedad, impureza y temperatura deben ser mayores a 0'
             raise UserError(msg)
-        if self.purchase_id.order_line[0].qty_received < self.net_weight:
-            msg = 'El peso neto es mayor a la cantidad entregada de la orden de compra'
-            raise UserError(msg)
         if self.state == 'draft':
             #Asignacion del nombre de acuerdo al tipo de transferencia
             if self.transfer_type == 'int' or self.transfer_type == 'in':
@@ -658,7 +655,6 @@ class RecibaTicket(models.Model):
         })]}
         picking = self.env['stock.picking'].create(values)
         picking.state = 'done'
-        self.purchase_id.order_line[0].qty_received = self.purchase_id.order_line[0].qty_received - self.net_weight
         self.transfer_id = picking.id
         self.transfer_count = 1
         if self.transfer_type == 'out':
@@ -676,13 +672,19 @@ class RecibaTicket(models.Model):
                 'origin_id': self.destination_id.id,
                 'gross_weight': self.gross_weight,
                 'tare_weight': self.tare_weight,
-                'ticket_id': self.id
+                'ticket_id': self.id,
+                'transfer_type': 'in'
             }
             ticket = self.env['reciba.ticket'].create(values)
             self.ticket_id = ticket.id
             self.ticket_count = 1
-        if self.transfer_type == 'in':
-            if self.ticket_id.ticket_id != 0 and self.ticket_id.ticket_id != self.id:
+        elif self.transfer_type == 'in':
+            #Si es de entrada se revisa la relacion de las boletas de salida y entrada
+            if self.ticket_id.ticket_id == 0:
+                self.ticket_id.ticket_id = self.id
+                self.ticket_id.ticket_count = 1
+                self.ticket_count = 1
+            elif self.ticket_id.ticket_id and self.ticket_id.ticket_id.id != self.id:
                 msg = 'La boleta de salida ya está relacionada con otra boleta de entrada'
                 raise UserError(msg)
             else:
@@ -709,7 +711,17 @@ class RecibaTicket(models.Model):
     @api.multi
     def action_view_ticket(self):
         #Metodo para ver boletas relacionadas
-        action = self.env.ref('wobin_reciba.tickets_reception')
+        action = None
+        if self.operation_type == 'in':
+            action = self.env.ref('wobin_reciba.tickets_reception')
+        elif self.operation_type == 'out':
+            action = self.env.ref('wobin_reciba.tickets_delivery')
+        elif self.operation_type == 'dev_sale':
+            action = self.env.ref('wobin_reciba.tickets_delivery')
+        elif self.operation_type == 'dev_purchase':
+            action = self.env.ref('wobin_reciba.tickets_reception')
+        elif self.operation_type == 'transfer':
+            action = self.env.ref('wobin_reciba.internal_transfer')
         result = action.read()[0]
         result['domain'] = [('id','=', self.ticket_id.id)]
         return result
@@ -725,8 +737,8 @@ class RecibaTicket(models.Model):
     @api.multi
     def unlink(self):
         #Metodo para eliminar la relacion de boletas cuando una es eliminada
-        tickets = self.env['reciba.ticket'].search([('ticket_id','=',self.id)])
-        for ticket in tickets:
+        ticket = self.env['reciba.ticket'].search([('ticket_id','=',self.id)])
+        if ticket:
             ticket.ticket_id = 0
             ticket.ticket_count = 0
         return super(RecibaTicket, self).unlink()
@@ -776,8 +788,8 @@ class AccountInvoice(models.Model):
     @api.multi
     def unlink(self):
         #Metodo para eliminar la relacion de notas de crédito cuando una es eliminada
-        tickets = self.env['reciba.ticket'].search([('credit_id','=',self.id)])
-        for ticket in tickets:
+        ticket = self.env['reciba.ticket'].search([('credit_id','=',self.id)])
+        if ticket:
             ticket.credit_id = 0
             ticket.credit_count = 0
         return super(AccountInvoice, self).unlink()
