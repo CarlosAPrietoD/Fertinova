@@ -611,7 +611,7 @@
                                 <field name="product_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 <field name="purchase_id" domain="['|',('state','=','purchase'),('state','=','done')]" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')]}"/>
                                 <field name="purchase_invoice_status"/>
-                                <field name="partner_id" string="Cliente" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="partner_id" string="Proveedor" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                             </group>
                             <group>
                                 <field name="origin" readonly="1"/>
@@ -649,7 +649,7 @@
                                     </group>
                                 </group>
                             </page>
-                            <page string="Entrega" name="delivery_page">
+                            <page string="Recepción" name="delivery_page">
                                 <br/>
                                 <group>
                                     <field name="driver" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
@@ -748,6 +748,167 @@
         </record>
 
         <menuitem id="devolution_purchase_menu" name="Devoluciones sobre compra" parent="operation_menu" action="purchases_devolution" sequence="4" />
+
+        <!--==========================================Transferencias internas================================================-->
+        
+        <record model="ir.ui.view" id="form_view_internal_transfer">
+            <field name="name">reciba.ticket.form</field>
+            <field name="model">reciba.ticket</field>
+            <field name="arch" type="xml">
+                <form string="Transferencia">
+                    <header>
+                        <button name="confirm_transfer_ticket" type="object" states="draft" string="Confirmar" class="btn-primary"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed" />
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button type="object" name="action_view_transfer" class="oe_stat_button" icon="fa-archive">
+                                <field name="transfer_count" widget="statinfo" string="Transferencia"/>
+                            </button>
+                        </div>
+                        <group>
+                            <h1>
+                                <field name="name" readonly="1" force_save="1"/>
+                            </h1>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="company_id" invisible="1"/>
+                                <field name="date" readonly="True"/>
+                                <field name="operation_type" invisible="1"/>
+                                <field name="operation_type_id" domain="[('name','=','Transferencias internas')]" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="weigher" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="product_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="transfer_type" required="1"/>
+                                <field name="ticket_id" attrs="{'invisible':['|',('transfer_type', '!=', 'in'),('state', '=', 'confirmed')], 'required':[('transfer_type', '=', 'in')]}" domain="[('transfer_type','=','out')]"/>
+                            </group>
+                            <group>
+                                <field name="origin" readonly="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Calidad" name="quality_page">
+                                <br/>
+                                <group>
+                                    <field name="quality_id" domain="[('product_id','=',product_id)]" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="humidity" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="impurity" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="density" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="temperature" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                    </group>
+                                </group>
+                                <br/>
+                                <field name="params_id"  attrs="{'readonly':[('state', '!=', 'draft')]}">
+                                    <tree editable="bottom" decoration-danger="value &gt; max_value" delete="0">
+                                        <field name="quality_params_id" readonly="True" force_save="1"/>
+                                        <field name="max_value"/>
+                                        <field name="unit"/>
+                                        <field name="value"/>
+                                    </tree>
+                                </field>
+                                <group>
+                                    <group>
+                                        <field name="sum_damage"/>
+                                    </group>
+                                    <group>
+                                        <field name="sum_broken"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Pesaje" name="delivery_page">
+                                <br/>
+                                <group>
+                                    <field name="driver" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="type_vehicle" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="plate_vehicle" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                    </group>
+                                    <group>
+                                        <field name="plate_trailer" attrs="{'readonly':[('state', '!=', 'draft')], 'invisible':['|',('type_vehicle', '=', 'van'),('type_vehicle', '=', 'torton')]}" />
+                                        <field name="plate_second_trailer" attrs="{'readonly':[('state', '!=', 'draft')], 'invisible':[('type_vehicle', '!=', 'full')]}"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="origin_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="destination_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                    </group>
+                                    <group>
+                                        <field name="origin_date" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="destination_date" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="gross_weight" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="tare_weight" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="net_weight"/>
+                                    </group>
+                                    <group>
+                                        <field name="gross_date"/>
+                                        <field name="tare_date"/>
+                                        <field name="net_date"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="tree_view_internal_transfer" model="ir.ui.view">
+            <field name="name">reciba.ticket.reception.tree</field>
+            <field name="model">reciba.ticket</field>
+            <field name="arch" type="xml">
+                <tree string="Transferencia" delete="0" default_order="id desc">
+                    <field name="id"/>
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="transfer_type"/>
+                    <field name="product_id"/>
+                    <field name="partner_id" string="Proveedor"/>
+                    <field name="origin_id"/>
+                    <field name="destination_id"/>
+                    <field name="net_weight"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="internal_transfer" model="ir.actions.act_window">
+            <field name="name">Transferencia internas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">reciba.ticket</field>
+            <field name="domain">[('operation_type','=','transfer')]</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'default_operation_type': 'transfer'}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a track value.
+                </p>
+            </field>
+        </record>
+
+        <record id="reciba_tree_internal_transfer_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="internal_transfer" />
+            <field name="view_id" ref="tree_view_internal_transfer" />
+            <field name="view_mode">tree</field>
+        </record>
+
+        <record id="reciba_form_internal_transfer_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="internal_transfer" />
+            <field name="view_id" ref="form_view_internal_transfer" />
+            <field name="view_mode">form</field>
+        </record>
+
+        <menuitem id="internal_transfer_menu" name="Transferencias internas" parent="operation_menu" action="internal_transfer" sequence="4" />
 
         <!--==========================================Parametros de calidad=======================================-->
 

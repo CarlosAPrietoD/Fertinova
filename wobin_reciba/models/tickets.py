@@ -163,10 +163,10 @@ class RecibaTicket(models.Model):
     ('priceless', 'Sin precio')], string="Tipo de recepción", default='price', required=True)
     transfer_type = fields.Selection([('int', 'Misma sucursal'),
     ('in', 'Entrada'), 
-    ('out','Salida')], string="Tipo de transferencia")
+    ('out','Salida')], string="Tipo de transferencia", default='int')
     weigher = fields.Char(string="Nombre del analista")
     product_id = fields.Many2one('product.product', string="Producto")
-    ticket_id = fields.Many2one('wreciba.ticket', string="Boleta relacionada")
+    ticket_id = fields.Many2one('reciba.ticket', string="Boleta relacionada")
     ticket_count = fields.Integer("Boletas", default=0)
     sale_id = fields.Many2one('sale.order', string="Orden de venta")
     sale_invoice_status = fields.Selection(related='sale_id.invoice_status', string="Estatus de facturación")
@@ -238,6 +238,8 @@ class RecibaTicket(models.Model):
             operation_id = self.env['stock.picking.type'].search([('name','=','Devolucion de Órdenes de entrega')], limit=1).id
         elif self.operation_type=='dev_purchase':
             operation_id = self.env['stock.picking.type'].search([('name','=','Devolucion de Recepciones')], limit=1).id
+        elif self.operation_type=='transfer':
+            operation_id = self.env['stock.picking.type'].search([('name','=','Transferencias internas')], limit=1).id
         self.operation_type_id = operation_id
 
     @api.onchange('quality_id')
@@ -604,6 +606,78 @@ class RecibaTicket(models.Model):
         self.purchase_id.order_line[0].qty_received = self.purchase_id.order_line[0].qty_received - self.net_weight
         self.transfer_id = picking.id
         self.transfer_count = 1
+        self.state = 'confirmed'
+
+    def confirm_transfer_ticket(self):
+        #Metodo para confirmar la boleta de transferencia interna
+        #Condicionales para confirmar la boleta
+        if self.net_weight == 0:
+            msg = 'El peso neto ingresado no es valido'
+            raise UserError(msg)
+        if self.humidity == 0 or self.impurity == 0 or self.temperature == 0:
+            msg = 'Los valores de humedad, impureza y temperatura deben ser mayores a 0'
+            raise UserError(msg)
+        if self.purchase_id.order_line[0].qty_received < self.net_weight:
+            msg = 'El peso neto es mayor a la cantidad entregada de la orden de compra'
+            raise UserError(msg)
+        if self.state == 'draft':
+            #Asignacion del nombre de acuerdo al destino si esta en modo borrador
+            if self.destination_id:
+                tickets = self.env['reciba.ticket'].search(['&',('origin_id','=',self.destination_id.id),('state','!=','draft')])
+                if tickets:
+                    name_location = self.destination_id.display_name
+                    number = str(len(tickets)+1).zfill(4)
+                    self.name=name_location + '/' + number
+                else:
+                    self.name = self.destination_id.display_name + '/' + '0001'
+        
+        #Creacion y asignación de la transferencia
+        values={
+        'picking_type_id': self.operation_type_id.id,
+        'location_id': self.origin_id.id,
+        'location_dest_id' : self.destination_id.id,
+        'scheduled_date': datetime.today(),
+        'reciba_id': self.id,
+        'partner_id': self.partner_id.id,
+        'move_ids_without_package': [(0,0,{
+            'name': self.product_id.name,
+            'product_id': self.product_id.id,
+            'product_uom_qty': self.net_weight,
+            'quantity_done': self.net_weight,
+            'product_uom': self.product_id.uom_po_id.id
+        })]}
+        picking = self.env['stock.picking'].create(values)
+        picking.state = 'done'
+        self.purchase_id.order_line[0].qty_received = self.purchase_id.order_line[0].qty_received - self.net_weight
+        self.transfer_id = picking.id
+        self.transfer_count = 1
+        if self.transfer_type == 'out':
+            #Creacion de nueva boleta borrador si la transferencia es de salida
+            values={
+                'state': 'draft',
+                'operation_type': self.operation_type,
+                'operation_type_id': self.operation_type_id.id,
+                'product_id': self.product_id.id,
+                'driver': self.driver,
+                'type_vehicle': self.type_vehicle,
+                'plate_vehicle': self.plate_vehicle,
+                'plate_trailer': self.plate_trailer,
+                'plate_second_trailer': self.plate_second_trailer,
+                'origin_id': self.destination_id.id,
+                'gross_weight': self.gross_weight,
+                'tare_weight': self.tare_weight,
+                'ticket_id': self.id
+            }
+            ticket = self.env['reciba.ticket'].create(values)
+            self.ticket_id = ticket.id
+            self.ticket_count = 1
+        if self.transfer_type == 'in':
+            if self.ticket_id.ticket_id != 0 and self.ticket_id.ticket_id != self.id:
+                msg = 'La boleta de salida ya está relacionada con otra boleta de entrada'
+                raise UserError(msg)
+            else:
+                self.ticket_count = 1
+
         self.state = 'confirmed'
 
     @api.multi
