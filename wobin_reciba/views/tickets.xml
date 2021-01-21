@@ -765,6 +765,9 @@
                             <button type="object" name="action_view_transfer" class="oe_stat_button" icon="fa-archive">
                                 <field name="transfer_count" widget="statinfo" string="Transferencia"/>
                             </button>
+                            <button type="object" name="action_view_ticket" class="oe_stat_button" icon="fa-file-text-o" attrs="{'invisible':[('ticket_count', '=', 0)]}">
+                                <field name="ticket_count" widget="statinfo" string="Boleta relacionada"/>
+                            </button>
                         </div>
                         <group>
                             <h1>
