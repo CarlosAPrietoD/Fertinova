@@ -304,6 +304,7 @@ class RecibaTicket(models.Model):
             'reciba_id': self.id,
             'purchase_id': self.purchase_id.id,
             'partner_id': self.partner_id.id,
+            'origin': self.purchase_id.name,
             'move_ids_without_package': [(0,0,{
                 'name': self.product_id.name,
                 'product_id': self.product_id.id,
@@ -311,10 +312,10 @@ class RecibaTicket(models.Model):
                 'quantity_done': self.net_weight,
                 'product_uom': self.product_id.uom_po_id.id,
                 'purchase_line_id': self.purchase_id.order_line[0].id,
+                'location_dest_id': self.destination_id.id,
             })]}
             picking = self.env['stock.picking'].create(values)
-            picking.state = 'done'
-            self.purchase_id.order_line[0].qty_received = self.purchase_id.order_line[0].qty_received+self.net_weight
+            picking.button_validate()
             self.transfer_id = picking.id
             self.transfer_count = 1
             #Se crea una nota de credito en caso de haber descuento
@@ -360,11 +361,11 @@ class RecibaTicket(models.Model):
             'quantity_done': self.net_weight,
             'product_uom': self.product_id.uom_po_id.id,
             'purchase_line_id': self.purchase_id.order_line[0].id,
-            'to_refund': True})]
+            'location_dest_id' : self.origin_id.id,
+            })]
         }
         picking = self.env['stock.picking'].create(values)
-        picking.state = 'done'
-        self.purchase_id.order_line[0].qty_received = self.purchase_id.order_line[0].qty_received-self.net_weight
+        picking.button_validate()
         self.transfer_reverse_id = picking.id
         self.transfer_reverse_count += 1
         #Creacion de nueva boleta borrador
@@ -443,11 +444,10 @@ class RecibaTicket(models.Model):
             'product_uom_qty': self.net_weight,
             'quantity_done': self.net_weight,
             'product_uom': self.product_id.uom_po_id.id,
-            
+            'location_dest_id' : self.destination_id.id,
         })]}
         picking = self.env['stock.picking'].create(values)
-        picking.state = 'done'
-        self.sale_id.order_line[0].qty_delivered = self.sale_id.order_line[0].qty_delivered+self.net_weight
+        picking.button_validate()
         self.transfer_id = picking.id
         self.transfer_count = 1
         self.state = 'confirmed'
@@ -469,11 +469,11 @@ class RecibaTicket(models.Model):
             'product_uom_qty': self.net_weight,
             'quantity_done': self.net_weight,
             'product_uom': self.product_id.uom_po_id.id,
-            'to_refund': True})]
+            'location_dest_id' : self.origin_id.id,
+            })]
         }
         picking = self.env['stock.picking'].create(values)
-        picking.state = 'done'
-        self.sale_id.order_line[0].qty_delivered = self.sale_id.order_line[0].qty_delivered-self.net_weight
+        picking.button_validate()
         self.transfer_reverse_id = picking.id
         self.transfer_reverse_count += 1
         #Creacion de nueva boleta borrador
@@ -552,11 +552,10 @@ class RecibaTicket(models.Model):
             'product_uom_qty': self.net_weight,
             'quantity_done': self.net_weight,
             'product_uom': self.product_id.uom_po_id.id,
-            
+            'location_dest_id' : self.destination_id.id,
         })]}
         picking = self.env['stock.picking'].create(values)
-        picking.state = 'done'
-        self.sale_id.order_line[0].qty_delivered = self.sale_id.order_line[0].qty_delivered - self.net_weight
+        picking.button_validate()
         self.transfer_id = picking.id
         self.transfer_count = 1
         self.state = 'confirmed'
@@ -599,11 +598,11 @@ class RecibaTicket(models.Model):
             'product_uom_qty': self.net_weight,
             'quantity_done': self.net_weight,
             'product_uom': self.product_id.uom_po_id.id,
-            'purchase_line_id': self.purchase_id.order_line[0].id
+            'purchase_line_id': self.purchase_id.order_line[0].id,
+            'location_dest_id' : self.destination_id.id,
         })]}
         picking = self.env['stock.picking'].create(values)
-        picking.state = 'done'
-        self.purchase_id.order_line[0].qty_received = self.purchase_id.order_line[0].qty_received - self.net_weight
+        picking.button_validate()
         self.transfer_id = picking.id
         self.transfer_count = 1
         self.state = 'confirmed'
@@ -651,10 +650,11 @@ class RecibaTicket(models.Model):
             'product_id': self.product_id.id,
             'product_uom_qty': self.net_weight,
             'quantity_done': self.net_weight,
-            'product_uom': self.product_id.uom_po_id.id
+            'product_uom': self.product_id.uom_po_id.id,
+            'location_dest_id' : self.destination_id.id,
         })]}
         picking = self.env['stock.picking'].create(values)
-        picking.state = 'done'
+        picking.button_validate()
         self.transfer_id = picking.id
         self.transfer_count = 1
         if self.transfer_type == 'out':
