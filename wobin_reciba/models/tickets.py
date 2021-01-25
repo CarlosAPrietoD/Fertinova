@@ -147,6 +147,8 @@ class RecibaTicket(models.Model):
     transfer_reverse_count = fields.Integer("Reversa", default=0)
     credit_id = fields.Many2one('account.invoice', "Nota de crédito por descuento")
     credit_count = fields.Integer("Nota de crédito por descuento", default=0)
+    manu_id = fields.Many2one('mrp.production', string="Fabricación")
+    manu_count = fields.Integer(string="Fabricación", default=0)
 
     #-------------------------------------Datos generales----------------------------------
     name = fields.Char(string="Boleta", default="Boleta borrador")
@@ -214,6 +216,8 @@ class RecibaTicket(models.Model):
     net_weight = fields.Float(string="Peso Neto", compute='_get_net_weight', store=True)
     net_date = fields.Datetime(string="Fecha y hora", compute='_default_net_date', store=True)
     net_expected = fields.Float(string="Peso neto esperado")
+    qty_manufacturing = fields.Float(string="Cantidad a producir")
+    bom_id = fields.Many2one('mrp.bom', string="Lista de materiales", domain="[('product_id', '=', product_id)]")
 
     #----------------------------------Datos de descuento-------------------------------
     apply_discount = fields.Boolean(string="Aplicar descuento")
@@ -240,6 +244,8 @@ class RecibaTicket(models.Model):
             operation_id = self.env['stock.picking.type'].search([('name','=','Devolucion de Recepciones')], limit=1).id
         elif self.operation_type=='transfer':
             operation_id = self.env['stock.picking.type'].search([('name','=','Transferencias internas')], limit=1).id
+        elif self.operation_type=='transfer':
+            operation_id = self.env['stock.picking.type'].search(['|',('name','=','Fabricación'),('name','=','Manufacturing')], limit=1).id
         self.operation_type_id = operation_id
 
     @api.onchange('quality_id')
@@ -367,7 +373,7 @@ class RecibaTicket(models.Model):
         picking = self.env['stock.picking'].create(values)
         picking.button_validate()
         self.transfer_reverse_id = picking.id
-        self.transfer_reverse_count += 1
+        self.transfer_reverse_count = 1
         #Creacion de nueva boleta borrador
         values={
             'state': 'draft',
@@ -475,7 +481,7 @@ class RecibaTicket(models.Model):
         picking = self.env['stock.picking'].create(values)
         picking.button_validate()
         self.transfer_reverse_id = picking.id
-        self.transfer_reverse_count += 1
+        self.transfer_reverse_count = 1
         #Creacion de nueva boleta borrador
         values={
             'state': 'draft',
@@ -692,6 +698,44 @@ class RecibaTicket(models.Model):
 
         self.state = 'confirmed'
 
+    def confirm_manufacturing_ticket(self):
+        #Metodo para confirmar la boleta de fabricación
+        #Condicionales para confirmar la boleta
+        if self.qty_manufacturing <= 0:
+            msg = 'La cantidad a producir no es valida'
+            raise UserError(msg)
+        if self.humidity == 0 or self.impurity == 0 or self.temperature == 0:
+            msg = 'Los valores de humedad, impureza y temperatura deben ser mayores a 0'
+            raise UserError(msg)
+        if self.state == 'draft':
+            #Asignacion del nombre de acuerdo al destino si esta en modo borrador
+            if self.origin_id:
+                tickets = self.env['reciba.ticket'].search(['&',('origin_id','=',self.origin_id.id),('state','!=','draft')])
+                if tickets:
+                    name_location = self.origin_id.display_name
+                    number = str(len(tickets)+1).zfill(4)
+                    self.name=name_location + '/' + number
+                else:
+                    self.name = self.origin_id.display_name + '/' + '0001'
+        values={
+            'product_id': self.product_id.id,
+            'product_qty': self.qty_manufacturing,
+            'product_uom_id' : self.product_id.uom_id.id,
+            'bom_id': self.bom_id.id,
+            'picking_type_id': self.operation_type_id.id,
+            'location_src_id': self.origin_id.id,
+            'location_dest_id': self.destination_id.id,
+        }
+        production = self.env['mrp.production'].create(values)
+        production.action_assign()
+        #product_produce = self.env['mrp.product.produce'].search([('production_id','=',production.id)])
+        #product_produce.do_produce()
+        production.button_mark_done()
+        self.manu_id = production.id
+        self.manu_count = 1
+        self.state = 'confirmed'
+        
+
     @api.multi
     def action_view_transfer(self):
         #Metodo para ver transferencias relacionadas
@@ -732,6 +776,14 @@ class RecibaTicket(models.Model):
         action = self.env.ref('wobin_reciba.reciba_credit')
         result = action.read()[0]
         result['domain'] = [('id','=', self.credit_id.id)]
+        return result
+
+    @api.multi
+    def action_view_manufacturing(self):
+        #Metodo para ver fabricaciones relacionadas
+        action = self.env.ref('wobin_reciba.reciba_manufacturing')
+        result = action.read()[0]
+        result['domain'] = [('id','=', self.manu_id.id)]
         return result
 
     @api.multi
