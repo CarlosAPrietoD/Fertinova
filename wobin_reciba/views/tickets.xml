@@ -911,7 +911,144 @@
             <field name="view_mode">form</field>
         </record>
 
-        <menuitem id="internal_transfer_menu" name="Transferencias internas" parent="operation_menu" action="internal_transfer" sequence="4" />
+        <menuitem id="internal_transfer_menu" name="Transferencias internas" parent="operation_menu" action="internal_transfer" sequence="5" />
+
+        <!--==========================================Fabricación================================================-->
+        
+        <record model="ir.ui.view" id="form_view_manufacturing">
+            <field name="name">reciba.ticket.form</field>
+            <field name="model">reciba.ticket</field>
+            <field name="arch" type="xml">
+                <form string="Transferencia">
+                    <header>
+                        <button name="confirm_manufacturing_ticket" type="object" states="draft" string="Confirmar" class="btn-primary"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed" />
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button type="object" name="action_view_manufacturing" class="oe_stat_button" icon="fa-archive">
+                                <field name="manu_count" widget="statinfo" string="Fabricación"/>
+                            </button>
+                        </div>
+                        <group>
+                            <h1>
+                                <field name="name" readonly="1" force_save="1"/>
+                            </h1>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="company_id" invisible="1"/>
+                                <field name="date" readonly="True"/>
+                                <field name="operation_type" invisible="1"/>
+                                <field name="operation_type_id" domain="['|',('name','=','Manufacturing'),('name','=','Fabricación')]" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="weigher" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="product_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Calidad" name="quality_page">
+                                <br/>
+                                <group>
+                                    <field name="quality_id" domain="[('product_id','=',product_id)]" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="humidity" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="impurity" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="density" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="temperature" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                    </group>
+                                </group>
+                                <br/>
+                                <field name="params_id"  attrs="{'readonly':[('state', '!=', 'draft')]}">
+                                    <tree editable="bottom" decoration-danger="value &gt; max_value" delete="0">
+                                        <field name="quality_params_id" readonly="True" force_save="1"/>
+                                        <field name="max_value"/>
+                                        <field name="unit"/>
+                                        <field name="value"/>
+                                    </tree>
+                                </field>
+                                <group>
+                                    <group>
+                                        <field name="sum_damage"/>
+                                    </group>
+                                    <group>
+                                        <field name="sum_broken"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Fabricación" name="delivery_page">
+                                <br/>
+                                <group>
+                                    <group>
+                                        <field name="origin_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="destination_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                    </group>
+                                    <group>
+                                        <field name="origin_date" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="destination_date" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="qty_manufacturing" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="bom_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="tree_view_manufacturing" model="ir.ui.view">
+            <field name="name">reciba.ticket.reception.tree</field>
+            <field name="model">reciba.ticket</field>
+            <field name="arch" type="xml">
+                <tree string="Transferencia" delete="0" default_order="id desc">
+                    <field name="id"/>
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="transfer_type"/>
+                    <field name="product_id"/>
+                    <field name="partner_id" string="Proveedor"/>
+                    <field name="origin_id"/>
+                    <field name="destination_id"/>
+                    <field name="net_weight"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="manufacturing" model="ir.actions.act_window">
+            <field name="name">Fabricación</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">reciba.ticket</field>
+            <field name="domain">[('operation_type','=','manufacturing')]</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'default_operation_type': 'manufacturing'}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a track value.
+                </p>
+            </field>
+        </record>
+
+        <record id="reciba_tree_manufacturing_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="manufacturing" />
+            <field name="view_id" ref="tree_view_manufacturing" />
+            <field name="view_mode">tree</field>
+        </record>
+
+        <record id="reciba_form_manufacturing_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="manufacturing" />
+            <field name="view_id" ref="form_view_manufacturing" />
+            <field name="view_mode">form</field>
+        </record>
+
+        <menuitem id="manufacturing_menu" name="Fabricación" parent="operation_menu" action="manufacturing" sequence="6" />
 
         <!--==========================================Parametros de calidad=======================================-->
 
@@ -996,6 +1133,21 @@
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
                 Click to add a Invoice.
+                </p>
+            </field>
+        </record>
+
+        <!--==============================================Fabricaciones====================================-->
+
+        <record id="reciba_manufacturing" model="ir.actions.act_window">
+            <field name="name">Fabricación</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">mrp.production</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a Manufacturing.
                 </p>
             </field>
         </record>
