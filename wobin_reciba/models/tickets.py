@@ -299,9 +299,10 @@ class RecibaTicket(models.Model):
         if self.humidity == 0 or self.impurity == 0 or self.temperature == 0:
             msg = 'Los valores de humedad, impureza y temperatura deben ser mayores a 0'
             raise UserError(msg)
-        if (self.purchase_id.order_line[0].product_qty-self.purchase_id.order_line[0].qty_received) < self.net_weight:
-            msg = 'El peso neto es mayor a la cantidad faltante en la orden de compra'
-            raise UserError(msg)
+        if self.purchase_id:
+            if (self.purchase_id.order_line[0].product_qty-self.purchase_id.order_line[0].qty_received) < self.net_weight:
+                msg = 'El peso neto es mayor a la cantidad faltante en la orden de compra'
+                raise UserError(msg)
         if self.state == 'draft':
             #Asignacion del nombre de acuerdo al destino si esta en modo borrador
             if self.destination_id:
