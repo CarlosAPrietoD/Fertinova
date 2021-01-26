@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-19 16:42+0000\n"
-"PO-Revision-Date: 2021-01-19 16:42+0000\n"
+"POT-Creation-Date: 2021-01-26 22:45+0000\n"
+"PO-Revision-Date: 2021-01-26 22:45+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -219,6 +219,11 @@ msgstr "Destino"
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__difference_qty
 msgid "Difference Qty"
 msgstr "Cant. Restante"
+
+#. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__discharge_location
+msgid "Discharge Location"
+msgstr "Ubicación de Descarga"
 
 #. module: wobin_logistics
 #: selection:logistics.trips,state:0
@@ -763,6 +768,12 @@ msgid "Upload Date"
 msgstr "Fecha de Carga"
 
 #. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__discharge_location
+#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__upload_location
+msgid "Upload Location"
+msgstr "Ubicación de Carga"
+
+#. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_account_analytic_account__vehicle_id
 #: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__vehicle_id
 msgid "Vehicle"
@@ -794,3 +805,8 @@ msgstr "Con Contrato"
 #: model:ir.ui.menu,name:wobin_logistics.menu_root
 msgid "Wobin Logistics"
 msgstr "Wobin Logística"
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.reporte_carta_porte_view
+msgid "kg"
+msgstr "kg"

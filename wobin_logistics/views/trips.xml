@@ -130,7 +130,8 @@
                                   <field name="upload_date"/>
                                   <field name="estimated_qty"/>
                                   <field name="real_upload_qty"/>
-                                  <field name="attachment_upload"/>
+                                  <field name="attachment_upload" widget="many2many_binary"/>
+                                  <field name="upload_location"/>
                               </group> 
                             </div>  
                           </div> 
@@ -143,14 +144,15 @@
                               <group>                           
                                   <field name="download_date"/>
                                   <field name="real_download_qty"/>
-                                  <field name="attachment_downld"/>
+                                  <field name="attachment_downld" widget="many2many_binary"/>
                                   <field name="qty_to_bill"/>
                                   <label for="conformity"/>
                                   <div>
                                       <field name="conformity" class="oe_inline" style="padding-right: 10px"/>
                                       <field name="checked" class="oe_inline"/>
                                   </div>  
-                                  <field name="advance_ids" widget="many2many_tags"/>                                  
+                                  <field name="discharge_location"/>
+                                  <field name="advance_ids" widget="many2many_tags"/>                                                                    
                                   <field name="sales_order_id" attrs="{'invisible': [('state', '!=', 'discharged')]}" readonly="True"/>
                               </group>
                             </div>  

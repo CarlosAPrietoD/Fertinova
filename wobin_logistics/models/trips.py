@@ -74,19 +74,21 @@ class LogisticsTrips(models.Model):
     upload_date       = fields.Date(string='Upload Date', track_visibility='always')
     estimated_qty     = fields.Float(string='Estimated Quantity (kg)', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always')
     real_upload_qty   = fields.Float(string='Real Upload Quantity (kg)', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always')
-    attachment_upload = fields.Binary(string='Upload Attachments', track_visibility='always')
+    attachment_upload = fields.Many2many('ir.attachment', relation='first_res_att_rel', string='Upload Attachments', track_visibility='always')
+    upload_location   = fields.Char(string='Upload Location', track_visibility='always')
    
     # Download Data / - / - / - / - / - / - / - / - / - / - /
-    download_date     = fields.Date(string='Download Date', track_visibility='always')
-    real_download_qty = fields.Float(string='Real Download Quantity (kg)', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always')
-    attachment_downld = fields.Binary(string='Download Attachments', track_visibility='always')
-    qty_to_bill       = fields.Float(string='Quantiy to bill $', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always', compute='_set_qty_to_bill') 
-    conformity        = fields.Binary(string='Conformity and Settlement', track_visibility='always')
-    checked           = fields.Boolean(string=" ")
-    sales_order_id    = fields.Many2one('sale.order', string='Sales Order Generated', track_visibility='always', compute='_set_sale_order', ondelete='set null')    
-    state             = fields.Selection(selection=[('assigned', 'Assigned'),
-                                                    ('route', 'En route'),
-                                                    ('discharged', 'Discharged')], 
+    download_date      = fields.Date(string='Download Date', track_visibility='always')
+    real_download_qty  = fields.Float(string='Real Download Quantity (kg)', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always')
+    attachment_downld  = fields.Many2many('ir.attachment', relation='second_res_att_rel', string='Download Attachments', track_visibility='always')
+    qty_to_bill        = fields.Float(string='Quantiy to bill $', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always', compute='_set_qty_to_bill') 
+    conformity         = fields.Binary(string='Conformity and Settlement', track_visibility='always')
+    checked            = fields.Boolean(string=" ")
+    discharge_location = fields.Char(string='Discharge Location', track_visibility='always')
+    sales_order_id     = fields.Many2one('sale.order', string='Sales Order Generated', track_visibility='always', compute='_set_sale_order', ondelete='set null')    
+    state              = fields.Selection(selection=[('assigned', 'Assigned'),
+                                                     ('route', 'En route'),
+                                                     ('discharged', 'Discharged')], 
                                                     string='State', required=True, readonly=True, copy=False, tracking=True, default='assigned', compute="set_status", track_visibility='always')
 
     # Analysis Fields / - / - / - / - / - / - / - / - / - / - /
@@ -109,9 +111,9 @@ class LogisticsTrips(models.Model):
     @api.one
     def set_status(self):
         '''Set up state in base a which fields are filled up'''
-        if self.contracts_id and self.sucursal_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty and self.download_date and self.real_download_qty and self.checked:
+        if self.contracts_id and self.sucursal_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty and self.upload_location and self.download_date and self.real_download_qty and self.checked and self.discharge_location:
             self.state = 'discharged'          
-        elif self.contracts_id and self.sucursal_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty:
+        elif self.contracts_id and self.sucursal_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty and self.upload_location:
             self.state = 'route'
         else:
             self.state = 'assigned'
