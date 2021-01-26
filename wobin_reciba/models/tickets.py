@@ -277,6 +277,17 @@ class RecibaTicket(models.Model):
             self.partner_id = self.sale_id.partner_id
             self.net_expected = self.sale_id.order_line[0].product_uom_qty - self.sale_id.order_line[0].qty_delivered
 
+    @api.onchange('product_id')
+    def _get_product_manufacturing(self):
+        #metodo para detectar cambiar la lista de materiales
+        if self.product_id:
+            if self.operation_type == 'manufacturing':
+                if self.product_id.bom_ids:
+                    self.bom_id = self.product_id.bom_ids[0]
+                else:
+                    msg = 'Este producto no cuenta con lista de materiales'
+                    raise UserError(msg)
+
     def confirm_receipt_ticket(self):
         #Metodo para confirmar la boleta de entrada
         #Condicionales para confirmar la boleta
@@ -717,6 +728,7 @@ class RecibaTicket(models.Model):
                     self.name=name_location + '/' + number
                 else:
                     self.name = self.origin_id.display_name + '/' + '0001'
+        #Creacion de la fabricación
         values={
             'product_id': self.product_id.id,
             'product_qty': self.qty_manufacturing,
@@ -728,8 +740,26 @@ class RecibaTicket(models.Model):
         }
         production = self.env['mrp.production'].create(values)
         production.action_assign()
-        #product_produce = self.env['mrp.product.produce'].search([('production_id','=',production.id)])
-        #product_produce.do_produce()
+        #creación del registro para validar la fabricacion
+        values={
+            'product_id': self.product_id.id,
+            'product_qty': self.qty_manufacturing,
+            'product_uom_id' : self.product_id.uom_id.id,
+            'production_id' : production.id
+        }
+        produce = self.env['mrp.product.produce'].create(values)
+        lines = []
+        for move in production.move_raw_ids:
+            lines.append((0,0,{'product_id': move.product_id.id,
+            'product_qty': move.product_qty,
+            'product_uom_id': move.product_uom.id,
+            'qty_to_consume': move.product_uom_qty,
+            'qty_reserved': move.reserved_availability,
+            'qty_done': move.product_uom_qty}))
+        produce.produce_line_ids = lines
+        #Cambiar a en proceso
+        produce.do_produce()
+        #Marcar como hecho
         production.button_mark_done()
         self.manu_id = production.id
         self.manu_count = 1
