@@ -149,6 +149,8 @@ class RecibaTicket(models.Model):
     credit_count = fields.Integer("Nota de crédito por descuento", default=0)
     manu_id = fields.Many2one('mrp.production', string="Fabricación")
     manu_count = fields.Integer(string="Fabricación", default=0)
+    unbuild_id = fields.Many2one('mrp.unbuild', string="Desconstrucción")
+    unbuild_count = fields.Integer(string="Desconstrucción", default=0)
 
     #-------------------------------------Datos generales----------------------------------
     name = fields.Char(string="Boleta", default="Boleta borrador")
@@ -764,6 +766,23 @@ class RecibaTicket(models.Model):
         self.manu_id = production.id
         self.manu_count = 1
         self.state = 'confirmed'
+
+    def unbuild_manufacturing_ticket(self):
+        #Metodo para hacer desconstruccion
+        values={
+            'product_id': self.product_id.id,
+            'product_qty': self.qty_manufacturing,
+            'product_uom_id': self.product_id.uom_id.id,
+            'bom_id': self.bom_id.id,
+            'location_id': self.destination_id.id,
+            'location_dest_id': self.origin_id.id,
+            'mo_id': self.manu_id.id,
+        }
+        unbuild = self.env['mrp.unbuild'].create(values)
+        unbuild.action_validate()
+        self.unbuild_id = unbuild.id
+        self.unbuild_count = 1
+        self.state = 'reverse'
         
 
     @api.multi
@@ -814,6 +833,14 @@ class RecibaTicket(models.Model):
         action = self.env.ref('wobin_reciba.reciba_manufacturing')
         result = action.read()[0]
         result['domain'] = [('id','=', self.manu_id.id)]
+        return result
+
+    @api.multi
+    def action_view_unbuild(self):
+        #Metodo para ver desconstrucciones relacionadas
+        action = self.env.ref('wobin_reciba.reciba_unbuild')
+        result = action.read()[0]
+        result['domain'] = [('id','=', self.unbuild_id.id)]
         return result
 
     @api.multi
