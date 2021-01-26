@@ -875,7 +875,6 @@
                     <field name="date"/>
                     <field name="transfer_type"/>
                     <field name="product_id"/>
-                    <field name="partner_id" string="Proveedor"/>
                     <field name="origin_id"/>
                     <field name="destination_id"/>
                     <field name="net_weight"/>
@@ -922,12 +921,16 @@
                 <form string="Transferencia">
                     <header>
                         <button name="confirm_manufacturing_ticket" type="object" states="draft" string="Confirmar" class="btn-primary"/>
+                        <button name="unbuild_manufacturing_ticket" type="object" states="confirmed" string="Desconstruir" class="btn-primary"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,confirmed" />
                     </header>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
                             <button type="object" name="action_view_manufacturing" class="oe_stat_button" icon="fa-archive">
                                 <field name="manu_count" widget="statinfo" string="Fabricación"/>
+                            </button>
+                            <button type="object" name="action_view_unbuild" class="oe_stat_button" icon="fa-rotate-left" attrs="{'invisible':[('unbuild_count', '=', 0)]}">
+                                <field name="unbuild_count" widget="statinfo" string="Desconstrucción"/>
                             </button>
                         </div>
                         <group>
@@ -1012,7 +1015,6 @@
                     <field name="date"/>
                     <field name="transfer_type"/>
                     <field name="product_id"/>
-                    <field name="partner_id" string="Proveedor"/>
                     <field name="origin_id"/>
                     <field name="destination_id"/>
                     <field name="net_weight"/>
@@ -1148,6 +1150,21 @@
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
                 Click to add a Manufacturing.
+                </p>
+            </field>
+        </record>
+
+        <!--==============================================Desconstrucciones====================================-->
+
+        <record id="reciba_unbuild" model="ir.actions.act_window">
+            <field name="name">Fabricación</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">mrp.unbuild</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a Unbuild.
                 </p>
             </field>
         </record>
