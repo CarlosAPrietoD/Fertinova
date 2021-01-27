@@ -476,7 +476,7 @@
                                     </group>
                                 </group>
                             </page>
-                            <page string="Entrega" name="delivery_page">
+                            <page string="Devolución Entrega" name="delivery_page">
                                 <br/>
                                 <group>
                                     <field name="driver" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
@@ -649,7 +649,7 @@
                                     </group>
                                 </group>
                             </page>
-                            <page string="Recepción" name="delivery_page">
+                            <page string="Devolución Recepción" name="delivery_page">
                                 <br/>
                                 <group>
                                     <field name="driver" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
