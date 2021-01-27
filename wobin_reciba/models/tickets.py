@@ -382,6 +382,7 @@ class RecibaTicket(models.Model):
             'product_uom': self.product_id.uom_po_id.id,
             'purchase_line_id': self.purchase_id.order_line[0].id,
             'location_dest_id' : self.origin_id.id,
+            'to_refund': True,
             })]
         }
         picking = self.env['stock.picking'].create(values)
@@ -465,6 +466,7 @@ class RecibaTicket(models.Model):
             'quantity_done': self.net_weight,
             'product_uom': self.product_id.uom_po_id.id,
             'location_dest_id' : self.destination_id.id,
+            'sale_line_id': self.sale_id.order_line[0].id,
         })]}
         picking = self.env['stock.picking'].create(values)
         picking.button_validate()
@@ -490,6 +492,8 @@ class RecibaTicket(models.Model):
             'quantity_done': self.net_weight,
             'product_uom': self.product_id.uom_po_id.id,
             'location_dest_id' : self.origin_id.id,
+            'sale_line_id': self.sale_id.order_line[0].id,
+            'to_refund': True,
             })]
         }
         picking = self.env['stock.picking'].create(values)
@@ -573,6 +577,8 @@ class RecibaTicket(models.Model):
             'quantity_done': self.net_weight,
             'product_uom': self.product_id.uom_po_id.id,
             'location_dest_id' : self.destination_id.id,
+            'sale_line_id': self.sale_id.order_line[0].id,
+            'to_refund': True,
         })]}
         picking = self.env['stock.picking'].create(values)
         picking.button_validate()
@@ -620,6 +626,7 @@ class RecibaTicket(models.Model):
             'product_uom': self.product_id.uom_po_id.id,
             'purchase_line_id': self.purchase_id.order_line[0].id,
             'location_dest_id' : self.destination_id.id,
+            'to_refund': True,
         })]}
         picking = self.env['stock.picking'].create(values)
         picking.button_validate()
