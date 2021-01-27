@@ -244,7 +244,7 @@
                                 <field name="operation_type_id" domain="['|',('name','=','Delivery Orders'),('name','=','Órdenes de entrega')]" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 <field name="weigher" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 <field name="product_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
-                                <field name="sale_id" domain="[('state','=','done')]" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')]}"/>
+                                <field name="sale_id" domain="['|',('state','=','done'),('state','=','sale')]" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')]}"/>
                                 <field name="sale_invoice_status"/>
                                 <field name="partner_id" string="Cliente" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                             </group>
@@ -436,7 +436,7 @@
                                 <field name="operation_type_id" domain="[('name','=','Devolucion de Órdenes de entrega')]" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 <field name="weigher" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 <field name="product_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
-                                <field name="sale_id" domain="[('state','=','done')]" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')]}"/>
+                                <field name="sale_id" domain="['|',('state','=','done'),('state','=','sale')]" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')]}"/>
                                 <field name="sale_invoice_status"/>
                                 <field name="partner_id" string="Cliente" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                             </group>
