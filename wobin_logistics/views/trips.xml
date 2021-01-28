@@ -55,6 +55,30 @@
     <!--::::::::::::::::::::::::::::::::::::::::::::-->
     <!-- VIEWS {LISTS, FORMS, SEARCH} -->
     <!--::::::::::::::::::::::::::::::::::::::::::::-->   
+    <!-- TRIPS - SEARCH VIEW -->    
+    <record id="view_logistics_trips_search" model="ir.ui.view"> 
+        <field name="model">logistics.trips</field> 
+        <field name="arch" type="xml"> 
+            <search> 
+              <field name="name"/> 
+              <field name="contracts_id"/>          
+              <field name="client_id"/>
+              <field name="vehicle_id"/>
+              <field name="analytic_accnt_id"/>
+              <field name="operator_id"/>          
+              <field name="route"/>
+              <field name="advance_ids"/>
+              <field name="start_date"/>
+              <field name="upload_date"/>
+              <field name="estimated_qty"/>
+              <field name="real_upload_qty"/>
+              <field name="download_date"/>
+              <field name="real_download_qty"/>
+              <field name="sales_order_id"/>  
+              <field name="state"/> 
+            </search> 
+        </field> 
+    </record>
 
     <!-- TRIPS - LIST VIEW -->
     <record id="view_logistics_trips_list" model="ir.ui.view">

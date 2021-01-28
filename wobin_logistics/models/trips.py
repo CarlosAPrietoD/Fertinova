@@ -89,7 +89,7 @@ class LogisticsTrips(models.Model):
     state              = fields.Selection(selection=[('assigned', 'Assigned'),
                                                      ('route', 'En route'),
                                                      ('discharged', 'Discharged')], 
-                                                    string='State', required=True, readonly=True, copy=False, tracking=True, default='assigned', compute="set_status", track_visibility='always')
+                                                    string='State', required=True, store=True, readonly=True, copy=False, tracking=True, default='assigned', compute="set_status", track_visibility='always')
 
     # Analysis Fields / - / - / - / - / - / - / - / - / - / - /
     trip_taxes        = fields.Many2many('account.tax', string='Taxes', compute="_set_trip_taxes", track_visibility='always')
