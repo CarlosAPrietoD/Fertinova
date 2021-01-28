@@ -5,6 +5,7 @@ from odoo.exceptions import UserError
 class RecibaTicket(models.Model):
     #Boletas
     _name = 'reciba.ticket'
+    _inherit = ['mail.thread']
     _description = 'Boletas'
 
 
