@@ -3,7 +3,29 @@
     <data>
 
         <!--===========================================Recepciones============================================-->
-        
+
+        <record model="ir.ui.view" id="view__graph">
+            <field name="name">reciba.ticket.graph</field>
+            <field name="model">reciba.ticket</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Graficas">
+                    <field name="destination_id"/>
+                    <field name="net_weight" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="view_pivot" model="ir.ui.view">
+            <field name="name">reciba.ticket.pivot</field>
+            <field name="model">reciba.ticket</field>
+            <field name="arch" type="xml">
+                <pivot string="Pivot View">
+                    <field name="name" type="row"/>
+                </pivot>
+            </field>
+        </record>
+
         <record model="ir.ui.view" id="form_view_reception">
             <field name="name">reciba.ticket.form</field>
             <field name="model">reciba.ticket</field>
@@ -71,7 +93,7 @@
                                     </group>
                                 </group>
                                 <br/>
-                                <field name="params_id"  attrs="{'readonly':[('state', '!=', 'draft')]}">
+                                <field name="params_id" attrs="{'readonly':[('state', '!=', 'draft')]}">
                                     <tree editable="bottom" decoration-danger="value &gt; max_value" delete="0">
                                         <field name="quality_params_id" readonly="True" force_save="1"/>
                                         <field name="max_value"/>
@@ -179,7 +201,7 @@
             <field name="res_model">reciba.ticket</field>
             <field name="domain">[('operation_type','=','in')]</field>
             <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
             <field name="context">{'default_operation_type': 'in', 'default_apply_discount': True}</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
@@ -208,7 +230,7 @@
 
 
         <!--==========================================Entregas================================================-->
-        
+
         <record model="ir.ui.view" id="form_view_delivery">
             <field name="name">reciba.ticket.form</field>
             <field name="model">reciba.ticket</field>
@@ -272,7 +294,7 @@
                                     </group>
                                 </group>
                                 <br/>
-                                <field name="params_id"  attrs="{'readonly':[('state', '!=', 'draft')]}">
+                                <field name="params_id" attrs="{'readonly':[('state', '!=', 'draft')]}">
                                     <tree editable="bottom" decoration-danger="value &gt; max_value" delete="0">
                                         <field name="quality_params_id" readonly="True" force_save="1"/>
                                         <field name="max_value"/>
@@ -404,7 +426,7 @@
         <menuitem id="deliveries_ticket_menu" name="Entregas" parent="operation_menu" action="tickets_delivery" sequence="2" />
 
         <!--==========================================Devoluciones sobre ventas================================================-->
-        
+
         <record model="ir.ui.view" id="form_view_sale_devolution">
             <field name="name">reciba.ticket.form</field>
             <field name="model">reciba.ticket</field>
@@ -459,7 +481,7 @@
                                     </group>
                                 </group>
                                 <br/>
-                                <field name="params_id"  attrs="{'readonly':[('state', '!=', 'draft')]}">
+                                <field name="params_id" attrs="{'readonly':[('state', '!=', 'draft')]}">
                                     <tree editable="bottom" decoration-danger="value &gt; max_value" delete="0">
                                         <field name="quality_params_id" readonly="True" force_save="1"/>
                                         <field name="max_value"/>
@@ -577,7 +599,7 @@
         <menuitem id="devolution_sale_menu" name="Devoluciones sobre venta" parent="operation_menu" action="sales_devolution" sequence="3" />
 
         <!--==========================================Devoluciones sobre compra================================================-->
-        
+
         <record model="ir.ui.view" id="form_view_purchase_devolution">
             <field name="name">reciba.ticket.form</field>
             <field name="model">reciba.ticket</field>
@@ -632,7 +654,7 @@
                                     </group>
                                 </group>
                                 <br/>
-                                <field name="params_id"  attrs="{'readonly':[('state', '!=', 'draft')]}">
+                                <field name="params_id" attrs="{'readonly':[('state', '!=', 'draft')]}">
                                     <tree editable="bottom" decoration-danger="value &gt; max_value" delete="0">
                                         <field name="quality_params_id" readonly="True" force_save="1"/>
                                         <field name="max_value"/>
@@ -750,7 +772,7 @@
         <menuitem id="devolution_purchase_menu" name="Devoluciones sobre compra" parent="operation_menu" action="purchases_devolution" sequence="4" />
 
         <!--==========================================Transferencias internas================================================-->
-        
+
         <record model="ir.ui.view" id="form_view_internal_transfer">
             <field name="name">reciba.ticket.form</field>
             <field name="model">reciba.ticket</field>
@@ -804,7 +826,7 @@
                                     </group>
                                 </group>
                                 <br/>
-                                <field name="params_id"  attrs="{'readonly':[('state', '!=', 'draft')]}">
+                                <field name="params_id" attrs="{'readonly':[('state', '!=', 'draft')]}">
                                     <tree editable="bottom" decoration-danger="value &gt; max_value" delete="0">
                                         <field name="quality_params_id" readonly="True" force_save="1"/>
                                         <field name="max_value"/>
@@ -913,7 +935,7 @@
         <menuitem id="internal_transfer_menu" name="Transferencias internas" parent="operation_menu" action="internal_transfer" sequence="5" />
 
         <!--==========================================Fabricación================================================-->
-        
+
         <record model="ir.ui.view" id="form_view_manufacturing">
             <field name="name">reciba.ticket.form</field>
             <field name="model">reciba.ticket</field>
@@ -963,7 +985,7 @@
                                     </group>
                                 </group>
                                 <br/>
-                                <field name="params_id"  attrs="{'readonly':[('state', '!=', 'draft')]}">
+                                <field name="params_id" attrs="{'readonly':[('state', '!=', 'draft')]}">
                                     <tree editable="bottom" decoration-danger="value &gt; max_value" delete="0">
                                         <field name="quality_params_id" readonly="True" force_save="1"/>
                                         <field name="max_value"/>
