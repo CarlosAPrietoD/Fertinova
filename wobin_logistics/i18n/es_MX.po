@@ -78,6 +78,7 @@ msgstr "Etiquetas analíticas"
 
 #. module: wobin_logistics
 #: selection:logistics.trips,state:0
+#: selection:logistics.trips,state_aux:0
 msgid "Assigned"
 msgstr "Asignado"
 
@@ -227,6 +228,7 @@ msgstr "Ubicación de Descarga"
 
 #. module: wobin_logistics
 #: selection:logistics.trips,state:0
+#: selection:logistics.trips,state_aux:0
 msgid "Discharged"
 msgstr "Descargado"
 
@@ -276,6 +278,7 @@ msgstr "Borrador"
 
 #. module: wobin_logistics
 #: selection:logistics.trips,state:0
+#: selection:logistics.trips,state_aux:0
 msgid "En route"
 msgstr "En Ruta"
 
