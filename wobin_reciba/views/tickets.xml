@@ -4,7 +4,7 @@
 
         <!--===========================================Recepciones============================================-->
 
-        <record model="ir.ui.view" id="graph_view_general">
+        <record model="ir.ui.view" id="graph_view_reception">
             <field name="name">reciba.ticket.graph</field>
             <field name="model">reciba.ticket</field>
             <field name="type">graph</field>
@@ -17,7 +17,7 @@
             </field>
         </record>
 
-        <record id="view_pivot" model="ir.ui.view">
+        <record id="pivot_view_reception" model="ir.ui.view">
             <field name="name">reciba.ticket.pivot</field>
             <field name="model">reciba.ticket</field>
             <field name="arch" type="xml">
@@ -219,6 +219,18 @@
             </field>
         </record>
 
+        <record id="reciba_pivot_reception_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="tickets_reception" />
+            <field name="view_id" ref="pivot_view_reception" />
+            <field name="view_mode">pivot</field>
+        </record>
+
+        <record id="reciba_graph_reception_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="tickets_reception" />
+            <field name="view_id" ref="graph_view_reception" />
+            <field name="view_mode">graph</field>
+        </record>
+
         <record id="reciba_tree_reception_ticket_action" model="ir.actions.act_window.view">
             <field name="act_window_id" ref="tickets_reception" />
             <field name="view_id" ref="tree_view_reception" />
@@ -239,6 +251,31 @@
 
 
         <!--==========================================Entregas================================================-->
+
+        <record model="ir.ui.view" id="graph_view_delivery">
+            <field name="name">reciba.ticket.graph</field>
+            <field name="model">reciba.ticket</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Graficas">
+                    <field name="origin_id"/>
+                    <field name="state" group="True"/>
+                    <field name="net_weight" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="pivot_view_delivery" model="ir.ui.view">
+            <field name="name">reciba.ticket.pivot</field>
+            <field name="model">reciba.ticket</field>
+            <field name="arch" type="xml">
+                <pivot string="Pivote">
+                    <field name="origin_id" type="row"/>
+                    <field name="net_weight" type="measure"/>
+                    <field name="state" type="col"/>
+                </pivot>
+            </field>
+        </record>
 
         <record model="ir.ui.view" id="form_view_delivery">
             <field name="name">reciba.ticket.form</field>
@@ -415,13 +452,25 @@
             <field name="res_model">reciba.ticket</field>
             <field name="domain">[('operation_type','=','out')]</field>
             <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
             <field name="context">{'default_operation_type': 'out', 'default_apply_discount': False}</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
                 Click to add a track value.
                 </p>
             </field>
+        </record>
+
+        <record id="reciba_pivot_delivery_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="tickets_delivery" />
+            <field name="view_id" ref="pivot_view_delivery" />
+            <field name="view_mode">pivot</field>
+        </record>
+
+        <record id="reciba_graph_delivery_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="tickets_delivery" />
+            <field name="view_id" ref="graph_view_delivery" />
+            <field name="view_mode">graph</field>
         </record>
 
         <record id="reciba_tree_delivery_ticket_action" model="ir.actions.act_window.view">
@@ -439,6 +488,31 @@
         <menuitem id="deliveries_ticket_menu" name="Entregas" parent="operation_menu" action="tickets_delivery" sequence="2" />
 
         <!--==========================================Devoluciones sobre ventas================================================-->
+
+        <record model="ir.ui.view" id="graph_view_sale_devolution">
+            <field name="name">reciba.ticket.graph</field>
+            <field name="model">reciba.ticket</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Graficas">
+                    <field name="destination_id"/>
+                    <field name="state" group="True"/>
+                    <field name="net_weight" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="pivot_view_sale_devolution" model="ir.ui.view">
+            <field name="name">reciba.ticket.pivot</field>
+            <field name="model">reciba.ticket</field>
+            <field name="arch" type="xml">
+                <pivot string="Pivote">
+                    <field name="destination_id" type="row"/>
+                    <field name="net_weight" type="measure"/>
+                    <field name="state" type="col"/>
+                </pivot>
+            </field>
+        </record>
 
         <record model="ir.ui.view" id="form_view_sale_devolution">
             <field name="name">reciba.ticket.form</field>
@@ -592,13 +666,25 @@
             <field name="res_model">reciba.ticket</field>
             <field name="domain">[('operation_type','=','dev_sale')]</field>
             <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
             <field name="context">{'default_operation_type': 'dev_sale'}</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
                 Click to add a track value.
                 </p>
             </field>
+        </record>
+
+        <record id="reciba_pivot_sale_devolution_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="sales_devolution" />
+            <field name="view_id" ref="pivot_view_sale_devolution" />
+            <field name="view_mode">pivot</field>
+        </record>
+
+        <record id="reciba_graph_sale_devolution_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="sales_devolution" />
+            <field name="view_id" ref="graph_view_sale_devolution" />
+            <field name="view_mode">graph</field>
         </record>
 
         <record id="reciba_tree_sale_devolution_ticket_action" model="ir.actions.act_window.view">
@@ -616,6 +702,31 @@
         <menuitem id="devolution_sale_menu" name="Devoluciones sobre venta" parent="operation_menu" action="sales_devolution" sequence="3" />
 
         <!--==========================================Devoluciones sobre compra================================================-->
+
+        <record model="ir.ui.view" id="graph_view_purchase_devolution">
+            <field name="name">reciba.ticket.graph</field>
+            <field name="model">reciba.ticket</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Graficas">
+                    <field name="origin_id"/>
+                    <field name="state" group="True"/>
+                    <field name="net_weight" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="pivot_view_purchase_devolution" model="ir.ui.view">
+            <field name="name">reciba.ticket.pivot</field>
+            <field name="model">reciba.ticket</field>
+            <field name="arch" type="xml">
+                <pivot string="Pivote">
+                    <field name="origin_id" type="row"/>
+                    <field name="net_weight" type="measure"/>
+                    <field name="state" type="col"/>
+                </pivot>
+            </field>
+        </record>
 
         <record model="ir.ui.view" id="form_view_purchase_devolution">
             <field name="name">reciba.ticket.form</field>
@@ -769,13 +880,25 @@
             <field name="res_model">reciba.ticket</field>
             <field name="domain">[('operation_type','=','dev_purchase')]</field>
             <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
             <field name="context">{'default_operation_type': 'dev_purchase'}</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
                 Click to add a track value.
                 </p>
             </field>
+        </record>
+
+        <record id="reciba_pivot_purchase_devolution_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="purchases_devolution" />
+            <field name="view_id" ref="pivot_view_purchase_devolution" />
+            <field name="view_mode">pivot</field>
+        </record>
+
+        <record id="reciba_graph_purchase_devolution_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="purchases_devolution" />
+            <field name="view_id" ref="graph_view_purchase_devolution" />
+            <field name="view_mode">graph</field>
         </record>
 
         <record id="reciba_tree_purchase_devolution_ticket_action" model="ir.actions.act_window.view">
