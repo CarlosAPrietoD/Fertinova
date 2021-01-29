@@ -30,7 +30,7 @@ class LogisticsContracts(models.Model):
         return result    
 
     name            = fields.Char(string="Contract", readonly=True, required=True, copy=False, default='New')
-    client_id       = fields.Many2one('res.partner', string='Client', required=True)
+    client_id       = fields.Many2one('res.partner', string='Client')
     product_id      = fields.Char(string="Product", required=True)
     covenant_qty    = fields.Float(string='Covenanted Quantity (kg)', required=True, digits=dp.get_precision('Product Unit of Measure'))
     tariff          = fields.Float(string='Tariff $', required=True, digits=dp.get_precision('Product Unit of Measure'))
