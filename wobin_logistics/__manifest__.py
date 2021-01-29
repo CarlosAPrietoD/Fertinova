@@ -18,7 +18,7 @@
     'version': '12.0.1.0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['fleet', 'hr_expense', 'sale_management'],
+    'depends': ['hr_expense', 'sale_management'],
 
     # always loaded
     'data': [        

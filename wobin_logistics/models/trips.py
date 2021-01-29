@@ -63,7 +63,7 @@ class LogisticsTrips(models.Model):
     contracts_id      = fields.Many2one('logistics.contracts', string='Contracts', track_visibility='always', ondelete='set null')
     sucursal_id       = fields.Many2one('stock.warehouse', string='Branch Office', track_visibility='always')
     client_id         = fields.Many2one('res.partner', string='Client', track_visibility='always')
-    vehicle_id        = fields.Many2one('fleet.vehicle', string='Vehicle')    
+    vehicle_id        = fields.Char(string='Vehicle', track_visibility='always')     
     analytic_accnt_id = fields.Many2one('account.analytic.account', string='Analytic Account', track_visibility='always')
     operator_id       = fields.Many2one('hr.employee',string='Operator', track_visibility='always')
     route             = fields.Char(string='Route', track_visibility='always')
