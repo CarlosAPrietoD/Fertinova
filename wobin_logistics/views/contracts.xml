@@ -45,22 +45,22 @@
                     </div>
                     <group>
                         <group>
-                            <field name="client_id"/>
-                            <field name="product_id"/>
-                            <field name="covenant_qty"/>
-                            <field name="tariff"/>  
-                            <field name="expected_income"/>                  
+                            <field name="client_id" required="True"/>
+                            <field name="product_id" required="True"/>
+                            <field name="covenant_qty" required="True"/>
+                            <field name="tariff" required="True"/>  
+                            <field name="expected_income" required="True"/>                  
                         </group>                                                 
                         <group>                     
-                            <field name="origin_id"/>
-                            <field name="destination_id"/>
-                            <field name="remitter"/>
-                            <field name="recipient"/>
-                            <field name="shipping"/>                                         
+                            <field name="origin_id" required="True"/>
+                            <field name="destination_id" required="True"/>
+                            <field name="remitter" required="True"/>
+                            <field name="recipient" required="True"/>
+                            <field name="shipping" required="True"/>                                         
                       </group> 
                   </group> 
                   <group>
-                      <field name="observations"/>
+                      <field name="observations" required="True"/>
                   </group>                                            
                 </sheet>              
                 <div class="oe_chatter">
