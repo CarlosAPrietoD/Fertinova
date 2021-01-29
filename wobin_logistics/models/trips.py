@@ -188,7 +188,7 @@ class LogisticsTrips(models.Model):
     @api.depends('name')
     def _set_purchase_orders(self):            
         #ID of trip tag:
-        trip_tag_id = self.env['account.analytic.tag'].search([('name', '=', self.trip_number_tag)]).id
+        trip_tag_id = self.env['account.analytic.tag'].search([('name', '=', self.trip_number_tag)], limit=1).id
         
         #Process valid in case of having an ID of Trip Tag:
         if trip_tag_id:
