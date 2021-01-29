@@ -16,7 +16,7 @@
     'data': [
         #Security Files:
         #'security/ir.model.access.csv',
-        'security/account_security.xml',
+        'security/account_security.xml',     
         
         #Views:
         'views/account_move.xml',        
@@ -24,9 +24,10 @@
         'views/product_template_inherited_view.xml',
         'views/purchase_inherited_view.xml',
         'views/sale_inherited_view.xml',       
-        'views/stock_move_inherited_view.xml',
+        #'views/stock_move_inherited_view.xml',
         'views/stock_picking_inherited_view.xml',
         'views/cfdi.xml',
+
 
         #Wizards:
         'wizard/account_move_inherited_view.xml',

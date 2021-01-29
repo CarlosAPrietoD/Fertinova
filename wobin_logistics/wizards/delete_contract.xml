@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <record id="wizard_delete_contract" model="ir.ui.view">
+            <field name="name">wizard.form</field>
+            <field name="model">wizard.delete.contract</field>
+            <field name="arch" type="xml">
+                <form string="Information related to deletion of this contract"> 
+                    <sheet>
+                        <h4>¿Está seguro de que desea eliminar este contrato?</h4>
+                        <h4>Al eliminarlo tendrá que generar uno nuevo para surtir la cantidad pendiente de entregar</h4>                        
+                    </sheet>                                                                        
+                    <footer>
+                        <button name="deletion" string="OK" type="object" default_focus="1" class="oe_highlight"/> 
+                        <button special="cancel" string="Cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window id="delete_contract_wizard"
+                    name="Contract Deletion"
+                    src_model="logistics.contracts"
+                    res_model="wizard.delete.contract"
+                    view_mode="form"
+                    target="new"
+                    key2="client_action_multi"/>
+
+</odoo>

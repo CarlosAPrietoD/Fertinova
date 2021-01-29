@@ -31,7 +31,6 @@ class AccountPayment(models.Model):
                                       string='Orden de Compra', readonly=False,
                                       default=lambda self: self.env['purchase.order'].search([('partner_id', '=', self.partner_id.id), 
                                                                                                ('state', 'not in', ['done', 'cancel'])]))
-
     #\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\
     #             METHOD FIELDS
     @api.depends('journal_id')
@@ -107,3 +106,4 @@ class AccountPayment(models.Model):
 
             rec.write({'state': 'posted', 'move_name': persist_move_name, 'bank_account_id': rec.bank_account_id.id})
         return True
+ 

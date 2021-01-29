@@ -15,7 +15,7 @@ class IrConfigParameter(models.Model):
     def _auth_timeout_get_parameter_delay(self):
         return int(
             self.env['ir.config_parameter'].sudo().get_param(
-                DELAY_KEY, 1800,
+                DELAY_KEY, 300,
             )
         )
 

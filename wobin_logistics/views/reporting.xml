@@ -1,0 +1,182 @@
+<odoo>
+  <data>
+
+    <!-- ANALYSIS (TRIPS) according to Contract - LIST VIEW -->
+    <record id="view_trips_analysis_contract" model="ir.ui.view">
+      <field name="name">Trips Analysis according Contracts</field>
+      <field name="model">logistics.contracts</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>          
+          <field name="trips"/>
+          <field name="covenant_qty"/>
+          <field name="trip_delivered_qty"/>
+          <field name="difference_qty"/>       
+        </tree>
+      </field>
+    </record>
+
+    <!-- ANALYSIS (TRIPS) in accordance to trips - LIST VIEW --> 
+    <record id="view_trips_analysis" model="ir.ui.view">
+      <field name="name">Trips Analysis</field>
+      <field name="model">logistics.trips</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>  
+          <field name="contracts_id"/>
+          <field name="trip_taxes" widget="many2many_tags"/> 
+          <field name="income_provisions"/>
+          <field name="invoice_status"/>       
+        </tree>
+      </field>
+    </record>       
+
+    <!-- ANALYSIS Profitabilty Trips - LIST VIEW --> 
+    <record id="view_profitability_trips" model="ir.ui.view">
+      <field name="name">Trips Profitability</field>
+      <field name="model">logistics.trips</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>  
+          <field name="billed_income"/>  
+          <field name="expenses"/> 
+          <field name="profitability"/>           
+        </tree>
+      </field>
+    </record>
+
+    <!-- ANALYSIS Contracts Status- LIST VIEW --> 
+    <record id="view_contracts_status" model="ir.ui.view">
+      <field name="name">Contracts Status</field>
+      <field name="model">logistics.contracts</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>  
+          <field name="status"/>
+          <field name="trip_status"/>        
+        </tree>
+      </field>
+    </record>
+
+    <!-- Discharged Trips - SEARCH VIEW --> 
+    <record id="view_search_discharged_trips" model="ir.ui.view"> 
+        <field name="model">sale.order</field> 
+        <field name="arch" type="xml"> 
+            <search> 
+              <field name="name" /> 
+              <field name="trips_id"/>
+              <field name="name"/> 
+              <field name="state"/> 
+              <field name="flag_trip"/>                 
+              <filter name="pending" string="Sale Orders w/ trips" 
+                      domain="[('flag_trip', '=', True)]"/>
+            </search> 
+        </field> 
+    </record>
+
+    <!-- Discharged Trips - LIST VIEW --> 
+    <record id="view_discharged_trips" model="ir.ui.view">
+      <field name="name">Discharged Trips and Sale Orders to Process</field>
+      <field name="model">sale.order</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="trips_id"/>
+          <field name="name"/> 
+          <field name="state"/> 
+          <field name="flag_trip" invisible="True"/>           
+        </tree>
+      </field>
+    </record>
+
+    <!-- Settlements - LIST VIEW --> 
+    <record id="view_trip_settlements" model="ir.ui.view">
+      <field name="name">Analysis for Operator's Settlements</field>
+      <field name="model">logistics.trips</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/> 
+          <field name="state"/> 
+          <field name="operator_id"/> 
+          <field name="expenses"/> 
+          <field name="advance_payment"/> 
+          <field name="settlement"/>           
+        </tree>
+      </field>
+    </record>
+
+    <!-- Billing related to their Contracts & Trips - SEARCH VIEW --> 
+    <record id="view_invoice_report_search" model="ir.ui.view">
+      <field name="name">Invoices Report related to Contract and Trips</field>
+      <field name="model">account.invoice</field>
+      <field name="arch" type="xml">
+        <search> 
+          <field name="id"/>           
+          <field name="number"/>  
+          <field name="contracts_ids"/> 
+          <field name="trips_related_ids"/> 
+          <field name="flag_cont_trip" />
+          <field name="state" invisible="1"/>
+          <filter name="flag_ct" string="With Contract" 
+                  domain="[('flag_cont_trip', '=', True)]" />                      
+        </search>
+      </field>
+    </record> 
+    <!-- Billing related to their Contracts & Trips - LIST VIEW --> 
+    <record id="view_invoice_report_list" model="ir.ui.view">
+      <field name="name">Invoices Report related to Contract and Trips</field>
+      <field name="model">account.invoice</field>
+      <field name="arch" type="xml">
+        <tree>          
+          <field name="number"/>  
+          <field name="contracts_ids" widget="many2many_tags"/> 
+          <field name="trips_related_ids" widget="many2many_tags"/> 
+          <field name="state" invisible="1"/>            
+        </tree>
+      </field>
+    </record> 
+    <!-- Billing related to their Contracts & Trips - FORM VIEW --> 
+    <record id="view_invoice_report_form" model="ir.ui.view">
+      <field name="name">Invoices Report related to Contract and Trips</field>
+      <field name="model">account.invoice</field>
+      <field name="arch" type="xml">
+        <form>
+            <sheet>
+              <div class="oe_left oe_title">
+                <h1>
+                  <field name="number" readonly="True"/>
+                </h1>
+              </div>  
+              <group>                 
+                  <field name="contracts_ids">
+                    <tree string="Contract Related">
+                      <field name="name"/>
+                      <field name="tariff"/>
+                      <field name="origin_id"/>
+                      <field name="destination_id"/>                  
+                      <field name="remitter"/>
+                      <field name="recipient"/>
+                    </tree>
+                  </field>
+            
+                  <field name="trips_related_ids"> 
+                    <tree string="Trips Related">
+                      <field name="name"/>
+                      <field name="vehicle_id"/>
+                      <field name="operator_id"/> 
+                      <field name="upload_date"/> 
+                      <field name="real_upload_qty"/>
+                      <field name="download_date"/>
+                      <field name="real_download_qty"/>
+                    </tree>
+                  </field> 
+                                        
+                  <field name="state" invisible="1"/>  
+              </group>                         
+            </sheet>          
+        </form>
+      </field>
+    </record>      
+
+
+  </data>  
+</odoo>     
