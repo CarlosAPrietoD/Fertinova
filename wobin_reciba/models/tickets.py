@@ -10,7 +10,7 @@ class RecibaTicket(models.Model):
 
 
     @api.one
-    @api.depends('humidity')
+    @api.depends('humidity','apply_discount')
     def _get_humidity_discount(self):
         #Metodo para calcular el descuento de humedad por cada mil kilos
         if self.apply_discount == True:
@@ -21,7 +21,7 @@ class RecibaTicket(models.Model):
             self.humidity_discount = 0
 
     @api.one
-    @api.depends('impurity')
+    @api.depends('impurity','apply_discount')
     def _get_impurity_discount(self):
         #Metodo para calcular el descuento de impureza por cada mil kilos
         if self.apply_discount == True:
@@ -32,7 +32,7 @@ class RecibaTicket(models.Model):
             self.impurity_discount=0
 
     @api.one
-    @api.depends('humidity', 'net_weight')
+    @api.depends('humidity', 'net_weight','apply_discount')
     def _get_humidity_total_discount(self):
         #Metodo para calcular el descuento total por humedad del peso neto 
         if self.apply_discount == True:
@@ -42,7 +42,7 @@ class RecibaTicket(models.Model):
         else: self.humidity_total_discount = 0
 
     @api.one
-    @api.depends('impurity', 'net_weight')
+    @api.depends('impurity', 'net_weight','apply_discount')
     def _get_impurity_total_discount(self):
         #Metodo para calcular el descuento total por impureza del peso neto
         if self.apply_discount == True:
@@ -134,6 +134,11 @@ class RecibaTicket(models.Model):
         if self.net_weight:
             today = datetime.today()
             self.net_date = today
+
+    @api.model
+    def _get_name_weigher(self):
+        #Obtener analista
+        return self.env.user.name
     
     #------------------------------------Datos---------------------------------------------
     company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('your.module'))
@@ -141,7 +146,7 @@ class RecibaTicket(models.Model):
     ('priceless', 'Confirmado sin precio'),
     ('confirmed', 'Confirmado'),
     ('reverse','Reversa'),
-    ('cancel', 'Cancelado')], default='draft')
+    ('cancel', 'Cancelado')], default='draft', track_visibility='onchange')
     transfer_id = fields.Many2one('stock.picking', string="Transferencia")
     transfer_count = fields.Integer("Transferencias", default=0)
     transfer_reverse_id = fields.Many2one('stock.picking', string="Reversa")
@@ -154,7 +159,7 @@ class RecibaTicket(models.Model):
     unbuild_count = fields.Integer(string="Desconstrucción", default=0)
 
     #-------------------------------------Datos generales----------------------------------
-    name = fields.Char(string="Boleta", default="Boleta borrador")
+    name = fields.Char(string="Boleta", default="Boleta borrador", track_visibility='onchange')
     date = fields.Datetime(string="Fecha y hora", default=lambda self: fields.datetime.now())
     operation_type = fields.Selection([('in','Recepción'),
     ('out','Entrega'),
@@ -163,74 +168,72 @@ class RecibaTicket(models.Model):
     ('manufacturing','Fabricaciones'),
     ('transfer','Transferencias internas'),
     ('order','Ordenes de desconstruccion')], string="Tipo de operacion")
-    operation_type_id = fields.Many2one('stock.picking.type', string="Tipo de operacion")
+    operation_type_id = fields.Many2one('stock.picking.type', string="Tipo de operacion", track_visibility='onchange')
     reception = fields.Selection([('price', 'Con precio'),
-    ('priceless', 'Sin precio')], string="Tipo de recepción", default='price', required=True)
+    ('priceless', 'Sin precio')], string="Tipo de recepción", default='price', required=True, track_visibility='onchange')
     transfer_type = fields.Selection([('int', 'Misma sucursal'),
     ('in', 'Entrada'), 
-    ('out','Salida')], string="Tipo de transferencia", default='int')
-    weigher = fields.Char(string="Nombre del analista")
-    product_id = fields.Many2one('product.product', string="Producto")
+    ('out','Salida')], string="Tipo de transferencia", default='int', track_visibility='onchange')
+    weigher = fields.Char(string="Nombre del analista", track_visibility='onchange', default=_get_name_weigher, readonly=True)
+    product_id = fields.Many2one('product.product', string="Producto", track_visibility='onchange')
     ticket_id = fields.Many2one('reciba.ticket', string="Boleta relacionada")
     ticket_count = fields.Integer("Boletas", default=0)
-    sale_id = fields.Many2one('sale.order', string="Orden de venta")
+    sale_id = fields.Many2one('sale.order', string="Orden de venta", track_visibility='onchange')
     sale_invoice_status = fields.Selection(related='sale_id.invoice_status', string="Estatus de facturación")
-    purchase_id = fields.Many2one('purchase.order', string="Pedido de compra", domain="[('company_id','=',company_id)]")
+    purchase_id = fields.Many2one('purchase.order', string="Pedido de compra", domain="[('company_id','=',company_id)]", track_visibility='onchange')
     purchase_invoice_status = fields.Selection(related='purchase_id.invoice_status', string="Estatus de facturación")
-    partner_id = fields.Many2one('res.partner', string="Contacto")
+    partner_id = fields.Many2one('res.partner', string="Contacto", track_visibility='onchange')
     list_production_id = fields.Many2one('mrp.bom', string="Lista de materiales")
-    qty_produce = fields.Float(string="Cantidad a producir")
-    qty_process = fields.Float(string="Cantidad a procesar")
-    origin = fields.Char(string="Documento origen")
+    origin = fields.Char(string="Documento origen", track_visibility='onchange')
     
     #------------------------------------Datos de calidad---------------------------------
-    quality_id = fields.Many2one('reciba.quality', string="Norma de calidad")
-    humidity = fields.Float(string="Humedad 14%")
+    quality_id = fields.Many2one('reciba.quality', string="Norma de calidad", track_visibility='onchange')
+    humidity = fields.Float(string="Humedad 14%", track_visibility='onchange')
     humidity_discount = fields.Float(string="Descuento (Kg)", compute='_get_humidity_discount', store=True)
-    impurity = fields.Float(string="Impureza 2%")
+    impurity = fields.Float(string="Impureza 2%", track_visibility='onchange')
     impurity_discount = fields.Float(string="Descuento (Kg)", compute='_get_impurity_discount', store=True)
-    density = fields.Float(string="Densidad g/L 720-1000")
-    temperature = fields.Float(string="Temperatura °C")
-    params_id = fields.One2many('reciba.ticket.params', 'ticket_id')
-    sum_damage = fields.Float(string="Suma daños", compute='_get_total_damage', store=True)
-    sum_broken = fields.Float(string="Suma quebrados", compute='_get_total_broken', store=True)
+    density = fields.Float(string="Densidad g/L 720-1000", track_visibility='onchange')
+    temperature = fields.Float(string="Temperatura °C", track_visibility='onchange')
+    params_id = fields.One2many('reciba.ticket.params', 'ticket_id', track_visibility='onchange')
+    sum_damage = fields.Float(string="Suma daños", compute='_get_total_damage', store=True, track_visibility='onchange')
+    sum_broken = fields.Float(string="Suma quebrados", compute='_get_total_broken', store=True, track_visibility='onchange')
 
     #-----------------------------------Datos de transportacion---------------------------
-    driver = fields.Char(string="Nombre del operador")
+    driver = fields.Char(string="Nombre del operador", track_visibility='onchange')
     type_vehicle = fields.Selection([('van','Camioneta'),
     ('torton','Torton'),
     ('trailer', 'Trailer sencillo'),
-    ('full','Trailer full')], string="Tipo de vehiculo", default='van')
-    plate_vehicle = fields.Char(string="Placas unidad")
-    plate_trailer = fields.Char(string="Placas remolque")
-    plate_second_trailer = fields.Char(string="Placas segundo remolque")
+    ('full','Trailer full')], string="Tipo de vehiculo", default='van', track_visibility='onchange')
+    plate_vehicle = fields.Char(string="Placas unidad", track_visibility='onchange')
+    plate_trailer = fields.Char(string="Placas remolque", track_visibility='onchange')
+    plate_second_trailer = fields.Char(string="Placas segundo remolque", track_visibility='onchange')
 
     #-----------------------------------Datos de ubicaciones-----------------------------
-    origin_id = fields.Many2one('stock.location', string="Ubicación origen")
+    origin_id = fields.Many2one('stock.location', string="Ubicación origen", track_visibility='onchange')
     origin_date = fields.Datetime(string="Fecha y hora", compute='_default_origin_date', store=True)
-    destination_id = fields.Many2one('stock.location', string="Ubicación destino")
+    destination_id = fields.Many2one('stock.location', string="Ubicación destino", track_visibility='onchange')
     destination_date = fields.Datetime(string="Fecha y hora", compute='_default_destination_date', store=True)
 
     #-----------------------------------Datos de pesaje----------------------------------
-    gross_weight = fields.Float(string="Peso Bruto")
+    gross_weight = fields.Float(string="Peso Bruto", track_visibility='onchange')
     gross_date = fields.Datetime(string="Fecha y hora", compute='_default_gross_date', store=True)
-    tare_weight = fields.Float(string="Peso Tara")
+    tare_weight = fields.Float(string="Peso Tara", track_visibility='onchange')
     tare_date = fields.Datetime(string="Fecha y hora", compute='_default_tare_date', store=True)
     net_weight = fields.Float(string="Peso Neto", compute='_get_net_weight', store=True)
     net_date = fields.Datetime(string="Fecha y hora", compute='_default_net_date', store=True)
-    net_expected = fields.Float(string="Peso neto esperado")
-    qty_manufacturing = fields.Float(string="Cantidad a producir")
-    bom_id = fields.Many2one('mrp.bom', string="Lista de materiales", domain="[('product_id', '=', product_id)]")
+    net_expected = fields.Float(string="Pendiente por surtir")
+    qty_manufacturing = fields.Float(string="Cantidad a producir", track_visibility='onchange')
+    bom_id = fields.Many2one('mrp.bom', string="Lista de materiales", domain="[('product_id', '=', product_id)]", track_visibility='onchange')
 
     #----------------------------------Datos de descuento-------------------------------
-    apply_discount = fields.Boolean(string="Aplicar descuento")
+    apply_discount = fields.Boolean(string="Aplicar descuento", track_visibility='onchange')
     humidity_total_discount = fields.Float(string="Descuento total de humedad (Kg)", compute='_get_humidity_total_discount', store=True)
     impurity_total_discount = fields.Float(string="Descuento total de impureza (Kg)", compute='_get_impurity_total_discount', store=True)
     discount = fields.Float(string="Descuento total (kg)", compute='_get_discount_total', store=True)
     total_weight = fields.Float(string="Peso neto analizado", compute='_get_total_weight', store=True)
-    price_po = fields.Float(related='purchase_id.order_line.price_unit', string="Precio", digits=(15,4))
-    price_so = fields.Float(related='sale_id.order_line.price_unit', string="Precio", digits=(15,4))
-    currency_id = fields.Many2one('res.currency', default=lambda self: self.env['res.company']._company_default_get('your.module').currency_id, string="Moneda")
+    price_po = fields.Float(related='purchase_id.order_line.price_unit', string="Precio", digits=(15,4), track_visibility='onchange')
+    price_so = fields.Float(related='sale_id.order_line.price_unit', string="Precio", digits=(15,4), track_visibility='onchange')
+    currency_id = fields.Many2one('res.currency', default=lambda self: self.env['res.company']._company_default_get('your.module').currency_id, string="Moneda", track_visibility='onchange')
 
 
     @api.onchange('operation_type')
@@ -427,6 +430,10 @@ class RecibaTicket(models.Model):
         self.ticket_id = ticket.id
         self.ticket_count = 1
         self.state='reverse'
+
+    def cancel_receipt_ticket(self):
+        #Metodo para cancelar boletas sin precio
+        self.state = 'cancel'
         
     def confirm_delivery_ticket(self):
         #Metodo para confirmar la boleta de salida
@@ -438,7 +445,7 @@ class RecibaTicket(models.Model):
             msg = 'Los valores de humedad, impureza y temperatura deben ser mayores a 0'
             raise UserError(msg)
         if self.net_expected < self.net_weight:
-            msg = 'El peso neto es mayor a la cantidad esperada'
+            msg = 'El peso neto es mayor a la cantidad pendiente por surtir'
             raise UserError(msg)
         if self.state == 'draft':
             #Asignacion del nombre de acuerdo al destino si esta en modo borrador
@@ -854,7 +861,11 @@ class RecibaTicket(models.Model):
 
     @api.multi
     def unlink(self):
-        #Metodo para eliminar la relacion de boletas cuando una es eliminada
+        #Validacion para eliminar la boleta
+        if self.state != 'draft':
+            msg = 'La boleta debe estar en estado borrador para ser eliminada'
+            raise UserError(msg)
+        #Eliminar la relacion de boletas cuando una es eliminada
         ticket = self.env['reciba.ticket'].search([('ticket_id','=',self.id)])
         if ticket:
             ticket.ticket_id = 0

@@ -4,13 +4,14 @@
 
         <!--===========================================Recepciones============================================-->
 
-        <record model="ir.ui.view" id="view__graph">
+        <record model="ir.ui.view" id="graph_view_general">
             <field name="name">reciba.ticket.graph</field>
             <field name="model">reciba.ticket</field>
             <field name="type">graph</field>
             <field name="arch" type="xml">
                 <graph string="Graficas">
                     <field name="destination_id"/>
+                    <field name="state" group="True"/>
                     <field name="net_weight" type="measure"/>
                 </graph>
             </field>
@@ -20,8 +21,11 @@
             <field name="name">reciba.ticket.pivot</field>
             <field name="model">reciba.ticket</field>
             <field name="arch" type="xml">
-                <pivot string="Pivot View">
-                    <field name="name" type="row"/>
+                <pivot string="Pivote">
+                    <field name="destination_id" type="row"/>
+                    <field name="net_weight" type="measure"/>
+                    <field name="reception" type="col"/>
+                    <field name="state" type="col"/>
                 </pivot>
             </field>
         </record>
@@ -34,6 +38,7 @@
                     <header>
                         <button name="confirm_receipt_ticket" type="object" states="draft,priceless" string="Confirmar" class="btn-primary"/>
                         <button name="reverse_receipt_ticket" type="object" states="confirmed" string="Reversa" class="btn-primary"/>
+                        <button name="cancel_receipt_ticket" type="object" states="priceless" string="Cancelar"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,priceless,confirmed" />
                     </header>
                     <sheet>
@@ -62,7 +67,7 @@
                                 <field name="date" readonly="True"/>
                                 <field name="operation_type" invisible="1"/>
                                 <field name="operation_type_id" domain="['|',('name','=','Receipts'),('name','=','Recepciones')]" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
-                                <field name="weigher" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="weigher"/>
                                 <field name="product_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 <field name="reception" required="True" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')]}"/>
                                 <field name="purchase_id" domain="['|',('state','=','purchase'),('state','=','done')]" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')], 'required':[('reception', '=', 'price')], 'invisible':[('reception', '=', 'priceless')]}"/>
@@ -268,7 +273,7 @@
                                 <field name="date" readonly="True"/>
                                 <field name="operation_type" invisible="1"/>
                                 <field name="operation_type_id" domain="['|',('name','=','Delivery Orders'),('name','=','Órdenes de entrega')]" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
-                                <field name="weigher" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="weigher"/>
                                 <field name="product_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 <field name="sale_id" domain="['|',('state','=','done'),('state','=','sale')]" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')]}"/>
                                 <field name="sale_invoice_status"/>
@@ -375,6 +380,10 @@
                             </page>
                         </notebook>
                     </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
                 </form>
             </field>
         </record>
@@ -460,7 +469,7 @@
                                 <field name="date" readonly="True"/>
                                 <field name="operation_type" invisible="1"/>
                                 <field name="operation_type_id" domain="[('name','=','Devolucion de Órdenes de entrega')]" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
-                                <field name="weigher" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="weigher"/>
                                 <field name="product_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 <field name="sale_id" domain="['|',('state','=','done'),('state','=','sale')]" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')]}"/>
                                 <field name="sale_invoice_status"/>
@@ -548,6 +557,10 @@
                             </page>
                         </notebook>
                     </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
                 </form>
             </field>
         </record>
@@ -633,7 +646,7 @@
                                 <field name="date" readonly="True"/>
                                 <field name="operation_type" invisible="1"/>
                                 <field name="operation_type_id" domain="[('name','=','Devolucion de Recepciones')]" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
-                                <field name="weigher" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="weigher"/>
                                 <field name="product_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 <field name="purchase_id" domain="['|',('state','=','purchase'),('state','=','done')]" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')]}"/>
                                 <field name="purchase_invoice_status"/>
@@ -721,6 +734,10 @@
                             </page>
                         </notebook>
                     </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
                 </form>
             </field>
         </record>
@@ -806,7 +823,7 @@
                                 <field name="date" readonly="True"/>
                                 <field name="operation_type" invisible="1"/>
                                 <field name="operation_type_id" domain="[('name','=','Transferencias internas')]" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
-                                <field name="weigher" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="weigher"/>
                                 <field name="product_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 <field name="transfer_type" required="1"/>
                                 <field name="ticket_id" attrs="{'invisible':['|',('transfer_type', '!=', 'in'),('state', '=', 'confirmed')], 'required':[('transfer_type', '=', 'in')]}" domain="[('transfer_type','=','out')]"/>
@@ -887,6 +904,10 @@
                             </page>
                         </notebook>
                     </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
                 </form>
             </field>
         </record>
@@ -970,7 +991,7 @@
                                 <field name="date" readonly="True"/>
                                 <field name="operation_type" invisible="1"/>
                                 <field name="operation_type_id" domain="['|',('name','=','Manufacturing'),('name','=','Fabricación')]" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
-                                <field name="weigher" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="weigher"/>
                                 <field name="product_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                             </group>
                         </group>
@@ -1027,6 +1048,10 @@
                             </page>
                         </notebook>
                     </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
                 </form>
             </field>
         </record>
