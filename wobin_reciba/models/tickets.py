@@ -135,6 +135,61 @@ class RecibaTicket(models.Model):
             today = datetime.today()
             self.net_date = today
 
+    @api.one
+    @api.depends('net_weight', 'sum_broken', 'apply_bonus')
+    def _get_broken_bonus(self):
+        #Metodo para obtener el bono por grano quebrado
+        if self.apply_bonus:
+            if self.sum_broken <= 2:
+                self.broken_bonus = 35 * self.net_weight/1000
+            else:
+                self.broken_bonus = 0
+        else:
+            self.broken_bonus = 0
+
+    @api.one
+    @api.depends('net_weight', 'impurity', 'apply_bonus')
+    def _get_impurity_bonus(self):
+        #Metodo para obtener el bono por impureza
+        if self.apply_bonus:
+            if self.impurity <= 1.5:
+                self.impurity_bonus = 35 * self.net_weight/1000
+            else:
+                self.impurity_bonus = 0
+        else:
+            self.impurity_bonus = 0
+
+    @api.one
+    @api.depends('net_weight', 'sum_damage', 'apply_bonus')
+    def _get_damage_bonus(self):
+        #Metodo para obtener el bono por grano dañado
+        if self.apply_bonus:
+            if self.sum_damage <= 1.5:
+                self.damage_bonus = 35 * self.net_weight/1000
+            else:
+                self.damage_bonus = 0
+        else:
+            self.damage_bonus = 0
+
+    @api.one
+    @api.depends('net_weight', 'humidity', 'apply_bonus')
+    def _get_humidity_bonus(self):
+        #Metodo para obtener el bono por humedad
+        if self.apply_bonus:
+            if self.humidity >= 14 and self.humidity <= 15:
+                self.humidity_bonus = 35 * self.net_weight/1000
+            else:
+                self.humidity_bonus = 0
+        else:
+            self.humidity_bonus = 0
+
+    @api.one
+    @api.depends('broken_bonus', 'impurity_bonus', 'damage_bonus','humidity_bonus')
+    def _get_total_bonus(self):
+        #Metodo para obtener el bono total
+        self.total_bonus = self.broken_bonus + self.impurity_bonus + self.damage_bonus + self.humidity_bonus
+
+
     @api.model
     def _get_name_weigher(self):
         #Obtener analista
@@ -235,6 +290,14 @@ class RecibaTicket(models.Model):
     price_so = fields.Float(related='sale_id.order_line.price_unit', string="Precio", digits=(15,4), track_visibility='onchange')
     currency_id = fields.Many2one('res.currency', default=lambda self: self.env['res.company']._company_default_get('your.module').currency_id, string="Moneda", track_visibility='onchange')
 
+    #----------------------------------Datos de bonificación----------------------------
+    apply_bonus = fields.Boolean(string="Aplicar bonos", track_visibility='onchange')
+    broken_bonus = fields.Float(string="Bono quebrado", compute='_get_broken_bonus', store=True)
+    impurity_bonus = fields.Float(string="Bono impureza", compute='_get_impurity_bonus', store=True)
+    damage_bonus = fields.Float(string="Bono dañado", compute='_get_damage_bonus', store=True)
+    humidity_bonus = fields.Float(string="Bono humedad", compute='_get_humidity_bonus', store=True)
+    total_bonus = fields.Float(string="Bono total", compute='_get_total_bonus', store=True)
+
 
     @api.onchange('operation_type')
     def _default_operation_type(self):
@@ -317,6 +380,9 @@ class RecibaTicket(models.Model):
                     self.name=name_location + '/' + number
                 else:
                     self.name = self.destination_id.display_name + '/' + '0001'
+            if self.total_bonus > 0:
+                self.purchase_id = 0
+                self.reception = 'priceless'
         
         if self.reception == 'price':
             #Creacion y asignación de la transferencia, si ya se tiene un precio asignado

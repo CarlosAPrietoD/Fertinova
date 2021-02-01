@@ -77,6 +77,7 @@
                             <group>
                                 <field name="origin" readonly="1"/>
                                 <field name="apply_discount" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="apply_bonus" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                             </group>
                         </group>
                         <notebook>
@@ -170,6 +171,22 @@
                                         <field name="impurity_total_discount"/>
                                         <field name="total_weight"/>
                                     </group>
+                                </group>
+                            </page>
+                            <page string="Bonificaciones" name="bonus_page" attrs="{'invisible':[('apply_bonus', '!=', True)]}">
+                                <br/>
+                                <group>
+                                    <group>
+                                        <field name="broken_bonus"/>
+                                        <field name="impurity_bonus"/>
+                                    </group>
+                                    <group>
+                                        <field name="damage_bonus"/>
+                                        <field name="humidity_bonus"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <field name="total_bonus"/>
                                 </group>
                             </page>
                         </notebook>
