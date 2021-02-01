@@ -380,6 +380,7 @@ class RecibaTicket(models.Model):
                     self.name=name_location + '/' + number
                 else:
                     self.name = self.destination_id.display_name + '/' + '0001'
+            #Si hay bonos por calidad se elimina la orden de compra seleccionada y se pone en estado sin precio
             if self.total_bonus > 0:
                 self.purchase_id = 0
                 self.reception = 'priceless'
