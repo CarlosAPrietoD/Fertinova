@@ -16,17 +16,7 @@
             </xpath>        
         </field>
     </record> 
-    <!--Add a new many2one field into Analytic Account model-->
-    <record id="analytic_accountform_inherit" model="ir.ui.view">
-        <field name="name">analytic.analytic.account.form.inherit</field>
-        <field name="model">account.analytic.account</field>
-        <field name="inherit_id" ref="analytic.view_account_analytic_account_form"/>
-        <field name="arch" type="xml">
-           <xpath expr="//field[@name='partner_id']" position="after">
-                <field name="vehicle_id"/>
-            </xpath>        
-        </field>
-    </record>  
+
     <!--Add a new many2one field of Trips into Account Invoice model-->
     <record id="invoice_with_trips_form_inherit" model="ir.ui.view">
         <field name="name">accnt.invoice.trips.form.inherit</field>
@@ -38,6 +28,7 @@
             </xpath>        
         </field>
     </record> 
+    
     <!--Add a new many2one field of Trips into Sale Order Form-->
     <record id="invoice_with_trips_form_inherit" model="ir.ui.view">
         <field name="name">sale.order.form.inherit</field>
@@ -57,7 +48,7 @@
     <!--::::::::::::::::::::::::::::::::::::::::::::-->   
     <!-- TRIPS - SEARCH VIEW -->    
     <record id="view_logistics_trips_search" model="ir.ui.view"> 
-        <field name="model">logistics.trips</field> 
+        <field name="model">wobin.logistica.trips</field> 
         <field name="arch" type="xml"> 
             <search> 
               <field name="name"/> 
@@ -83,7 +74,7 @@
     <!-- TRIPS - LIST VIEW -->
     <record id="view_logistics_trips_list" model="ir.ui.view">
       <field name="name">Trips</field>
-      <field name="model">logistics.trips</field>
+      <field name="model">wobin.logistica.trips</field>
       <field name="arch" type="xml">
         <tree decoration-danger="state == 'assigned'" decoration-warning="state == 'route'" decoration-success="state == 'discharged'">
           <field name="name"/>
@@ -109,7 +100,7 @@
     <!-- TRIPS - FORM VIEW -->
     <record id="view_logistics_trips_form" model="ir.ui.view"> 
         <field name="name">Trips</field> 
-        <field name="model">logistics.trips</field> 
+        <field name="model">wobin.logistica.trips</field> 
         <field name="arch" type="xml"> 
             <form> 
                 <header>
@@ -197,7 +188,7 @@
     <!-- ROUTES ANALYSIS from contract assignments - LIST VIEW -->
     <record id="view_logs_routes_lst" model="ir.ui.view">
       <field name="name">Routes</field>
-      <field name="model">logistics.contracts</field>
+      <field name="model">wobin.logistica.contracts</field>
       <field name="arch" type="xml">
         <tree>          
           <field name="origin_id"/>

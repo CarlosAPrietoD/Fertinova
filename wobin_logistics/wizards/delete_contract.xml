@@ -20,7 +20,7 @@
 
         <act_window id="delete_contract_wizard"
                     name="Contract Deletion"
-                    src_model="logistics.contracts"
+                    src_model="wobin.logistica.contracts"
                     res_model="wizard.delete.contract"
                     view_mode="form"
                     target="new"

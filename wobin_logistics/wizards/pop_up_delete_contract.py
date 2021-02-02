@@ -6,14 +6,14 @@ class delete_contract_wizard(models.TransientModel):
     
 
     def deletion(self):
-        #Get Context:
-        print('\n\n\n context: ',self._context)
+        #Get Context:    
         context = self._context
+        
         #Get active id from Contract viewed and to be deleted:
         contract_to_delete = context['active_id']
-        print('\n\n\n contract_to_delete: ', contract_to_delete)
+        
         #Deletion:
-        self.env['logistics.contracts'].search([('id', '=', contract_to_delete)]).unlink()
+        self.env['wobin.logistica.contracts'].search([('id', '=', contract_to_delete)]).unlink()
     
         
        

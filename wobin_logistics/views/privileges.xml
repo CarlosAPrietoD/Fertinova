@@ -8,7 +8,7 @@
         <!--Avoid Creation of Trips for Sale Group in FORM & TREE views-->
         <record id="hide_general_view_form_trip" model="ir.ui.view">
         <field name="name">Trips</field>
-        <field name="model">logistics.trips</field>
+        <field name="model">wobin.logistica.trips</field>
         <field name="inherit_id" ref="wobin_logistics.view_logistics_trips_form"/>
         <field name="groups_id" eval="[(4,ref('wobin_logistics.group_wl_access_sales'))]"/>
             <field name="arch" type="xml">
@@ -22,7 +22,7 @@
 
         <record id="hide_general_view_tree_trip" model="ir.ui.view">
         <field name="name">Trips</field>
-        <field name="model">logistics.trips</field>
+        <field name="model">wobin.logistica.trips</field>
         <field name="inherit_id" ref="wobin_logistics.view_logistics_trips_list"/>
         <field name="groups_id" eval="[(4,ref('wobin_logistics.group_wl_access_sales'))]"/>
             <field name="arch" type="xml">
@@ -43,7 +43,7 @@
         <!--Avoid Creation of Contracts for Logistics Group in FORM & TREE views-->
         <record id="hide_general_view_form_contract" model="ir.ui.view">
         <field name="name">Contracts</field>
-        <field name="model">logistics.contracts</field>
+        <field name="model">wobin.logistica.contracts</field>
         <field name="inherit_id" ref="wobin_logistics.view_logistics_contracts_form"/>
         <field name="groups_id" eval="[(4,ref('wobin_logistics.group_wl_access_logistics'))]"/>
             <field name="arch" type="xml">
@@ -57,7 +57,7 @@
 
         <record id="hide_general_view_tree_contract" model="ir.ui.view">
         <field name="name">Contracts</field>
-        <field name="model">logistics.contracts</field>
+        <field name="model">wobin.logistica.contracts</field>
         <field name="inherit_id" ref="wobin_logistics.view_logistics_contracts_list"/>
         <field name="groups_id" eval="[(4,ref('wobin_logistics.group_wl_access_logistics'))]"/>
             <field name="arch" type="xml">
@@ -78,7 +78,7 @@
         <!--Avoid Creation of Trips for Analysis Group in FORM & TREE views-->
         <record id="hide_general_view_form_trip_for_ganalytic" model="ir.ui.view">
         <field name="name">Trips</field>
-        <field name="model">logistics.trips</field>
+        <field name="model">wobin.logistica.trips</field>
         <field name="inherit_id" ref="wobin_logistics.view_logistics_trips_form"/>
         <field name="groups_id" eval="[(4,ref('wobin_logistics.group_wl_access_analysis'))]"/>
             <field name="arch" type="xml">
@@ -92,7 +92,7 @@
 
         <record id="hide_general_view_tree_trip_for_ganalytic" model="ir.ui.view">
         <field name="name">Trips</field>
-        <field name="model">logistics.trips</field>
+        <field name="model">wobin.logistica.trips</field>
         <field name="inherit_id" ref="wobin_logistics.view_logistics_trips_list"/>
         <field name="groups_id" eval="[(4,ref('wobin_logistics.group_wl_access_analysis'))]"/>
             <field name="arch" type="xml">
@@ -107,7 +107,7 @@
         <!--Avoid Creation of Contracts for Analysis Group in FORM & TREE views-->
         <record id="hide_general_view_form_contract_for_ganalytic" model="ir.ui.view">
         <field name="name">Contracts</field>
-        <field name="model">logistics.contracts</field>
+        <field name="model">wobin.logistica.contracts</field>
         <field name="inherit_id" ref="wobin_logistics.view_logistics_contracts_form"/>
         <field name="groups_id" eval="[(4,ref('wobin_logistics.group_wl_access_analysis'))]"/>
             <field name="arch" type="xml">
@@ -121,7 +121,7 @@
 
         <record id="hide_general_view_tree_contract_for_ganalytic" model="ir.ui.view">
         <field name="name">Contracts</field>
-        <field name="model">logistics.contracts</field>
+        <field name="model">wobin.logistica.contracts</field>
         <field name="inherit_id" ref="wobin_logistics.view_logistics_contracts_list"/>
         <field name="groups_id" eval="[(4,ref('wobin_logistics.group_wl_access_analysis'))]"/>
             <field name="arch" type="xml">
@@ -142,7 +142,7 @@
         <!--Avoid Creation of Trips for Analysis Group in FORM & TREE views-->
         <record id="hide_general_view_form_trip_for_gview" model="ir.ui.view">
         <field name="name">Trips</field>
-        <field name="model">logistics.trips</field>
+        <field name="model">wobin.logistica.trips</field>
         <field name="inherit_id" ref="wobin_logistics.view_logistics_trips_form"/>
         <field name="groups_id" eval="[(4,ref('wobin_logistics.group_wl_access_view'))]"/>
             <field name="arch" type="xml">
@@ -156,7 +156,7 @@
 
         <record id="hide_general_view_tree_trip_for_gview" model="ir.ui.view">
         <field name="name">Trips</field>
-        <field name="model">logistics.trips</field>
+        <field name="model">wobin.logistica.trips</field>
         <field name="inherit_id" ref="wobin_logistics.view_logistics_trips_list"/>
         <field name="groups_id" eval="[(4,ref('wobin_logistics.group_wl_access_view'))]"/>
             <field name="arch" type="xml">
@@ -171,7 +171,7 @@
         <!--Avoid Creation of Contracts for Analysis Group in FORM & TREE views-->
         <record id="hide_general_view_form_contract_for_gview" model="ir.ui.view">
         <field name="name">Contracts</field>
-        <field name="model">logistics.contracts</field>
+        <field name="model">wobin.logistica.contracts</field>
         <field name="inherit_id" ref="wobin_logistics.view_logistics_contracts_form"/>
         <field name="groups_id" eval="[(4,ref('wobin_logistics.group_wl_access_view'))]"/>
             <field name="arch" type="xml">
@@ -185,7 +185,7 @@
 
         <record id="hide_general_view_tree_contract_for_gview" model="ir.ui.view">
         <field name="name">Contracts</field>
-        <field name="model">logistics.contracts</field>
+        <field name="model">wobin.logistica.contracts</field>
         <field name="inherit_id" ref="wobin_logistics.view_logistics_contracts_list"/>
         <field name="groups_id" eval="[(4,ref('wobin_logistics.group_wl_access_view'))]"/>
             <field name="arch" type="xml">
@@ -207,7 +207,7 @@
         <!--Tree View Routes-->
         <record id="hide_view_tree_routes" model="ir.ui.view">
         <field name="name">Routes</field>
-        <field name="model">logistics.contracts</field>
+        <field name="model">wobin.logistica.contracts</field>
         <field name="inherit_id" ref="wobin_logistics.view_logs_routes_lst"/>
             <field name="arch" type="xml">
                 <xpath expr="/tree" position="attributes">
@@ -221,7 +221,7 @@
         <!--Tree View Trips Analysis according Contracts-->
         <record id="hide_view_tree_trips_analysis_contracts" model="ir.ui.view">
         <field name="name">Trips Analysis according Contracts</field>
-        <field name="model">logistics.contracts</field>
+        <field name="model">wobin.logistica.contracts</field>
         <field name="inherit_id" ref="wobin_logistics.view_trips_analysis_contract"/>
             <field name="arch" type="xml">
                 <xpath expr="/tree" position="attributes">
@@ -235,7 +235,7 @@
         <!--Tree View Trips Analysis-->
         <record id="hide_view_tree_trips_analysis" model="ir.ui.view">
         <field name="name">Trips Analysis</field>
-        <field name="model">logistics.trips</field>
+        <field name="model">wobin.logistica.trips</field>
         <field name="inherit_id" ref="wobin_logistics.view_trips_analysis"/>
             <field name="arch" type="xml">
                 <xpath expr="/tree" position="attributes">
@@ -249,7 +249,7 @@
         <!--Tree View Trips Profitability-->
         <record id="hide_view_trips_profit" model="ir.ui.view">
         <field name="name">Trips Profitability</field>
-        <field name="model">logistics.trips</field>
+        <field name="model">wobin.logistica.trips</field>
         <field name="inherit_id" ref="wobin_logistics.view_profitability_trips"/>
             <field name="arch" type="xml">
                 <xpath expr="/tree" position="attributes">
@@ -263,7 +263,7 @@
         <!--Tree View Contracts Status-->
         <record id="hide_view_tree_contract_status" model="ir.ui.view">
         <field name="name">Contracts Status</field>
-        <field name="model">logistics.contracts</field>
+        <field name="model">wobin.logistica.contracts</field>
         <field name="inherit_id" ref="wobin_logistics.view_contracts_status"/>
             <field name="arch" type="xml">
                 <xpath expr="/tree" position="attributes">
@@ -291,7 +291,7 @@
         <!--Tree View Trips Analysis for Settlements-->
         <record id="hide_view_tree_settlement" model="ir.ui.view">
         <field name="name">Trips Analysis for Settlements</field>
-        <field name="model">logistics.trips</field>
+        <field name="model">wobin.logistica.trips</field>
         <field name="inherit_id" ref="wobin_logistics.view_trip_settlements"/>
             <field name="arch" type="xml">
                 <xpath expr="/tree" position="attributes">

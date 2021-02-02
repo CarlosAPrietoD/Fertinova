@@ -12,7 +12,7 @@
     <!-- QUOTATIONS - GENERAL ACTION -->
     <record id="action_logistics_quotations" model="ir.actions.act_window">
       <field name="name">Quotations</field>
-      <field name="res_model">logistics.quotations</field>
+      <field name="res_model">wobin.logistica.quotations</field>
       <field name="view_mode">tree,form</field>
     </record>
 
@@ -25,7 +25,7 @@
     <!-- CONTRACTS - GENERAL ACTION -->
     <record id="action_logistics_contracts" model="ir.actions.act_window">
       <field name="name">Contracts</field>
-      <field name="res_model">logistics.contracts</field>
+      <field name="res_model">wobin.logistica.contracts</field>
       <field name="view_mode">tree,form</field>
     </record>   
 
@@ -38,7 +38,7 @@
     <!-- TRIPS - GENERAL ACTION -->
     <record id="action_logistics_trips" model="ir.actions.act_window">
       <field name="name">Trips</field>
-      <field name="res_model">logistics.trips</field>    
+      <field name="res_model">wobin.logistica.trips</field>    
       <field name="view_mode">tree,form</field> 
       <field name="search_view_id" ref="view_logistics_trips_search"/> 
       <field name="context">{'tree_view_ref': 'wobin_logistics.view_logistics_trips_list', 'form_view_ref': 'wobin_logistics.view_logistics_trips_form'}</field>                             
@@ -46,7 +46,7 @@
     <!-- ROUTES ANALYSIS {from Contract Assignments} - ACTION -->
     <record id="action_logistics_routes" model="ir.actions.act_window">
         <field name="name">Routes</field>
-        <field name="res_model">logistics.contracts</field>
+        <field name="res_model">wobin.logistica.contracts</field>
         <field name="view_mode">tree</field>        
         <field name="view_id" ref="view_logs_routes_lst"/>
         <field name="domain"></field> 
@@ -61,7 +61,7 @@
     <!-- TRIPS ANALYSIS according to Contracts - ACTION -->
     <record id="action_logistics_contract_analysis" model="ir.actions.act_window">
         <field name="name">Analysis (Contracts)</field>
-        <field name="res_model">logistics.contracts</field>
+        <field name="res_model">wobin.logistica.contracts</field>
         <field name="view_mode">tree</field>        
         <field name="view_id" ref="view_trips_analysis_contract"/>
         <field name="domain"></field> 
@@ -69,7 +69,7 @@
     <!-- TRIPS ANALYSIS - ACTION -->
     <record id="action_trips_analysis" model="ir.actions.act_window">
         <field name="name">Analysis (Trips)</field>
-        <field name="res_model">logistics.trips</field>
+        <field name="res_model">wobin.logistica.trips</field>
         <field name="view_mode">tree</field>        
         <field name="view_id" ref="view_trips_analysis"/>
         <field name="domain"></field> 
@@ -77,7 +77,7 @@
     <!-- TRIPS PROFITABILITY ANALYSIS Report - ACTION -->
     <record id="action_logistics_profit" model="ir.actions.act_window">
         <field name="name">Trips Profitability Report</field>
-        <field name="res_model">logistics.trips</field>
+        <field name="res_model">wobin.logistica.trips</field>
         <field name="view_mode">tree</field>        
         <field name="view_id" ref="view_profitability_trips"/>
         <field name="domain"></field> 
@@ -85,7 +85,7 @@
     <!-- CONTRACT STATUS ANALYSIS Report - ACTION -->
     <record id="action_logistics_contract_status" model="ir.actions.act_window">
         <field name="name">Contract Status Report</field>
-        <field name="res_model">logistics.contracts</field>
+        <field name="res_model">wobin.logistica.contracts</field>
         <field name="view_mode">tree</field>        
         <field name="view_id" ref="view_contracts_status"/>
         <field name="domain"></field> 
@@ -103,7 +103,7 @@
     <!-- SETTLEMENTS ANALYSIS Report - ACTION -->
     <record id="action_trip_settlements" model="ir.actions.act_window">
         <field name="name">Analysis for Operator's Settlements</field>
-        <field name="res_model">logistics.trips</field>
+        <field name="res_model">wobin.logistica.trips</field>
         <field name="view_mode">tree</field>        
         <field name="view_id" ref="wobin_logistics.view_trip_settlements"/>
         <field name="domain">[]</field> 

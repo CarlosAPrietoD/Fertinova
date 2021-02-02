@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-26 22:45+0000\n"
-"PO-Revision-Date: 2021-01-26 22:45+0000\n"
+"POT-Creation-Date: 2021-02-02 19:43+0000\n"
+"PO-Revision-Date: 2021-02-02 19:43+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,32 +16,244 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__message_needaction
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__message_needaction
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid ") al usuario que contrata el servicio. \"Destinatario\" ("
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid ") es la mercancía que documenta el\n"
+"                            \"Remitente\"."
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid ") es la persona física o\n"
+"                            moral a la que va a dirigida el \"Envío\" transportado y \"Envío\" ("
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "<strong>CUARTA: </strong>   \n"
+"                            El \"Remitente\" debe declarar al \"Porteador\" el tipo de mercancía o efectos de que se\n"
+"                            trate, peso, medidas y/o número de carga que entrega para su transporte y en su caso el valor de\n"
+"                            la misma."
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.view_logistics_trips_form
+msgid "<strong>Carga</strong>"
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.view_logistics_trips_form
+msgid "<strong>Datos Generales</strong>"
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.view_logistics_trips_form
+msgid "<strong>Descarga</strong>"
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "<strong>DÉCIMA CUARTA: </strong> \n"
+"                            En caso de incumplir por cualquier de las partes del presente contrato se\n"
+"                            establece como pena convencional el pago del 5%del valor del servicio prestado."
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "<strong>DÉCIMA PRIMERA: </strong>   \n"
+"                            Para el caso que el “Remitente” contrate carro por entero (se entiende por\n"
+"                            “Carro por Entero” cuando la totalidad de la carga es propiedad de uno solo “Remitente” y/o\n"
+"                            “Destinatario” ), este aceptara la responsabilidad solidaria para con el “Porteador” mediante la\n"
+"                            figura de la corresponsabilidad que contiene el artículo 10 del Reglamento Sobre el Peso\n"
+"                            Dimensiones y Capacidad de los Vehículos de Autotransporte que Transitan en los Caminos y\n"
+"                            Puentes de Jurisdicción Federal, por lo que el “Remitente” queda obligado a verificar que la carga\n"
+"                            y el vehículo que la transporta, cumpla con el peso y dimensiones establecidos en la\n"
+"                            NOM-012-SCT-2-2008, sobre el peso y dimensiones máximas con los que pueden circular los\n"
+"                            vehículos de autotransportes que transitan en las vías generales de comunicación de jurisdicción\n"
+"                            federal."
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "<strong>DÉCIMA QUINTA: </strong> \n"
+"                            El “Porteador” esta exentó de las responsabilidades por perdida, retraso\n"
+"                            en la entrega o daño causado en el “Envío” en los siguientes casos:"
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "<strong>DÉCIMA SEGUNDA: </strong>  \n"
+"                            En caso de pérdida, daño o robo de la mercancía transportada el “Porteador”\n"
+"                            cuenta con una póliza de Seguro que cubrirá el valor declarado por el “Remitente” de las\n"
+"                            mercancías objeto del contrato, seguro por el cual el “Porteador” realizara el cargo\n"
+"                            correspondiente al “Remitente” Cuando el usuario no declare el valor de la mercancía; la \n"
+"                            responsabilidad quedara limitada a la cantidad equivalente a 15 días de salario mínimo general\n"
+"                            vigente del Distrito Federal, por tonelada o por parte proporcional que corresponda tratándose de\n"
+"                            embarques de menor peso."
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "<strong>DÉCIMA SEXTA: </strong>  \n"
+"                            En todos los casos se entenderá que el “Remitente” y/o “Destinatario” no aceptan\n"
+"                            que se ceda o transmita a terceros, con fines mercadotécnicos o publicitarios la información\n"
+"                            proporcionada por el motivo del presente contrato y que no acepta que le envíen publicidad\n"
+"                            sobre bienes y servicios salvo que el “Remitente” y/o “Destinatario” manifieste su autorización\n"
+"                            para ello, casos en lo que se harán una anotación en la parte frontal de la presente Carta Porte en\n"
+"                            la cual se manifiesta la aceptación con su firma autógrafa."
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "<strong>DÉCIMA SÉPTIMA: </strong>  \n"
+"                            Para los casos de controversia en la interpretación, aplicación o ejecución de\n"
+"                            este contrato, las partes señalan como competentes dentro de la esfera de atribuciones que las\n"
+"                            leyes le atribuyen y según sea el caso a la Procuraduría Federal del Consumidor en la vía\n"
+"                            administrativa en primera instancia y de persistir la controversia a los tribunales del Fuero Común\n"
+"                            de Guadalajara renunciando por ello al fuero que les pueda corresponder por razones de domicilio\n"
+"                            presente o futuro."
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "<strong>DÉCIMA TERCERA: </strong> \n"
+"                            Si al momento de la entrega resulta algún faltante o avería el “Remitente “ o\n"
+"                            “Destinatario” deberá hacerla constar en ese acto en la Carta Porte y formular su reclamación por\n"
+"                            escrito al “Porteador” dentro de las 24 horas siguientes, reclamación que se contestara dentro de\n"
+"                            los 15 días hábiles."
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "<strong>DÉCIMA: </strong> \n"
+"                            El “Porteador” queda eximido de la obligación de recibir mercancías o efectos para su\n"
+"                            transporte en los siguientes casos:"
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "<strong>NOVENA: </strong>  \n"
+"                            El precio del Transporte deberá pagarse en origen salvo convenio entre las partes de\n"
+"                            pago destino. Cuando el transporte se hubiera concertado por cobrar la entrega de las mercancías\n"
+"                            o efectos se hará contar el pago y el “Porteador” tendrá derecho a retener mientras no se le cubra\n"
+"                            el precio convenido."
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "<strong>OCTAVA: </strong>  \n"
+"                            El \"Remitente\" pagara el precio del servicio de acuerdo a lo establecido en el anverso\n"
+"                            de esta Carta Porte el cual siempre será en moneda nacional e incluyendo los impuestos\n"
+"                            aplicables. En todos los casos el \"Porteador\" entregara al \"Remitente\" factura o recibo de los\n"
+"                            servicios prestados."
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "<strong>PRIMERA: </strong>\n"
+"                            El objeto del presente contrato es la Presentación del Servicio de Transporte de Carga Foráneo."
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "<strong>QUINTA: </strong>  \n"
+"                            Es obligación del \"Remitente\" declarar verazmente al \"Porteador\" toda la información\n"
+"                            relativa a la descripción, valor, cantidad y peso y demás características de la mercancía que\n"
+"                            pretende transportar, en caso de falsedad el \"Remitente\" será directamente responsable frente al\n"
+"                            \"Porteador\" de las multas y demás sanciones impuestas por las autoridades competentes así como\n"
+"                            por la legislación aplicable, obligándose a resarcir al \"Porteador\" o terceras personas en su caso,\n"
+"                            los daños y perjuicios que le pudiera ocasionar por tal motivo y a su vez libera al \"Porteador\" de\n"
+"                            cualquier responsabilidad originada por dicha omisión."
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "<strong>SEGUNDA: </strong>  \n"
+"                            Para los efectos del presente contrato de transporte se denomina \"Porteador\" al\n"
+"                            transportista y \"Remitente\" ("
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "<strong>SEXTA: </strong>      \n"
+"                            El \"Porteador\" deberá recoger y entregar la carga precisamente en los domicilios que\n"
+"                            señale el \"Remitente\" ajustándose a los términos y condiciones convenidos. El \"Porteador\" será\n"
+"                            responsable del envío desde el momento que lo recibe hasta que se entregue al \"Remitente\"\n"
+"                            encargándose de las maniobras de carga y descarga de los bienes con un límite de 200 kilogramos\n"
+"                            por pieza. En caso de que el peso máximo establecido sea rebasado, las maniobras de carga y\n"
+"                            descarga de los bienes serán por cuenta y riesgo del \"Remitente\" y/o \"Destinatario\"\n"
+"                            respectivamente. El \"Destinatario\" firmara de conformidad por dicha recepción, después de\n"
+"                            revisar la mercancía con el \"Porteador\". El \"Porteador\" solo está obligado a llevar el \"Envío\" al\n"
+"                            domicilio señalado por el remitente para su entrega una solo vez. Si esta no fuera recibida se\n"
+"                            dejara aviso por escrito en el domicilio del \"Destinatario\" de que la mercancía queda a disposición\n"
+"                            del interesado en las bodegas que indique el \"Porteador\"."
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "<strong>SÉPTIMA: </strong>  \n"
+"                            Si la carga no fuera retirada dentro de los 30 días naturales siguientes a aquel en que\n"
+"                            hubiere sido puesta a disposición del \"Destinatario\"; el \"Porteador\" podrá promover judicialmente\n"
+"                            su venta con arreglo a lo dispuesto en los artículos 603 y 604 del Código de Comercio. El\n"
+"                            \"Remitente\" pagara los gastos que se generen por no retirar la mercancía en plazo estipulado en la\n"
+"                            presente clausula."
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "<strong>TERCERA: </strong>  \n"
+"                            El \"Remitente \" acepta los términos de este contrato al documentar la mercancía para\n"
+"                            su \" Envío\". El “Porteador” se obliga a proporcionar estos términos al \"Remitente\". El \"Porteador\"\n"
+"                            declara que tiene la capacidad e infraestructura para celebrar el presente contrato en los términos\n"
+"                            y condiciones a aquí previstas"
+msgstr ""
+
+#. module: wobin_logistics
+#: model:res.groups,name:wobin_logistics.group_wl_access_general
+msgid "ACCESO GENERAL para Wobin Logística"
+msgstr ""
+
+#. module: wobin_logistics
+#: model:res.groups,name:wobin_logistics.group_wl_access_analysis
+msgid "ANÁLISIS (Restricción de permisos) para Wobin Logística"
+msgstr ""
+
+#. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__message_needaction
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__message_needaction
 msgid "Action Needed"
 msgstr "Acción Necesaria"
 
 #. module: wobin_logistics
-#: selection:logistics.contracts,status:0
+#: selection:wobin.logistica.contracts,status:0
 msgid "Active"
 msgstr "Activo"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__activity_ids
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__activity_ids
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__activity_ids
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__activity_ids
 msgid "Activities"
 msgstr "Actividades"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__activity_state
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__activity_state
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__activity_state
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__activity_state
 msgid "Activity State"
 msgstr "Estado de la actividad"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__advance_payment
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__advance_payment
 msgid "Advance Payment"
 msgstr "Anticipo"
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.wizard_delete_contract
+msgid "Al eliminarlo tendrá que generar uno nuevo para surtir la cantidad pendiente de entregar"
+msgstr ""
 
 #. module: wobin_logistics
 #: model:ir.actions.act_window,name:wobin_logistics.action_logistics_contract_analysis
@@ -61,10 +273,9 @@ msgid "Analysis for Operator's Settlements"
 msgstr "Análisis de Liquidación de Operadores"
 
 #. module: wobin_logistics
-#: model:ir.model,name:wobin_logistics.model_account_analytic_account
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__analytic_accnt_id
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__analytic_accnt_id
 msgid "Analytic Account"
-msgstr "Cuenta analítica"
+msgstr "Cuenta Analítica"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_account_analytic_tag__analytic_tag_type
@@ -77,26 +288,56 @@ msgid "Analytic Tags"
 msgstr "Etiquetas analíticas"
 
 #. module: wobin_logistics
-#: selection:logistics.trips,state:0
-#: selection:logistics.trips,state_aux:0
+#: selection:wobin.logistica.trips,state:0
+#: selection:wobin.logistica.trips,state_aux:0
 msgid "Assigned"
 msgstr "Asignado"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__message_attachment_count
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__message_attachment_count
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__message_attachment_count
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__message_attachment_count
 msgid "Attachment Count"
 msgstr "Conteo de archivos adjuntos"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__billed_income
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__billed_income
 msgid "Billed Income"
-msgstr "Ingreso Facturado"
+msgstr "Importe a Facturar"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__sucursal_id
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__sucursal_id
 msgid "Branch Office"
 msgstr "Sucursal"
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.reporte_carta_porte_view
+msgid "CANTIDAD DE CARGA"
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.reporte_carta_porte_view
+msgid "CARTA PORTE"
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.reporte_carta_porte_view
+msgid "CLIENTE"
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.reporte_carta_porte_view
+msgid "CONDICIONES"
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "CONDICIONES DEL CONTRATO DE TRANSPORTE QUE AMPARA ESTA CARTA PORTE"
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.reporte_carta_porte_view
+msgid "CONTRATO"
+msgstr ""
 
 #. module: wobin_logistics
 #: model_terms:ir.ui.view,arch_db:wobin_logistics.wizard_delete_contract
@@ -104,7 +345,7 @@ msgid "Cancel"
 msgstr "Cancelar"
 
 #. module: wobin_logistics
-#: selection:logistics.trips,invoice_status:0
+#: selection:wobin.logistica.trips,invoice_status:0
 msgid "Cancelled"
 msgstr "Cancelado"
 
@@ -114,33 +355,43 @@ msgid "Carrying Letter"
 msgstr "Carta Porte"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_routes__name
-msgid "City to add for origins & destinations"
-msgstr "Ciudad para agregar Orígenes y Destinos"
+#: model:ir.actions.report,name:wobin_logistics.reporte_carta_porte
+msgid "Carta Porte"
+msgstr ""
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__client_id
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__client_id
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_routes__name
+msgid "City to add for origins & destinations"
+msgstr "Ciudad a añadir para Orígenes y Destinos"
+
+#. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__client_id
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__client_id
 msgid "Client"
 msgstr "Cliente"
 
 #. module: wobin_logistics
-#: model_terms:ir.ui.view,arch_db:wobin_logistics.view_logistics_contracts_form
-msgid "Close Contract"
-msgstr "Cerrar Contrato"
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "Cliente"
+msgstr ""
 
 #. module: wobin_logistics
-#: selection:logistics.contracts,status:0
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.view_logistics_contracts_form
+msgid "Close Contract"
+msgstr "Cerrar contrato"
+
+#. module: wobin_logistics
+#: selection:wobin.logistica.contracts,status:0
 msgid "Closed"
 msgstr "Cerrado"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__conformity
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__conformity
 msgid "Conformity and Settlement"
-msgstr "Conformidad y finiquito"
+msgstr "Conformidad y Finiquito"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__name
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__name
 msgid "Contract"
 msgstr "Contrato"
 
@@ -162,11 +413,11 @@ msgstr "Status del Contrato"
 #. module: wobin_logistics
 #: model:ir.actions.act_window,name:wobin_logistics.action_logistics_contract_status
 msgid "Contract Status Report"
-msgstr "Reporte de Status de Contratos"
+msgstr "Reporte de Status de los Contratos"
 
 #. module: wobin_logistics
 #: model:ir.actions.act_window,name:wobin_logistics.action_logistics_contracts
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__contracts_id
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__contracts_id
 #: model:ir.ui.menu,name:wobin_logistics.contracts_menu_2
 #: model:ir.ui.menu,name:wobin_logistics.sub_menuitem_contracts
 msgid "Contracts"
@@ -175,10 +426,10 @@ msgstr "Contratos"
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_account_invoice__contracts_ids
 msgid "Contracts Information"
-msgstr "Información de Contratos"
+msgstr "Información de los Contratos"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__covenant_qty
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__covenant_qty
 msgid "Covenanted Quantity (kg)"
 msgstr "Cantidad Pactada (kg)"
 
@@ -188,47 +439,74 @@ msgid "Create Trip"
 msgstr "Crear Viaje"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__create_uid
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_quotations__create_uid
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_routes__create_uid
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__create_uid
 #: model:ir.model.fields,field_description:wobin_logistics.field_wizard_delete_contract__create_uid
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__create_uid
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_quotations__create_uid
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_routes__create_uid
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__create_uid
 msgid "Created by"
 msgstr "Creado por"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__create_date
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_quotations__create_date
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_routes__create_date
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__create_date
 #: model:ir.model.fields,field_description:wobin_logistics.field_wizard_delete_contract__create_date
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__create_date
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_quotations__create_date
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_routes__create_date
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__create_date
 msgid "Created on"
 msgstr "Creado el"
 
 #. module: wobin_logistics
-#: model:ir.model,name:wobin_logistics.model_logistics_contract_delete
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "Cuando el “Envío” por su propia naturaleza sufra deterioro o daño total o parcial."
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "Cuando se trate de cargas que por su naturaleza peso volumen, embalaje defectuoso o\n"
+"                                    cualquier otra circunstancia no pueda transportarse sin destruirse o sin causar daño a los\n"
+"                                    demás artículos o al material rodante salvo que la empresa de que se trate tenga el equipo\n"
+"                                    adecuado."
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.reporte_carta_porte_view
+msgid "DESTINO"
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.reporte_carta_porte_view
+msgid "DOCUMENTOS REQUERIDOS"
+msgstr ""
+
+#. module: wobin_logistics
 #: model:ir.model,name:wobin_logistics.model_wizard_delete_contract
 msgid "Delete Contract"
 msgstr "Eliminar Contrato"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__destination_id
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__destination_id
 msgid "Destination"
 msgstr "Destino"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__difference_qty
-msgid "Difference Qty"
-msgstr "Cant. Restante"
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "Destino"
+msgstr ""
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__discharge_location
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__difference_qty
+msgid "Difference Qty"
+msgstr "Cant. Diferencia"
+
+#. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__discharge_location
 msgid "Discharge Location"
 msgstr "Ubicación de Descarga"
 
 #. module: wobin_logistics
-#: selection:logistics.trips,state:0
-#: selection:logistics.trips,state_aux:0
+#: selection:wobin.logistica.trips,state:0
+#: selection:wobin.logistica.trips,state_aux:0
 msgid "Discharged"
 msgstr "Descargado"
 
@@ -240,132 +518,152 @@ msgstr "Viajes Descargados"
 #. module: wobin_logistics
 #: model:ir.actions.act_window,name:wobin_logistics.action_logistics_discharge_trips
 msgid "Discharged Trips and Sale Orders to Process"
-msgstr "Viajes Descargados y Ordenes de Venta por Procesar"
+msgstr "Viajes Descargados y Órdenes de Venta a Procesar"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__display_name
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_quotations__display_name
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_routes__display_name
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__display_name
 #: model:ir.model.fields,field_description:wobin_logistics.field_wizard_delete_contract__display_name
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__display_name
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_quotations__display_name
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_routes__display_name
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__display_name
 msgid "Display Name"
 msgstr "Nombre mostrado"
 
 #. module: wobin_logistics
-#: selection:logistics.contracts,trip_status:0
+#: selection:wobin.logistica.contracts,trip_status:0
 msgid "Doing"
 msgstr "En Curso"
 
 #. module: wobin_logistics
-#: selection:logistics.contracts,trip_status:0
+#: selection:wobin.logistica.contracts,trip_status:0
 msgid "Done"
 msgstr "Terminado"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__attachment_downld
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__attachment_downld
 msgid "Download Attachments"
 msgstr "Adjuntos de Descarga"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__download_date
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__download_date
 msgid "Download Date"
 msgstr "Fecha de Descarga"
 
 #. module: wobin_logistics
-#: selection:logistics.trips,invoice_status:0
+#: selection:wobin.logistica.trips,invoice_status:0
 msgid "Draft"
 msgstr "Borrador"
 
 #. module: wobin_logistics
-#: selection:logistics.trips,state:0
-#: selection:logistics.trips,state_aux:0
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.reporte_carta_porte_view
+msgid "ESTADO"
+msgstr ""
+
+#. module: wobin_logistics
+#: selection:wobin.logistica.trips,state:0
+#: selection:wobin.logistica.trips,state_aux:0
 msgid "En route"
 msgstr "En Ruta"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__estimated_qty
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__estimated_qty
 msgid "Estimated Quantity (kg)"
 msgstr "Cantidad Estimada (kg)"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__expected_income
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__expected_income
 msgid "Expected Income $"
-msgstr "Ingreso Esperado $"
+msgstr "Ingreso Esperado"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__expenses
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__expenses
 msgid "Expenses"
 msgstr "Gastos"
 
 #. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.reporte_carta_porte_view
+msgid "FECHA / HORA"
+msgstr ""
+
+#. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_account_invoice__flag_cont_trip
 msgid "Flag for contract and trip"
-msgstr "Bandera para contrato y viaje asignados"
+msgstr "Bandera para Contrato y Viaje"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_sale_order__flag_trip
 msgid "Flag to indicate this sale order has trip"
-msgstr "Bandera para indicar que esta orden de venta tiene viaje"
+msgstr "Bandera para indicar que la Orden de Venta tiene Viaje"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__message_follower_ids
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__message_follower_ids
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__message_follower_ids
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__message_follower_ids
 msgid "Followers"
 msgstr "Seguidores"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__message_channel_ids
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__message_channel_ids
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__message_channel_ids
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__message_channel_ids
 msgid "Followers (Channels)"
 msgstr "Seguidores (Canales)"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__message_partner_ids
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__message_partner_ids
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__message_partner_ids
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__message_partner_ids
 msgid "Followers (Partners)"
 msgstr "Seguidores (Empresas)"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__id
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_quotations__id
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_routes__id
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__id
 #: model:ir.model.fields,field_description:wobin_logistics.field_wizard_delete_contract__id
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__id
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_quotations__id
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_routes__id
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__id
 msgid "ID"
 msgstr "ID"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,help:wobin_logistics.field_logistics_contracts__message_unread
-#: model:ir.model.fields,help:wobin_logistics.field_logistics_trips__message_unread
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.reporte_carta_porte_view
+msgid "IMPORTE"
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "INSTRUCCIONES PARA LLENAR ESTA CARTA PORTE"
+msgstr ""
+
+#. module: wobin_logistics
+#: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_contracts__message_unread
+#: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_trips__message_unread
 msgid "If checked new messages require your attention."
 msgstr "Si está marcado, hay nuevos mensajes que requieren su atención"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,help:wobin_logistics.field_logistics_contracts__message_needaction
-#: model:ir.model.fields,help:wobin_logistics.field_logistics_trips__message_needaction
+#: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_contracts__message_needaction
+#: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_trips__message_needaction
 msgid "If checked, new messages require your attention."
 msgstr "Si está marcado, hay nuevos mensajes que requieren su atención."
 
 #. module: wobin_logistics
-#: model:ir.model.fields,help:wobin_logistics.field_logistics_contracts__message_has_error
-#: model:ir.model.fields,help:wobin_logistics.field_logistics_trips__message_has_error
+#: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_contracts__message_has_error
+#: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_trips__message_has_error
 msgid "If checked, some messages have a delivery error."
 msgstr "Si se encuentra marcado, algunos mensajes tienen error de envío."
 
 #. module: wobin_logistics
-#: selection:logistics.trips,invoice_status:0
+#: selection:wobin.logistica.trips,invoice_status:0
 msgid "In Payment"
 msgstr "En Pago"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__income_provisions
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__income_provisions
 msgid "Income Provisions"
 msgstr "Provisiones de Ingreso"
 
 #. module: wobin_logistics
 #: model_terms:ir.ui.view,arch_db:wobin_logistics.wizard_delete_contract
 msgid "Information related to deletion of this contract"
-msgstr "Información relacionada con la eliminación de este contrato"
+msgstr "Información relacionada a la Eliminación de este Contrato"
 
 #. module: wobin_logistics
 #: model:ir.model,name:wobin_logistics.model_account_invoice
@@ -375,141 +673,172 @@ msgstr "Factura"
 #. module: wobin_logistics
 #: model:ir.model,name:wobin_logistics.model_account_invoice_line
 msgid "Invoice Line"
-msgstr "Linea de Factura"
+msgstr "Linea de factura"
 
 #. module: wobin_logistics
 #: model:ir.actions.act_window,name:wobin_logistics.action_invoicing_report
 msgid "Invoices Report related to Contract and Trips"
-msgstr "Reporte de Facturas relacionadas con Contratos y Viajes"
+msgstr "Reporte de Facturas relacionadas a Contratos y Viajes"
 
 #. module: wobin_logistics
 #: model:ir.ui.menu,name:wobin_logistics.sub_menuitem_invoicing
 msgid "Invoicing Analysis"
-msgstr "Análisis de Facturas"
+msgstr "Análisis de Facturación"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__message_is_follower
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__message_is_follower
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__message_is_follower
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__message_is_follower
 msgid "Is Follower"
 msgstr "Es un seguidor"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts____last_update
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_quotations____last_update
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_routes____last_update
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips____last_update
+#: model:res.groups,name:wobin_logistics.group_wl_access_logistics
+msgid "LOGÍSTICA (Restricción de permisos) para Wobin Logística"
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "La empresa porteadora deberá de llenar todos y cada uno de los datos que se consignan en la\n"
+"                            presente Carta Porte y tomando como base las informaciones rendidas por el remitente haciendo\n"
+"                            las verificaciones o comprobaciones que sean necesarias."
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "Las mercancías cuyo transporte haya sido prohibido por disposiciones legales o\n"
+"                                    reglamentarias. Cuando tales disposiciones no prohíban precisamente el transporte\n"
+"                                    determinadas mercancías pero si ordene la presentación de ciertos documentos para que\n"
+"                                    puedan ser transportadas el “Remitente” estará obligado a entregar al “Porteador” los\n"
+"                                    documentos correspondientes."
+msgstr ""
+
+#. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_wizard_delete_contract____last_update
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts____last_update
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_quotations____last_update
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_routes____last_update
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips____last_update
 msgid "Last Modified on"
 msgstr "Última modificación en"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__write_uid
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_quotations__write_uid
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_routes__write_uid
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__write_uid
 #: model:ir.model.fields,field_description:wobin_logistics.field_wizard_delete_contract__write_uid
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__write_uid
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_quotations__write_uid
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_routes__write_uid
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__write_uid
 msgid "Last Updated by"
 msgstr "Última actualización por"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__write_date
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_quotations__write_date
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_routes__write_date
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__write_date
 #: model:ir.model.fields,field_description:wobin_logistics.field_wizard_delete_contract__write_date
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__write_date
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_quotations__write_date
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_routes__write_date
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__write_date
 msgid "Last Updated on"
 msgstr "Última actualización el"
 
 #. module: wobin_logistics
-#: model:ir.model,name:wobin_logistics.model_logistics_contracts
+#: model:ir.model,name:wobin_logistics.model_wobin_logistica_contracts
 msgid "Logistics Contracts"
-msgstr "Contratos de Logística"
+msgstr "Contratos Logística"
 
 #. module: wobin_logistics
-#: model:ir.model,name:wobin_logistics.model_logistics_quotations
+#: model:ir.model,name:wobin_logistics.model_wobin_logistica_quotations
 msgid "Logistics Quotations"
-msgstr "Cotizaciones de Logística"
+msgstr "Cotizaciones Logística"
 
 #. module: wobin_logistics
-#: model:ir.model,name:wobin_logistics.model_logistics_routes
+#: model:ir.model,name:wobin_logistics.model_wobin_logistica_routes
 msgid "Logistics Routes"
-msgstr "Rutas de Logística"
+msgstr "Rutas Logística"
 
 #. module: wobin_logistics
-#: model:ir.model,name:wobin_logistics.model_logistics_trips
+#: model:ir.model,name:wobin_logistics.model_wobin_logistica_trips
 msgid "Logistics Trips"
-msgstr "Viajes de Logística"
+msgstr "Viajes Logística"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__message_main_attachment_id
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__message_main_attachment_id
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__message_main_attachment_id
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__message_main_attachment_id
 msgid "Main Attachment"
 msgstr "Adjuntos principales"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__message_has_error
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__message_has_error
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__message_has_error
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__message_has_error
 msgid "Message Delivery error"
 msgstr "Error de Envío de Mensaje"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__message_ids
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__message_ids
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__message_ids
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__message_ids
 msgid "Messages"
 msgstr "Mensajes"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_quotations__name
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_quotations__name
 msgid "Name"
 msgstr "Nombre"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__activity_date_deadline
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__activity_date_deadline
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__activity_date_deadline
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__activity_date_deadline
 msgid "Next Activity Deadline"
 msgstr "Siguiente plazo de actividad"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__activity_summary
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__activity_summary
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__activity_summary
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__activity_summary
 msgid "Next Activity Summary"
 msgstr "Resumen de la siguiente actividad"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__activity_type_id
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__activity_type_id
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__activity_type_id
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__activity_type_id
 msgid "Next Activity Type"
 msgstr "Siguiente tipo de actividad"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__message_needaction_counter
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__message_needaction_counter
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__message_needaction_counter
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__message_needaction_counter
 msgid "Number of Actions"
 msgstr "Número de acciones"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__message_has_error_counter
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__message_has_error_counter
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__message_has_error_counter
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__message_has_error_counter
 msgid "Number of error"
 msgstr "Número de error"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,help:wobin_logistics.field_logistics_contracts__message_needaction_counter
-#: model:ir.model.fields,help:wobin_logistics.field_logistics_trips__message_needaction_counter
+#: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_contracts__message_needaction_counter
+#: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_trips__message_needaction_counter
 msgid "Number of messages which requires an action"
 msgstr "Número de mensajes que requieren una acción"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,help:wobin_logistics.field_logistics_contracts__message_has_error_counter
-#: model:ir.model.fields,help:wobin_logistics.field_logistics_trips__message_has_error_counter
+#: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_contracts__message_has_error_counter
+#: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_trips__message_has_error_counter
 msgid "Number of messages with delivery error"
 msgstr "Número de mensajes con error de envío"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,help:wobin_logistics.field_logistics_contracts__message_unread_counter
-#: model:ir.model.fields,help:wobin_logistics.field_logistics_trips__message_unread_counter
+#: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_contracts__message_unread_counter
+#: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_trips__message_unread_counter
 msgid "Number of unread messages"
 msgstr "Número de mensajes no leidos"
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "Núm. Contrato"
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.reporte_carta_porte_view
+msgid "OBSERVACIONES"
+msgstr ""
 
 #. module: wobin_logistics
 #: model_terms:ir.ui.view,arch_db:wobin_logistics.wizard_delete_contract
@@ -517,80 +846,137 @@ msgid "OK"
 msgstr "Aceptar"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__observations
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.reporte_carta_porte_view
+msgid "OPERADOR"
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.reporte_carta_porte_view
+msgid "ORIGEN"
+msgstr ""
+
+#. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__observations
 msgid "Observations"
 msgstr "Observaciones"
 
 #. module: wobin_logistics
-#: selection:logistics.trips,invoice_status:0
+#: selection:wobin.logistica.trips,invoice_status:0
 msgid "Open"
 msgstr "Abierto"
 
 #. module: wobin_logistics
 #: selection:account.analytic.tag,analytic_tag_type:0
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__operator_id
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__operator_id
 msgid "Operator"
 msgstr "Operador"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__origin_id
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "Origen"
+msgstr ""
+
+#. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__origin_id
 msgid "Origin"
 msgstr "Origen"
 
 #. module: wobin_logistics
-#: selection:logistics.contracts,activity_state:0
-#: selection:logistics.trips,activity_state:0
-msgid "Overdue"
-msgstr "Retrasado"
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.reporte_carta_porte_view
+msgid "PRODUCTO"
+msgstr ""
 
 #. module: wobin_logistics
-#: selection:logistics.trips,invoice_status:0
+#: selection:wobin.logistica.trips,invoice_status:0
 msgid "Paid"
 msgstr "Pagado"
 
 #. module: wobin_logistics
-#: selection:logistics.contracts,activity_state:0
-#: selection:logistics.trips,activity_state:0
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "Para el caso de incumplimiento e inobservancias a las disposiciones que regulan el peso y\n"
+"                            dimensiones por parte del “Remitente”, este será responsable de las infracciones y multas que la\n"
+"                            Secretaria de Comunicación y Transporte y la Policía Federal Preventiva imponga al “Porteador”\n"
+"                            por cargar las unidades con exceso de peso."
+msgstr ""
+
+#. module: wobin_logistics
+#: selection:wobin.logistica.contracts,activity_state:0
+#: selection:wobin.logistica.trips,activity_state:0
 msgid "Planned"
 msgstr "Planeado"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__product_id
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "Por acto de guerra, huelga, motines, disturbios, caso fortuito, fuerza mayor."
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "Por daño eléctrico o magnético, borradura o cualquier otro daño a información e imágenes eléctricas, fotográficas o grabadas en cualquier otro tipo."
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "Por disposición de las autoridades competentes o de cualquier otro motivo razonable fuera del control del “Porteador”."
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "Por embalajes inadecuados."
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "Por la ambigüedad, falta de exactitud o falsedad de las declaraciones o instrucciones proporcionada por el “Remitente” y/o “Destinatario” del “Envío”."
+msgstr ""
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "Por vicios propios del mismo."
+msgstr ""
+
+#. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__product_id
 msgid "Product"
 msgstr "Producto"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__profitability
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "Producto"
+msgstr ""
+
+#. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__profitability
 msgid "Profitability"
 msgstr "Rentabilidad"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__qty_to_bill
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__qty_to_bill
 msgid "Quantiy to bill $"
-msgstr "Importe a Facturar $"
+msgstr "Cantidad a Facturar $"
 
 #. module: wobin_logistics
 #: model:ir.actions.act_window,name:wobin_logistics.action_logistics_quotations
 msgid "Quotations"
-msgstr "Cotizaciones"
+msgstr "Presupuestos"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__real_download_qty
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__real_download_qty
 msgid "Real Download Quantity (kg)"
 msgstr "Cantidad Real de Descarga (kg)"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__real_upload_qty
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__real_upload_qty
 msgid "Real Upload Quantity (kg)"
 msgstr "Cantidad Real de Carga (kg)"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__recipient
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__recipient
 msgid "Recipient"
 msgstr "Destinatario"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__advance_ids
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__advance_ids
 msgid "Related Expenses"
 msgstr "Gastos Relacionados"
 
@@ -600,7 +986,7 @@ msgid "Related Trips"
 msgstr "Viajes Relacionados"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__remitter
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__remitter
 msgid "Remitter"
 msgstr "Remitente"
 
@@ -610,14 +996,14 @@ msgid "Reports"
 msgstr "Informes"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__activity_user_id
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__activity_user_id
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__activity_user_id
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__activity_user_id
 msgid "Responsible User"
 msgstr "Usuario responsable"
 
 #. module: wobin_logistics
 #: selection:account.analytic.tag,analytic_tag_type:0
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__route
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__route
 msgid "Route"
 msgstr "Ruta"
 
@@ -628,9 +1014,14 @@ msgid "Routes"
 msgstr "Rutas"
 
 #. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.reporte_carta_porte_view
+msgid "SUCURSAL"
+msgstr ""
+
+#. module: wobin_logistics
 #: model:ir.model,name:wobin_logistics.model_sale_order
 msgid "Sale Order"
-msgstr "Pedido de venta"
+msgstr "Orden de Venta"
 
 #. module: wobin_logistics
 #: model_terms:ir.ui.view,arch_db:wobin_logistics.view_search_discharged_trips
@@ -638,40 +1029,47 @@ msgid "Sale Orders w/ trips"
 msgstr "Órdenes de Venta con Viajes"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__sales_order_id
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__sales_order_id
 msgid "Sales Order Generated"
-msgstr "Orden de Venta Generada"
+msgstr "Order de Venta Generada"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__settlement
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.report_contract_view
+msgid "Se entenderá que se tienen por aceptado los términos y condiciones aquí pactadas cuando el\n"
+"                            “Remitente” documente el “Envío” de acurdo con la presente carta Porte."
+msgstr ""
+
+#. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__settlement
 #: model:ir.ui.menu,name:wobin_logistics.sub_menuitem_settlement
 msgid "Settlement"
-msgstr "Liquidaciones"
+msgstr "Liquidación"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__shipping
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__shipping
 msgid "Shipping"
 msgstr "Envío"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__start_date
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__start_date
 msgid "Start Date"
 msgstr "Fecha de inicio"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__status
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__state
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__status
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__state
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__state_aux
 msgid "State"
 msgstr "Estado"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__invoice_status
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__invoice_status
 msgid "Status"
 msgstr "Estado"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,help:wobin_logistics.field_logistics_contracts__activity_state
-#: model:ir.model.fields,help:wobin_logistics.field_logistics_trips__activity_state
+#: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_contracts__activity_state
+#: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_trips__activity_state
 msgid "Status based on activities\n"
 "Overdue: Due date is already passed\n"
 "Today: Activity date is today\n"
@@ -682,52 +1080,62 @@ msgstr "Estado basado en actividades\n"
 "Planificada: futuras actividades."
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__trip_status
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__trip_status
 msgid "Supply Contract Status"
 msgstr "Status de Surtimiento del Contrato"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__tariff
-msgid "Tariff $"
-msgstr "Tarifa  $"
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.reporte_carta_porte_view
+msgid "TOTALES"
+msgstr ""
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__trip_taxes
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.reporte_carta_porte_view
+msgid "TRANSPORTE"
+msgstr ""
+
+#. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__tariff
+msgid "Tariff $"
+msgstr "Tarifa $"
+
+#. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__trip_taxes
 msgid "Taxes"
 msgstr "Impuestos"
 
 #. module: wobin_logistics
-#: selection:logistics.contracts,trip_status:0
+#: selection:wobin.logistica.contracts,trip_status:0
 msgid "To Do"
 msgstr "Por Comenzar"
 
 #. module: wobin_logistics
-#: selection:logistics.contracts,activity_state:0
-#: selection:logistics.trips,activity_state:0
+#: selection:wobin.logistica.contracts,activity_state:0
+#: selection:wobin.logistica.trips,activity_state:0
 msgid "Today"
 msgstr "Hoy"
 
 #. module: wobin_logistics
 #: selection:account.analytic.tag,analytic_tag_type:0
 #: model:ir.model.fields,field_description:wobin_logistics.field_account_invoice_line__trips_id
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__name
 #: model:ir.model.fields,field_description:wobin_logistics.field_sale_order__trips_id
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__name
 msgid "Trip"
 msgstr "Viaje"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__trip_delivered_qty
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__trip_delivered_qty
 msgid "Trip Delivered Qty"
-msgstr "Cant. Entregada"
+msgstr "Cant. de Viaje Entregada"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__trip_number_tag
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__trip_number_tag
 msgid "Trip Number (Analytic Tag)"
 msgstr "Número de Viaje (Etiqueta Analítica)"
 
 #. module: wobin_logistics
 #: model:ir.actions.act_window,name:wobin_logistics.action_logistics_trips
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__trips
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__trips
 #: model:ir.ui.menu,name:wobin_logistics.sub_menuitem_trips
 #: model:ir.ui.menu,name:wobin_logistics.trips_menu_3
 msgid "Trips"
@@ -749,36 +1157,49 @@ msgid "Trips Related"
 msgstr "Viajes Relacionados"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__message_unread
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__message_unread
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__message_unread
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__message_unread
 msgid "Unread Messages"
 msgstr "Mensajes por leer"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__message_unread_counter
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__message_unread_counter
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__message_unread_counter
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__message_unread_counter
 msgid "Unread Messages Counter"
 msgstr "Contador de mensajes sin leer"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__attachment_upload
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__attachment_upload
 msgid "Upload Attachments"
 msgstr "Adjuntos de Carga"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__upload_date
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__upload_date
 msgid "Upload Date"
 msgstr "Fecha de Carga"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__discharge_location
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__upload_location
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__upload_location
 msgid "Upload Location"
 msgstr "Ubicación de Carga"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_account_analytic_account__vehicle_id
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__vehicle_id
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.reporte_carta_porte_view
+msgid "VEHÍCULO"
+msgstr ""
+
+#. module: wobin_logistics
+#: model:res.groups,name:wobin_logistics.group_wl_access_sales
+msgid "VENTAS (Restricción de permisos) para Wobin Logística"
+msgstr ""
+
+#. module: wobin_logistics
+#: model:res.groups,name:wobin_logistics.group_wl_access_view
+msgid "VISUALIZACIÓN (Restricción de permisos) para Wobin Logística"
+msgstr ""
+
+#. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__vehicle_id
 msgid "Vehicle"
 msgstr "Vehículo"
 
@@ -788,14 +1209,14 @@ msgid "WOBIN Logistics"
 msgstr "WOBIN Logística"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_contracts__website_message_ids
-#: model:ir.model.fields,field_description:wobin_logistics.field_logistics_trips__website_message_ids
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__website_message_ids
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__website_message_ids
 msgid "Website Messages"
 msgstr "Mensajes del sitio web"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,help:wobin_logistics.field_logistics_contracts__website_message_ids
-#: model:ir.model.fields,help:wobin_logistics.field_logistics_trips__website_message_ids
+#: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_contracts__website_message_ids
+#: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_trips__website_message_ids
 msgid "Website communication history"
 msgstr "Historial de comunicaciones del sitio web"
 
@@ -813,3 +1234,8 @@ msgstr "Wobin Logística"
 #: model_terms:ir.ui.view,arch_db:wobin_logistics.reporte_carta_porte_view
 msgid "kg"
 msgstr "kg"
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.wizard_delete_contract
+msgid "¿Está seguro de que desea eliminar este contrato?"
+msgstr ""

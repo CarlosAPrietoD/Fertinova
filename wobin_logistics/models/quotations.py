@@ -2,8 +2,8 @@
 
 from odoo import models, fields, api
 
-class LogisticsQuotations(models.Model):
-    _name = 'logistics.quotations'
+class WobinLogisticaQuotations(models.Model):
+    _name = 'wobin.logistica.quotations'
     _description = 'Logistics Quotations'
 
     name = fields.Char()

@@ -4,7 +4,7 @@
     <!-- ANALYSIS (TRIPS) according to Contract - LIST VIEW -->
     <record id="view_trips_analysis_contract" model="ir.ui.view">
       <field name="name">Trips Analysis according Contracts</field>
-      <field name="model">logistics.contracts</field>
+      <field name="model">wobin.logistica.contracts</field>
       <field name="arch" type="xml">
         <tree>
           <field name="name"/>          
@@ -19,7 +19,7 @@
     <!-- ANALYSIS (TRIPS) in accordance to trips - LIST VIEW --> 
     <record id="view_trips_analysis" model="ir.ui.view">
       <field name="name">Trips Analysis</field>
-      <field name="model">logistics.trips</field>
+      <field name="model">wobin.logistica.trips</field>
       <field name="arch" type="xml">
         <tree>
           <field name="name"/>  
@@ -34,7 +34,7 @@
     <!-- ANALYSIS Profitabilty Trips - LIST VIEW --> 
     <record id="view_profitability_trips" model="ir.ui.view">
       <field name="name">Trips Profitability</field>
-      <field name="model">logistics.trips</field>
+      <field name="model">wobin.logistica.trips</field>
       <field name="arch" type="xml">
         <tree>
           <field name="name"/>  
@@ -48,7 +48,7 @@
     <!-- ANALYSIS Contracts Status- LIST VIEW --> 
     <record id="view_contracts_status" model="ir.ui.view">
       <field name="name">Contracts Status</field>
-      <field name="model">logistics.contracts</field>
+      <field name="model">wobin.logistica.contracts</field>
       <field name="arch" type="xml">
         <tree>
           <field name="name"/>  
@@ -91,7 +91,7 @@
     <!-- Settlements - LIST VIEW --> 
     <record id="view_trip_settlements" model="ir.ui.view">
       <field name="name">Analysis for Operator's Settlements</field>
-      <field name="model">logistics.trips</field>
+      <field name="model">wobin.logistica.trips</field>
       <field name="arch" type="xml">
         <tree>
           <field name="name"/> 
@@ -106,8 +106,8 @@
 
     <!-- Billing related to their Contracts & Trips - SEARCH VIEW --> 
     <record id="view_invoice_report_search" model="ir.ui.view">
-      <field name="name">Invoices Report related to Contract and Trips</field>
-      <field name="model">account.invoice</field>
+      <field name="name">account.invoice.inherit</field>
+      <field name="model">account.invoice</field>      
       <field name="arch" type="xml">
         <search> 
           <field name="id"/>           
@@ -123,8 +123,9 @@
     </record> 
     <!-- Billing related to their Contracts & Trips - LIST VIEW --> 
     <record id="view_invoice_report_list" model="ir.ui.view">
-      <field name="name">Invoices Report related to Contract and Trips</field>
+      <field name="name">account.invoice.inherit</field>
       <field name="model">account.invoice</field>
+      <field name="priority" eval="15"/>
       <field name="arch" type="xml">
         <tree>          
           <field name="number"/>  
@@ -136,7 +137,7 @@
     </record> 
     <!-- Billing related to their Contracts & Trips - FORM VIEW --> 
     <record id="view_invoice_report_form" model="ir.ui.view">
-      <field name="name">Invoices Report related to Contract and Trips</field>
+      <field name="name">account.invoice.inherit</field>
       <field name="model">account.invoice</field>
       <field name="arch" type="xml">
         <form>
