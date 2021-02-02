@@ -129,6 +129,7 @@
     <!-- Top Menu Item {ROOT} -->
     <menuitem name="Wobin Logistics" 
               id="wobin_logistics.menu_root" 
+              groups="wobin_logistics.group_wl_access_general"
               web_icon="wobin_logistics,static/description/icon.png"/>
 
     <!-- Menu Categories {SUB MENUITEMS} -->

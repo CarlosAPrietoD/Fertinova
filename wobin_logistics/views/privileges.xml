@@ -140,7 +140,7 @@
         <!--/////////////////////////////////////-->
 
         <!--Avoid Creation of Trips for Analysis Group in FORM & TREE views-->
-        <record id="hide_general_view_form_trip_for_ganalytic" model="ir.ui.view">
+        <record id="hide_general_view_form_trip_for_gview" model="ir.ui.view">
         <field name="name">Trips</field>
         <field name="model">logistics.trips</field>
         <field name="inherit_id" ref="wobin_logistics.view_logistics_trips_form"/>
@@ -154,7 +154,7 @@
             </field>
         </record> 
 
-        <record id="hide_general_view_tree_trip_for_ganalytic" model="ir.ui.view">
+        <record id="hide_general_view_tree_trip_for_gview" model="ir.ui.view">
         <field name="name">Trips</field>
         <field name="model">logistics.trips</field>
         <field name="inherit_id" ref="wobin_logistics.view_logistics_trips_list"/>
@@ -169,7 +169,7 @@
         </record>       
 
         <!--Avoid Creation of Contracts for Analysis Group in FORM & TREE views-->
-        <record id="hide_general_view_form_contract_for_ganalytic" model="ir.ui.view">
+        <record id="hide_general_view_form_contract_for_gview" model="ir.ui.view">
         <field name="name">Contracts</field>
         <field name="model">logistics.contracts</field>
         <field name="inherit_id" ref="wobin_logistics.view_logistics_contracts_form"/>
@@ -183,7 +183,7 @@
             </field>
         </record> 
 
-        <record id="hide_general_view_tree_contract_for_ganalytic" model="ir.ui.view">
+        <record id="hide_general_view_tree_contract_for_gview" model="ir.ui.view">
         <field name="name">Contracts</field>
         <field name="model">logistics.contracts</field>
         <field name="inherit_id" ref="wobin_logistics.view_logistics_contracts_list"/>
