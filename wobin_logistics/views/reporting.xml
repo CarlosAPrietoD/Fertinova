@@ -23,13 +23,25 @@
       <field name="arch" type="xml">
         <tree>
           <field name="name"/>  
+          <field name="state"/> 
           <field name="contracts_id"/>
           <field name="trip_taxes" widget="many2many_tags"/> 
           <field name="income_provisions"/>
-          <field name="invoice_status"/>       
+          <field name="invoice_status"/>                             
         </tree>
       </field>
-    </record>       
+    </record>  
+    <!--Change label field for invoice_status-->
+    <record id="analytic_tagform_inherited" model="ir.ui.view">
+        <field name="name">wobin.logistica.trips.inherit</field>
+        <field name="model">wobin.logistica.trips</field>
+        <field name="inherit_id" ref="wobin_logistics.view_trips_analysis"/>
+        <field name="arch" type="xml">
+           <xpath expr="//field[@name='invoice_status']" position="attributes">
+              <attribute name="string">Estado de facturación</attribute> 
+            </xpath>        
+        </field>
+    </record>          
 
     <!-- ANALYSIS Profitabilty Trips - LIST VIEW --> 
     <record id="view_profitability_trips" model="ir.ui.view">

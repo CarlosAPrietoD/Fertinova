@@ -149,7 +149,7 @@ class WobinLogisticaTrips(models.Model):
 
             #Conversion from set to list in order to permit injection of multiple values:
             pur_ords_lst = list(pur_ord_set)
-            print('\n\n\n\n list conversion pur_ords_lst: ', pur_ords_lst)
+            
             #Now many2many field Advance_ids has various values:
             self.advance_ids = [(6, 0, pur_ords_lst)]
                  
