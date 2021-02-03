@@ -989,3 +989,47 @@ class AccountInvoice(models.Model):
             ticket.credit_id = 0
             ticket.credit_count = 0
         return super(AccountInvoice, self).unlink()
+
+class ReportRecibaTicket(models.AbstractModel):
+    #Reporte recepción con precio
+    _name = 'report.wobin_reciba.report_ticket'
+
+    @api.model
+    def _get_report_values(self, docids, data=None): 
+        tickets = self.env['reciba.ticket'].browse(docids)
+        docs=[]
+        for ticket in tickets:
+            
+            doc={'ticket': ticket,
+                'total_format': f'{ticket.total_weight:,.2f}'
+            }
+            docs.append(doc)
+            
+        
+        return {
+            'doc_ids': docids,
+            'doc_model': 'res.partner',
+            'docs': docs
+        }
+
+class ReportRecibaTicketPriceless(models.AbstractModel):
+    #Reporte recepción sin precio
+    _name = 'report.wobin_reciba.ticket_priceless'
+
+    @api.model
+    def _get_report_values(self, docids, data=None): 
+        tickets = self.env['reciba.ticket'].browse(docids)
+        docs=[]
+        for ticket in tickets:
+            
+            doc={'ticket': ticket,
+                'total_format': f'{ticket.total_weight:,.2f}'
+            }
+            docs.append(doc)
+            
+        
+        return {
+            'doc_ids': docids,
+            'doc_model': 'res.partner',
+            'docs': docs
+        }
