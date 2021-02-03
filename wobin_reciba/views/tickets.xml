@@ -935,6 +935,31 @@
 
         <!--==========================================Transferencias internas================================================-->
 
+        <record model="ir.ui.view" id="graph_view_internal_transfer">
+            <field name="name">reciba.ticket.graph</field>
+            <field name="model">reciba.ticket</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Graficas">
+                    <field name="destination_id"/>
+                    <field name="product_id"/>
+                    <field name="net_weight" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="pivot_view_internal_transfer" model="ir.ui.view">
+            <field name="name">reciba.ticket.pivot</field>
+            <field name="model">reciba.ticket</field>
+            <field name="arch" type="xml">
+                <pivot string="Pivote">
+                    <field name="destination_id" type="row"/>
+                    <field name="product_id" type="col"/>
+                    <field name="net_weight" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
         <record model="ir.ui.view" id="form_view_internal_transfer">
             <field name="name">reciba.ticket.form</field>
             <field name="model">reciba.ticket</field>
@@ -1077,13 +1102,25 @@
             <field name="res_model">reciba.ticket</field>
             <field name="domain">[('operation_type','=','transfer')]</field>
             <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
             <field name="context">{'default_operation_type': 'transfer'}</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
                 Click to add a track value.
                 </p>
             </field>
+        </record>
+
+        <record id="reciba_pivot_internal_transfer_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="internal_transfer" />
+            <field name="view_id" ref="pivot_view_internal_transfer" />
+            <field name="view_mode">pivot</field>
+        </record>
+
+        <record id="reciba_graph_internal_transfer_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="internal_transfer" />
+            <field name="view_id" ref="graph_view_internal_transfer" />
+            <field name="view_mode">graph</field>
         </record>
 
         <record id="reciba_tree_internal_transfer_ticket_action" model="ir.actions.act_window.view">
@@ -1101,6 +1138,31 @@
         <menuitem id="internal_transfer_menu" name="Transferencias internas" parent="operation_menu" action="internal_transfer" sequence="5" />
 
         <!--==========================================Fabricación================================================-->
+
+        <record model="ir.ui.view" id="graph_view_manufacturing">
+            <field name="name">reciba.ticket.graph</field>
+            <field name="model">reciba.ticket</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Graficas">
+                    <field name="origin_id"/>
+                    <field name="product_id"/>
+                    <field name="qty_manufacturing" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="pivot_view_manufacturing" model="ir.ui.view">
+            <field name="name">reciba.ticket.pivot</field>
+            <field name="model">reciba.ticket</field>
+            <field name="arch" type="xml">
+                <pivot string="Pivote">
+                    <field name="origin_id" type="row"/>
+                    <field name="product_id" type="col"/>
+                    <field name="qty_manufacturing" type="measure"/>
+                </pivot>
+            </field>
+        </record>
 
         <record model="ir.ui.view" id="form_view_manufacturing">
             <field name="name">reciba.ticket.form</field>
@@ -1221,13 +1283,25 @@
             <field name="res_model">reciba.ticket</field>
             <field name="domain">[('operation_type','=','manufacturing')]</field>
             <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
             <field name="context">{'default_operation_type': 'manufacturing'}</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
                 Click to add a track value.
                 </p>
             </field>
+        </record>
+
+        <record id="reciba_pivot_manufacturing_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="manufacturing" />
+            <field name="view_id" ref="pivot_view_manufacturing" />
+            <field name="view_mode">pivot</field>
+        </record>
+
+        <record id="reciba_graph_manufacturing_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="manufacturing" />
+            <field name="view_id" ref="graph_view_manufacturing" />
+            <field name="view_mode">graph</field>
         </record>
 
         <record id="reciba_tree_manufacturing_ticket_action" model="ir.actions.act_window.view">
