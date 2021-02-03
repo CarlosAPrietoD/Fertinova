@@ -1014,7 +1014,7 @@ class ReportRecibaTicket(models.AbstractModel):
 
 class ReportRecibaTicketPriceless(models.AbstractModel):
     #Reporte recepción sin precio
-    _name = 'report.wobin_reciba.ticket_priceless'
+    _name = 'report.wobin_reciba.report_ticket_priceless'
 
     @api.model
     def _get_report_values(self, docids, data=None): 
