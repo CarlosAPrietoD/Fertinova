@@ -30,6 +30,7 @@
         #views
         'views/views.xml',
         'views/templates.xml',
+        'views/reports.xml',
         'views/tickets.xml',
     ],
     # only loaded in demonstration mode
