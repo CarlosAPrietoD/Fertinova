@@ -30,8 +30,9 @@
         #views
         'views/views.xml',
         'views/templates.xml',
-        'views/reports.xml',
+        'views/print.xml',
         'views/tickets.xml',
+        'views/reports.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

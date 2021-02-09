@@ -1371,7 +1371,7 @@
             </field>
         </record>
 
-        <menuitem id="configuration_menu" name="Configuración" parent="reciba_root" sequence="2"/>
+        <menuitem id="configuration_menu" name="Configuración" parent="reciba_root" sequence="5"/>
 
         <menuitem id="quality_menu" name="Parametros de calidad" parent="configuration_menu" action="reciba_quality" sequence="1" />
 
