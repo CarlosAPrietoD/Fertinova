@@ -221,8 +221,7 @@ class RecibaTicket(models.Model):
     ('dev_sale','Devolucion sobre venta'),
     ('dev_purchase','Devolucion sobre compra'),
     ('manufacturing','Fabricaciones'),
-    ('transfer','Transferencias internas'),
-    ('order','Ordenes de desconstruccion')], string="Tipo de operacion")
+    ('transfer','Transferencias internas')], string="Tipo de operacion")
     operation_type_id = fields.Many2one('stock.picking.type', string="Tipo de operacion", track_visibility='onchange')
     reception = fields.Selection([('price', 'Con precio'),
     ('priceless', 'Sin precio')], string="Tipo de recepción", default='price', required=True, track_visibility='onchange')
