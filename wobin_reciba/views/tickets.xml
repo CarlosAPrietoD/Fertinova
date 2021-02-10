@@ -39,8 +39,8 @@
                         <button name="confirm_receipt_ticket" type="object" states="draft,priceless" string="Confirmar" class="btn-primary"/>
                         <button name="reverse_receipt_ticket" type="object" states="confirmed" string="Reversa" class="btn-primary"/>
                         <button name="cancel_receipt_ticket" type="object" states="priceless" string="Cancelar"/>
-                        <button name="%(wobin_reciba.report_ticket_price)d" string="Imprimir con precio" type="action" class="btn-primary"/>
-                        <button name="%(wobin_reciba.report_priceless)d" string="Imprimir sin precio" type="action"/>
+                        <button name="%(wobin_reciba.report_ticket_price)d" string="Imprimir con precio" states="confirmed" type="action" class="btn-primary"/>
+                        <button name="%(wobin_reciba.report_priceless)d" string="Imprimir sin precio" states="priceless,confirmed" type="action"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,priceless,confirmed" />
                     </header>
                     <sheet>
@@ -304,6 +304,7 @@
                     <header>
                         <button name="confirm_delivery_ticket" type="object" states="draft" string="Confirmar" class="btn-primary"/>
                         <button name="reverse_delivery_ticket" type="object" states="confirmed" string="Reversa" class="btn-primary"/>
+                        <button name="%(wobin_reciba.report_ticket_price)d" string="Imprimir" states="confirmed" type="action" class="btn-primary"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,confirmed" />
                     </header>
                     <sheet>
@@ -540,6 +541,7 @@
                 <form string="Devolución">
                     <header>
                         <button name="confirm_dev_sale_ticket" type="object" states="draft" string="Confirmar" class="btn-primary"/>
+                        <button name="%(wobin_reciba.report_ticket_price)d" string="Imprimir" states="confirmed" type="action" class="btn-primary"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,confirmed" />
                     </header>
                     <sheet>
@@ -754,6 +756,7 @@
                 <form string="Devolución">
                     <header>
                         <button name="confirm_dev_purchase_ticket" type="object" states="draft" string="Confirmar" class="btn-primary"/>
+                        <button name="%(wobin_reciba.report_ticket_price)d" string="Imprimir" states="confirmed" type="action" class="btn-primary"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,confirmed" />
                     </header>
                     <sheet>
@@ -968,6 +971,7 @@
                 <form string="Transferencia">
                     <header>
                         <button name="confirm_transfer_ticket" type="object" states="draft" string="Confirmar" class="btn-primary"/>
+                        <button name="%(wobin_reciba.report_priceless)d" string="Imprimir" states="confirmed" type="action" class="btn-primary"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,confirmed" />
                     </header>
                     <sheet>
@@ -1173,6 +1177,7 @@
                     <header>
                         <button name="confirm_manufacturing_ticket" type="object" states="draft" string="Confirmar" class="btn-primary"/>
                         <button name="unbuild_manufacturing_ticket" type="object" states="confirmed" string="Desconstruir" class="btn-primary"/>
+                        <button name="%(wobin_reciba.report_priceless)d" string="Imprimir" states="confirmed" type="action" class="btn-primary"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,confirmed" />
                     </header>
                     <sheet>
