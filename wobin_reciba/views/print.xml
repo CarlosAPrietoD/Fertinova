@@ -56,6 +56,13 @@
                                     <t t-esc="ticket['ticket'].partner_id.name" />
                                 </td>
                             </tr>
+                            <tr t-if="ticket['ticket'].operation_type == 'out' or ticket['ticket'].operation_type == 'dev_sale'">
+                                <th style="width: 20%; padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
+                                    Cliente</th>
+                                <td style="width: 30%;  padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
+                                    <t t-esc="ticket['ticket'].partner_id.name" />
+                                </td>
+                            </tr>
                             <tr>
                                 <th style="width: 20%; padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
                                     Producto</th>
@@ -180,6 +187,12 @@
                                                     <t t-esc="ticket['ticket'].price_po" />
                                                 </td>
                                             </t>
+                                            <t t-elif="ticket['ticket'].price_so">
+                                                <td style="width: 15%; border-bottom: black 1px solid;">
+                                                    $
+                                                    <t t-esc="ticket['ticket'].price_so" />
+                                                </td>
+                                            </t>
                                             <t t-else="">
                                                 <td style="width: 15%; border-bottom: black 1px solid;">
                                                     Por asignar</td>
@@ -199,9 +212,17 @@
                                     <div style="width: 94%; margin-left: 3%; margin-right: 3%; border-top: black 1px solid;">
                                         Analista</div>
                                 </th>
-                                <th style="width: 33%; ">
+                                <th style="width: 33%; " t-if="ticket['ticket'].operation_type == 'in' or ticket['ticket'].operation_type == 'dev_purchase'">
                                     <div style="width: 94%; margin-left: 3%; margin-right: 3%; border-top: black 1px solid;">
                                         Proveedor/Chofer</div>
+                                </th>
+                                <th style="width: 33%; " t-if="ticket['ticket'].operation_type == 'out' or ticket['ticket'].operation_type == 'dev_sale'">
+                                    <div style="width: 94%; margin-left: 3%; margin-right: 3%; border-top: black 1px solid;">
+                                        Cliente/Chofer</div>
+                                </th>
+                                <th style="width: 33%; " t-if="ticket['ticket'].operation_type == 'manufacturing' or ticket['ticket'].operation_type == 'transfer'">
+                                    <div style="width: 94%; margin-left: 3%; margin-right: 3%">
+                                    </div>
                                 </th>
                                 <th style="width: 33%; ">
                                     <div style="width: 94%; margin-left: 3%; margin-right: 3%; border-top: black 1px solid;">
@@ -216,7 +237,7 @@
         </t>
     </template>
 
-    <report id="report_ticket_price" string="Imprimir boleta con precio" model="reciba.ticket" report_type="qweb-html" name="wobin_reciba.report_ticket"/>
+    <report id="report_ticket_price" string="Imprimir boleta con precio" model="reciba.ticket" report_type="qweb-html" name="wobin_reciba.report_ticket" menu="False"/>
 
     <!--========================================Impresión de formato sin precio==================================-->
 
@@ -236,6 +257,18 @@
                                 <td t-if="ticket['ticket'].operation_type == 'out'" style="width: 30%;  padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
                                     Entrega
                                 </td>
+                                <td t-if="ticket['ticket'].operation_type == 'dev_sale'" style="width: 30%;  padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
+                                    Devolución sobre venta
+                                </td>
+                                <td t-if="ticket['ticket'].operation_type == 'dev_purchase'" style="width: 30%;  padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
+                                    Devolución sobre compra
+                                </td>
+                                <td t-if="ticket['ticket'].operation_type == 'transfer'" style="width: 30%;  padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
+                                    Transferencia
+                                </td>
+                                <td t-if="ticket['ticket'].operation_type == 'manufacturing'" style="width: 30%;  padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
+                                    Fabricación
+                                </td>
                                 <td style="width: 50%;" rowspan="7">
 
                                 </td>
@@ -254,7 +287,7 @@
                                     <t t-esc="ticket['ticket'].name" />
                                 </td>
                             </tr>
-                            <tr>
+                            <tr t-if="ticket['ticket'].operation_type == 'in'">
                                 <th style="width: 20%; padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
                                     Proveedor</th>
                                 <td style="width: 30%;  padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
@@ -268,14 +301,14 @@
                                     <t t-esc="ticket['ticket'].product_id.name" />
                                 </td>
                             </tr>
-                            <tr>
+                            <tr t-if="ticket['ticket'].operation_type != 'manufacturing'">
                                 <th style="width: 20%; padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
                                     Chofer</th>
                                 <td style="width: 30%;  padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
                                     <t t-esc="ticket['ticket'].driver" />
                                 </td>
                             </tr>
-                            <tr>
+                            <tr t-if="ticket['ticket'].operation_type != 'manufacturing'">
                                 <th style="width: 20%; padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
                                     Placas unidad</th>
                                 <td style="width: 30%;  padding-top: 5px; padding-bottom: 5px; border-bottom: solid 1px black;">
@@ -370,10 +403,17 @@
                                             </td>
                                             <td style="width: 10%;">%</td>
                                         </tr>
-                                        <tr>
+                                        <tr t-if="ticket['ticket'].operation_type != 'manufacturing'">
                                             <th style="width: 25%;">Peso neto analizado</th>
                                             <td style="width: 10%; border-bottom: black 1px solid;">
                                                 <t t-esc="ticket['total_format']" />
+                                            </td>
+                                            <td style="width: 10%;">Kg</td>
+                                        </tr>
+                                        <tr t-if="ticket['ticket'].operation_type == 'manufacturing'">
+                                            <th style="width: 25%;">Cantidad producida</th>
+                                            <td style="width: 10%; border-bottom: black 1px solid;">
+                                                <t t-esc="ticket['ticket'].qty_manufacturing" />
                                             </td>
                                             <td style="width: 10%;">Kg</td>
                                         </tr>
@@ -390,9 +430,13 @@
                                     <div style="width: 94%; margin-left: 3%; margin-right: 3%; border-top: black 1px solid;">
                                         Analista</div>
                                 </th>
-                                <th style="width: 33%; ">
+                                <th style="width: 33%; " t-if="ticket['ticket'].operation_type == 'in' or ticket['ticket'].operation_type == 'dev_purchase'">
                                     <div style="width: 94%; margin-left: 3%; margin-right: 3%; border-top: black 1px solid;">
                                         Proveedor/Chofer</div>
+                                </th>
+                                <th style="width: 33%; " t-else="">
+                                    <div style="width: 94%; margin-left: 3%; margin-right: 3%">
+                                        </div>
                                 </th>
                                 <th style="width: 33%; ">
                                     <div style="width: 94%; margin-left: 3%; margin-right: 3%; border-top: black 1px solid;">
@@ -407,6 +451,6 @@
         </t>
     </template>
 
-    <report id="report_priceless" string="Imprimir boleta sin precio" model="reciba.ticket" report_type="qweb-html" name="wobin_reciba.report_ticket_priceless"/>
+    <report id="report_priceless" string="Imprimir boleta sin precio" model="reciba.ticket" report_type="qweb-html" name="wobin_reciba.report_ticket_priceless" menu="False"/>
 
 </odoo>

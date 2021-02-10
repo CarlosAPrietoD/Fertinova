@@ -6,8 +6,9 @@
 
         <menuitem id="menu_quality_reports" name="Calidad" parent="menu_reports" />
 
-        <!--================================Reporte de calidad; humedad ponderada============================================-->
+        <!--================================Reporte de calidad humedad ponderada============================================-->
 
+        <!--Plantilla-->
         <template id="report_avg_humidity">
             <t t-call="web.html_container">
                 <t t-call="web.external_layout">
@@ -234,8 +235,10 @@
             </t>
         </template>
 
+        <!--Reporte-->
         <report id="report_quality_avg_humidity" model="quality.avg.humidity" string="Reporte" report_type="qweb-html" name="wobin_reciba.report_avg_humidity" />
 
+        <!--Ventana de ingreso de datos-->
         <record model="ir.ui.view" id="report_avg_humi">
             <field name="name">report_avg_humidity</field>
             <field name="model">quality.avg.humidity</field>
@@ -260,8 +263,10 @@
             </field>
         </record>
 
+        <!--Accion para la ventana emergente-->
         <act_window id="action_avg_humidity" name="Selecciona el intervalo del reporte" res_model="quality.avg.humidity" view_mode="form" target="new" multi="True" />
 
+        <!--Menu-->
         <menuitem id="menu_avg_humidity" name="Promedio ponderado humedad" parent="menu_quality_reports" action="action_avg_humidity" />
 
 
