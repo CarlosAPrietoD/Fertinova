@@ -19,7 +19,7 @@
 
     <!-- SETTLEMENTS - GENERAL ACTION -->
     <record id="action_settlements" model="ir.actions.act_window">
-      <field name="name">Comprobations</field>
+      <field name="name">Settlements</field>
       <field name="res_model">wobin.settlements</field>
       <field name="view_mode">tree,form,search</field>
       <field name="context">{'group_by':'operator_id'}</field>

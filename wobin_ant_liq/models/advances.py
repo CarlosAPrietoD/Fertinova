@@ -38,9 +38,10 @@ class WobinAdvances(models.Model):
             values = {
                     'operator_id': self.operator_id.id,
                     'circuit_id': self.circuit_id.id,
-                    'trip_id': self.trip_id.id
+                    'trip_id': self.trip_id.id,
+                    'advance_id': self.id
                 }
-            self.env['wobin.moves.adv.set.lines'].create(values) 
+            self.env['wobin.moves.adv.set.lines'].create(values)           
 
             #Update flag to indicate employee for checking up:
             employee_obj = self.env['hr.employee'].browse(vals['operator_id'])
@@ -97,4 +98,4 @@ class WobinAdvances(models.Model):
         #Retrieve related payment to this advance
         payment_related = self.env['account.payment'].search([('advance_id', '=', self.id)], limit=1).id 
         if payment_related:
-            self.payment_related_id = payment_related
+            self.payment_related_id = payment_related          

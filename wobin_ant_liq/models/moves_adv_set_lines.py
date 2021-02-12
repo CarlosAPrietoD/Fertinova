@@ -10,7 +10,8 @@ class WobinMovesAdvSetLines(models.Model):
 
     operator_id = fields.Many2one('hr.employee',string='Operator')
     circuit_id  = fields.Many2one('wobin.circuits', string='Circuit')
-    trip_id     = fields.Many2one('wobin.logistica.trips', string='Trip', track_visibility='always')
+    trip_id     = fields.Many2one('wobin.logistica.trips', string='Trip')
+    advance_id  = fields.Many2one('wobin.advances', string='Advance', ondelete='set null')
     advance_sum_amnt      = fields.Float(string='Advances', digits=dp.get_precision('Product Unit of Measure'), compute='set_advance_sum_amnt')
     comprobation_sum_amnt = fields.Float(string='Comprobations', digits=dp.get_precision('Product Unit of Measure'), compute='set_comprobation_sum_amnt')
     amount_to_settle      = fields.Float(string='Amount to Settle', digits=dp.get_precision('Product Unit of Measure'), compute='set_amount_to_settle')
