@@ -3,7 +3,7 @@
         <!--/////////////////////////////////////-->
         <!-- PERMISSIONS FOR GENERAL ROLE GROUP  -->
         <!--/////////////////////////////////////-->
-        <record id="hide_general_role_tree_inform" model="ir.ui.view">
+        <record id="general_role_hide_tree_informs" model="ir.ui.view">
         <field name="name">Informs</field>
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="wobin_ant_liq.view_informs_list"/>
