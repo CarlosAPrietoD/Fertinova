@@ -78,7 +78,7 @@
     <menuitem name="Informs" 
               id="informs_menu_4" 
               parent="wobin_ant_liq.menu_root" 
-              groups="wobin_ant_liq.group_wacs_general"
+              groups="wobin_ant_liq.group_wacs_general,group_wacs_administration"
               action="action_informs"/>
 
   </data>
