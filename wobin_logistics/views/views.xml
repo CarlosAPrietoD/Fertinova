@@ -115,7 +115,7 @@
         <field name="view_mode">tree,form</field> 
         <field name="domain">[('flag_cont_trip', '=', True)]</field>       
         <field name="search_view_id" ref="view_invoice_report_search"/> 
-        <field name="context">{'tree_view_ref': 'wobin_logistics.view_invoice_report_list', 'form_view_ref': 'wobin_logistics.view_invoice_report_form', 'search_default_flag_ct': 1}}</field>                        
+        <field name="context">{'tree_view_ref': 'wobin_logistics.view_invoice_report_list', 'form_view_ref': 'wobin_logistics.view_invoice_report_form', 'search_default_flag_ct': 1}</field>                        
       </record>              
         
 

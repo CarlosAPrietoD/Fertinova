@@ -1,0 +1,85 @@
+<odoo>
+  <data>
+
+    <!-- ADVANCES - GENERAL ACTION -->
+    <record id="action_advances" model="ir.actions.act_window">
+      <field name="name">Advances</field>
+      <field name="res_model">wobin.advances</field>
+      <field name="view_mode">tree,form,search</field>
+      <field name="context">{'group_by':'circuit_id'}</field>
+    </record>
+
+    <!-- COMPROBATIONS - GENERAL ACTION -->
+    <record id="action_comprobations" model="ir.actions.act_window">
+      <field name="name">Comprobations</field>
+      <field name="res_model">wobin.comprobations</field>
+      <field name="view_mode">tree,form,search</field>
+      <field name="context">{'group_by':'circuit_id'}</field>
+    </record>     
+
+    <!-- SETTLEMENTS - GENERAL ACTION -->
+    <record id="action_settlements" model="ir.actions.act_window">
+      <field name="name">Comprobations</field>
+      <field name="res_model">wobin.settlements</field>
+      <field name="view_mode">tree,form,search</field>
+      <field name="context">{'group_by':'operator_id'}</field>
+    </record>   
+
+    <!-- INFORMS - GENERAL ACTION -->
+    <record id="action_informs" model="ir.actions.act_window">
+      <field name="name">Informs</field>
+      <field name="res_model">hr.employee</field>
+      <field name="view_mode">tree</field>
+      <field name="context">{'search_default_flag_act_emp': 1}</field>  
+    </record>        
+    
+    
+
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+    <!-- MENUITEMS -->    
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+    
+    <!-- Top Menu Item {ROOT} -->
+    <menuitem id="wobin_ant_liq.menu_root"
+              name="Advances and Settlements" 
+              groups="wobin_ant_liq.group_wacs_general,group_wacs_administration"                             
+              web_icon="wobin_ant_liq,static/description/icon.png"/>
+
+    <!-- Menu Categories {SUB MENUITEMS} -->
+    <menuitem name="Advances" 
+              id="advances_menu_1" 
+              parent="wobin_ant_liq.menu_root" 
+              groups="wobin_ant_liq.group_wacs_administration"
+              action="action_advances"/>
+    <record model="ir.ui.menu" id="wobin_ant_liq.advances_menu_1">
+        <field name="groups_id" eval="[(6,0,[ref('group_wacs_administration')])]"/>
+    </record>  
+
+
+    <menuitem name="Comprobations" 
+              id="comprobations_menu_2" 
+              parent="wobin_ant_liq.menu_root"
+              groups="wobin_ant_liq.group_wacs_administration" 
+              action="action_comprobations"/>
+    <record model="ir.ui.menu" id="wobin_ant_liq.comprobations_menu_2">
+        <field name="groups_id" eval="[(6,0,[ref('group_wacs_administration')])]"/>
+    </record>
+
+
+    <menuitem name="Settlements" 
+              id="settlemens_menu_3" 
+              parent="wobin_ant_liq.menu_root" 
+              groups="wobin_ant_liq.group_wacs_administration"
+              action="action_settlements"/>
+    <record model="ir.ui.menu" id="wobin_ant_liq.settlemens_menu_3">
+        <field name="groups_id" eval="[(6,0,[ref('group_wacs_administration')])]"/>
+    </record>              
+
+    <menuitem name="Informs" 
+              id="informs_menu_4" 
+              parent="wobin_ant_liq.menu_root" 
+              groups="wobin_ant_liq.group_wacs_general"
+              action="action_informs"/>
+
+  </data>
+</odoo>

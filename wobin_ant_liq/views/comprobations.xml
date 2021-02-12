@@ -1,0 +1,84 @@
+<odoo>
+  <data>
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+    <!-- VIEWS {LISTS, FORMS, SEARCH} -->
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+
+    <!-- COMPROBATIONS - SEARCH VIEW -->    
+    <record id="view_comprobations_tree" model="ir.ui.view"> 
+      <field name="name">Comprobations</field>
+      <field name="model">wobin.comprobations</field>
+        <field name="arch" type="xml"> 
+            <search> 
+              <field name="name"/>
+              <field name="operator_id"/>            
+              <field name="date"/>                 
+              <field name="amount"/>
+              <field name="circuit_id"/>
+              <field name="trip_id"/>   
+              <field name="payment_related_id"/>   
+              <group expand="0" string="Group By">
+                  <filter string="Advance" name="name" 
+                            context="{'group_by':'circuit_id'}"/>
+              </group>
+            </search> 
+        </field> 
+    </record>    
+
+    <!-- COMPROBATIONS - LIST VIEW -->
+    <record id="view_comprobations_list" model="ir.ui.view">
+      <field name="name">Comprobations</field>
+      <field name="model">wobin.comprobations</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="operator_id"/>            
+          <field name="date"/>                 
+          <field name="amount"/>
+          <field name="circuit_id"/>
+          <field name="trip_id"/>
+          <field name="payment_related_id"/>   
+        </tree>
+      </field>
+    </record>    
+
+    <!-- COMPROBATIONS - FORM VIEW -->
+    <record id="view_comprobations_form" model="ir.ui.view"> 
+        <field name="name">Comprobations</field> 
+        <field name="model">wobin.comprobations</field> 
+        <field name="arch" type="xml"> 
+            <form> 
+                <header>
+                    <button name="create_payment" type="object" string="Create Payment" class="oe_highlight" attrs="{'invisible': [('name', '=', 'New')]}"/>
+                </header>
+                <sheet> 
+                    <div class="oe_left oe_title">
+                        <h1>
+                            <field name="name" readonly="True"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                          <field name="operator_id" required="True"/>          
+                          <field name="date" required="True"/>
+                          <field name="amount" required="True"/>  
+                          <field name="circuit_id" required="True"/>
+                          <field name="trip_id" required="True"/>                           
+                        </group>                                                 
+                        <group>                     
+                          <field name="expenses_to_refund"/>      
+                          <field name="payment_related_id"/>                                     
+                        </group> 
+                    </group>                                            
+                </sheet>              
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>               
+            </form> 
+        </field> 
+    </record>
+
+  </data>  
+</odoo> 

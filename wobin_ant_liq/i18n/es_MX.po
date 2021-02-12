@@ -1,0 +1,500 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* wobin_ant_liq
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-02-11 23:34+0000\n"
+"PO-Revision-Date: 2021-02-11 23:34+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: wobin_ant_liq
+#: model:res.groups,name:wobin_ant_liq.group_wacs_administration
+msgid "ACCESO ADMINISTRADOR (Visualización completa del módulo)"
+msgstr ""
+
+#. module: wobin_ant_liq
+#: model:res.groups,name:wobin_ant_liq.group_wacs_general
+msgid "ACCESO GENERAL (Visualización mínima del módulo)"
+msgstr ""
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__message_needaction
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__message_needaction
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__message_needaction
+msgid "Action Needed"
+msgstr "Acción Necesaria"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__activity_ids
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__activity_ids
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__activity_ids
+msgid "Activities"
+msgstr "Actividades"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__activity_state
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__activity_state
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__activity_state
+msgid "Activity State"
+msgstr "Estado de la actividad"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_account_payment__advance_id
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__name
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__name
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__name
+#: model_terms:ir.ui.view,arch_db:wobin_ant_liq.view_advances_tree
+#: model_terms:ir.ui.view,arch_db:wobin_ant_liq.view_comprobations_tree
+msgid "Advance"
+msgstr "Anticipo"
+
+#. module: wobin_ant_liq
+#: model:ir.actions.act_window,name:wobin_ant_liq.action_advances
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_hr_employee__advance_sum_amnt
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__advance_sum_amnt
+#: model:ir.ui.menu,name:wobin_ant_liq.advances_menu_1
+msgid "Advances"
+msgstr "Anticipos"
+
+#. module: wobin_ant_liq
+#: model:ir.ui.menu,name:wobin_ant_liq.menu_root
+msgid "Advances and Settlements"
+msgstr "Anticipos y Liquidaciones"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__amount
+msgid "Amount"
+msgstr "Monto"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__amount
+msgid "Amount $"
+msgstr "Monto $"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_hr_employee__amount_to_settle
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__amount_to_settle
+msgid "Amount to Settle"
+msgstr "Saldo a Liquidar"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__message_attachment_count
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__message_attachment_count
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__message_attachment_count
+msgid "Attachment Count"
+msgstr "Conteo de archivos adjuntos"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__attachments
+msgid "Attachments"
+msgstr "Adjuntos"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__circuit_id
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__circuit_id
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__circuit_id
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__circuit_id
+msgid "Circuit"
+msgstr "Circuito"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__adv_set_lines_ids
+msgid "Circuit Settlements for operator"
+msgstr "Liquidaciones de Circuito por Operador"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_circuits__name
+msgid "Circuit to be created"
+msgstr "Circuito por crear"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_account_payment__comprobation_id
+msgid "Comprobation"
+msgstr "Comprobación"
+
+#. module: wobin_ant_liq
+#: model:ir.actions.act_window,name:wobin_ant_liq.action_comprobations
+#: model:ir.actions.act_window,name:wobin_ant_liq.action_settlements
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_hr_employee__comprobation_sum_amnt
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__comprobation_sum_amnt
+#: model:ir.ui.menu,name:wobin_ant_liq.comprobations_menu_2
+msgid "Comprobations"
+msgstr "Comprobaciones"
+
+#. module: wobin_ant_liq
+#: model_terms:ir.ui.view,arch_db:wobin_ant_liq.view_advances_form
+#: model_terms:ir.ui.view,arch_db:wobin_ant_liq.view_comprobations_form
+#: model_terms:ir.ui.view,arch_db:wobin_ant_liq.view_settlements_form
+msgid "Create Payment"
+msgstr "Crear Pago"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__create_uid
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_circuits__create_uid
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__create_uid
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__create_uid
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__create_date
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_circuits__create_date
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__create_date
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__create_date
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__date
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__date
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__date
+msgid "Date"
+msgstr "Fecha"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__display_name
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_circuits__display_name
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__display_name
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__display_name
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: wobin_ant_liq
+#: model:ir.model,name:wobin_ant_liq.model_hr_employee
+msgid "Employee"
+msgstr "Empleado"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_hr_employee__flag_employee_active
+msgid "Flag"
+msgstr "Bandera"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__message_follower_ids
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__message_follower_ids
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__message_follower_ids
+msgid "Followers"
+msgstr "Seguidores"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__message_channel_ids
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__message_channel_ids
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__message_channel_ids
+msgid "Followers (Channels)"
+msgstr "Seguidores (Canales)"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__message_partner_ids
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__message_partner_ids
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "Seguidores (Empresas)"
+
+#. module: wobin_ant_liq
+#: model_terms:ir.ui.view,arch_db:wobin_ant_liq.view_advances_tree
+#: model_terms:ir.ui.view,arch_db:wobin_ant_liq.view_comprobations_tree
+msgid "Group By"
+msgstr "Agrupar por"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__id
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_circuits__id
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__id
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__id
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__id
+msgid "ID"
+msgstr "ID"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,help:wobin_ant_liq.field_wobin_advances__message_unread
+#: model:ir.model.fields,help:wobin_ant_liq.field_wobin_comprobations__message_unread
+#: model:ir.model.fields,help:wobin_ant_liq.field_wobin_settlements__message_unread
+msgid "If checked new messages require your attention."
+msgstr "Si está marcado, hay nuevos mensajes que requieren su atención"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,help:wobin_ant_liq.field_wobin_advances__message_needaction
+#: model:ir.model.fields,help:wobin_ant_liq.field_wobin_comprobations__message_needaction
+#: model:ir.model.fields,help:wobin_ant_liq.field_wobin_settlements__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "Si está marcado, hay nuevos mensajes que requieren su atención."
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,help:wobin_ant_liq.field_wobin_advances__message_has_error
+#: model:ir.model.fields,help:wobin_ant_liq.field_wobin_comprobations__message_has_error
+#: model:ir.model.fields,help:wobin_ant_liq.field_wobin_settlements__message_has_error
+msgid "If checked, some messages have a delivery error."
+msgstr "Si se encuentra marcado, algunos mensajes tienen error de envío."
+
+#. module: wobin_ant_liq
+#: model:ir.actions.report,name:wobin_ant_liq.reporte_liquidacion_formato
+msgid "Imprimir Liquidación"
+msgstr ""
+
+#. module: wobin_ant_liq
+#: model:ir.actions.act_window,name:wobin_ant_liq.action_informs
+#: model:ir.ui.menu,name:wobin_ant_liq.informs_menu_4
+msgid "Informs"
+msgstr "Informes"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__message_is_follower
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__message_is_follower
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__message_is_follower
+msgid "Is Follower"
+msgstr "Es un seguidor"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances____last_update
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_circuits____last_update
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations____last_update
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines____last_update
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements____last_update
+msgid "Last Modified on"
+msgstr "Última modificación en"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__write_uid
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_circuits__write_uid
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__write_uid
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__write_uid
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__write_date
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_circuits__write_date
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__write_date
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__write_date
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__message_main_attachment_id
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__message_main_attachment_id
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__message_main_attachment_id
+msgid "Main Attachment"
+msgstr "Adjuntos principales"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__message_has_error
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__message_has_error
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__message_has_error
+msgid "Message Delivery error"
+msgstr "Error de Envío de Mensaje"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__message_ids
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__message_ids
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__message_ids
+msgid "Messages"
+msgstr "Mensajes"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__activity_date_deadline
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__activity_date_deadline
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "Siguiente plazo de actividad"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__activity_summary
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__activity_summary
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__activity_summary
+msgid "Next Activity Summary"
+msgstr "Resumen de la siguiente actividad"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__activity_type_id
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__activity_type_id
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__activity_type_id
+msgid "Next Activity Type"
+msgstr "Siguiente tipo de actividad"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__message_needaction_counter
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__message_needaction_counter
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__message_needaction_counter
+msgid "Number of Actions"
+msgstr "Número de acciones"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__message_has_error_counter
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__message_has_error_counter
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__message_has_error_counter
+msgid "Number of error"
+msgstr "Número de error"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,help:wobin_ant_liq.field_wobin_advances__message_needaction_counter
+#: model:ir.model.fields,help:wobin_ant_liq.field_wobin_comprobations__message_needaction_counter
+#: model:ir.model.fields,help:wobin_ant_liq.field_wobin_settlements__message_needaction_counter
+msgid "Number of messages which requires an action"
+msgstr "Número de mensajes que requieren una acción"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,help:wobin_ant_liq.field_wobin_advances__message_has_error_counter
+#: model:ir.model.fields,help:wobin_ant_liq.field_wobin_comprobations__message_has_error_counter
+#: model:ir.model.fields,help:wobin_ant_liq.field_wobin_settlements__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "Número de mensajes con error de envío"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,help:wobin_ant_liq.field_wobin_advances__message_unread_counter
+#: model:ir.model.fields,help:wobin_ant_liq.field_wobin_comprobations__message_unread_counter
+#: model:ir.model.fields,help:wobin_ant_liq.field_wobin_settlements__message_unread_counter
+msgid "Number of unread messages"
+msgstr "Número de mensajes no leidos"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__operator_id
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__operator_id
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__operator_id
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__operator_id
+msgid "Operator"
+msgstr "Operador"
+
+#. module: wobin_ant_liq
+#: selection:wobin.advances,activity_state:0
+#: selection:wobin.comprobations,activity_state:0
+#: selection:wobin.settlements,activity_state:0
+msgid "Overdue"
+msgstr "Atrasado"
+
+#. module: wobin_ant_liq
+#: model:ir.model,name:wobin_ant_liq.model_account_payment
+msgid "Payments"
+msgstr "Pagos"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__expenses_to_check
+msgid "Pending Expenses to Check"
+msgstr "Gastos Pendientes por Comprobar"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__expenses_to_refund
+msgid "Pending Expenses to Refund"
+msgstr "Gastos Pendientes por Reembolsar"
+
+#. module: wobin_ant_liq
+#: selection:wobin.advances,activity_state:0
+#: selection:wobin.comprobations,activity_state:0
+#: selection:wobin.settlements,activity_state:0
+msgid "Planned"
+msgstr "Planeado"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__payment_related_id
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__payment_related_id
+msgid "Related Payment"
+msgstr "Pago Relacionado"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__activity_user_id
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__activity_user_id
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__activity_user_id
+msgid "Responsible User"
+msgstr "Usuario responsable"
+
+#. module: wobin_ant_liq
+#: model:ir.ui.menu,name:wobin_ant_liq.settlemens_menu_3
+msgid "Settlements"
+msgstr "Liquidaciones"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,help:wobin_ant_liq.field_wobin_advances__activity_state
+#: model:ir.model.fields,help:wobin_ant_liq.field_wobin_comprobations__activity_state
+#: model:ir.model.fields,help:wobin_ant_liq.field_wobin_settlements__activity_state
+msgid "Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr "Estado basado en actividades\n"
+"Vencida: la fecha tope ya ha pasado\n"
+"Hoy: La fecha tope es hoy\n"
+"Planificada: futuras actividades."
+
+#. module: wobin_ant_liq
+#: selection:wobin.advances,activity_state:0
+#: selection:wobin.comprobations,activity_state:0
+#: selection:wobin.settlements,activity_state:0
+msgid "Today"
+msgstr "Hoy"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__trip_id
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__trip_id
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__trip_id
+msgid "Trip"
+msgstr "Viaje"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__message_unread
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__message_unread
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__message_unread
+msgid "Unread Messages"
+msgstr "Mensajes por leer"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__message_unread_counter
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__message_unread_counter
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__message_unread_counter
+msgid "Unread Messages Counter"
+msgstr "Contador de mensajes sin leer"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__website_message_ids
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__website_message_ids
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__website_message_ids
+msgid "Website Messages"
+msgstr "Mensajes del sitio web"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,help:wobin_ant_liq.field_wobin_advances__website_message_ids
+#: model:ir.model.fields,help:wobin_ant_liq.field_wobin_comprobations__website_message_ids
+#: model:ir.model.fields,help:wobin_ant_liq.field_wobin_settlements__website_message_ids
+msgid "Website communication history"
+msgstr "Historial de comunicaciones del sitio web"
+
+#. module: wobin_ant_liq
+#: model_terms:ir.ui.view,arch_db:wobin_ant_liq.view_informs_tree
+msgid "With Active Process"
+msgstr "Con Proceso Activo"
+
+#. module: wobin_ant_liq
+#: model:ir.model,name:wobin_ant_liq.model_wobin_advances
+msgid "Wobin Advances"
+msgstr "Wobin Anticipos"
+
+#. module: wobin_ant_liq
+#: model:ir.model,name:wobin_ant_liq.model_wobin_circuits
+msgid "Wobin Circuits"
+msgstr "Wobin Circuitos"
+
+#. module: wobin_ant_liq
+#: model:ir.model,name:wobin_ant_liq.model_wobin_comprobations
+msgid "Wobin Comprobations"
+msgstr "Wobin Comprobaciones"
+
+#. module: wobin_ant_liq
+#: model:ir.model,name:wobin_ant_liq.model_wobin_moves_adv_set_lines
+msgid "Wobin Moves Advances Settlements Lines"
+msgstr "Wobin Líneas de Movimientos de Anticipos y Liquidaciones"
+
+#. module: wobin_ant_liq
+#: model:ir.model,name:wobin_ant_liq.model_wobin_settlements
+msgid "Wobin Settlements"
+msgstr "Wobin Liquidaciones"

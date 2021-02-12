@@ -1,0 +1,39 @@
+<odoo>
+  <data>
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+    <!-- VIEWS {LISTS, FORMS, SEARCH} -->
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+
+    <!-- INFORMS - SEARCH VIEW -->    
+    <record id="view_informs_search" model="ir.ui.view"> 
+      <field name="name">Informs</field>
+      <field name="model">hr.employee</field>
+        <field name="arch" type="xml"> 
+            <search> 
+              <field name="id"/>     
+              <field name="name"/>                     
+              <field name="advance_sum_amnt"/>                 
+              <field name="comprobation_sum_amnt"/>
+              <field name="amount_to_settle"/> 
+              <filter name="flag_act_emp" string="With Active Process" 
+                      domain="[('flag_employee_active', '=', True)]" />  
+            </search> 
+        </field> 
+    </record>    
+
+    <!-- INFORMS - LIST VIEW -->
+    <record id="view_informs_list" model="ir.ui.view">
+      <field name="name">Informs</field>
+      <field name="model">hr.employee</field>
+      <field name="arch" type="xml">
+        <tree>
+            <field name="name"/>                     
+            <field name="advance_sum_amnt"/>                 
+            <field name="comprobation_sum_amnt"/>
+            <field name="amount_to_settle"/>   
+        </tree>
+      </field>
+    </record>    
+
+  </data>  
+</odoo> 
