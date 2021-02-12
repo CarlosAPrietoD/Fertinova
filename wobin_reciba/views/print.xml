@@ -119,116 +119,116 @@
                     <div style="display: flex; padding-top: 20px; width: 100%;">
                         <table style="width: 100%;">
                             <tr>
-                                <td>
+                                <td style="padding: 10px;">
                                     <table style="width: 100%; text-align: left;">
                                         <tr t-foreach="ticket['ticket'].params_id" t-as="param">
-                                            <th style="width: 25%; border-bottom: black 1px solid;">
+                                            <th style="border: black 1px solid; padding-left: 5px;">
                                                 <t t-esc="param.quality_params_id.name" />
                                             </th>
-                                            <td style="width: 8%; border-bottom: black 1px solid;">
+                                            <td style="border: black 1px solid; padding-left: 5px;">
                                                 <t t-esc="param.value" />
                                             </td>
-                                            <td style="width: 5%;">
+                                            <td style="border: black 1px solid; padding-left: 5px;">
                                                 <t t-esc="param.unit" />
                                             </td>
                                         </tr>
                                     </table>
                                 </td>
-                                <td>
+                                <td style="padding: 10px;">
                                     <table style="width: 100%; text-align: left;">
                                         <tr>
-                                            <th style="width: 20%; border-bottom: black 1px solid;">
+                                            <th style="border: black 1px solid; padding-left: 5px;">
                                                 Suma de daños
                                             </th>
-                                            <td style="width: 8%; border-bottom: black 1px solid;">
+                                            <td style="border: black 1px solid; padding-left: 5px;">
                                                 <t t-esc="ticket['ticket'].sum_damage" />
                                             </td>
-                                            <td style="width: 5%;">
+                                            <td style="border: black 1px solid; padding-left: 5px;">
                                                 %
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th style="width: 20%; border-bottom: black 1px solid;">
+                                            <th style="border: black 1px solid; padding-left: 5px;">
                                                 Suma de quebrados
                                             </th>
-                                            <td style="width: 8%; border-bottom: black 1px solid;">
+                                            <td style="border: black 1px solid; padding-left: 5px;">
                                                 <t t-esc="ticket['ticket'].sum_broken" />
                                             </td>
-                                            <td style="width: 5%;">
+                                            <td style="border: black 1px solid; padding-left: 5px;">
                                                 %
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th style="width: 20%; border-bottom: black 1px solid;">Humedad</th>
-                                            <td style="width: 8%; border-bottom: black 1px solid;">
+                                            <th style="border: black 1px solid; padding-left: 5px;">Humedad</th>
+                                            <td style="border: black 1px solid; padding-left: 5px;">
                                                 <t t-esc="ticket['ticket'].humidity" />
                                             </td>
-                                            <td style="width: 5%;">%</td>
+                                            <td style="border: black 1px solid; padding-left: 5px;">%</td>
                                         </tr>
                                         <tr>
-                                            <th style="width: 20%; border-bottom: black 1px solid;">Impureza</th>
-                                            <td style="width: 8%; border-bottom: black 1px solid;">
+                                            <th style="border: black 1px solid; padding-left: 5px;">Impureza</th>
+                                            <td style="border: black 1px solid; padding-left: 5px;">
                                                 <t t-esc="ticket['ticket'].impurity" />
                                             </td>
-                                            <td style="width: 5%;">%</td>
+                                            <td style="border: black 1px solid; padding-left: 5px;">%</td>
                                         </tr>
                                         <tr>
-                                            <th style="width: 20%; border-bottom: black 1px solid;">Peso neto analizado</th>
-                                            <td style="width: 8%; border-bottom: black 1px solid;">
+                                            <th style="border: black 1px solid; padding-left: 5px;">Peso neto analizado</th>
+                                            <td style="border: black 1px solid; padding-left: 5px;">
                                                 <t t-esc="ticket['total_format']" />
                                             </td>
-                                            <td style="width: 5%;">Kg</td>
+                                            <td style="border: black 1px solid; padding-left: 5px;">Kg</td>
                                         </tr>
                                         <tr>
-                                            <th style="width: 20%; border-bottom: black 1px solid;">Precio</th>
+                                            <th style="border: black 1px solid; padding-left: 5px;">Precio</th>
                                             <t t-if="ticket['ticket'].price_po">
-                                                <td style="width: 13%; border-bottom: black 1px solid;">
+                                                <td style="border: black 1px solid; padding-left: 5px;">
                                                     $
                                                     <t t-esc="ticket['ticket'].price_po" />
                                                 </td>
                                             </t>
                                             <t t-elif="ticket['ticket'].price_so">
-                                                <td style="width: 13%; border-bottom: black 1px solid;">
+                                                <td style="border: black 1px solid; padding-left: 5px;">
                                                     $
                                                     <t t-esc="ticket['ticket'].price_so" />
                                                 </td>
                                             </t>
                                             <t t-else="">
-                                                <td style="width: 13%; border-bottom: black 1px solid;">
+                                                <td style="border: black 1px solid; padding-left: 5px;">
                                                     Por asignar</td>
                                             </t>
                                         </tr>
                                     </table>
                                 </td>
-                                <td t-if="ticket['ticket'].apply_bonus">
+                                <td style="padding: 10px;" t-if="ticket['ticket'].apply_bonus">
                                     <table style="width: 100%; text-align: left;">
                                         <tr>
-                                            <th style="width: 20%; border-bottom: black 1px solid;">Bono dañado</th>
-                                            <td style="width: 10%; border-bottom: black 1px solid;">
+                                            <th style="border: black 1px solid; padding-left: 5px;">Bono dañado</th>
+                                            <td style="border: black 1px solid; padding-left: 5px;">
                                                 $ <t t-esc="ticket['ticket'].damage_bonus" />
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th style="width: 20%; border-bottom: black 1px solid;">Bono quebrado</th>
-                                            <td style="width: 10%; border-bottom: black 1px solid;">
+                                            <th style="border: black 1px solid; padding-left: 5px;">Bono quebrado</th>
+                                            <td style="border: black 1px solid; padding-left: 5px;">
                                                 $ <t t-esc="ticket['ticket'].broken_bonus" />
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th style="width: 20%; border-bottom: black 1px solid;">Bono humedad</th>
-                                            <td style="width: 10%; border-bottom: black 1px solid;">
+                                            <th style="border: black 1px solid; padding-left: 5px;">Bono humedad</th>
+                                            <td style="border: black 1px solid; padding-left: 5px;">
                                                 $ <t t-esc="ticket['ticket'].humidity_bonus" />
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th style="width: 20%; border-bottom: black 1px solid;">Bono impureza</th>
-                                            <td style="width: 10%; border-bottom: black 1px solid;">
+                                            <th style="border: black 1px solid; padding-left: 5px;">Bono impureza</th>
+                                            <td style="border: black 1px solid; padding-left: 5px;">
                                                 $ <t t-esc="ticket['ticket'].impurity_bonus" />
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th style="width: 20%; border-bottom: black 1px solid;">Bono total</th>
-                                            <td style="width: 10%; border-bottom: black 1px solid;">
+                                            <th style="border: black 1px solid; padding-left: 5px;">Bono total</th>
+                                            <td style="border: black 1px solid; padding-left: 5px;">
                                                 $ <t t-esc="ticket['ticket'].total_bonus" />
                                             </td>
                                         </tr>
