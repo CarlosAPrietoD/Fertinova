@@ -29,7 +29,7 @@
         'views/comprobations.xml',
         'views/settlements.xml',
         'views/informs.xml', 
-        'security/privileges.xml'
+        'security/privileges.xml',
 
         #reports
         'reports/liquidacion_formato.xml',                       
