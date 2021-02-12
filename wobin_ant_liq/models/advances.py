@@ -43,8 +43,7 @@ class WobinAdvances(models.Model):
             self.env['wobin.moves.adv.set.lines'].create(values) 
 
             #Update flag to indicate employee for checking up:
-            employee_id  = self.env['hr.employee'].search([('id', '=', self.operator_id.id)], limit=1).id
-            employee_obj = self.env['hr.employee'].browse(employee_id)
+            employee_obj = self.env['hr.employee'].browse(vals['operator_id'])
             employee_obj.flag_employee_active = True
 
         return super(WobinAdvances, self).create(vals)
