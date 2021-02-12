@@ -4,7 +4,272 @@
 
         <menuitem id="menu_reports" name="Informes" parent="wobin_reciba.reciba_root" sequence="2" />
 
-        <menuitem id="menu_quality_reports" name="Calidad" parent="menu_reports" />
+        <menuitem id="menu_receipt_reports" name="Recepciones" parent="menu_reports" sequence="1"/>
+
+        <menuitem id="menu_quality_reports" name="Calidad" parent="menu_reports" sequence="2"/>
+
+        <!--================================Reporte de recepciones a depósito======================================-->
+
+        <!--Plantilla-->
+        <template id="report_receipt_priceless">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <br/>
+                    <br/>
+                    <br/>
+                    <div style="width: 100%;">
+                        <table style="width: 100%; text-align: left;">
+                            <tr style="border: black 1px solid">
+                                <th colspan="3" style="text-align:center; border: black 1px solid; padding: 5px">REPORTE DE HUMEDAD</th>
+                            </tr>
+                            <tr style="height: 40px"></tr>
+                            <tr style="border: black 1px solid">
+                                <td>
+                                    
+                                </td>
+                                <td style="text-align:right; padding: 5px">
+                                    FECHA
+                                </td>
+                                <td style="text-align:center; padding: 5px">
+                                    <t t-esc="report_data['today']" />
+                                </td>
+                            </tr>
+                            <tr style="height: 40px"></tr>
+                            <tr style="border: black 1px solid">
+                                <td style="border: black 1px solid; padding: 5px">
+                                    PRODUCTO
+                                </td>
+                                <td style="border: black 1px solid; padding: 5px">
+                                    <t t-esc="report_data['product']" />
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr style="border: black 1px solid">
+                                <td style="border: black 1px solid; padding: 5px">
+                                    UBICACION
+                                </td>
+                                <td style="border: black 1px solid; padding: 5px">
+                                    <t t-esc="report_data['location']" />
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr style="border: black 1px solid">
+                                <td style="border: black 1px solid; padding: 5px">
+                                    PERIODO
+                                </td>
+                                <td style="border: black 1px solid; padding: 5px">
+                                    DE <t t-esc="report_data['i_date']" /> A <t t-esc="report_data['e_date']" />
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr style="height: 40px"></tr>
+                            <tr style="border: black 1px solid">
+                                <th style="text-align:center; border: black 1px solid; padding: 5px">
+                                    RESUMEN
+                                </th>
+                                <th style="text-align:center; border: black 1px solid; padding: 5px">
+                                    KILOS
+                                </th>
+                                <th style="text-align:center; border: black 1px solid; padding: 5px">
+                                    HUMEDAD PROMEDIO PONDERADA
+                                </th>
+                            </tr>
+                            <tr style="border: black 1px solid">
+                                <td style="border: black 1px solid; padding: 5px">
+                                    RECEPCIONES
+                                </td>
+                                <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                    <t t-esc="report_data['sum_net_receipt']" />
+                                </td>
+                                <td style="text-align:right; border: black 1px solid; padding: 5px">
+                                    <t t-esc="report_data['avg_humidity_receipt']" />%
+                                </td>
+                            </tr>
+                            <tr style="border: black 1px solid">
+                                <td style="border: black 1px solid; padding: 5px">
+                                    ENTREGAS
+                                </td>
+                                <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                    <t t-esc="report_data['sum_net_delivery']" />
+                                </td>
+                                <td style="text-align:right; border: black 1px solid; padding: 5px">
+                                    <t t-esc="report_data['avg_humidity_delivery']" />%
+                                </td>
+                            </tr>
+                            <tr style="border: black 1px solid">
+                                <td style="border: black 1px solid; padding: 5px">
+                                    DIFERENCIA
+                                </td>
+                                <th style="text-align:center; border: black 1px solid; padding: 5px">
+                                    <t t-esc="report_data['dif_net']" />
+                                </th>
+                                <th style="text-align:right; border: black 1px solid; padding: 5px">
+                                    <t t-esc="report_data['dif_avg']" />%
+                                </th>
+                            </tr>
+                            <tr style="height: 40px"></tr>
+                            <tr style="border: black 1px solid">
+                                <td style="border: black 1px solid; padding: 5px">
+                                    TOLERANCIA EN KG
+                                </td>
+                                <th style="text-align:center; border: black 1px solid; padding: 5px">
+                                    <t t-esc="report_data['tolerance']" />
+                                </th>
+                                <td></td>
+                            </tr>
+                            <tr style="height: 40px"></tr>
+                            <tr style="border: black 1px solid">
+                                <td style="border: black 1px solid; padding: 5px">
+                                    MERMA FUERA DE TOLERANCIA
+                                </td>
+                                <th style="text-align:center; border: black 1px solid; padding: 5px">
+                                    <t t-esc="report_data['decrease']" />
+                                </th>
+                                <td></td>
+                            </tr>
+                            <tr style="height: 160px"></tr>
+                            <tr>
+                                <td style="border-top: black 1px solid; text-align: center; padding: 5px">
+                                    REVISÓ
+                                </td>
+                                <td>
+                                </td>
+                                <td style="border-top: black 1px solid; text-align: center; padding: 5px">
+                                    ALMACENISTA
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <br />
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/><br/>
+                    <div style="width: 100%;">
+                        <table style="width: 100%; text-align: left;">
+                            <tr>
+                                <th colspan="3" style="text-align:center; border: black 1px solid; padding: 5px">KARDEX</th>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="text-align:center; border: black 1px solid; padding: 5px">
+                                    DEL 
+                                    <t t-esc="report_data['i_date']" />
+                                    AL 
+                                    <t t-esc="report_data['e_date']" />
+                                </td>
+                            </tr>
+                            <tr style="height: 40px"></tr>
+                            <tr>
+                                <th colspan="3" style="text-align:center; border: black 1px solid; padding: 5px">RECEPCIONES</th>
+                            </tr>
+                            <tr>
+                                <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                    FECHA
+                                </td>
+                                <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                    PESO NETO
+                                </td>
+                                <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                    % HUMEDAD
+                                </td>
+                            </tr>
+                            <tr t-foreach="receipts" t-as="receipt">
+                                <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                    <t t-esc="receipt['date']" />
+                                </td>
+                                <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                    <t t-esc="receipt['net_weight']" />
+                                </td>
+                                <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                    <t t-esc="receipt['humidity']" />%
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                </td>
+                                <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                    <t t-esc="report_data['sum_net_receipt']" />
+                                </td>
+                                <th style="text-align:center; border: black 1px solid; padding: 5px">
+                                    <t t-esc="report_data['avg_humidity_receipt']" />%
+                                </th>
+                            </tr>
+                            <tr style="height: 40px"></tr>
+                            <tr>
+                                <th colspan="3" style="text-align:center; border: black 1px solid; padding: 5px">ENTREGAS</th>
+                            </tr>
+                            <tr>
+                                <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                    FECHA
+                                </td>
+                                <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                    PESO NETO
+                                </td>
+                                <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                    % HUMEDAD
+                                </td>
+                            </tr>
+                            <tr t-foreach="deliveries" t-as="delivery">
+                                <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                    <t t-esc="delivery['date']" />
+                                </td>
+                                <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                    <t t-esc="delivery['net_weight']" />
+                                </td>
+                                <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                    <t t-esc="delivery['humidity']" />%
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                </td>
+                                <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                    <t t-esc="report_data['sum_net_delivery']" />
+                                </td>
+                                <th style="text-align:center; border: black 1px solid; padding: 5px">
+                                    <t t-esc="report_data['avg_humidity_delivery']" />%
+                                </th>
+                            </tr>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+        <!--Reporte-->
+        <report id="report_receipts_receipt_priceless" model="quality.avg.humidity" string="Reporte" report_type="qweb-html" name="wobin_reciba.report_receipt_priceless" />
+
+        <!--Ventana de ingreso de datos-->
+        <record model="ir.ui.view" id="report_data_receipt_priceless">
+            <field name="name">report_receipt_priceless</field>
+            <field name="model">receipt.priceless</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <field name="product" />
+                            <field name="location" />
+                        </group>
+                        <group>
+                            <field name="init_date" />
+                            <field name="end_date" />
+                        </group>
+                    </group>
+                    <footer>
+                        <button string="Cancel" special="cancel" class="oe_highlight" />
+                        <button name="%(wobin_reciba.report_quality_avg_humidity)d" string="Submit" type="action" class="oe_highlight" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!--Accion para la ventana emergente-->
+        <act_window id="action_receipt_priceless" name="Selecciona el intervalo del reporte" res_model="receipt.priceless" view_mode="form" target="new" multi="True" />
+
+        <!--Menu-->
+        <menuitem id="menu_receipt_priceless" name="Recepciones a depósito" parent="menu_receipt_reports" action="action_receipt_priceless" />
 
         <!--================================Reporte de calidad humedad ponderada============================================-->
 
@@ -239,7 +504,7 @@
         <report id="report_quality_avg_humidity" model="quality.avg.humidity" string="Reporte" report_type="qweb-html" name="wobin_reciba.report_avg_humidity" />
 
         <!--Ventana de ingreso de datos-->
-        <record model="ir.ui.view" id="report_avg_humi">
+        <record model="ir.ui.view" id="report_data_avg_humidity">
             <field name="name">report_avg_humidity</field>
             <field name="model">quality.avg.humidity</field>
             <field name="type">form</field>
