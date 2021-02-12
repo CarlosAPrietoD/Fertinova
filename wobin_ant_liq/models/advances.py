@@ -61,6 +61,7 @@ class WobinAdvances(models.Model):
 
 
 
+
     def create_payment(self):
         """This method intends to display a Form View of Payments""" 
         return {
@@ -98,4 +99,12 @@ class WobinAdvances(models.Model):
         #Retrieve related payment to this advance
         payment_related = self.env['account.payment'].search([('advance_id', '=', self.id)], limit=1).id 
         if payment_related:
-            self.payment_related_id = payment_related          
+            self.payment_related_id = payment_related
+
+
+    
+    @api.onchange('trip_id')
+    def _onchange_trip_id(self):        
+        get_id_mvs = self.env['wobin.moves.adv.set.lines'].search([('advance_id', '=', self._origin.id)])
+        mov_lns_obj = self.env['wobin.moves.adv.set.lines'].browse(get_id_mvs.id)
+        mov_lns_obj.write({'trip_id': self.trip_id.id}) 
