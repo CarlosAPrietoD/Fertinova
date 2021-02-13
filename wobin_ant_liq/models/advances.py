@@ -47,19 +47,23 @@ class WobinAdvances(models.Model):
                   'trip_id': res.trip_id.id,
                   'advance_id': res.id
                  }
-        self.env['wobin.moves.adv.set.lines'].create(values) 
+        mov_lns_obj = self.env['wobin.moves.adv.set.lines'].create(values) 
+
+        #Set value of id for Wobin Moves Advances Settlements Lines in Advances:
+        res.mov_lns_ad_set_id = mov_lns_obj.id 
 
         return res
 
 
     name        = fields.Char(string="Advance", readonly=True, required=True, copy=False, default='New')
-    operator_id = fields.Many2one('hr.employee',string='Operator', track_visibility='always')
+    operator_id = fields.Many2one('hr.employee',string='Operator', track_visibility='always', ondelete='cascade')
     date        = fields.Date(string='Date', track_visibility='always')
     amount      = fields.Float(string='Amount $', digits=dp.get_precision('Product Unit of Measure'), group_operator=False, track_visibility='always')
-    circuit_id  = fields.Many2one('wobin.circuits', string='Circuit', track_visibility='always')
-    trip_id     = fields.Many2one('wobin.logistica.trips', string='Trip', track_visibility='always')
+    circuit_id  = fields.Many2one('wobin.circuits', string='Circuit', track_visibility='always', ondelete='cascade')
+    trip_id     = fields.Many2one('wobin.logistica.trips', string='Trip', track_visibility='always', ondelete='cascade')
     expenses_to_check  = fields.Float(string='Pending Expenses to Check', digits=dp.get_precision('Product Unit of Measure'), compute='set_expenses_to_check', track_visibility='always')
-    payment_related_id = fields.Many2one('account.payment', string='Related Payment', compute='set_related_payment', track_visibility='always')
+    payment_related_id = fields.Many2one('account.payment', string='Related Payment', compute='set_related_payment', ondelete='cascade', track_visibility='always')
+    mov_lns_ad_set_id  = fields.Many2one('wobin.moves.adv.set.lines', string='Movs Lns Adv Set Id', ondelete='cascade')
 
 
 
@@ -104,9 +108,22 @@ class WobinAdvances(models.Model):
             self.payment_related_id = payment_related
 
 
-    
+    """
+    @api.one
     @api.onchange('trip_id')
-    def _onchange_trip_id(self):        
+    def _onchange_trip_id(self):  
+    #    self.ensure_one()  
+        ctxt = self.env.context
+        print('\n\n ??? context ???\n', ctxt)
+
+        if ctxt:
+            print('\n\n\n ??? context ID activo ???\n', ctxt['params']['id'])
+            advance_id = ctxt['params']['id']        
+
         get_id_mvs = self.env['wobin.moves.adv.set.lines'].search([('advance_id', '=', self._origin.id)])
+        print('\n\n\n\n get_id_mvs?', get_id_mvs)
         mov_lns_obj = self.env['wobin.moves.adv.set.lines'].browse(get_id_mvs.id)
+        print('\n\n\n\n mov_lns_obj?', mov_lns_obj)
         mov_lns_obj.write({'trip_id': self.trip_id.id}) 
+
+    """

@@ -65,7 +65,8 @@
                           <field name="circuit_id" required="True"/>
                           <field name="trip_id" required="True"/>                           
                         </group>                                                 
-                        <group>                     
+                        <group>    
+                          <field name="advance_id" required="True"/>                  
                           <field name="expenses_to_refund"/>      
                           <field name="payment_related_id"/>                                     
                         </group> 

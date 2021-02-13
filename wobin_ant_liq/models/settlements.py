@@ -30,8 +30,10 @@ class WobinSettlements(models.Model):
     adv_set_lines_ids = fields.One2many('wobin.moves.adv.set.lines', 'id', string='Circuit Settlements for operator', compute='_set_adv_set_lines_ids')
 
 
+
     @api.one
     @api.depends('circuit_id')
     def _set_adv_set_lines_ids(self):
+        #Fill up one2many field with data:
         self.adv_set_lines_ids = self.env['wobin.moves.adv.set.lines'].search([('operator_id', '=', self.operator_id.id),
                                                                                ('circuit_id','=', self.circuit_id.id)]).ids
