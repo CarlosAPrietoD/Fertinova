@@ -27,16 +27,7 @@ class WobinAdvances(models.Model):
 
     @api.model
     def create(self, vals):  
-        """This method intends to create a sequence for a given advance"""
-        #Create a new record for Wobin Moves Advances Settlements Lines
-        values = {
-                  'operator_id': self.operator_id.id,
-                  'circuit_id': self.circuit_id.id,
-                  'trip_id': self.trip_id.id,
-                  'advance_id': self.id
-                 }
-        self.env['wobin.moves.adv.set.lines'].create(values)          
-        
+        """This method intends to create a sequence for a given advance"""            
         #Change of sequence (if it isn't stored is shown "New" else e.g ANT000005) 
         if vals.get('name', 'New') == 'New':
             sequence = self.env['ir.sequence'].next_by_code(
@@ -47,7 +38,18 @@ class WobinAdvances(models.Model):
             employee_obj = self.env['hr.employee'].browse(vals['operator_id'])
             employee_obj.flag_employee_active = True
 
-        return super(WobinAdvances, self).create(vals)
+            res = super(WobinAdvances, self).create(vals)
+
+        #Create a new record for Wobin Moves Advances Settlements Lines
+        values = {
+                  'operator_id': res.operator_id.id,
+                  'circuit_id': res.circuit_id.id,
+                  'trip_id': res.trip_id.id,
+                  'advance_id': res.id
+                 }
+        self.env['wobin.moves.adv.set.lines'].create(values) 
+
+        return res
 
 
     name        = fields.Char(string="Advance", readonly=True, required=True, copy=False, default='New')
