@@ -65,7 +65,7 @@ class ReportDeliveryUninvoiced(models.AbstractModel):
         sum_net = 0
         count = 0
         for delivery in tickets_uninvoiced:
-            sum_net += receipt.net_weight
+            sum_net += delivery.net_weight
             count += 1
         
 
@@ -84,6 +84,48 @@ class ReportDeliveryUninvoiced(models.AbstractModel):
             'doc_model': 'res.partner',
             'report_data' : report_data,
             'deliveries' : tickets_uninvoiced
+        }
+
+class DeliveryInvoiced(models.TransientModel):
+    #Entregas facturadas    
+    _name='delivery.invoiced'
+    
+    product = fields.Many2one('product.product', string="Producto")
+    location = fields.Many2one('stock.location', string="Ubicación")
+    init_date = fields.Datetime(string="Fecha inicio")
+    end_date = fields.Datetime(string="Fecha fin")
+
+class ReportDeliveryInvoiced(models.AbstractModel):
+    #Reporte entregas facturadas
+    _name = 'report.wobin_reciba.report_delivery_invoiced'
+
+    @api.model
+    def _get_report_values(self, docids, data=None):
+        report = self.env['delivery.invoiced'].browse(docids)
+        tickets_invoiced = self.env['reciba.ticket'].search([('operation_type','=','out'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),('origin_id','=',report.location.id),('state','=','confirmed'),('sale_invoice_status','=','invoiced')])
+        
+        sum_net = 0
+        count = 0
+        for delivery in tickets_invoiced:
+            sum_net += delivery.net_weight
+            count += 1
+        
+
+        report_data = {
+            'i_date' : report.init_date.strftime("%d/%m/%Y"),
+            'e_date': report.end_date.strftime("%d/%m/%Y"),
+            'today' : date.today(),
+            'product' : report.product.name,
+            'location' : report.location.name,
+            'sum_net' : sum_net,
+            'count' : count
+        }
+
+        return {
+            'doc_ids': docids,
+            'doc_model': 'res.partner',
+            'report_data' : report_data,
+            'deliveries' : tickets_invoiced
         }
 
 class QualityAvgHumidity(models.TransientModel):
