@@ -47,9 +47,9 @@ class WobinComprobations(models.Model):
     circuit_id  = fields.Many2one('wobin.circuits', string='Circuit', track_visibility='always', ondelete='cascade')
     trip_id     = fields.Many2one('wobin.logistica.trips', string='Trip', track_visibility='always', ondelete='cascade')
     expenses_to_refund = fields.Float(string='Pending Expenses to Refund', digits=dp.get_precision('Product Unit of Measure'), compute='set_expenses_to_refund', track_visibility='always')
-    payment_related_ids = fields.Many2many('account.payment', string='Related Payment', compute='set_related_payment', track_visibility='always', ondelete='cascade')
-    advance_id          = fields.Many2one('wobin.advances', string='Advance ID', ondelete='cascade')
-    mov_lns_ad_set_id   = fields.Many2one('wobin.moves.adv.set.lines', string='Movs Lns Adv Set Id', ondelete='cascade')
+    payment_related_id = fields.Many2one('account.payment', string='Related Payment', compute='set_related_payment', track_visibility='always', ondelete='cascade')
+    advance_id         = fields.Many2one('wobin.advances', string='Advance ID', ondelete='cascade')
+    mov_lns_ad_set_id  = fields.Many2one('wobin.moves.adv.set.lines', string='Movs Lns Adv Set Id', ondelete='cascade')
 
 
     def create_payment(self):
@@ -86,6 +86,6 @@ class WobinComprobations(models.Model):
 
     @api.one
     def set_related_payment(self):
-        payment_related = self.env['account.payment'].search([('comprobation_id', '=', self.id)]).ids
+        payment_related = self.env['account.payment'].search([('comprobation_id', '=', self.id)], limit=1).id
         if payment_related:
-            self.payment_related_ids = payment_related
+            self.payment_related_id = payment_related

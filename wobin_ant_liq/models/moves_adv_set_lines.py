@@ -12,7 +12,7 @@ class WobinMovesAdvSetLines(models.Model):
     circuit_id  = fields.Many2one('wobin.circuits', string='Circuit', ondelete='cascade', compute='set_circuit', store=True)
     trip_id     = fields.Many2one('wobin.logistica.trips', string='Trip', ondelete='cascade', compute='set_trip', store=True)
     advance_id  = fields.Many2one('wobin.advances', string='Advance ID', ondelete='cascade', compute='set_advance', store=True)
-    comprobation_id = fields.Many2one('wobin.comprobations', string='Comprobation ID', ondelete='cascade', compute='set_comprobation', store=True)
+    comprobation_ids = fields.Many2many('wobin.comprobations', string='Comprobation ID', ondelete='cascade', compute='set_comprobations', store=True)
     advance_sum_amnt      = fields.Float(string='Advances', digits=dp.get_precision('Product Unit of Measure'), compute='set_advance_sum_amnt')
     comprobation_sum_amnt = fields.Float(string='Comprobations', digits=dp.get_precision('Product Unit of Measure'), compute='set_comprobation_sum_amnt')
     amount_to_settle      = fields.Float(string='Amount to Settle', digits=dp.get_precision('Product Unit of Measure'), compute='set_amount_to_settle')
@@ -40,8 +40,8 @@ class WobinMovesAdvSetLines(models.Model):
 
 
     @api.one
-    def set_comprobation(self):
-        self.comprobation_id = self.env['wobin.comprobations'].search([('mov_lns_ad_set_id', '=', self.id)], limit=1).id
+    def set_comprobations(self):
+        self.comprobation_ids = [(6, 0, self.env['wobin.comprobations'].search([('mov_lns_ad_set_id', '=', self.id)]).ids)]
 
 
     @api.one
@@ -51,7 +51,16 @@ class WobinMovesAdvSetLines(models.Model):
 
     @api.one 
     def set_comprobation_sum_amnt(self):
-        self.comprobation_sum_amnt = self.env['wobin.comprobations'].search([('mov_lns_ad_set_id', '=', self.id)], limit=1).amount  
+        #Sum amounts from various comprobations linked to an advance:
+        sql_query = """SELECT sum(amount) 
+                         FROM wobin_comprobations 
+                        WHERE mov_lns_ad_set_id = %s"""
+        self.env.cr.execute(sql_query, (self.id,))
+        result = self.env.cr.fetchone()
+
+        if result:                    
+            self.comprobation_sum_amnt = result[0]        
+        #self.comprobation_sum_amnt = self.env['wobin.comprobations'].search([('mov_lns_ad_set_id', '=', self.id)], limit=1).amount  
 
 
     @api.one  
