@@ -16,7 +16,7 @@
               <field name="amount"/>
               <field name="circuit_id"/>
               <field name="trip_id"/>   
-              <field name="payment_related_id"/>   
+              <field name="payment_related_ids"/>   
               <group expand="0" string="Group By">
                   <filter string="Advance" name="name" 
                             context="{'group_by':'circuit_id'}"/>
@@ -37,7 +37,7 @@
           <field name="amount"/>
           <field name="circuit_id"/>
           <field name="trip_id"/>
-          <field name="payment_related_id"/>   
+          <field name="payment_related_ids" widget="many2many_tags"/>   
         </tree>
       </field>
     </record>    
@@ -68,7 +68,7 @@
                         <group>    
                           <field name="advance_id" required="True"/>                  
                           <field name="expenses_to_refund"/>      
-                          <field name="payment_related_id"/>                                     
+                          <field name="payment_related_ids" widget="many2many_tags"/>                                     
                         </group> 
                     </group>                                            
                 </sheet>              
