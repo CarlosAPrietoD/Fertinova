@@ -212,6 +212,7 @@ class RecibaTicket(models.Model):
     manu_count = fields.Integer(string="Fabricación", default=0)
     unbuild_id = fields.Many2one('mrp.unbuild', string="Desconstrucción")
     unbuild_count = fields.Integer(string="Desconstrucción", default=0)
+    invoice_id = fields.Many2one('account.invoice')
 
     #-------------------------------------Datos generales----------------------------------
     name = fields.Char(string="Boleta", default="Boleta borrador", track_visibility='onchange')
@@ -1032,3 +1033,25 @@ class ReportRecibaTicketPriceless(models.AbstractModel):
             'doc_model': 'res.partner',
             'docs': docs
         }
+
+class AccountInvoice(models.Model):
+    #Campo que relaciona factura con boletas
+    _inherit = 'account.invoice'
+
+    reciba_id = fields.Many2one('reciba.ticket', string="Boleta reciba", domain="[('operation_type','=','in'),('purchase_id.name','=',origin),('state','=','confirmed')]")
+
+    @api.onchange('reciba_id')
+    def _onchange_reciba(self):
+        #agregamos la relacion de reciba con factura, con sus restricciones
+        if self.reciba_id:
+            if self.reciba_id.invoice_id:
+                msg = 'La boleta seleccionada ya está relacionada con otra factura'
+                raise UserError(msg)
+            else:
+                self.reciba_id.write({
+                    'invoice_id' : self._origin.id
+                })
+                if self._origin.reciba_id:
+                    self._origin.reciba_id.write({
+                        'invoice_id' : 0
+                    })
