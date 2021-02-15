@@ -21,37 +21,37 @@ class WobinMovesAdvSetLines(models.Model):
 
     @api.one
     def set_operator(self):
-        self.operator_id = self.env['wobin.advances'].search([('mov_lns_ad_set_id', '=', self.id)]).operator_id.id
+        self.operator_id = self.env['wobin.advances'].search([('mov_lns_ad_set_id', '=', self.id)], limit=1).operator_id.id
 
 
     @api.one
     def set_circuit(self):
-        self.circuit_id = self.env['wobin.advances'].search([('mov_lns_ad_set_id', '=', self.id)]).circuit_id.id
+        self.circuit_id = self.env['wobin.advances'].search([('mov_lns_ad_set_id', '=', self.id)], limit=1).circuit_id.id
 
 
     @api.one
     def set_trip(self):
-        self.trip_id = self.env['wobin.advances'].search([('mov_lns_ad_set_id', '=', self.id)]).trip_id.id    
+        self.trip_id = self.env['wobin.advances'].search([('mov_lns_ad_set_id', '=', self.id)], limit=1).trip_id.id    
 
 
     @api.one
     def set_advance(self):
-        self.advance_id = self.env['wobin.advances'].search([('mov_lns_ad_set_id', '=', self.id)]).id
+        self.advance_id = self.env['wobin.advances'].search([('mov_lns_ad_set_id', '=', self.id)], limit=1).id
 
 
     @api.one
     def set_comprobation(self):
-        self.comprobation_id = self.env['wobin.comprobations'].search([('mov_lns_ad_set_id', '=', self.id)]).id
+        self.comprobation_id = self.env['wobin.comprobations'].search([('mov_lns_ad_set_id', '=', self.id)], limit=1).id
 
 
     @api.one
     def set_advance_sum_amnt(self):
-        self.advance_sum_amnt = self.env['wobin.advances'].search([('mov_lns_ad_set_id', '=', self.id)]).amount
+        self.advance_sum_amnt = self.env['wobin.advances'].search([('mov_lns_ad_set_id', '=', self.id)], limit=1).amount
 
 
     @api.one 
     def set_comprobation_sum_amnt(self):
-        self.comprobation_sum_amnt = self.env['wobin.comprobations'].search([('mov_lns_ad_set_id', '=', self.id)]).amount  
+        self.comprobation_sum_amnt = self.env['wobin.comprobations'].search([('mov_lns_ad_set_id', '=', self.id)], limit=1).amount  
 
 
     @api.one  
