@@ -88,4 +88,4 @@ class WobinComprobations(models.Model):
     def set_related_payment(self):
         payment_related = self.env['account.payment'].search([('comprobation_id', '=', self.id)]).ids
         if payment_related:
-            self.payment_related_id = payment_related
+            self.payment_related_ids = payment_related
