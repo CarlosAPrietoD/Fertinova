@@ -24,15 +24,16 @@ class WobinSettlements(models.Model):
 
     name        = fields.Char(string="Advance", readonly=True, required=True, copy=False, default='New')
     operator_id = fields.Many2one('hr.employee',string='Operator', track_visibility='always')
-    date        = fields.Date(string='Date', default=datetime.today(), track_visibility='always')
+    date        = fields.Date(string='Date', track_visibility='always')
     circuit_id  = fields.Many2one('wobin.circuits', string='Circuit', track_visibility='always')
     attachments  = fields.Many2many('ir.attachment', relation='settlements_attachment', string='Attachments', track_visibility='always')
     adv_set_lines_ids = fields.One2many('wobin.moves.adv.set.lines', 'id', string='Circuit Settlements for operator', compute='_set_adv_set_lines_ids')
 
 
-    @api.multi
-    @api.depends('name')
+
+    @api.one
+    @api.depends('circuit_id')
     def _set_adv_set_lines_ids(self):
-        for rec in self:
-            rec.adv_set_lines_ids = self.env['wobin.moves.adv.set.lines'].search([('operator_id', '=', rec.operator_id.id),
-                                                                                  ('circuit_id','=', rec.circuit_id.id)])
+        #Fill up one2many field with data:
+        self.adv_set_lines_ids = self.env['wobin.moves.adv.set.lines'].search([('operator_id', '=', self.operator_id.id),
+                                                                               ('circuit_id','=', self.circuit_id.id)]).ids

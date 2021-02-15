@@ -21,7 +21,6 @@
         #Security:
         'security/ir.model.access.csv',
         'security/adv_set_groups.xml',
-        'security/privileges.xml',
 
         #Views:
         'views/sequences.xml',        
@@ -30,6 +29,7 @@
         'views/comprobations.xml',
         'views/settlements.xml',
         'views/informs.xml', 
+        'security/privileges.xml',
 
         #reports
         'reports/liquidacion_formato.xml',                       

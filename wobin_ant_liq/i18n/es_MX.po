@@ -122,7 +122,6 @@ msgstr "Comprobación"
 
 #. module: wobin_ant_liq
 #: model:ir.actions.act_window,name:wobin_ant_liq.action_comprobations
-#: model:ir.actions.act_window,name:wobin_ant_liq.action_settlements
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_hr_employee__comprobation_sum_amnt
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__comprobation_sum_amnt
 #: model:ir.ui.menu,name:wobin_ant_liq.comprobations_menu_2
@@ -410,6 +409,7 @@ msgid "Responsible User"
 msgstr "Usuario responsable"
 
 #. module: wobin_ant_liq
+#: model:ir.actions.act_window,name:wobin_ant_liq.action_settlements
 #: model:ir.ui.menu,name:wobin_ant_liq.settlemens_menu_3
 msgid "Settlements"
 msgstr "Liquidaciones"

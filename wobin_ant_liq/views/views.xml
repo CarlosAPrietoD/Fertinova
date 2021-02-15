@@ -19,7 +19,7 @@
 
     <!-- SETTLEMENTS - GENERAL ACTION -->
     <record id="action_settlements" model="ir.actions.act_window">
-      <field name="name">Comprobations</field>
+      <field name="name">Settlements</field>
       <field name="res_model">wobin.settlements</field>
       <field name="view_mode">tree,form,search</field>
       <field name="context">{'group_by':'operator_id'}</field>
@@ -78,7 +78,7 @@
     <menuitem name="Informs" 
               id="informs_menu_4" 
               parent="wobin_ant_liq.menu_root" 
-              groups="wobin_ant_liq.group_wacs_general"
+              groups="wobin_ant_liq.group_wacs_general,group_wacs_administration"
               action="action_informs"/>
 
   </data>
