@@ -106,3 +106,4 @@ class WobinAdvances(models.Model):
         payment_related = self.env['account.payment'].search([('advance_id', '=', self.id)], limit=1).id 
         if payment_related:
             self.payment_related_id = payment_related
+            
