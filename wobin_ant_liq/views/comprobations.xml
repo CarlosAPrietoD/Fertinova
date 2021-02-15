@@ -68,7 +68,7 @@
                         <group>    
                           <field name="advance_id" required="True"/>                  
                           <field name="expenses_to_refund"/>      
-                          <field name="payment_related_ids" widget="many2many_kanban"/>                                     
+                          <field name="payment_related_ids" widget="many2many_binary"/>                                     
                         </group> 
                     </group>                                            
                 </sheet>              
