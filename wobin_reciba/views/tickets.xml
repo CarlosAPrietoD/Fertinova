@@ -80,6 +80,7 @@
                                 <field name="origin" readonly="1"/>
                                 <field name="apply_discount" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 <field name="apply_bonus" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="invoice_id"/>
                             </group>
                         </group>
                         <notebook>
@@ -1438,6 +1439,19 @@
                 <p class="oe_view_nocontent_create">
                 Click to add a Unbuild.
                 </p>
+            </field>
+        </record>
+
+        <!--==============================================Facturas====================================-->
+
+        <record id="view_invoice_form_inherit" model="ir.ui.view">
+            <field name="name">account.invoice.form.inherit</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='origin']" position="after">
+                    <field name="reciba_id"/>
+                </xpath>
             </field>
         </record>
 

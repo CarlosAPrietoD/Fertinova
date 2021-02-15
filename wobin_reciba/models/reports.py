@@ -2,6 +2,90 @@ from odoo import models, fields, api
 from datetime import date, datetime
 from odoo.exceptions import UserError
 
+class ReceiptUninvoiced(models.TransientModel):
+    #Recepciones por facturar    
+    _name='receipt.uninvoiced'
+    
+    product = fields.Many2one('product.product', string="Producto")
+    location = fields.Many2one('stock.location', string="Ubicación")
+    init_date = fields.Datetime(string="Fecha inicio")
+    end_date = fields.Datetime(string="Fecha fin")
+
+class ReportReceiptUninvoiced(models.AbstractModel):
+    #Reporte recepciones por facturar
+    _name = 'report.wobin_reciba.report_receipt_uninvoiced'
+
+    @api.model
+    def _get_report_values(self, docids, data=None):
+        report = self.env['receipt.uninvoiced'].browse(docids)
+        tickets_uninvoiced = self.env['reciba.ticket'].search([('operation_type','=','in'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),('destination_id','=',report.location.id),('invoice_id','=',False),'|',('state','=','priceless'),('state','=','confirmed')])
+        
+        sum_net = 0
+        count = 0
+        for receipt in tickets_uninvoiced:
+            sum_net += receipt.net_weight
+            count += 1
+        
+
+        report_data = {
+            'i_date' : report.init_date.strftime("%d/%m/%Y"),
+            'e_date': report.end_date.strftime("%d/%m/%Y"),
+            'today' : date.today(),
+            'product' : report.product.name,
+            'location' : report.location.name,
+            'sum_net' : sum_net,
+            'count' : count
+        }
+
+        return {
+            'doc_ids': docids,
+            'doc_model': 'res.partner',
+            'report_data' : report_data,
+            'receipts' : tickets_uninvoiced
+        }
+
+class ReceiptInvoiced(models.TransientModel):
+    #Recepciones facturadas    
+    _name='receipt.invoiced'
+    
+    product = fields.Many2one('product.product', string="Producto")
+    location = fields.Many2one('stock.location', string="Ubicación")
+    init_date = fields.Datetime(string="Fecha inicio")
+    end_date = fields.Datetime(string="Fecha fin")
+
+class ReportReceiptInvoiced(models.AbstractModel):
+    #Reporte recepciones facturadas
+    _name = 'report.wobin_reciba.report_receipt_invoiced'
+
+    @api.model
+    def _get_report_values(self, docids, data=None):
+        report = self.env['receipt.invoiced'].browse(docids)
+        tickets_invoiced = self.env['reciba.ticket'].search([('operation_type','=','in'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),('destination_id','=',report.location.id),('invoice_id','!=',False),('state','=','confirmed')])
+        
+        sum_net = 0
+        count = 0
+        for receipt in tickets_invoiced:
+            sum_net += receipt.net_weight
+            count += 1
+        
+
+        report_data = {
+            'i_date' : report.init_date.strftime("%d/%m/%Y"),
+            'e_date': report.end_date.strftime("%d/%m/%Y"),
+            'today' : date.today(),
+            'product' : report.product.name,
+            'location' : report.location.name,
+            'sum_net' : sum_net,
+            'count' : count
+        }
+
+        return {
+            'doc_ids': docids,
+            'doc_model': 'res.partner',
+            'report_data' : report_data,
+            'receipts' : tickets_invoiced
+        }
+
 class ReceiptPriceless(models.TransientModel):
     #Recepciones a deposito    
     _name='receipt.priceless'
