@@ -45,6 +45,9 @@
                     </header>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
+                            <button type="object" name="action_view_invoice" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible':[('invoice_count', '=', 0)]}">
+                                <field name="invoice_count" widget="statinfo" string="Factura relacionada"/>
+                            </button>
                             <button type="object" name="action_view_credit" class="oe_stat_button" icon="fa-archive" attrs="{'invisible':[('credit_count', '=', 0)]}">
                                 <field name="credit_count" widget="statinfo" string="Nota de crédito por descuento"/>
                             </button>
@@ -80,7 +83,6 @@
                                 <field name="origin" readonly="1"/>
                                 <field name="apply_discount" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 <field name="apply_bonus" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
-                                <field name="invoice_id"/>
                             </group>
                         </group>
                         <notebook>
@@ -1444,13 +1446,27 @@
 
         <!--==============================================Facturas====================================-->
 
+
+        <record id="reciba_invoice" model="ir.actions.act_window">
+            <field name="name">Facturación</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a Unbuild.
+                </p>
+            </field>
+        </record>
+
         <record id="view_invoice_form_inherit" model="ir.ui.view">
             <field name="name">account.invoice.form.inherit</field>
             <field name="model">account.invoice</field>
             <field name="inherit_id" ref="account.invoice_supplier_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='origin']" position="after">
-                    <field name="reciba_id"/>
+                    <field name="reciba_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                 </xpath>
             </field>
         </record>
