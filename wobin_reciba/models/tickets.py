@@ -213,6 +213,7 @@ class RecibaTicket(models.Model):
     unbuild_id = fields.Many2one('mrp.unbuild', string="Desconstrucción")
     unbuild_count = fields.Integer(string="Desconstrucción", default=0)
     invoice_id = fields.Many2one('account.invoice')
+    invoice_count = fields.Integer(string="Facturas", default=0)
 
     #-------------------------------------Datos generales----------------------------------
     name = fields.Char(string="Boleta", default="Boleta borrador", track_visibility='onchange')
@@ -927,6 +928,14 @@ class RecibaTicket(models.Model):
         return result
 
     @api.multi
+    def action_view_invoice(self):
+        #Metodo para ver facturas relacionadas
+        action = self.env.ref('wobin_reciba.reciba_invoice')
+        result = action.read()[0]
+        result['domain'] = [('id','=', self.invoice_id.id)]
+        return result
+
+    @api.multi
     def unlink(self):
         #Validacion para eliminar la boleta
         if self.state != 'draft':
@@ -1040,6 +1049,20 @@ class AccountInvoice(models.Model):
 
     reciba_id = fields.Many2one('reciba.ticket', string="Boleta reciba", domain="[('operation_type','=','in'),('purchase_id.name','=',origin),('state','=','confirmed')]")
 
+    @api.model
+    def create(self, values):
+        #agregamos la relacion de reciba con factura, con sus restricciones al crear la factura
+        invoice = super(AccountInvoice, self).create(values)
+        if invoice.reciba_id.invoice_id:
+            msg = 'La boleta seleccionada ya está relacionada con otra factura'
+            raise UserError(msg)
+        else:
+            invoice.reciba_id.write({
+                'invoice_id' : invoice.id,
+                'invoice_count' : 1
+            })
+        return invoice
+
     @api.onchange('reciba_id')
     def _onchange_reciba(self):
         #agregamos la relacion de reciba con factura, con sus restricciones
@@ -1049,9 +1072,11 @@ class AccountInvoice(models.Model):
                 raise UserError(msg)
             else:
                 self.reciba_id.write({
-                    'invoice_id' : self._origin.id
+                    'invoice_id' : self._origin.id,
+                    'invoice_count' : 1
                 })
                 if self._origin.reciba_id:
                     self._origin.reciba_id.write({
-                        'invoice_id' : 0
+                        'invoice_id' : 0,
+                        'invoice_count' : 1
                     })
