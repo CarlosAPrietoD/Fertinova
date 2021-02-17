@@ -230,19 +230,37 @@ class ReportAvgHumidity(models.AbstractModel):
         report = self.env['quality.avg.humidity'].browse(docids)
         tickets_receipt = self.env['reciba.ticket'].search([('operation_type','=','in'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),('destination_id','=',report.location.id),'|',('state','=','priceless'),('state','=','confirmed')])
         tickets_delivery = self.env['reciba.ticket'].search([('operation_type','=','out'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),('origin_id','=',report.location.id),('state','=','confirmed')])    
+
         sum_net_receipt = 0
         sum_humidity_receipt = 0
         avg_humidity_receipt = 0
         sum_net_delivery = 0
         sum_humidity_delivery = 0
         avg_humidity_delivery = 0
+
+        receipts = []
         for receipt in tickets_receipt:
+            receipts.append({
+                'name' : receipt.name,
+                'date' : receipt.date.strftime("%d/%m/%Y %H:%M:%S"),
+                'net_weight' : "{:,.0f}".format(receipt.net_weight),
+                'humidity' : "{:.2f}".format(receipt.humidity)
+            })
             sum_net_receipt += receipt.net_weight
             sum_humidity_receipt += receipt.net_weight * receipt.humidity
         avg_humidity_receipt = sum_humidity_receipt/sum_net_receipt
+
+        deliveries = []
         for delivery in tickets_delivery:
+            deliveries.append({
+                'name' : delivery.name,
+                'date' : delivery.date.strftime("%d/%m/%Y %H:%M:%S"),
+                'net_weight' : "{:,.0f}".format(delivery.net_weight),
+                'humidity' : "{:.2f}".format(delivery.humidity)
+            })
             sum_net_delivery += delivery.net_weight
             sum_humidity_delivery += delivery.net_weight * delivery.humidity
+        
         avg_humidity_delivery = sum_humidity_delivery/sum_net_delivery
         dif_net = sum_net_receipt - sum_net_delivery
         dif_avg = avg_humidity_receipt - avg_humidity_delivery
@@ -252,25 +270,25 @@ class ReportAvgHumidity(models.AbstractModel):
         report_data = {
             'i_date' : report.init_date.strftime("%d/%m/%Y"),
             'e_date': report.end_date.strftime("%d/%m/%Y"),
-            'today' : date.today(),
+            'today' : date.today().strftime("%d/%m/%Y"),
             'product' : report.product.name,
             'location' : report.location.name,
-            'sum_net_receipt' : sum_net_receipt,
+            'sum_net_receipt' : "{:,.0f}".format(sum_net_receipt),
             'sum_humidity_receipt' : sum_humidity_receipt,
-            'avg_humidity_receipt' : avg_humidity_receipt,
-            'sum_net_delivery' : sum_net_delivery,
+            'avg_humidity_receipt' : "{:.2f}".format(avg_humidity_receipt),
+            'sum_net_delivery' : "{:,.0f}".format(sum_net_delivery),
             'sum_humidity_delivery' : sum_humidity_delivery,
-            'avg_humidity_delivery' : avg_humidity_delivery,
-            'dif_net' : dif_net,
-            'dif_avg' : dif_avg,
-            'tolerance' : tolerance,
-            'decrease' : decrease,
+            'avg_humidity_delivery' : "{:.2f}".format(avg_humidity_delivery),
+            'dif_net' : "{:,.0f}".format(dif_net),
+            'dif_avg' : "{:.2f}".format(dif_avg),
+            'tolerance' : "{:,.0f}".format(tolerance),
+            'decrease' : "{:,.0f}".format(decrease),
         }
 
         return {
             'doc_ids': docids,
             'doc_model': 'res.partner',
             'report_data' : report_data,
-            'receipts' : tickets_receipt,
-            'deliveries' : tickets_delivery,
+            'receipts' : receipts,
+            'deliveries' : deliveries,
         }

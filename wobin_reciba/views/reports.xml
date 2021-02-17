@@ -547,7 +547,7 @@
                     <div style="width: 100%;">
                         <table style="width: 100%; text-align: left;">
                             <tr style="border: black 1px solid">
-                                <th colspan="3" style="text-align:center; border: black 1px solid; padding: 5px">REPORTE DE HUMEDAD</th>
+                                <th colspan="3" style="text-align:center; border: black 1px solid; padding: 5px">AUDITORIA DE HUMEDAD</th>
                             </tr>
                             <tr style="height: 40px"></tr>
                             <tr style="border: black 1px solid">
@@ -555,7 +555,7 @@
                                     
                                 </td>
                                 <td style="text-align:right; padding: 5px">
-                                    FECHA
+                                    FECHA DE AUDITORIA
                                 </td>
                                 <td style="text-align:center; padding: 5px">
                                     <t t-esc="report_data['today']" />
@@ -595,7 +595,7 @@
                                     RESUMEN
                                 </th>
                                 <th style="text-align:center; border: black 1px solid; padding: 5px">
-                                    KILOS
+                                    PESO NETO (KILOS)
                                 </th>
                                 <th style="text-align:center; border: black 1px solid; padding: 5px">
                                     HUMEDAD PROMEDIO PONDERADA
@@ -657,12 +657,12 @@
                             <tr style="height: 160px"></tr>
                             <tr>
                                 <td style="border-top: black 1px solid; text-align: center; padding: 5px">
-                                    REVISÓ
+                                    AUDITOR
                                 </td>
                                 <td>
                                 </td>
                                 <td style="border-top: black 1px solid; text-align: center; padding: 5px">
-                                    ALMACENISTA
+                                    RESPONSABLE DE ALMACEN
                                 </td>
                             </tr>
                         </table>
