@@ -61,6 +61,9 @@
                                 <field name="ticket_count" widget="statinfo" string="Boleta relacionada"/>
                             </button>
                         </div>
+                        <div  class="alert alert-info" role="alert" style="margin-bottom:0px;" attrs="{'invisible':['|','|','|',('state', '!=', 'priceless'),('purchase_id','&gt;',0),('total_bonus','=','0'),('apply_bonus','=',False)]}">
+                            Se detectó una bonificación, se debe seleccionar una nueva orden de compra
+                        </div>
                         <group>
                             <h1>
                                 <field name="name" readonly="1" force_save="1"/>
