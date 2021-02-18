@@ -270,7 +270,7 @@ class ReportAvgHumidity(models.AbstractModel):
         report_data = {
             'i_date' : report.init_date.strftime("%d/%m/%Y"),
             'e_date': report.end_date.strftime("%d/%m/%Y"),
-            'today' : date.today().strftime("%d/%m/%Y"),
+            'today' : datetime.today().strftime("%d/%m/%Y %H:%M:%S"),
             'product' : report.product.name,
             'location' : report.location.name,
             'sum_net_receipt' : "{:,.0f}".format(sum_net_receipt),
