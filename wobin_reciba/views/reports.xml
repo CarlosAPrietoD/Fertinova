@@ -698,7 +698,7 @@
                                     FECHA
                                 </td>
                                 <td style="text-align:center; border: black 1px solid; padding: 5px">
-                                    PESO NETO
+                                    PESO NETO (KILOS)
                                 </td>
                                 <td style="text-align:center; border: black 1px solid; padding: 5px">
                                     % HUMEDAD
@@ -742,7 +742,7 @@
                                     FECHA
                                 </td>
                                 <td style="text-align:center; border: black 1px solid; padding: 5px">
-                                    PESO NETO
+                                    PESO NETO (KILOS)
                                 </td>
                                 <td style="text-align:center; border: black 1px solid; padding: 5px">
                                     % HUMEDAD

@@ -62,7 +62,7 @@
                             </button>
                         </div>
                         <div  class="alert alert-info" role="alert" style="margin-bottom:0px;" attrs="{'invisible':['|','|','|',('state', '!=', 'priceless'),('purchase_id','&gt;',0),('total_bonus','=','0'),('apply_bonus','=',False)]}">
-                            Se detectó una bonificación, se debe seleccionar una nueva orden de compra
+                            Se detectaron <b>bonificaciones</b>, se debe seleccionar una nueva <b>orden de compra</b>
                         </div>
                         <group>
                             <h1>
