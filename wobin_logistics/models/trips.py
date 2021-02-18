@@ -157,7 +157,7 @@ class WobinLogisticaTrips(models.Model):
 
     @api.one
     def _set_trip_taxes(self):
-        self.trip_taxes = self.env['account.invoice.line'].search([('trips_id', '=', self.id)]).invoice_line_tax_ids.ids
+        self.trip_taxes = self.env['account.invoice.line'].search([('trips_id', '=', self.id)], limit=1).invoice_line_tax_ids.ids
 
 
 
