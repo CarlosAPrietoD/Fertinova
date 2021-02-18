@@ -177,7 +177,7 @@ class WobinLogisticaTrips(models.Model):
 
     @api.one
     def _set_inv_status(self):
-        invoice_id = self.env['account.invoice.line'].search([('trips_id', '=', self.id)]).invoice_id.id
+        invoice_id = self.env['account.invoice.line'].search([('trips_id', '=', self.id)], limit=1).invoice_id.id
         self.invoice_status = self.env['account.invoice'].search([('id', '=', invoice_id)]).state
 
 
