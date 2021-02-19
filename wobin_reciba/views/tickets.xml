@@ -126,12 +126,12 @@
                             <page string="Recepción" name="reception_page">
                                 <br/>
                                 <group>
-                                    <field name="driver" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                    <field name="driver" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 </group>
                                 <group>
                                     <group>
-                                        <field name="type_vehicle" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
-                                        <field name="plate_vehicle" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="type_vehicle" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="plate_vehicle" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                     </group>
                                     <group>
                                         <field name="plate_trailer" attrs="{'readonly':[('state', '!=', 'draft')], 'invisible':['|',('type_vehicle', '=', 'van'),('type_vehicle', '=', 'torton')]}" />
@@ -144,14 +144,14 @@
                                         <field name="destination_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                     </group>
                                     <group>
-                                        <field name="origin_date" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
-                                        <field name="destination_date" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="origin_date"/>
+                                        <field name="destination_date"/>
                                     </group>
                                 </group>
                                 <group>
                                     <group>
-                                        <field name="gross_weight" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
-                                        <field name="tare_weight" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="gross_weight" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="tare_weight" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                         <field name="net_weight"/>
                                     </group>
                                     <group>
@@ -385,12 +385,12 @@
                             <page string="Entrega" name="delivery_page">
                                 <br/>
                                 <group>
-                                    <field name="driver" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                    <field name="driver" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 </group>
                                 <group>
                                     <group>
-                                        <field name="type_vehicle" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
-                                        <field name="plate_vehicle" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="type_vehicle" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="plate_vehicle" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                     </group>
                                     <group>
                                         <field name="plate_trailer" attrs="{'readonly':[('state', '!=', 'draft')], 'invisible':['|',('type_vehicle', '=', 'van'),('type_vehicle', '=', 'torton')]}" />
@@ -403,14 +403,14 @@
                                         <field name="destination_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                     </group>
                                     <group>
-                                        <field name="origin_date" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
-                                        <field name="destination_date" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="origin_date"/>
+                                        <field name="destination_date"/>
                                     </group>
                                 </group>
                                 <group>
                                     <group>
-                                        <field name="gross_weight" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
-                                        <field name="tare_weight" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="gross_weight" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="tare_weight" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                         <field name="net_weight"/>
                                         <field name="net_expected" readonly="1" force_save="1"/>
                                     </group>
@@ -614,12 +614,12 @@
                             <page string="Devolución Entrega" name="delivery_page">
                                 <br/>
                                 <group>
-                                    <field name="driver" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                    <field name="driver" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 </group>
                                 <group>
                                     <group>
-                                        <field name="type_vehicle" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
-                                        <field name="plate_vehicle" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="type_vehicle" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="plate_vehicle" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                     </group>
                                     <group>
                                         <field name="plate_trailer" attrs="{'readonly':[('state', '!=', 'draft')], 'invisible':['|',('type_vehicle', '=', 'van'),('type_vehicle', '=', 'torton')]}" />
@@ -632,14 +632,14 @@
                                         <field name="destination_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                     </group>
                                     <group>
-                                        <field name="origin_date" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
-                                        <field name="destination_date" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="origin_date"/>
+                                        <field name="destination_date"/>
                                     </group>
                                 </group>
                                 <group>
                                     <group>
-                                        <field name="gross_weight" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
-                                        <field name="tare_weight" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="gross_weight" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="tare_weight" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                         <field name="net_weight"/>
                                     </group>
                                     <group>
@@ -829,12 +829,12 @@
                             <page string="Devolución Recepción" name="delivery_page">
                                 <br/>
                                 <group>
-                                    <field name="driver" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                    <field name="driver" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 </group>
                                 <group>
                                     <group>
-                                        <field name="type_vehicle" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
-                                        <field name="plate_vehicle" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="type_vehicle" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="plate_vehicle" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                     </group>
                                     <group>
                                         <field name="plate_trailer" attrs="{'readonly':[('state', '!=', 'draft')], 'invisible':['|',('type_vehicle', '=', 'van'),('type_vehicle', '=', 'torton')]}" />
@@ -847,14 +847,14 @@
                                         <field name="destination_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                     </group>
                                     <group>
-                                        <field name="origin_date" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
-                                        <field name="destination_date" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="origin_date"/>
+                                        <field name="destination_date"/>
                                     </group>
                                 </group>
                                 <group>
                                     <group>
-                                        <field name="gross_weight" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
-                                        <field name="tare_weight" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="gross_weight" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="tare_weight" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                         <field name="net_weight"/>
                                     </group>
                                     <group>
@@ -1043,12 +1043,12 @@
                             <page string="Pesaje" name="delivery_page">
                                 <br/>
                                 <group>
-                                    <field name="driver" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                    <field name="driver" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 </group>
                                 <group>
                                     <group>
-                                        <field name="type_vehicle" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
-                                        <field name="plate_vehicle" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="type_vehicle" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="plate_vehicle" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                     </group>
                                     <group>
                                         <field name="plate_trailer" attrs="{'readonly':[('state', '!=', 'draft')], 'invisible':['|',('type_vehicle', '=', 'van'),('type_vehicle', '=', 'torton')]}" />
@@ -1061,14 +1061,14 @@
                                         <field name="destination_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                     </group>
                                     <group>
-                                        <field name="origin_date" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
-                                        <field name="destination_date" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="origin_date"/>
+                                        <field name="destination_date"/>
                                     </group>
                                 </group>
                                 <group>
                                     <group>
-                                        <field name="gross_weight" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
-                                        <field name="tare_weight" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="gross_weight" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="tare_weight" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                         <field name="net_weight"/>
                                     </group>
                                     <group>
@@ -1249,14 +1249,14 @@
                                         <field name="destination_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                     </group>
                                     <group>
-                                        <field name="origin_date" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
-                                        <field name="destination_date" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="origin_date"/>
+                                        <field name="destination_date"/>
                                     </group>
                                 </group>
                                 <group>
                                     <group>
-                                        <field name="qty_manufacturing" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
-                                        <field name="bom_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="qty_manufacturing" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                        <field name="bom_id" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                     </group>
                                 </group>
                             </page>

@@ -216,7 +216,7 @@ class RecibaTicket(models.Model):
     invoice_count = fields.Integer(string="Facturas", default=0)
 
     #-------------------------------------Datos generales----------------------------------
-    name = fields.Char(string="Boleta", default="Boleta borrador", track_visibility='onchange')
+    name = fields.Char(string="Boleta", default="Boleta borrador", track_visibility='onchange', required=True)
     date = fields.Datetime(string="Fecha y hora", default=lambda self: fields.datetime.now())
     operation_type = fields.Selection([('in','Recepción'),
     ('out','Entrega'),
@@ -224,32 +224,32 @@ class RecibaTicket(models.Model):
     ('dev_purchase','Devolucion sobre compra'),
     ('manufacturing','Fabricaciones'),
     ('transfer','Transferencias internas')], string="Tipo de operacion")
-    operation_type_id = fields.Many2one('stock.picking.type', string="Tipo de operacion", track_visibility='onchange')
+    operation_type_id = fields.Many2one('stock.picking.type', string="Tipo de operacion", track_visibility='onchange', required=True)
     reception = fields.Selection([('price', 'Con precio'),
     ('priceless', 'Sin precio')], string="Tipo de recepción", default='price', required=True, track_visibility='onchange')
     transfer_type = fields.Selection([('int', 'Misma sucursal'),
     ('in', 'Entrada'), 
     ('out','Salida')], string="Tipo de transferencia", default='int', track_visibility='onchange')
-    weigher = fields.Char(string="Nombre del analista", track_visibility='onchange', default=_get_name_weigher, readonly=True)
-    product_id = fields.Many2one('product.product', string="Producto", track_visibility='onchange')
+    weigher = fields.Char(string="Nombre del analista", track_visibility='onchange', default=_get_name_weigher, readonly=True, required=True)
+    product_id = fields.Many2one('product.product', string="Producto", track_visibility='onchange', required=True)
     ticket_id = fields.Many2one('reciba.ticket', string="Boleta relacionada")
     ticket_count = fields.Integer("Boletas", default=0)
     sale_id = fields.Many2one('sale.order', string="Orden de venta", track_visibility='onchange')
     sale_invoice_status = fields.Selection(related='sale_id.invoice_status', string="Estatus de facturación")
     purchase_id = fields.Many2one('purchase.order', string="Pedido de compra", domain="[('company_id','=',company_id)]", track_visibility='onchange')
     purchase_invoice_status = fields.Selection(related='purchase_id.invoice_status', string="Estatus de facturación")
-    partner_id = fields.Many2one('res.partner', string="Contacto", track_visibility='onchange')
+    partner_id = fields.Many2one('res.partner', string="Contacto", track_visibility='onchange', required=True)
     list_production_id = fields.Many2one('mrp.bom', string="Lista de materiales")
     origin = fields.Char(string="Documento origen", track_visibility='onchange')
     
     #------------------------------------Datos de calidad---------------------------------
-    quality_id = fields.Many2one('reciba.quality', string="Norma de calidad", track_visibility='onchange')
-    humidity = fields.Float(string="Humedad 14%", track_visibility='onchange')
+    quality_id = fields.Many2one('reciba.quality', string="Norma de calidad", track_visibility='onchange', required=True)
+    humidity = fields.Float(string="Humedad 14%", track_visibility='onchange', required=True)
     humidity_discount = fields.Float(string="Descuento (Kg)", compute='_get_humidity_discount', store=True)
-    impurity = fields.Float(string="Impureza 2%", track_visibility='onchange')
+    impurity = fields.Float(string="Impureza 2%", track_visibility='onchange', required=True)
     impurity_discount = fields.Float(string="Descuento (Kg)", compute='_get_impurity_discount', store=True)
     density = fields.Float(string="Densidad g/L 720-1000", track_visibility='onchange')
-    temperature = fields.Float(string="Temperatura °C", track_visibility='onchange')
+    temperature = fields.Float(string="Temperatura °C", track_visibility='onchange', required=True)
     params_id = fields.One2many('reciba.ticket.params', 'ticket_id', track_visibility='onchange')
     sum_damage = fields.Float(string="Suma daños", compute='_get_total_damage', store=True, track_visibility='onchange')
     sum_broken = fields.Float(string="Suma quebrados", compute='_get_total_broken', store=True, track_visibility='onchange')
@@ -265,9 +265,9 @@ class RecibaTicket(models.Model):
     plate_second_trailer = fields.Char(string="Placas segundo remolque", track_visibility='onchange')
 
     #-----------------------------------Datos de ubicaciones-----------------------------
-    origin_id = fields.Many2one('stock.location', string="Ubicación origen", track_visibility='onchange')
+    origin_id = fields.Many2one('stock.location', string="Ubicación origen", track_visibility='onchange', required=True)
     origin_date = fields.Datetime(string="Fecha y hora", compute='_default_origin_date', store=True)
-    destination_id = fields.Many2one('stock.location', string="Ubicación destino", track_visibility='onchange')
+    destination_id = fields.Many2one('stock.location', string="Ubicación destino", track_visibility='onchange', required=True)
     destination_date = fields.Datetime(string="Fecha y hora", compute='_default_destination_date', store=True)
 
     #-----------------------------------Datos de pesaje----------------------------------
