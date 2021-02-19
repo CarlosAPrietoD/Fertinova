@@ -13,7 +13,8 @@
               <field name="name"/>
               <field name="operator_id"/>            
               <field name="date"/>                 
-              <field name="circuit_id"/>
+              <field name="trip_id"/>
+              <field name="state"/>
             </search> 
         </field> 
     </record>    
@@ -27,7 +28,8 @@
           <field name="name"/>
           <field name="operator_id"/>            
           <field name="date"/>                 
-          <field name="circuit_id"/>   
+          <field name="trip_id"/>   
+          <field name="state"/>
         </tree>
       </field>
     </record>    
@@ -39,7 +41,11 @@
         <field name="arch" type="xml"> 
             <form> 
                 <header>
-                    <button name="create_payment" type="object" string="Create Payment" class="oe_highlight" attrs="{'invisible': [('name', '=', 'New')]}"/>
+                    <button name="create_payment" type="object" string="Create Payment" class="oe_highlight" attrs="{'invisible': [('btn_crt_payment', '=', False)]}"/>
+                    <button name="mark_settled" type="object" string="Mark Settled" class="oe_highlight" attrs="{'invisible': [('btn_mark_settle', '=', False)]}"/>
+                    <button name="send_debtor" type="object" string="Send to Debtor" class="oe_highlight" attrs="{'invisible': [('btn_debtor_new_adv', '=', False)]}"/>
+                    <button name="create_advance" type="object" string="Give amount in New Advance" class="oe_highlight" attrs="{'invisible': [('btn_debtor_new_adv', '=', False)]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="pending,settled"/>
                 </header>
                 <sheet> 
                     <div class="oe_left oe_title">
@@ -47,14 +53,26 @@
                             <field name="name" readonly="True"/>
                         </h1>
                     </div>
+                    <div style="margin-top: 50px; margin-bottom: 15px;" class="p-3 bg-info text-white text-center" attrs="{'invisible': [('label_process', '=', False)]}">
+                        <field name="label_process"/>
+                    </div>
                     <group>
                         <group>
                           <field name="operator_id" required="True"/>          
                           <field name="date" required="True"/>
-                          <field name="circuit_id" required="True"/>                          
+                          <field name="trip_id" required="True"/>                          
                         </group>  
                         <group>
                           <field name="attachments" widget="many2many_binary"/>
+                          
+                          <field name="btn_crt_payment" invisible="True"/>
+                          <field name="payment_related_id" attrs="{'invisible': [('btn_crt_payment', '=', False)]}"/>
+
+                          <field name="btn_mark_settle" invisible="True"/>                                    
+
+                          <field name="btn_debtor_new_adv" invisible="True"/> 
+                          <field name="acc_mov_related_id" attrs="{'invisible': [('btn_debtor_new_adv', '=', False)]}"/>
+                          <field name="advance_related_id" attrs="{'invisible': [('btn_debtor_new_adv', '=', False)]}"/>                     
                         </group>                                                
                     </group>
                     <field name="adv_set_lines_ids" readonly="True">
@@ -62,7 +80,7 @@
                             <field name="advance_sum_amnt" />
                             <field name="comprobation_sum_amnt"/>
                             <field name="trip_id"/>
-                            <field name="amount_to_settle"/>                   
+                            <field name="amount_to_settle"/>
                         </tree>
                     </field>                                                                
                 </sheet>              

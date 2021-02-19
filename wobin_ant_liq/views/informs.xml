@@ -33,7 +33,25 @@
             <field name="amount_to_settle"/>   
         </tree>
       </field>
-    </record>    
+    </record>  
+
+    <!-- DEBTS INFORM - LIST VIEW -->
+    <record id="view_debts_inform_list" model="ir.ui.view">
+      <field name="name">Settlements</field>
+      <field name="model">wobin.settlements</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="trip_id"/>  
+          <field name="operator_id"/>                
+          <field name="advance_sum_amnt"/>
+          <field name="comprobation_sum_amnt"/>
+          <field name="amount_to_settle"/>
+          <field name="date"/>          
+          <field name="name"/>                           
+          <field name="state"/>   
+        </tree>
+      </field>
+    </record>      
 
   </data>  
 </odoo> 
