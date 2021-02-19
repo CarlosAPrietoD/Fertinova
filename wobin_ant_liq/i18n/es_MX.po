@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-11 23:34+0000\n"
-"PO-Revision-Date: 2021-02-11 23:34+0000\n"
+"POT-Creation-Date: 2021-02-19 19:25+0000\n"
+"PO-Revision-Date: 2021-02-19 19:25+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -17,12 +17,12 @@ msgstr ""
 
 #. module: wobin_ant_liq
 #: model:res.groups,name:wobin_ant_liq.group_wacs_administration
-msgid "ACCESO ADMINISTRADOR (Visualización completa del módulo)"
+msgid "ACCESO ADMINISTRADOR (Visualización Completa del módulo Anticipos y Liquidaciones)"
 msgstr ""
 
 #. module: wobin_ant_liq
 #: model:res.groups,name:wobin_ant_liq.group_wacs_general
-msgid "ACCESO GENERAL (Visualización mínima del módulo)"
+msgid "ACCESO GENERAL (Visualización Mínima del módulo Anticipos y Liquidaciones)"
 msgstr ""
 
 #. module: wobin_ant_liq
@@ -57,9 +57,16 @@ msgid "Advance"
 msgstr "Anticipo"
 
 #. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__advance_id
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__advance_id
+msgid "Advance ID"
+msgstr "Anticipo"
+
+#. module: wobin_ant_liq
 #: model:ir.actions.act_window,name:wobin_ant_liq.action_advances
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_hr_employee__advance_sum_amnt
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__advance_sum_amnt
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__advance_sum_amnt
 #: model:ir.ui.menu,name:wobin_ant_liq.advances_menu_1
 msgid "Advances"
 msgstr "Anticipos"
@@ -82,6 +89,7 @@ msgstr "Monto $"
 #. module: wobin_ant_liq
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_hr_employee__amount_to_settle
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__amount_to_settle
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__amount_to_settle
 msgid "Amount to Settle"
 msgstr "Saldo a Liquidar"
 
@@ -98,12 +106,19 @@ msgid "Attachments"
 msgstr "Adjuntos"
 
 #. module: wobin_ant_liq
-#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__circuit_id
-#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__circuit_id
-#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__circuit_id
-#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__circuit_id
-msgid "Circuit"
-msgstr "Circuito"
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__btn_crt_payment
+msgid "Btn Crt Payment"
+msgstr ""
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__btn_debtor_new_adv
+msgid "Btn Debtor New Adv"
+msgstr ""
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__btn_mark_settle
+msgid "Btn Mark Settle"
+msgstr ""
 
 #. module: wobin_ant_liq
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__adv_set_lines_ids
@@ -111,19 +126,20 @@ msgid "Circuit Settlements for operator"
 msgstr "Liquidaciones de Circuito por Operador"
 
 #. module: wobin_ant_liq
-#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_circuits__name
-msgid "Circuit to be created"
-msgstr "Circuito por crear"
-
-#. module: wobin_ant_liq
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_account_payment__comprobation_id
 msgid "Comprobation"
+msgstr "Comprobación"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__comprobation_ids
+msgid "Comprobation ID"
 msgstr "Comprobación"
 
 #. module: wobin_ant_liq
 #: model:ir.actions.act_window,name:wobin_ant_liq.action_comprobations
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_hr_employee__comprobation_sum_amnt
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__comprobation_sum_amnt
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__comprobation_sum_amnt
 #: model:ir.ui.menu,name:wobin_ant_liq.comprobations_menu_2
 msgid "Comprobations"
 msgstr "Comprobaciones"
@@ -137,7 +153,6 @@ msgstr "Crear Pago"
 
 #. module: wobin_ant_liq
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__create_uid
-#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_circuits__create_uid
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__create_uid
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__create_uid
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__create_uid
@@ -146,7 +161,6 @@ msgstr "Creado por"
 
 #. module: wobin_ant_liq
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__create_date
-#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_circuits__create_date
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__create_date
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__create_date
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__create_date
@@ -161,8 +175,13 @@ msgid "Date"
 msgstr "Fecha"
 
 #. module: wobin_ant_liq
+#: model:ir.actions.act_window,name:wobin_ant_liq.action_debts_inform
+#: model:ir.ui.menu,name:wobin_ant_liq.debts_inform
+msgid "Debts Inform"
+msgstr "Informe de Adeudos"
+
+#. module: wobin_ant_liq
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__display_name
-#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_circuits__display_name
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__display_name
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__display_name
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__display_name
@@ -201,6 +220,17 @@ msgid "Followers (Partners)"
 msgstr "Seguidores (Empresas)"
 
 #. module: wobin_ant_liq
+#: model:ir.actions.act_window,name:wobin_ant_liq.action_inform
+#: model:ir.ui.menu,name:wobin_ant_liq.gen_ope_inform
+msgid "General Operator Inform"
+msgstr "Informe de Operadores General"
+
+#. module: wobin_ant_liq
+#: model_terms:ir.ui.view,arch_db:wobin_ant_liq.view_settlements_form
+msgid "Give amount in New Advance"
+msgstr "Abonarse en Nuevo Anticipo"
+
+#. module: wobin_ant_liq
 #: model_terms:ir.ui.view,arch_db:wobin_ant_liq.view_advances_tree
 #: model_terms:ir.ui.view,arch_db:wobin_ant_liq.view_comprobations_tree
 msgid "Group By"
@@ -208,7 +238,6 @@ msgstr "Agrupar por"
 
 #. module: wobin_ant_liq
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__id
-#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_circuits__id
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__id
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__id
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__id
@@ -242,7 +271,6 @@ msgid "Imprimir Liquidación"
 msgstr ""
 
 #. module: wobin_ant_liq
-#: model:ir.actions.act_window,name:wobin_ant_liq.action_informs
 #: model:ir.ui.menu,name:wobin_ant_liq.informs_menu_4
 msgid "Informs"
 msgstr "Informes"
@@ -255,8 +283,17 @@ msgid "Is Follower"
 msgstr "Es un seguidor"
 
 #. module: wobin_ant_liq
+#: model:ir.model,name:wobin_ant_liq.model_account_move
+msgid "Journal Entries"
+msgstr "Asientos contables"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__label_process
+msgid "Label Process"
+msgstr "Label de Proceso"
+
+#. module: wobin_ant_liq
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances____last_update
-#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_circuits____last_update
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations____last_update
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines____last_update
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements____last_update
@@ -265,7 +302,6 @@ msgstr "Última modificación en"
 
 #. module: wobin_ant_liq
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__write_uid
-#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_circuits__write_uid
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__write_uid
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__write_uid
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__write_uid
@@ -274,7 +310,6 @@ msgstr "Última actualización por"
 
 #. module: wobin_ant_liq
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__write_date
-#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_circuits__write_date
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__write_date
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__write_date
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__write_date
@@ -289,6 +324,11 @@ msgid "Main Attachment"
 msgstr "Adjuntos principales"
 
 #. module: wobin_ant_liq
+#: model_terms:ir.ui.view,arch_db:wobin_ant_liq.view_settlements_form
+msgid "Mark Settled"
+msgstr "Marcar como Saldado"
+
+#. module: wobin_ant_liq
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__message_has_error
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__message_has_error
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__message_has_error
@@ -301,6 +341,12 @@ msgstr "Error de Envío de Mensaje"
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__message_ids
 msgid "Messages"
 msgstr "Mensajes"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__mov_lns_ad_set_id
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__mov_lns_ad_set_id
+msgid "Movs Lns Adv Set Id"
+msgstr "Movs Lns Adv Set Id"
 
 #. module: wobin_ant_liq
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__activity_date_deadline
@@ -379,6 +425,11 @@ msgid "Payments"
 msgstr "Pagos"
 
 #. module: wobin_ant_liq
+#: selection:wobin.settlements,state:0
+msgid "Pending"
+msgstr "Pendiente"
+
+#. module: wobin_ant_liq
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__expenses_to_check
 msgid "Pending Expenses to Check"
 msgstr "Gastos Pendientes por Comprobar"
@@ -396,8 +447,19 @@ msgid "Planned"
 msgstr "Planeado"
 
 #. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__acc_mov_related_id
+msgid "Related Account Move"
+msgstr "Movimiento Contable Relacionado"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__advance_related_id
+msgid "Related Advance"
+msgstr "Anticipo Relacionado"
+
+#. module: wobin_ant_liq
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__payment_related_id
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__payment_related_id
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__payment_related_id
 msgid "Related Payment"
 msgstr "Pago Relacionado"
 
@@ -409,10 +471,32 @@ msgid "Responsible User"
 msgstr "Usuario responsable"
 
 #. module: wobin_ant_liq
+#: model_terms:ir.ui.view,arch_db:wobin_ant_liq.view_settlements_form
+msgid "Send to Debtor"
+msgstr "Crear Movimiento de Deudor"
+
+#. module: wobin_ant_liq
+#: selection:wobin.settlements,state:0
+msgid "Settled"
+msgstr "Saldado"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_account_move__settlement_id
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_account_payment__settlement_id
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__settlement_id
+msgid "Settlement"
+msgstr "Liquidación"
+
+#. module: wobin_ant_liq
 #: model:ir.actions.act_window,name:wobin_ant_liq.action_settlements
 #: model:ir.ui.menu,name:wobin_ant_liq.settlemens_menu_3
 msgid "Settlements"
 msgstr "Liquidaciones"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__state
+msgid "State"
+msgstr "Estado"
 
 #. module: wobin_ant_liq
 #: model:ir.model.fields,help:wobin_ant_liq.field_wobin_advances__activity_state
@@ -438,6 +522,7 @@ msgstr "Hoy"
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__trip_id
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__trip_id
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__trip_id
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__trip_id
 msgid "Trip"
 msgstr "Viaje"
 
@@ -470,7 +555,7 @@ msgid "Website communication history"
 msgstr "Historial de comunicaciones del sitio web"
 
 #. module: wobin_ant_liq
-#: model_terms:ir.ui.view,arch_db:wobin_ant_liq.view_informs_tree
+#: model_terms:ir.ui.view,arch_db:wobin_ant_liq.view_informs_search
 msgid "With Active Process"
 msgstr "Con Proceso Activo"
 

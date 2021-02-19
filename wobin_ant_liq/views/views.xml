@@ -6,7 +6,7 @@
       <field name="name">Advances</field>
       <field name="res_model">wobin.advances</field>
       <field name="view_mode">tree,form,search</field>
-      <field name="context">{'group_by':'circuit_id'}</field>
+      <field name="context">{'group_by':'trip_id'}</field>
     </record>
 
     <!-- COMPROBATIONS - GENERAL ACTION -->
@@ -14,7 +14,7 @@
       <field name="name">Comprobations</field>
       <field name="res_model">wobin.comprobations</field>
       <field name="view_mode">tree,form,search</field>
-      <field name="context">{'group_by':'circuit_id'}</field>
+      <field name="context">{'group_by':'trip_id'}</field>
     </record>     
 
     <!-- SETTLEMENTS - GENERAL ACTION -->
@@ -22,16 +22,25 @@
       <field name="name">Settlements</field>
       <field name="res_model">wobin.settlements</field>
       <field name="view_mode">tree,form,search</field>
-      <field name="context">{'group_by':'operator_id'}</field>
+      <field name="context">{'group_by':'trip_id'}</field>
     </record>   
 
     <!-- INFORMS - GENERAL ACTION -->
-    <record id="action_informs" model="ir.actions.act_window">
-      <field name="name">Informs</field>
+    <record id="action_inform" model="ir.actions.act_window">
+      <field name="name">General Operator Inform</field>
       <field name="res_model">hr.employee</field>
       <field name="view_mode">tree</field>
       <field name="context">{'search_default_flag_act_emp': 1}</field>  
-    </record>        
+    </record>   
+    <!-- DEBTS Inform - ACTION -->
+    <record id="action_debts_inform" model="ir.actions.act_window">
+        <field name="name">Debts Inform</field>
+        <field name="res_model">wobin.settlements</field>
+        <field name="view_mode">tree,form</field>        
+        <field name="view_id" ref="wobin_ant_liq.view_debts_inform_list"/>
+        <field name="domain"></field>
+        <field name="context">{'group_by':'operator_id'}</field> 
+    </record>          
     
     
 
@@ -75,11 +84,25 @@
         <field name="groups_id" eval="[(6,0,[ref('group_wacs_administration')])]"/>
     </record>              
 
+
     <menuitem name="Informs" 
               id="informs_menu_4" 
               parent="wobin_ant_liq.menu_root" 
+              groups="wobin_ant_liq.group_wacs_general,group_wacs_administration"/>
+
+    <menuitem name="General Operator Inform" 
+              id="gen_ope_inform" 
+              parent="wobin_ant_liq.informs_menu_4" 
               groups="wobin_ant_liq.group_wacs_general,group_wacs_administration"
-              action="action_informs"/>
+              action="action_inform"
+              sequence="1"/>
+    <menuitem name="Debts Inform" 
+              id="debts_inform" 
+              parent="wobin_ant_liq.informs_menu_4" 
+              groups="wobin_ant_liq.group_wacs_general,group_wacs_administration"
+              action="action_debts_inform"
+              sequence="2"/>              
+             
 
   </data>
 </odoo>

@@ -24,12 +24,12 @@
 
         #Views:
         'views/sequences.xml',        
-        'views/views.xml',
         'views/advances.xml',
         'views/comprobations.xml',
         'views/settlements.xml',
         'views/informs.xml', 
         'security/privileges.xml',
+        'views/views.xml',        
 
         #reports
         'reports/liquidacion_formato.xml',                       

@@ -9,7 +9,6 @@ class WobinMovesAdvSetLines(models.Model):
 
 
     operator_id = fields.Many2one('hr.employee',string='Operator', ondelete='cascade', compute='set_operator', store=True)
-    circuit_id  = fields.Many2one('wobin.circuits', string='Circuit', ondelete='cascade', compute='set_circuit', store=True)
     trip_id     = fields.Many2one('wobin.logistica.trips', string='Trip', ondelete='cascade', compute='set_trip', store=True)
     advance_id  = fields.Many2one('wobin.advances', string='Advance ID', ondelete='cascade', compute='set_advance', store=True)
     comprobation_ids = fields.Many2many('wobin.comprobations', string='Comprobation ID', ondelete='cascade', compute='set_comprobations', store=True)
@@ -22,11 +21,6 @@ class WobinMovesAdvSetLines(models.Model):
     @api.one
     def set_operator(self):
         self.operator_id = self.env['wobin.advances'].search([('mov_lns_ad_set_id', '=', self.id)], limit=1).operator_id.id
-
-
-    @api.one
-    def set_circuit(self):
-        self.circuit_id = self.env['wobin.advances'].search([('mov_lns_ad_set_id', '=', self.id)], limit=1).circuit_id.id
 
 
     @api.one
@@ -107,4 +101,5 @@ class HrEmployee(models.Model):
 
     @api.one  
     def set_amount_to_settle(self):
+        #Determine 'amount to settle' by doing subtraction comprobation - advance        
         self.amount_to_settle = self.comprobation_sum_amnt - self.advance_sum_amnt  

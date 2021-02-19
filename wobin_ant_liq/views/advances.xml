@@ -14,12 +14,11 @@
               <field name="operator_id"/>            
               <field name="date"/>                 
               <field name="amount"/>
-              <field name="circuit_id"/>
               <field name="trip_id"/>   
               <field name="payment_related_id"/>   
               <group expand="0" string="Group By">
                   <filter string="Advance" name="name" 
-                            context="{'group_by':'circuit_id'}"/>
+                            context="{'group_by':'trip_id'}"/>
               </group>
             </search> 
         </field> 
@@ -35,7 +34,6 @@
           <field name="operator_id"/>            
           <field name="date"/>                 
           <field name="amount"/>
-          <field name="circuit_id"/>
           <field name="trip_id"/>
           <field name="payment_related_id"/>   
         </tree>
@@ -62,7 +60,6 @@
                           <field name="operator_id" required="True"/>          
                           <field name="date" required="True"/>
                           <field name="amount" required="True"/>  
-                          <field name="circuit_id" required="True"/>
                           <field name="trip_id" required="True"/>                           
                         </group>                                                 
                         <group>                     
