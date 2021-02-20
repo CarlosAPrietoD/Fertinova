@@ -41,10 +41,10 @@
         <field name="arch" type="xml"> 
             <form> 
                 <header>
-                    <button name="create_payment" type="object" string="Create Payment" class="oe_highlight" attrs="{'invisible': [('btn_crt_payment', '=', False)]}"/>
-                    <button name="mark_settled" type="object" string="Mark Settled" class="oe_highlight" attrs="{'invisible': [('btn_mark_settle', '=', False)]}"/>
-                    <button name="send_debtor" type="object" string="Send to Debtor" class="oe_highlight" attrs="{'invisible': [('btn_debtor_new_adv', '=', False)]}"/>
-                    <button name="create_advance" type="object" string="Give amount in New Advance" class="oe_highlight" attrs="{'invisible': [('btn_debtor_new_adv', '=', False)]}"/>
+                    <button name="create_payment" type="object" string="Create Payment" class="oe_highlight" attrs="{'invisible': ['|', ('btn_crt_payment', '=', False), ('state', '=', 'settled')]}"/>
+                    <button name="mark_settled" type="object" string="Mark Settled" class="oe_highlight" attrs="{'invisible': ['|', ('btn_mark_settle', '=', False), ('state', '=', 'settled')]}"/>
+                    <button name="send_debtor" type="object" string="Send to Debtor" class="oe_highlight" attrs="{'invisible': ['|', ('btn_debtor_new_adv', '=', False), ('state', '=', 'settled')]}"/>
+                    <button name="create_advance" type="object" string="Give amount in New Advance" class="oe_highlight" attrs="{'invisible': ['|', ('btn_debtor_new_adv', '=', False), ('state', '=', 'settled')]}"/>
                     <field name="state" widget="statusbar" statusbar_visible="pending,settled"/>
                 </header>
                 <sheet> 

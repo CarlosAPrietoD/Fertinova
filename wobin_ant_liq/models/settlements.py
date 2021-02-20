@@ -202,7 +202,7 @@ class WobinSettlements(models.Model):
         #Retrieve related payment to this settlement:
         settlement_related = self.env['wobin.advances'].search([('settlement_id', '=', self.id)], limit=1).id 
         if settlement_related:
-            self.acc_mov_related_id = settlement_related            
+            self.advance_related_id = settlement_related            
 
             #Display into label this settlement was finished by a payment: 
             self.label_process = 'Esta Liquidación ha sido saldada por Anticipo ', self.advance_related_id.name    
