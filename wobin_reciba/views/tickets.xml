@@ -269,7 +269,7 @@
 
         <menuitem name="Reciba" id="reciba_root" sequence="40" web_icon="wobin_reciba,static/description/reciba_icon.png"/>
 
-        <menuitem id="operation_menu" name="Tipo de operación" parent="reciba_root" sequence="1"/>
+        <menuitem id="operation_menu" name="Tipo de operación" parent="reciba_root" sequence="1" groups="group_reciba_control,group_reciba_responsable"/>
 
         <menuitem id="reception_ticket_menu" name="Recepcion" parent="operation_menu" action="tickets_reception" sequence="1" />
 
@@ -1383,7 +1383,7 @@
 
         <menuitem id="configuration_menu" name="Configuración" parent="reciba_root" sequence="5"/>
 
-        <menuitem id="quality_menu" name="Parametros de calidad" parent="configuration_menu" action="reciba_quality" sequence="1" />
+        <menuitem id="quality_menu" name="Parametros de calidad" parent="configuration_menu" action="reciba_quality" sequence="1" groups="group_reciba_responsable"/>
 
 
         <!--==============================================Transferencias====================================-->
