@@ -4,11 +4,11 @@
 
         <menuitem id="menu_reports" name="Informes" parent="wobin_reciba.reciba_root" sequence="2" />
 
-        <menuitem id="menu_receipt_reports" name="Recepciones" parent="menu_reports" sequence="1"/>
+        <menuitem id="menu_receipt_reports" name="Recepciones" parent="menu_reports" sequence="1" groups="group_reciba_comercial,group_reciba_responsable"/>
 
-        <menuitem id="menu_delivery_reports" name="Entregas" parent="menu_reports" sequence="2"/>
+        <menuitem id="menu_delivery_reports" name="Entregas" parent="menu_reports" sequence="2" groups="group_reciba_comercial,group_reciba_responsable"/>
 
-        <menuitem id="menu_quality_reports" name="Calidad" parent="menu_reports" sequence="3"/>
+        <menuitem id="menu_quality_reports" name="Calidad" parent="menu_reports" sequence="3" groups="group_reciba_responsable,group_reciba_auditoria"/>
 
         <!--================================Reporte de recepciones por facturar======================================-->
 
@@ -323,7 +323,7 @@
         <act_window id="action_receipt_priceless" name="Selecciona el intervalo del reporte" res_model="receipt.priceless" view_mode="form" target="new" multi="True" />
 
         <!--Menu-->
-        <menuitem id="menu_receipt_priceless" name="Recepciones a depósito" parent="menu_receipt_reports" action="action_receipt_priceless" />
+        <menuitem id="menu_receipt_priceless" name="Recepciones a depósito" parent="menu_receipt_reports" action="action_receipt_priceless" groups="group_reciba_control,group_reciba_responsable"/>
 
         <!--================================Reporte de entregas por facturar======================================-->
 
@@ -812,7 +812,7 @@
         <act_window id="action_avg_humidity" name="Selecciona el intervalo del reporte" res_model="quality.avg.humidity" view_mode="form" target="new" multi="True" />
 
         <!--Menu-->
-        <menuitem id="menu_avg_humidity" name="Promedio ponderado humedad" parent="menu_quality_reports" action="action_avg_humidity" />
+        <menuitem id="menu_avg_humidity" name="Promedio ponderado humedad" parent="menu_quality_reports" action="action_avg_humidity" groups="group_reciba_auditoria,group_reciba_responsable"/>
 
 
     </data>
