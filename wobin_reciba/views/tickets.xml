@@ -134,8 +134,8 @@
                                         <field name="plate_vehicle" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                     </group>
                                     <group>
-                                        <field name="plate_trailer" attrs="{'readonly':[('state', '!=', 'draft')], 'invisible':['|',('type_vehicle', '=', 'van'),('type_vehicle', '=', 'torton')]}" />
-                                        <field name="plate_second_trailer" attrs="{'readonly':[('state', '!=', 'draft')], 'invisible':[('type_vehicle', '!=', 'full')]}"/>
+                                        <field name="plate_trailer" attrs="{'readonly':[('state', '!=', 'draft')], 'invisible':['|',('type_vehicle', '=', 'van'),('type_vehicle', '=', 'torton')], 'required':['|',('type_vehicle', '=', 'trailer'),('type_vehicle', '=', 'full')]}" />
+                                        <field name="plate_second_trailer" attrs="{'readonly':[('state', '!=', 'draft')], 'invisible':[('type_vehicle', '!=', 'full')], 'required':[('type_vehicle', '=', 'full')]}"/>
                                     </group>
                                 </group>
                                 <group>
