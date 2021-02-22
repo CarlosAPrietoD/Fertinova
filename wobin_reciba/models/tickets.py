@@ -314,7 +314,7 @@ class RecibaTicket(models.Model):
             operation_id = self.env['stock.picking.type'].search([('name','=','Devolucion de Recepciones')], limit=1).id
         elif self.operation_type=='transfer':
             operation_id = self.env['stock.picking.type'].search([('name','=','Transferencias internas')], limit=1).id
-        elif self.operation_type=='transfer':
+        elif self.operation_type=='manufacturing':
             operation_id = self.env['stock.picking.type'].search(['|',('name','=','Fabricación'),('name','=','Manufacturing')], limit=1).id
         self.operation_type_id = operation_id
 
