@@ -113,9 +113,6 @@ class WobinSettlements(models.Model):
 
 
     def create_payment(self):
-        #Change state of this settlement:
-        self.state = 'settled'
-
         #This method intends to display a Form View of Payments:
         return {
             #'name':_(""),
@@ -156,9 +153,6 @@ class WobinSettlements(models.Model):
 
     
     def send_debtor(self):
-        #Change state of this settlement:
-        self.state = 'settled'
-
         #This method intends to display a Form View of Account Moves:
         return {
             #'name':_(""),
@@ -187,10 +181,7 @@ class WobinSettlements(models.Model):
 
 
 
-    def create_advance(self):
-        #Change state of this settlement:
-        self.state = 'settled'
-                
+    def create_advance(self):                
         #This method intends to display a Form View of Advances:
         return {
             #'name':_(""),
