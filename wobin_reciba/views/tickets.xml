@@ -337,7 +337,7 @@
                                 <field name="operation_type_id" domain="['|',('name','=','Delivery Orders'),('name','=','Órdenes de entrega')]" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 <field name="weigher"/>
                                 <field name="product_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
-                                <field name="sale_id" domain="['|',('state','=','done'),('state','=','sale')]" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')]}"/>
+                                <field name="sale_id" required="1" domain="['|',('state','=','done'),('state','=','sale')]" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')]}"/>
                                 <field name="sale_invoice_status"/>
                                 <field name="partner_id" string="Cliente" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                             </group>
@@ -571,7 +571,7 @@
                                 <field name="operation_type_id" domain="[('name','=','Devolucion de Órdenes de entrega')]" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 <field name="weigher"/>
                                 <field name="product_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
-                                <field name="sale_id" domain="['|',('state','=','done'),('state','=','sale')]" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')]}"/>
+                                <field name="sale_id" required="1" domain="['|',('state','=','done'),('state','=','sale')]" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')]}"/>
                                 <field name="sale_invoice_status"/>
                                 <field name="partner_id" string="Cliente" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                             </group>
@@ -786,8 +786,7 @@
                                 <field name="operation_type_id" domain="[('name','=','Devolucion de Recepciones')]" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                                 <field name="weigher"/>
                                 <field name="product_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
-                                <field name="purchase_id" domain="['|',('state','=','purchase'),('state','=','done')]" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')]}"/>
-                                <field name="purchase_invoice_status"/>
+                                <field name="purchase_id" required="1" domain="['|',('state','=','purchase'),('state','=','done')]" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')]}"/>
                                 <field name="partner_id" string="Proveedor" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
                             </group>
                             <group>
