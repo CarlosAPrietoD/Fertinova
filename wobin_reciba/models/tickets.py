@@ -248,7 +248,7 @@ class RecibaTicket(models.Model):
     humidity_discount = fields.Float(string="Descuento (Kg)", compute='_get_humidity_discount', store=True)
     impurity = fields.Float(string="Impureza 2%", track_visibility='onchange', required=True)
     impurity_discount = fields.Float(string="Descuento (Kg)", compute='_get_impurity_discount', store=True)
-    density = fields.Float(string="Densidad g/L 720-1000", track_visibility='onchange')
+    density = fields.Float(string="Densidad g/L 720-1000", track_visibility='onchange', required=True)
     temperature = fields.Float(string="Temperatura °C", track_visibility='onchange', required=True)
     params_id = fields.One2many('reciba.ticket.params', 'ticket_id', track_visibility='onchange')
     sum_damage = fields.Float(string="Suma daños", compute='_get_total_damage', store=True, track_visibility='onchange')
@@ -364,8 +364,8 @@ class RecibaTicket(models.Model):
         if self.net_weight == 0:
             msg = 'El peso neto ingresado no es valido'
             raise UserError(msg)
-        if self.humidity == 0 or self.impurity == 0 or self.temperature == 0:
-            msg = 'Los valores de humedad, impureza y temperatura deben ser mayores a 0'
+        if self.humidity <= 0 or self.impurity <= 0 or self.temperature <= 0 or self.density <= 0:
+            msg = 'Los valores de humedad, impureza, densidad y temperatura deben ser mayores a 0'
             raise UserError(msg)
         if self.purchase_id:
             if (self.purchase_id.order_line[0].product_qty-self.purchase_id.order_line[0].qty_received) < self.net_weight:
@@ -509,8 +509,8 @@ class RecibaTicket(models.Model):
         if self.net_weight == 0:
             msg = 'El peso neto ingresado no es valido'
             raise UserError(msg)
-        if self.humidity == 0 or self.impurity == 0 or self.temperature == 0:
-            msg = 'Los valores de humedad, impureza y temperatura deben ser mayores a 0'
+        if self.humidity <= 0 or self.impurity <= 0 or self.temperature <= 0 or self.density <= 0:
+            msg = 'Los valores de humedad, impureza, densidad y temperatura deben ser mayores a 0'
             raise UserError(msg)
         if self.net_expected < self.net_weight:
             msg = 'El peso neto es mayor a la cantidad pendiente por surtir'
@@ -620,8 +620,8 @@ class RecibaTicket(models.Model):
         if self.net_weight == 0:
             msg = 'El peso neto ingresado no es valido'
             raise UserError(msg)
-        if self.humidity == 0 or self.impurity == 0 or self.temperature == 0:
-            msg = 'Los valores de humedad, impureza y temperatura deben ser mayores a 0'
+        if self.humidity <= 0 or self.impurity <= 0 or self.temperature <= 0 or self.density <= 0:
+            msg = 'Los valores de humedad, impureza, densidad y temperatura deben ser mayores a 0'
             raise UserError(msg)
         if self.sale_id.order_line[0].qty_delivered < self.net_weight:
             msg = 'El peso neto es mayor a la cantidad entregada en la orden de venta'
@@ -668,8 +668,8 @@ class RecibaTicket(models.Model):
         if self.net_weight == 0:
             msg = 'El peso neto ingresado no es valido'
             raise UserError(msg)
-        if self.humidity == 0 or self.impurity == 0 or self.temperature == 0:
-            msg = 'Los valores de humedad, impureza y temperatura deben ser mayores a 0'
+        if self.humidity <= 0 or self.impurity <= 0 or self.temperature <= 0 or self.density <= 0:
+            msg = 'Los valores de humedad, impureza, densidad y temperatura deben ser mayores a 0'
             raise UserError(msg)
         if self.purchase_id.order_line[0].qty_received < self.net_weight:
             msg = 'El peso neto es mayor a la cantidad entregada de la orden de compra'
@@ -716,8 +716,8 @@ class RecibaTicket(models.Model):
         if self.net_weight == 0:
             msg = 'El peso neto ingresado no es valido'
             raise UserError(msg)
-        if self.humidity == 0 or self.impurity == 0 or self.temperature == 0:
-            msg = 'Los valores de humedad, impureza y temperatura deben ser mayores a 0'
+        if self.humidity == 0 or self.impurity == 0 or self.temperature == 0 or self.density == 0:
+            msg = 'Los valores de humedad, impureza, densidad y temperatura deben ser mayores a 0'
             raise UserError(msg)
         if self.state == 'draft':
             #Asignacion del nombre de acuerdo al tipo de transferencia
@@ -801,8 +801,8 @@ class RecibaTicket(models.Model):
         if self.qty_manufacturing <= 0:
             msg = 'La cantidad a producir no es valida'
             raise UserError(msg)
-        if self.humidity == 0 or self.impurity == 0 or self.temperature == 0:
-            msg = 'Los valores de humedad, impureza y temperatura deben ser mayores a 0'
+        if self.humidity == 0 or self.impurity == 0 or self.temperature == 0 or self.density == 0:
+            msg = 'Los valores de humedad, impureza, densidad y temperatura deben ser mayores a 0'
             raise UserError(msg)
         if self.state == 'draft':
             #Asignacion del nombre de acuerdo al destino si esta en modo borrador
