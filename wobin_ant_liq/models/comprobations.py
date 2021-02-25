@@ -44,19 +44,20 @@ class WobinComprobations(models.Model):
     amount      = fields.Float(string='Amount', digits=dp.get_precision('Product Unit of Measure'), group_operator=False, track_visibility='always')
     trip_id     = fields.Many2one('wobin.logistica.trips', string='Trip', track_visibility='always', ondelete='cascade')
     expenses_to_refund = fields.Float(string='Pending Expenses to Refund', digits=dp.get_precision('Product Unit of Measure'), compute='set_expenses_to_refund', track_visibility='always')
-    payment_related_id = fields.Many2one('account.payment', string='Related Payment', compute='set_related_payment', track_visibility='always', ondelete='cascade')
+    acc_mov_related_id = fields.Many2one('account.move', string='Related Payment', compute='set_related_acc_mov', track_visibility='always', ondelete='cascade')
     advance_id         = fields.Many2one('wobin.advances', string='Advance ID', ondelete='cascade')
     mov_lns_ad_set_id  = fields.Many2one('wobin.moves.adv.set.lines', string='Movs Lns Adv Set Id', ondelete='cascade')
+    
 
 
-    def create_payment(self):
-        """This method intends to display a Form View of Payments""" 
+    def create_acc_mov(self):
+        """This method intends to display a Form View of Account Move""" 
         return {
             #'name':_(""),
             'view_mode': 'form',
             'view_id': False,
             'view_type': 'form',
-            'res_model': 'account.payment',
+            'res_model': 'account.move',
             #'res_id': p_id,
             'type': 'ir.actions.act_window',
             'nodestroy': True,
@@ -82,7 +83,7 @@ class WobinComprobations(models.Model):
 
 
     @api.one
-    def set_related_payment(self):
-        payment_related = self.env['account.payment'].search([('comprobation_id', '=', self.id)], limit=1).id
-        if payment_related:
-            self.payment_related_id = payment_related
+    def set_related_acc_mov(self):
+        acc_mov_related = self.env['account.move'].search([('comprobation_id', '=', self.id)], limit=1).id
+        if acc_mov_related:
+            self.acc_mov_related_id = acc_mov_related

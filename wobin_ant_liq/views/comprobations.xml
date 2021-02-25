@@ -15,7 +15,7 @@
               <field name="date"/>                 
               <field name="amount"/>
               <field name="trip_id"/>   
-              <field name="payment_related_id"/>   
+              <field name="acc_mov_related_id"/>   
               <group expand="0" string="Group By">
                   <filter string="Advance" name="name" 
                             context="{'group_by':'trip_id'}"/>
@@ -35,7 +35,7 @@
           <field name="date"/>                 
           <field name="amount"/>
           <field name="trip_id"/>
-          <field name="payment_related_id"/>   
+          <field name="acc_mov_related_id"/>   
         </tree>
       </field>
     </record>    
@@ -47,7 +47,7 @@
         <field name="arch" type="xml"> 
             <form> 
                 <header>
-                    <button name="create_payment" type="object" string="Create Payment" class="oe_highlight" attrs="{'invisible': [('name', '=', 'New')]}"/>
+                    <button name="create_acc_mov" type="object" string="Create Comprobation Entry" class="oe_highlight" attrs="{'invisible': [('name', '=', 'New')]}"/>
                 </header>
                 <sheet> 
                     <div class="oe_left oe_title">
@@ -65,7 +65,7 @@
                         <group>    
                           <field name="advance_id" required="True"/>                  
                           <field name="expenses_to_refund"/>      
-                          <field name="payment_related_id"/>                                     
+                          <field name="acc_mov_related_id"/>                                     
                         </group> 
                     </group>                                            
                 </sheet>              

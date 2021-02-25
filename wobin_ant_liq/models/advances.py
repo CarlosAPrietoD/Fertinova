@@ -3,15 +3,6 @@ from odoo import models, fields, api
 from odoo.addons import decimal_precision as dp
 
 
-class AccountPayment(models.Model):
-    _inherit = 'account.payment'
-
-    advance_id      = fields.Many2one('wobin.advances', string='Advance')
-    comprobation_id = fields.Many2one('wobin.comprobations', string='Comprobation') 
-    settlement_id   = fields.Many2one('wobin.settlements', string='Settlement')
-
-
-
 class WobinAdvances(models.Model):
     _name = 'wobin.advances'
     _description = 'Wobin Advances'
@@ -32,6 +23,12 @@ class WobinAdvances(models.Model):
             employee_obj.flag_employee_active = True
 
             res = super(WobinAdvances, self).create(vals)
+
+            #If a new record was created successfully and settlement related exists
+            #update that settlement in order to change its state to 'settled':
+            if res.settlement_id:
+                settlement_obj = self.env['wobin.settlements'].browse(res.settlement_id.id)
+                settlement_obj.update({'state': 'ready'})
 
         #Create a new record for Wobin Moves Advances Settlements Lines
         values = {

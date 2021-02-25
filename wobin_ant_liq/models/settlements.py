@@ -22,6 +22,7 @@ class WobinSettlements(models.Model):
 
 
 
+
     name        = fields.Char(string="Advance", readonly=True, required=True, copy=False, default='New')
     operator_id = fields.Many2one('hr.employee',string='Operator', track_visibility='always')
     date        = fields.Date(string='Date', track_visibility='always')
@@ -29,6 +30,7 @@ class WobinSettlements(models.Model):
     attachments = fields.Many2many('ir.attachment', relation='settlements_attachment', string='Attachments', track_visibility='always')
     adv_set_lines_ids = fields.One2many('wobin.moves.adv.set.lines', 'id', string='Circuit Settlements for operator', compute='_set_adv_set_lines_ids')
     state             = fields.Selection(selection=[('pending', 'Pending'),
+                                                    ('ready', 'Ready to settle'),
                                                     ('settled', 'Settled'),
                                                    ], string='State', required=True, readonly=True, copy=False, tracking=True, default='pending', track_visibility='always')    
     # Fields for analysis:
@@ -42,6 +44,7 @@ class WobinSettlements(models.Model):
     payment_related_id = fields.Many2one('account.payment', string='Related Payment', compute='set_related_payment', ondelete='cascade')    
     acc_mov_related_id = fields.Many2one('account.move', string='Related Account Move', compute='set_related_acc_mov', ondelete='cascade')    
     advance_related_id = fields.Many2one('wobin.advances', string='Related Advance', compute='set_related_advance', ondelete='cascade')    
+
 
 
 
@@ -66,7 +69,6 @@ class WobinSettlements(models.Model):
             self.advance_sum_amnt = result[0]
     
 
-
     @api.one   
     def set_comprobation_sum_amnt(self):
         #Sum all amounts from the same operator whitin a given trip
@@ -80,7 +82,6 @@ class WobinSettlements(models.Model):
             self.comprobation_sum_amnt = result[0]
 
 
-
     @api.one  
     def set_amount_to_settle(self):
         #Determine 'amount to settle' by doing subtraction comprobation - advance
@@ -89,26 +90,26 @@ class WobinSettlements(models.Model):
 
     @api.one
     def set_flag_btn_crt_payment(self):
+        #When "amount to settle" is greater than 0 just display button for payments
+        #through its respectice flag and to aid in xml definition:
         if self.amount_to_settle > 0:
-            print('\n\nself.amount_to_settle', self.amount_to_settle)
             self.btn_crt_payment = True
-            print('\n\nself.flag_btn_crt_payment', self.btn_crt_payment)
 
 
     @api.one
     def set_flag_btn_mark_settle(self):
-        if self.amount_to_settle == 0:
-            print('\n\nself.amount_to_settle', self.amount_to_settle)            
+        #When "amount to settle" is equal to 0 just display button to settle:
+        #through its respectice flag and to aid in xml definition:
+        if self.amount_to_settle == 0:           
             self.btn_mark_settle = True
-            print('\n\nself.btn_mark_settle', self.btn_mark_settle)
 
 
     @api.one
     def set_flag_btn_debtor_new_a(self):  
+        #When "amount to settle" is lesser than 0 just display button for acc. move or advances
+        #through its respectice flag and to aid in xml definition:        
         if self.amount_to_settle < 0:
-            print('\n\nself.amount_to_settle', self.amount_to_settle)
-            self.btn_debtor_new_adv = True  
-            print('\n\nself.flag_btn_debtor_new_a', self.btn_debtor_new_adv)  
+            self.btn_debtor_new_adv = True    
 
 
 
@@ -133,11 +134,7 @@ class WobinSettlements(models.Model):
         #Retrieve related payment to this settlement:
         settlement_related = self.env['account.payment'].search([('settlement_id', '=', self.id)], limit=1).id 
         if settlement_related:
-            self.payment_related_id = settlement_related            
-
-            #Display into label this settlement was finished by a payment: 
-            self.label_process = 'Esta Liquidación ha sido saldada por Pago ', self.payment_related_id.name       
-
+            self.payment_related_id = settlement_related 
 
 
 
@@ -148,7 +145,6 @@ class WobinSettlements(models.Model):
         
         #Display into label this settlement was finished: 
         self.label_process = 'Esta Liquidación ha sido saldada' 
-
 
 
     
@@ -173,11 +169,7 @@ class WobinSettlements(models.Model):
         #Retrieve related payment to this settlement:
         settlement_related = self.env['account.move'].search([('settlement_id', '=', self.id)], limit=1).id 
         if settlement_related:
-            self.acc_mov_related_id = settlement_related            
-
-            #Display into label this settlement was finished by a payment: 
-            self.label_process = 'Esta Liquidación ha sido saldada por Movimiento Contable ', self.acc_mov_related_id.name
-
+            self.acc_mov_related_id = settlement_related              
 
 
 
@@ -201,11 +193,49 @@ class WobinSettlements(models.Model):
     def set_related_advance(self):
         #Retrieve related payment to this settlement:
         settlement_related = self.env['wobin.advances'].search([('settlement_id', '=', self.id)], limit=1).id 
-        if settlement_related:
-            self.advance_related_id = settlement_related            
+        if settlement_related:            
+            self.advance_related_id = settlement_related 
+              
 
+
+    def settle_operation(self):
+        #Change state of this settlement if proccess is set up 
+        #because already exists a payment, acc. move or advance related with this settlement:
+        self.state = 'settled' 
+
+        if self.payment_related_id:
             #Display into label this settlement was finished by a payment: 
-            self.label_process = 'Esta Liquidación ha sido saldada por Anticipo ', self.advance_related_id.name    
+            self.label_process = 'Esta Liquidación ha sido saldada por Pago ' + self.payment_related_id.name                                                    
+
+        if self.acc_mov_related_id:
+            #Display into label this settlement was finished by an account move: 
+            self.label_process = 'Esta Liquidación ha sido saldada por Movimiento Contable ' + self.acc_mov_related_id.name                              
+
+        if self.advance_related_id:
+            #Display into label this settlement was finished by an advance: 
+            self.label_process = 'Esta Liquidación ha sido saldada por Anticipo ' + self.advance_related_id.name                                                         
+
+
+
+
+
+class AccountPayment(models.Model):
+    _inherit = 'account.payment'
+
+    advance_id    = fields.Many2one('wobin.advances', string='Advance')     
+    settlement_id = fields.Many2one('wobin.settlements', string='Settlement')
+
+    @api.model
+    def create(self, vals):
+        #Try to modify flow in order to upate state in possible settlement related:
+        res = super(AccountPayment, self).create(vals)
+
+        #If a new record was created successfully and settlement related exists
+        #update that settlement in order to change its state to 'settled':
+        if res.settlement_id:
+            settlement_obj = self.env['wobin.settlements'].browse(res.settlement_id.id)
+            settlement_obj.update({'state': 'ready'})                   
+        return res    
 
 
 
@@ -214,3 +244,25 @@ class AccountMove(models.Model):
     _inherit = 'account.move'
 
     settlement_id   = fields.Many2one('wobin.settlements', string='Settlement')
+    comprobation_id = fields.Many2one('wobin.comprobations', string='Comprobation')    
+
+    @api.model
+    def create(self, vals):
+        #Try to modify flow in order to upate state in possible settlement related:
+        res = super(AccountMove, self).create(vals)
+
+        #If a new record was created successfully and settlement related exists
+        #update that settlement in order to change its state to 'settled':
+        if res.settlement_id:
+            settlement_obj = self.env['wobin.settlements'].browse(res.settlement_id.id)
+            settlement_obj.update({'state': 'ready'})        
+        return res
+    
+
+
+
+
+class AccountMoveLine(models.Model):
+    _inherit = 'account.move.line'
+
+    contact_deb_cred_id = fields.Many2one('res.partner', string='Contact Debtor/Creditor')

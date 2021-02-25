@@ -1,6 +1,22 @@
 <odoo>
   <data>
 
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+    <!-- INHERITANCES -->
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+    <!--Add a new many2one field of Contact Debtor/Creditor into Account Move model-->
+    <record id="move_with_contact_form_inherit" model="ir.ui.view">
+        <field name="name">account.move.form.inherit</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+           <xpath expr="//tree/field[@name='partner_id']" position="after">
+                <field name="contact_deb_cred_id"/>
+            </xpath>        
+        </field>
+    </record>   
+
+
     <!-- ADVANCES - GENERAL ACTION -->
     <record id="action_advances" model="ir.actions.act_window">
       <field name="name">Advances</field>
