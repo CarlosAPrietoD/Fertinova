@@ -47,11 +47,35 @@ class WobinComprobations(models.Model):
     acc_mov_related_id = fields.Many2one('account.move', string='Related Payment', compute='set_related_acc_mov', track_visibility='always', ondelete='cascade')
     advance_id         = fields.Many2one('wobin.advances', string='Advance ID', ondelete='cascade')
     mov_lns_ad_set_id  = fields.Many2one('wobin.moves.adv.set.lines', string='Movs Lns Adv Set Id', ondelete='cascade')
+    comprobation_lines = fields.Many2many('wobin.comprobation.lines', string='Concept Lines')
     
 
 
     def create_acc_mov(self):
-        """This method intends to display a Form View of Account Move""" 
+        #This method intends to display a Form View of Account Move        
+        context_modified = False
+
+        #Retrieve related payment to advance in this comprobation:
+        payment_related = self.env['account.payment'].search([('advance_id', '=', self.advance_id.id)], limit=1) 
+        
+        if payment_related:
+            #Get journal name from payment consulted and determine if it contains "Contabilidad B"
+            journal = self.env['account.journal'].search([('id', '=', payment_related.journal_id.id)], limit=1)
+
+            journal_id = journal.id
+            journal_name = journal.name
+            
+            if journal_name:
+                substring = "Contabilidad B"
+                
+                if substring in journal_name:
+                    context_modified = True
+                    ctxt = {'default_comprobation_id': self.id,
+                            'default_journal_id': journal_id}
+        
+        if context_modified == False:
+            ctxt = {'default_comprobation_id': self.id}
+         
         return {
             #'name':_(""),
             'view_mode': 'form',
@@ -63,7 +87,7 @@ class WobinComprobations(models.Model):
             'nodestroy': True,
             'target': 'new',
             'domain': '[]',
-            'context': {'default_comprobation_id': self.id}
+            'context': ctxt
         }   
 
 
@@ -87,3 +111,15 @@ class WobinComprobations(models.Model):
         acc_mov_related = self.env['account.move'].search([('comprobation_id', '=', self.id)], limit=1).id
         if acc_mov_related:
             self.acc_mov_related_id = acc_mov_related
+
+
+
+
+class WobinComprobationLines(models.Model):
+    _name = 'wobin.comprobation.lines'
+    _description = 'Wobin Comprobation Lines'
+    _inherit = ['mail.thread', 'mail.activity.mixin'] 
+
+    concept = fields.Char(string='Concept', track_visibility='always')
+    account_account_id = fields.Many2one('account.account', string='Accounting Account', track_visibility='always', ondelete='cascade')
+    amount = fields.Integer(string='Amount')

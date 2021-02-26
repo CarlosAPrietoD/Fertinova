@@ -4,6 +4,16 @@ from odoo import models, fields, api
 from odoo.addons import decimal_precision as dp
 
 
+class WobinConcepts(models.Model):
+    _name = 'wobin.concepts'
+    _description = 'Wobin Concepts'
+    _inherit = ['mail.thread', 'mail.activity.mixin'] 
+
+    concept = fields.Char(string='Concept', track_visibility='always')
+    account_account_id = fields.Many2one('account.account', string='Accounting Account', track_visibility='always', ondelete='cascade')
+
+
+
 class WobinSettlements(models.Model):
     _name = 'wobin.settlements'
     _description = 'Wobin Settlements'
@@ -218,6 +228,9 @@ class WobinSettlements(models.Model):
 
 
 
+# *******************************************************************
+#  Some inheritances made to Account Models
+# *******************************************************************
 
 class AccountPayment(models.Model):
     _inherit = 'account.payment'
@@ -266,3 +279,13 @@ class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
 
     contact_deb_cred_id = fields.Many2one('res.partner', string='Contact Debtor/Creditor')
+    
+
+
+
+
+class HrEmployee(models.Model):
+    _inherit = 'hr.employee'
+
+    contact_id = fields.Many2one('res.partner', string='Contact')
+    enterprise_id = fields.Many2one('res.company', string='Enterprise')

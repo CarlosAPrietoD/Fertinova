@@ -14,9 +14,28 @@
                 <field name="contact_deb_cred_id"/>
             </xpath>        
         </field>
-    </record>   
+    </record>
+    <!--Add a new many2one fields of Contact & Company into Hr Employee model-->
+    <record id="hr_employee_contact_comp_form_inherit" model="ir.ui.view">
+        <field name="name">hr.employee.form.inherit</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+           <xpath expr="//field[@name='category_ids']" position="before">
+               <group>
+                  <group> 
+                      <field name="contact_id"/>
+                      <field name="enterprise_id"/>
+                  </group>
+                </group>
+            </xpath>        
+        </field>
+    </record>       
 
 
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+    <!-- ACTIONS -->
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
     <!-- ADVANCES - GENERAL ACTION -->
     <record id="action_advances" model="ir.actions.act_window">
       <field name="name">Advances</field>
@@ -56,7 +75,16 @@
         <field name="view_id" ref="wobin_ant_liq.view_debts_inform_list"/>
         <field name="domain"></field>
         <field name="context">{'group_by':'operator_id'}</field> 
-    </record>          
+    </record> 
+
+    <!-- SETTINGS - ACTION -->
+    <record id="action_concepts" model="ir.actions.act_window">
+        <field name="name">Concepts</field>
+        <field name="res_model">wobin.concepts</field>
+        <field name="view_mode">tree,form</field>        
+        <field name="domain"></field>
+        <field name="context"></field> 
+    </record>              
     
     
 
@@ -107,17 +135,34 @@
               groups="wobin_ant_liq.group_wacs_general,group_wacs_administration"/>
 
     <menuitem name="General Operator Inform" 
-              id="gen_ope_inform" 
+              id="gen_ope_inform_menuitem" 
               parent="wobin_ant_liq.informs_menu_4" 
               groups="wobin_ant_liq.group_wacs_general,group_wacs_administration"
               action="action_inform"
               sequence="1"/>
     <menuitem name="Debts Inform" 
-              id="debts_inform" 
+              id="debts_inform_menuitem" 
               parent="wobin_ant_liq.informs_menu_4" 
               groups="wobin_ant_liq.group_wacs_general,group_wacs_administration"
               action="action_debts_inform"
-              sequence="2"/>              
+              sequence="2"/>  
+
+
+    <menuitem name="Settings" 
+              id="settings_menu_5" 
+              parent="wobin_ant_liq.menu_root" 
+              groups="wobin_ant_liq.group_wacs_administration"/>
+    <record model="ir.ui.menu" id="wobin_ant_liq.settings_menu_5">
+        <field name="groups_id" eval="[(6,0,[ref('group_wacs_administration')])]"/>        
+    </record>               
+                          
+
+    <menuitem name="Concepts" 
+              id="concepts_menuitem" 
+              parent="wobin_ant_liq.settings_menu_5" 
+              groups="wobin_ant_liq.group_wacs_administration"
+              action="action_concepts"
+              sequence="1"/>    
              
 
   </data>

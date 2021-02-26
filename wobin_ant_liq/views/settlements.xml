@@ -94,5 +94,56 @@
         </field> 
     </record>
 
+    <!--:::::::::::::::::::::::::::::::::::::::::::::::::-->
+    <!-- VIEWS FOR CONCEPTS MODEL {LISTS, FORMS, SEARCH} -->
+    <!--:::::::::::::::::::::::::::::::::::::::::::::::::-->
+
+    <!-- SETTINGS - SEARCH VIEW -->    
+    <record id="view_settlements_tree" model="ir.ui.view"> 
+      <field name="name">Concepts</field>
+      <field name="model">wobin.concepts</field>
+        <field name="arch" type="xml"> 
+            <search> 
+              <field name="concept"/>
+              <field name="account_account_id"/>            
+            </search> 
+        </field> 
+    </record>    
+
+    <!-- SETTLEMENTS - LIST VIEW -->
+    <record id="view_settlements_list" model="ir.ui.view">
+      <field name="name">Concepts</field>
+      <field name="model">wobin.concepts</field>
+      <field name="arch" type="xml">
+        <tree>
+            <field name="concept"/>
+            <field name="account_account_id"/>
+        </tree>
+      </field>
+    </record>    
+
+    <!-- SETTLEMENTS - FORM VIEW -->
+    <record id="view_settlements_form" model="ir.ui.view"> 
+        <field name="name">Concepts</field> 
+        <field name="model">wobin.concepts</field> 
+        <field name="arch" type="xml"> 
+            <form> 
+                <sheet> 
+                    <group>
+                        <group>
+                            <field name="concept"/>
+                            <field name="account_account_id"/>                         
+                        </group>                                                  
+                    </group>                                                               
+                </sheet>              
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>               
+            </form> 
+        </field> 
+    </record>
+
   </data>  
 </odoo> 
