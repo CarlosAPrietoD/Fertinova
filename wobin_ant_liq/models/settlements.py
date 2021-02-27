@@ -9,7 +9,7 @@ class WobinConcepts(models.Model):
     _description = 'Wobin Concepts'
     _inherit = ['mail.thread', 'mail.activity.mixin'] 
 
-    concept = fields.Char(string='Concept', track_visibility='always')
+    name = fields.Char(string='Concept', track_visibility='always')
     account_account_id = fields.Many2one('account.account', string='Accounting Account', track_visibility='always', ondelete='cascade')
 
 
@@ -44,9 +44,9 @@ class WobinSettlements(models.Model):
                                                     ('settled', 'Settled'),
                                                    ], string='State', required=True, readonly=True, copy=False, tracking=True, default='pending', track_visibility='always')    
     # Fields for analysis:
-    advance_sum_amnt      = fields.Float(string='Advances', digits=dp.get_precision('Product Unit of Measure'), compute='set_advance_sum_amnt')
-    comprobation_sum_amnt = fields.Float(string='Comprobations', digits=dp.get_precision('Product Unit of Measure'), compute='set_comprobation_sum_amnt')
-    amount_to_settle      = fields.Float(string='Amount to Settle', digits=dp.get_precision('Product Unit of Measure'), compute='set_amount_to_settle')
+    advance_sum_amnt      = fields.Float(string='Advances', digits=(15,2), compute='set_advance_sum_amnt')
+    comprobation_sum_amnt = fields.Float(string='Comprobations', digits=(15,2), compute='set_comprobation_sum_amnt')
+    amount_to_settle      = fields.Float(string='Amount to Settle $', digits=(15,2), compute='set_amount_to_settle')
     btn_crt_payment    = fields.Boolean(compute="set_flag_btn_crt_payment", default=False)
     btn_mark_settle    = fields.Boolean(compute="set_flag_btn_mark_settle", default=False)
     btn_debtor_new_adv = fields.Boolean(compute="set_flag_btn_debtor_new_a", default=False)

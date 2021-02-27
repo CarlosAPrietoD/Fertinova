@@ -41,13 +41,13 @@ class WobinComprobations(models.Model):
     name        = fields.Char(string="Advance", readonly=True, required=True, copy=False, default='New')
     operator_id = fields.Many2one('hr.employee',string='Operator', track_visibility='always', ondelete='cascade')
     date        = fields.Date(string='Date', track_visibility='always')
-    amount      = fields.Float(string='Amount', digits=dp.get_precision('Product Unit of Measure'), group_operator=False, track_visibility='always')
+    amount      = fields.Float(string='Amount $', digits=(15,2), group_operator=False, track_visibility='always')
     trip_id     = fields.Many2one('wobin.logistica.trips', string='Trip', track_visibility='always', ondelete='cascade')
-    expenses_to_refund = fields.Float(string='Pending Expenses to Refund', digits=dp.get_precision('Product Unit of Measure'), compute='set_expenses_to_refund', track_visibility='always')
+    expenses_to_refund = fields.Float(string='Pending Expenses to Refund', digits=(15,2), compute='set_expenses_to_refund', track_visibility='always')
     acc_mov_related_id = fields.Many2one('account.move', string='Related Payment', compute='set_related_acc_mov', track_visibility='always', ondelete='cascade')
     advance_id         = fields.Many2one('wobin.advances', string='Advance ID', ondelete='cascade')
     mov_lns_ad_set_id  = fields.Many2one('wobin.moves.adv.set.lines', string='Movs Lns Adv Set Id', ondelete='cascade')
-    comprobation_lines = fields.Many2many('wobin.comprobation.lines', string='Concept Lines')
+    comprobation_lines_ids = fields.One2many('wobin.comprobation.lines', 'comprobation_id', string='Concept Lines')
     
 
 
@@ -120,6 +120,13 @@ class WobinComprobationLines(models.Model):
     _description = 'Wobin Comprobation Lines'
     _inherit = ['mail.thread', 'mail.activity.mixin'] 
 
-    concept = fields.Char(string='Concept', track_visibility='always')
-    account_account_id = fields.Many2one('account.account', string='Accounting Account', track_visibility='always', ondelete='cascade')
-    amount = fields.Integer(string='Amount')
+    
+    _sql_constraints = [
+                        ('compr_line_uniq', 
+                         'unique (comprobation_id)',     
+                         'Conceptos Duplicados en Líneas de Comprobación no permitidas')
+                       ]
+
+    comprobation_id = fields.Many2one('wobin.comprobations', string='Comprobation Reference', required=True, ondelete='cascade', index=True)
+    concept_id = fields.Many2one('wobin.concepts', string='Concept', track_visibility='always')
+    amount = fields.Float(string='Amount $', digits=(15,2), track_visibility='always')

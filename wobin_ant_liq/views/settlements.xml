@@ -94,6 +94,7 @@
         </field> 
     </record>
 
+
     <!--:::::::::::::::::::::::::::::::::::::::::::::::::-->
     <!-- VIEWS FOR CONCEPTS MODEL {LISTS, FORMS, SEARCH} -->
     <!--:::::::::::::::::::::::::::::::::::::::::::::::::-->
@@ -104,7 +105,7 @@
       <field name="model">wobin.concepts</field>
         <field name="arch" type="xml"> 
             <search> 
-              <field name="concept"/>
+              <field name="name"/>
               <field name="account_account_id"/>            
             </search> 
         </field> 
@@ -116,7 +117,7 @@
       <field name="model">wobin.concepts</field>
       <field name="arch" type="xml">
         <tree>
-            <field name="concept"/>
+            <field name="name"/>
             <field name="account_account_id"/>
         </tree>
       </field>
@@ -131,16 +132,16 @@
                 <sheet> 
                     <group>
                         <group>
-                            <field name="concept"/>
+                            <field name="name"/>
                             <field name="account_account_id"/>                         
                         </group>                                                  
-                    </group>                                                               
-                </sheet>              
+                    </group>                                                                                   
+                </sheet> 
                 <div class="oe_chatter">
                     <field name="message_follower_ids" widget="mail_followers"/>
                     <field name="activity_ids" widget="mail_activity"/>
                     <field name="message_ids" widget="mail_thread"/>
-                </div>               
+                </div>                                     
             </form> 
         </field> 
     </record>

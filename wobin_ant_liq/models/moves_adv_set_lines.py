@@ -12,9 +12,9 @@ class WobinMovesAdvSetLines(models.Model):
     trip_id     = fields.Many2one('wobin.logistica.trips', string='Trip', ondelete='cascade', compute='set_trip', store=True)
     advance_id  = fields.Many2one('wobin.advances', string='Advance ID', ondelete='cascade', compute='set_advance', store=True)
     comprobation_ids = fields.Many2many('wobin.comprobations', string='Comprobation ID', ondelete='cascade', compute='set_comprobations', store=True)
-    advance_sum_amnt      = fields.Float(string='Advances', digits=dp.get_precision('Product Unit of Measure'), compute='set_advance_sum_amnt')
-    comprobation_sum_amnt = fields.Float(string='Comprobations', digits=dp.get_precision('Product Unit of Measure'), compute='set_comprobation_sum_amnt')
-    amount_to_settle      = fields.Float(string='Amount to Settle', digits=dp.get_precision('Product Unit of Measure'), compute='set_amount_to_settle')
+    advance_sum_amnt      = fields.Float(string='Advances', digits=(15,2), compute='set_advance_sum_amnt')
+    comprobation_sum_amnt = fields.Float(string='Comprobations', digits=(15,2), compute='set_comprobation_sum_amnt')
+    amount_to_settle      = fields.Float(string='Amount to Settle', digits=(15,2), compute='set_amount_to_settle')
 
 
 
@@ -68,9 +68,9 @@ class HrEmployee(models.Model):
     _inherit = 'hr.employee'
 
     flag_employee_active  = fields.Boolean(string='Flag')
-    advance_sum_amnt      = fields.Float(string='Advances', digits=dp.get_precision('Product Unit of Measure'), compute='set_advance_sum_amnt')
-    comprobation_sum_amnt = fields.Float(string='Comprobations', digits=dp.get_precision('Product Unit of Measure'), compute='set_comprobation_sum_amnt')
-    amount_to_settle      = fields.Float(string='Amount to Settle', digits=dp.get_precision('Product Unit of Measure'), compute='set_amount_to_settle')
+    advance_sum_amnt      = fields.Float(string='Advances', digits=(15,2), compute='set_advance_sum_amnt')
+    comprobation_sum_amnt = fields.Float(string='Comprobations', digits=(15,2), compute='set_comprobation_sum_amnt')
+    amount_to_settle      = fields.Float(string='Amount to Settle', digits=(15,2), compute='set_amount_to_settle')
 
     @api.one
     def set_advance_sum_amnt(self):

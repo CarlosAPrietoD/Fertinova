@@ -56,7 +56,7 @@ class WobinAdvances(models.Model):
     name        = fields.Char(string="Advance", readonly=True, required=True, copy=False, default='New')
     operator_id = fields.Many2one('hr.employee',string='Operator', track_visibility='always', ondelete='cascade')
     date        = fields.Date(string='Date', track_visibility='always')
-    amount      = fields.Float(string='Amount $', digits=dp.get_precision('Product Unit of Measure'), group_operator=False, track_visibility='always')
+    amount      = fields.Float(string='Amount $', digits=(15,2), group_operator=False, track_visibility='always')
     trip_id     = fields.Many2one('wobin.logistica.trips', string='Trip', track_visibility='always', ondelete='cascade')
     expenses_to_check  = fields.Float(string='Pending Expenses to Check', digits=dp.get_precision('Product Unit of Measure'), compute='set_expenses_to_check', track_visibility='always')
     payment_related_id = fields.Many2one('account.payment', string='Related Payment', compute='set_related_payment', ondelete='cascade', track_visibility='always')
