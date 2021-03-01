@@ -288,4 +288,4 @@ class HrEmployee(models.Model):
     _inherit = 'hr.employee'
 
     contact_id = fields.Many2one('res.partner', string='Contact')
-    enterprise_id = fields.Many2one('res.company', string='Enterprise')
+    enterprise_id = fields.Many2one('res.partner', string='Enterprise')
