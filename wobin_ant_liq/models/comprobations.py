@@ -147,13 +147,6 @@ class WobinComprobationLines(models.Model):
     _description = 'Wobin Comprobation Lines'
     _inherit = ['mail.thread', 'mail.activity.mixin'] 
 
-    """
-    _sql_constraints = [
-                        ('concept_line_uniq', 
-                         'unique (concept_id)',     
-                         'Conceptos Duplicados en Líneas de Comprobación no permitidos')
-                       ]
-    """
 
     comprobation_id = fields.Many2one('wobin.comprobations', string='Comprobation Reference', required=True, ondelete='cascade', index=True)
     concept_id = fields.Many2one('wobin.concepts', string='Concept', track_visibility='always')
