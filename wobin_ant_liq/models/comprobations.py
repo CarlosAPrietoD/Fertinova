@@ -43,7 +43,8 @@ class WobinComprobations(models.Model):
     name        = fields.Char(string="Advance", readonly=True, required=True, copy=False, default='New')
     operator_id = fields.Many2one('hr.employee',string='Operator', track_visibility='always', ondelete='cascade')
     date        = fields.Date(string='Date', track_visibility='always')
-    amount      = fields.Float(string='Amount $', digits=(15,2), group_operator=False, compute='set_amount', track_visibility='always')
+    amount      = fields.Float(string='Amount $', digits=(15,2), group_operator=False, track_visibility='always')
+    amount_aux  = fields.Float(string='Amount $', digits=(15,2), group_operator=False, compute='set_amount', track_visibility='always')
     trip_id     = fields.Many2one('wobin.logistica.trips', string='Trip', track_visibility='always', ondelete='cascade')
     expenses_to_refund = fields.Float(string='Pending Expenses to Refund', digits=(15,2), compute='set_expenses_to_refund', track_visibility='always')
     acc_mov_related_id = fields.Many2one('account.move', string='Related Account Move', compute='set_related_acc_mov', track_visibility='always', ondelete='cascade')
@@ -118,6 +119,7 @@ class WobinComprobations(models.Model):
     @api.one
     def set_amount(self):
         self.amount = sum(line.amount for line in self.comprobation_lines_ids)
+        self.amount_aux = self.amount
 
 
 
@@ -131,6 +133,7 @@ class WobinComprobations(models.Model):
 
         if result:                    
             self.expenses_to_refund = result[0]        
+
 
 
 
