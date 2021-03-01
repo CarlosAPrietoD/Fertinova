@@ -149,8 +149,8 @@ class WobinComprobationLines(models.Model):
 
     
     _sql_constraints = [
-                        ('compr_line_uniq', 
-                         'unique (comprobation_id)',     
+                        ('comprobation_line_uniq', 
+                         'unique (comprobation_id,concept_id)',     
                          'Conceptos Duplicados en Líneas de Comprobación no permitidos')
                        ]
 
