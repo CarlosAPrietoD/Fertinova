@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api
 from odoo.addons import decimal_precision as dp
+import logging
+_logger = logging.getLogger(__name__)
 
 
 class WobinComprobations(models.Model):
@@ -127,6 +129,7 @@ class WobinComprobations(models.Model):
                         WHERE trip_id = %s AND operator_id = %s"""
         self.env.cr.execute(sql_query, (self.trip_id.id, self.operator_id.id,))
         result = self.env.cr.fetchone()
+        _logger.info('\n\n\n result query %s', result)
 
         if result:                    
             self.expenses_to_refund = result[0]        
