@@ -43,8 +43,7 @@ class WobinComprobations(models.Model):
     name        = fields.Char(string="Advance", readonly=True, required=True, copy=False, default='New')
     operator_id = fields.Many2one('hr.employee',string='Operator', track_visibility='always', ondelete='cascade')
     date        = fields.Date(string='Date', track_visibility='always')
-    amount      = fields.Float(string='Amount $', digits=(15,2), group_operator=False, track_visibility='always')
-    amount_aux  = fields.Float(string='Amount $', digits=(15,2), group_operator=False, compute='set_amount', track_visibility='always')
+    amount  = fields.Float(string='Amount $', digits=(15,2), group_operator=False, store=True, compute='set_amount', track_visibility='always')
     trip_id     = fields.Many2one('wobin.logistica.trips', string='Trip', track_visibility='always', ondelete='cascade')
     expenses_to_refund = fields.Float(string='Pending Expenses to Refund', digits=(15,2), compute='set_expenses_to_refund', track_visibility='always')
     acc_mov_related_id = fields.Many2one('account.move', string='Related Account Move', compute='set_related_acc_mov', track_visibility='always', ondelete='cascade')
@@ -119,15 +118,16 @@ class WobinComprobations(models.Model):
     @api.one
     def set_amount(self):
         self.amount = sum(line.amount for line in self.comprobation_lines_ids)
-        self.amount_aux = self.amount
-        _logger.info('\n\n\n self.amount_aux %s', self.amount_aux)
+        _logger.info('\n\n\n self.amount_aux %s', self.amount)
 
 
 
     @api.one
     def set_expenses_to_refund(self):
         #Sum amounts from the same trip by operator
-        sql_query = """SELECT SUM(amount_aux) FROM wobin_comprobations WHERE trip_id = %s AND operator_id = %s;"""
+        sql_query = """SELECT SUM(amount) 
+                         FROM wobin_comprobations 
+                        WHERE trip_id = %s AND operator_id = %s;"""
         self.env.cr.execute(sql_query, (self.trip_id.id, self.operator_id.id,))
         result = self.env.cr.fetchone()
         _logger.info('\n\n\n result query %s', result)
