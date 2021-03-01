@@ -120,13 +120,14 @@ class WobinComprobations(models.Model):
     def set_amount(self):
         self.amount = sum(line.amount for line in self.comprobation_lines_ids)
         self.amount_aux = self.amount
+        _logger.info('\n\n\n self.amount_aux %s', self.amount_aux)
 
 
 
     @api.one
     def set_expenses_to_refund(self):
         #Sum amounts from the same trip by operator
-        sql_query = """SELECT SUM(amount) FROM wobin_comprobations WHERE trip_id = %s AND operator_id = %s;"""
+        sql_query = """SELECT SUM(amount_aux) FROM wobin_comprobations WHERE trip_id = %s AND operator_id = %s;"""
         self.env.cr.execute(sql_query, (self.trip_id.id, self.operator_id.id,))
         result = self.env.cr.fetchone()
         _logger.info('\n\n\n result query %s', result)
