@@ -56,14 +56,32 @@ class WobinComprobations(models.Model):
     def create_acc_mov(self):
         #This method intends to display a Form View of Account Move        
         context_modified = False
+        line_ids_list    = list()
+        item             = tuple()
+        dictionary_vals  = dict()
 
         # Subprocess:
         #Consult different models in order to fill up by default some fields in 
         #pop up window of account move
-        enterprise_id       = self.env['hr.employee'].search([('id', '=', self.operator_id.id)], limit=1).enterprise_id.id
-        contact_id          = self.env['hr.employee'].search([('id', '=', self.operator_id.id)], limit=1).contact_id.id
-        analytic_account_id = self.env['wobin.logistica.trips'].search([('id', '=', self.trip_id.id)], limit=1).analytic_accnt_id.id
-        analytic_tag_ids    = self.env['account.analytic.tag'].search([('name', '=', self.trip_id.name)], limit=1).ids
+        for line in self.comprobation_lines_ids:             
+            account_id          = self.env['wobin.concepts'].search([('id', '=', line.concept_id.id)], limit=1).account_account_id.id
+            enterprise_id       = self.env['hr.employee'].search([('id', '=', self.operator_id.id)], limit=1).enterprise_id.id
+            contact_id          = self.env['hr.employee'].search([('id', '=', self.operator_id.id)], limit=1).contact_id.id
+            analytic_account_id = self.env['wobin.logistica.trips'].search([('id', '=', self.trip_id.id)], limit=1).analytic_accnt_id.id
+            analytic_tag_ids    = self.env['account.analytic.tag'].search([('name', '=', self.trip_id.name)], limit=1).ids          
+
+            #Construct tuple item for each line (0, 0, dictionary_vals)
+            dictionary_vals = {
+                'account_id': account_id,
+                'partner_id': enterprise_id,                 
+                'contact_deb_cred_id': contact_id,
+                'analytic_account_id': analytic_account_id,
+                'analytic_tag_ids': analytic_tag_ids
+            }
+            item = (0, 0, dictionary_vals)
+
+            #Append into list which it will be used later in context:
+            line_ids_list.append(item)
 
 
         #Retrieve related payment of advance in this comprobation:
@@ -81,22 +99,16 @@ class WobinComprobations(models.Model):
                 
                 if substring in journal_name:
                     context_modified = True
-                    ctxt = {'default_comprobation_id': self.id,
+                    ctxt = {
+                            'default_comprobation_id': self.id,
                             'default_journal_id': journal_id,
-                            'default_line_ids': [(0, 0, {'partner_id': enterprise_id, 
-                                                 'contact_deb_cred_id': contact_id,
-                                                 'analytic_account_id': analytic_account_id,
-                                                 'analytic_tag_ids': analytic_tag_ids}
-                                                )]
+                            'default_line_ids': line_ids_list
                            }
         
         if context_modified == False:
-            ctxt = {'default_comprobation_id': self.id,
-                    'default_line_ids': [(0, 0, {'partner_id': enterprise_id, 
-                                                 'contact_deb_cred_id': contact_id,
-                                                 'analytic_account_id': analytic_account_id,
-                                                 'analytic_tag_ids': analytic_tag_ids}
-                                         )]
+            ctxt = {
+                    'default_comprobation_id': self.id,
+                    'default_line_ids': line_ids_list
                    }            
          
         return {
