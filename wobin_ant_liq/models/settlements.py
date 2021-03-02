@@ -11,6 +11,7 @@ class WobinConcepts(models.Model):
 
     name = fields.Char(string='Concept', track_visibility='always')
     account_account_id = fields.Many2one('account.account', string='Accounting Account', track_visibility='always', ondelete='cascade')
+    credit_flag = fields.Boolean(string='Concept Set Like Credit')
 
 
 

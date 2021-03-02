@@ -68,13 +68,17 @@
                           <field name="acc_mov_related_id"/>                                     
                         </group> 
                     </group> 
-                    <field name="comprobation_lines_ids" context="{'default_comprobation_id': active_id}">
-                        <tree editable="top">
+                    <field name="debit_comprobation_lines_ids" context="{'default_comprobation_id': active_id}">
+                        <tree decoration-info="credit_flag == True" editable="top">
                             <field name="comprobation_id" invisible="True"/>
                             <field name="concept_id"/>
-                            <field name="amount" sum="Amount Lines"/>
+                            <field name="amount"/>
+                            <field name="credit_flag" invisible="True"/>
                         </tree>
-                    </field>                                                               
+                    </field> 
+                    <div class="oe_subtotal_footer oe_right font-weight-bold">
+                        <field name="total" readonly="True"/>
+                    </div>                                                                                                                        
                 </sheet>              
                 <div class="oe_chatter">
                     <field name="message_follower_ids" widget="mail_followers"/>

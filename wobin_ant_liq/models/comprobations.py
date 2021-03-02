@@ -44,12 +44,13 @@ class WobinComprobations(models.Model):
     operator_id = fields.Many2one('hr.employee',string='Operator', track_visibility='always', ondelete='cascade')
     date        = fields.Date(string='Date', track_visibility='always')
     amount      = fields.Float(string='Amount $', digits=(15,2), track_visibility='always')
+    total       = fields.Float(string='Total $', digits=(15,2))
     trip_id     = fields.Many2one('wobin.logistica.trips', string='Trip', track_visibility='always', ondelete='cascade')
     expenses_to_refund = fields.Float(string='Pending Expenses to Refund', digits=(15,2), compute='set_expenses_to_refund', track_visibility='always')
     acc_mov_related_id = fields.Many2one('account.move', string='Related Account Move', compute='set_related_acc_mov', track_visibility='always', ondelete='cascade')
     advance_id         = fields.Many2one('wobin.advances', string='Advance ID', ondelete='cascade')
     mov_lns_ad_set_id  = fields.Many2one('wobin.moves.adv.set.lines', string='Movs Lns Adv Set Id', ondelete='cascade')
-    comprobation_lines_ids = fields.One2many('wobin.comprobation.lines', 'comprobation_id', string='Concept Lines')
+    debit_comprobation_lines_ids  = fields.One2many('wobin.comprobation.lines', 'comprobation_id', string='Concept Lines')
     
 
 
@@ -60,15 +61,27 @@ class WobinComprobations(models.Model):
         item             = tuple()
         dictionary_vals  = dict()
 
+        # | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - |
         # Subprocess:
         #Consult different models in order to fill up by default some fields in 
-        #pop up window of account move
-        for line in self.comprobation_lines_ids:             
+        #pop up window of account move lines
+        
+        #   For Debit Lines
+        for line in self.debit_comprobation_lines_ids:  
+            credit = None; debit = None           
             account_id          = self.env['wobin.concepts'].search([('id', '=', line.concept_id.id)], limit=1).account_account_id.id
             enterprise_id       = self.env['hr.employee'].search([('id', '=', self.operator_id.id)], limit=1).enterprise_id.id
             contact_id          = self.env['hr.employee'].search([('id', '=', self.operator_id.id)], limit=1).contact_id.id
             analytic_account_id = self.env['wobin.logistica.trips'].search([('id', '=', self.trip_id.id)], limit=1).analytic_accnt_id.id
             analytic_tag_ids    = self.env['account.analytic.tag'].search([('name', '=', self.trip_id.name)], limit=1).ids          
+            
+            # Determine Concepts Set like Credit:
+            credit_flag = self.env['wobin.concepts'].search([('id', '=', line.concept_id.id)], limit=1).credit_flag
+            if credit_flag == True:
+                credit = line.amount
+            else:
+                debit = line.amount            
+            
 
             #Construct tuple item for each line (0, 0, dictionary_vals)
             dictionary_vals = {
@@ -76,12 +89,15 @@ class WobinComprobations(models.Model):
                 'partner_id': enterprise_id,                 
                 'contact_deb_cred_id': contact_id,
                 'analytic_account_id': analytic_account_id,
-                'analytic_tag_ids': analytic_tag_ids
+                'analytic_tag_ids': analytic_tag_ids,
+                'debit': debit,
+                'credit': credit
             }
             item = (0, 0, dictionary_vals)
 
             #Append into list which it will be used later in context:
-            line_ids_list.append(item)
+            line_ids_list.append(item)           
+        # | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - |            
 
 
         #Retrieve related payment of advance in this comprobation:
@@ -127,9 +143,10 @@ class WobinComprobations(models.Model):
 
 
 
-    @api.onchange('comprobation_lines_ids')
-    def _onchange_comprobation_lines_ids(self):
-        self.amount = sum(line.amount for line in self.comprobation_lines_ids)
+    @api.onchange('debit_comprobation_lines_ids')
+    def _onchange_debit_comprobation_lines_ids(self):
+        self.amount = sum(line.amount for line in self.debit_comprobation_lines_ids if line.concept_id.credit_flag != True)
+        self.total  = self.amount
 
 
     @api.one
@@ -162,5 +179,11 @@ class WobinComprobationLines(models.Model):
 
 
     comprobation_id = fields.Many2one('wobin.comprobations', string='Comprobation Reference', required=True, ondelete='cascade', index=True)
-    concept_id = fields.Many2one('wobin.concepts', string='Concept', track_visibility='always')
-    amount = fields.Float(string='Amount $', digits=(15,2), track_visibility='always')
+    concept_id      = fields.Many2one('wobin.concepts', string='Concept', track_visibility='always')
+    amount          = fields.Float(string='Amount $', digits=(15,2), track_visibility='always')
+    credit_flag     = fields.Boolean(string='Concept Set Like Credit', compute='set_flag')
+
+
+    @api.one
+    def set_flag(self):
+        self.credit_flag = self.env['wobin.concepts'].search([('id', '=', self.concept_id.id)], limit=1).credit_flag
