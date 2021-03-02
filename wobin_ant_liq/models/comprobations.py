@@ -50,7 +50,7 @@ class WobinComprobations(models.Model):
     acc_mov_related_id = fields.Many2one('account.move', string='Related Account Move', compute='set_related_acc_mov', track_visibility='always', ondelete='cascade')
     advance_id         = fields.Many2one('wobin.advances', string='Advance ID', ondelete='cascade')
     mov_lns_ad_set_id  = fields.Many2one('wobin.moves.adv.set.lines', string='Movs Lns Adv Set Id', ondelete='cascade')
-    debit_comprobation_lines_ids  = fields.One2many('wobin.comprobation.lines', 'comprobation_id', string='Concept Lines')
+    comprobation_lines_ids  = fields.One2many('wobin.comprobation.lines', 'comprobation_id', string='Concept Lines')
     
 
 
@@ -67,7 +67,7 @@ class WobinComprobations(models.Model):
         #pop up window of account move lines
         
         #   For Debit Lines
-        for line in self.debit_comprobation_lines_ids:  
+        for line in self.comprobation_lines_ids:  
             credit = None; debit = None           
             account_id          = self.env['wobin.concepts'].search([('id', '=', line.concept_id.id)], limit=1).account_account_id.id
             enterprise_id       = self.env['hr.employee'].search([('id', '=', self.operator_id.id)], limit=1).enterprise_id.id
@@ -143,10 +143,14 @@ class WobinComprobations(models.Model):
 
 
 
-    @api.onchange('debit_comprobation_lines_ids')
-    def _onchange_debit_comprobation_lines_ids(self):
-        self.amount = sum(line.amount for line in self.debit_comprobation_lines_ids if line.concept_id.credit_flag != True)
-        self.total  = self.amount
+    @api.onchange('comprobation_lines_ids')
+    def _onchange_comprobation_lines_ids(self):        
+        # Only sum up lines which are not credit concepts:
+        sum_amount = sum(line.amount for line in self.comprobation_lines_ids if line.concept_id.credit_flag != True)
+        # Assign to amount and total:
+        self.amount = sum_amount        
+        self.total = sum_amount
+
 
 
     @api.one
