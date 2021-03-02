@@ -59,7 +59,7 @@
                         <group>
                           <field name="operator_id" required="True"/>          
                           <field name="date" required="True"/>
-                          <field name="amount" required="True"/>  
+                          <field name="amount" readonly="True"/>  
                           <field name="trip_id" required="True"/>                           
                         </group>                                                 
                         <group>    
