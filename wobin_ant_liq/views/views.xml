@@ -60,16 +60,16 @@
       <field name="context">{'group_by':'trip_id'}</field>
     </record>   
 
-    <!-- INFORMS - GENERAL ACTION -->
+    <!-- DEBTS Inform - ACTION  -->
     <record id="action_inform" model="ir.actions.act_window">
-      <field name="name">General Operator Inform</field>
+      <field name="name">Debts Inform</field>
       <field name="res_model">hr.employee</field>
       <field name="view_mode">tree</field>
       <field name="context">{'search_default_flag_act_emp': 1}</field>  
     </record>   
-    <!-- DEBTS Inform - ACTION -->
+    <!-- INFORMS - GENERAL ACTION -->
     <record id="action_debts_inform" model="ir.actions.act_window">
-        <field name="name">Debts Inform</field>
+        <field name="name">General Operator Inform</field>
         <field name="res_model">wobin.settlements</field>
         <field name="view_mode">tree,form</field>        
         <field name="view_id" ref="wobin_ant_liq.view_debts_inform_list"/>
@@ -134,14 +134,14 @@
               parent="wobin_ant_liq.menu_root" 
               groups="wobin_ant_liq.group_wacs_general,group_wacs_administration"/>
 
-    <menuitem name="General Operator Inform" 
-              id="gen_ope_inform_menuitem" 
+    <menuitem name="Debts Inform" 
+              id="debts_inform_menuitem" 
               parent="wobin_ant_liq.informs_menu_4" 
               groups="wobin_ant_liq.group_wacs_general,group_wacs_administration"
               action="action_inform"
               sequence="1"/>
-    <menuitem name="Debts Inform" 
-              id="debts_inform_menuitem" 
+    <menuitem name="General Operator Inform" 
+              id="gen_ope_inform_menuitem" 
               parent="wobin_ant_liq.informs_menu_4" 
               groups="wobin_ant_liq.group_wacs_general,group_wacs_administration"
               action="action_debts_inform"
