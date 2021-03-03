@@ -33,7 +33,6 @@ class WobinSettlements(models.Model):
 
 
 
-
     name        = fields.Char(string="Advance", readonly=True, required=True, copy=False, default='New')
     operator_id = fields.Many2one('hr.employee',string='Operator', track_visibility='always')
     date        = fields.Date(string='Date', track_visibility='always')
@@ -58,13 +57,12 @@ class WobinSettlements(models.Model):
 
 
 
-
     @api.one
-    @api.depends('trip_id')
     def _set_adv_set_lines_ids(self):
         #Fill up one2many field with data for current operator and a given trip:
         self.adv_set_lines_ids = self.env['wobin.moves.adv.set.lines'].search([('operator_id', '=', self.operator_id.id),
                                                                                ('trip_id','=', self.trip_id.id)]).ids
+
 
 
     @api.one
