@@ -15,6 +15,7 @@ class WobinMovesAdvSetLines(models.Model):
     advance_sum_amnt      = fields.Float(string='Advances', digits=(15,2), compute='set_advance_sum_amnt')
     comprobation_sum_amnt = fields.Float(string='Comprobations', digits=(15,2), compute='set_comprobation_sum_amnt')
     amount_to_settle      = fields.Float(string='Amount to Settle', digits=(15,2), compute='set_amount_to_settle')
+    flag_pending_process  = fields.Boolean(string='Pending Process', compute='set_flag_pending_process')
 
 
 
@@ -60,6 +61,27 @@ class WobinMovesAdvSetLines(models.Model):
     @api.one  
     def set_amount_to_settle(self):
         self.amount_to_settle = self.comprobation_sum_amnt - self.advance_sum_amnt 
+
+
+    
+    @api.one        
+    def set_flag_pending_process(self):
+        flag_advances = False; flag_comprobations = False
+
+        #Iterate multiple possible comprobations and determine if all comprobations are settled:
+        for comp in self.comprobation_ids:
+            if comp.acc_mov_related_id:
+                flag_comprobations = True
+            else:
+                flag_comprobations = False
+
+        #Determine if advance is settled:
+        if self.advance_id.payment_related_id:
+            flag_advances = True
+
+        #Assign final determination only when both flags are True
+        if flag_advances and flag_comprobations:
+            self.flag_pending_process = True
 
 
 

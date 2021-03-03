@@ -77,11 +77,12 @@
                         </group>                                                
                     </group>
                     <field name="adv_set_lines_ids" readonly="True">
-                        <tree>
+                        <tree decoration-danger="flag_pending_process == False">
                             <field name="advance_sum_amnt" />
                             <field name="comprobation_sum_amnt"/>
                             <field name="trip_id"/>
                             <field name="amount_to_settle"/>
+                            <field name="flag_pending_process" invisible="True"/>
                         </tree>
                     </field>                                                                
                 </sheet>              
