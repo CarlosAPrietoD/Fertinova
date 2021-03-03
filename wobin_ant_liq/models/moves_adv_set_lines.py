@@ -67,17 +67,20 @@ class WobinMovesAdvSetLines(models.Model):
     @api.one        
     def set_flag_pending_process(self):
         flag_advances = False; flag_comprobations = False
-
-        #Iterate multiple possible comprobations and determine if all comprobations are settled:
-        for comp in self.comprobation_ids:
+        #Determine if comprobations have an assigened account move:
+        possible_comprobations = self.env['wobin.comprobations'].search([('advance_id', '=', self.advance_id.id)])        
+        for comp in possible_comprobations:
             if comp.acc_mov_related_id:
                 flag_comprobations = True
             else:
                 flag_comprobations = False
 
-        #Determine if advance is settled:
+        
+
+        #Determine if advance has an assigened payment:
         if self.advance_id.payment_related_id:
             flag_advances = True
+        print('\n\n self.advance_id.payment_related_id', self.advance_id.payment_related_id)
 
         #Assign final determination only when both flags are True
         if flag_advances and flag_comprobations:
