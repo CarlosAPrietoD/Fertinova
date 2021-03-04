@@ -33,7 +33,7 @@ class WobinSettlements(models.Model):
 
 
 
-    name        = fields.Char(string="Advance", readonly=True, required=True, copy=False, default='New')
+    name        = fields.Char(string="Settlement", readonly=True, required=True, copy=False, default='New')
     operator_id = fields.Many2one('hr.employee',string='Operator', track_visibility='always')
     date        = fields.Date(string='Date', track_visibility='always')
     trip_id     = fields.Many2one('wobin.logistica.trips', string='Trip', track_visibility='always', ondelete='cascade')

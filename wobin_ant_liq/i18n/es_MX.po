@@ -61,7 +61,6 @@ msgstr "Estado de la actividad"
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_account_payment__advance_id
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__name
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__name
-#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__name
 #: model_terms:ir.ui.view,arch_db:wobin_ant_liq.view_advances_tree
 #: model_terms:ir.ui.view,arch_db:wobin_ant_liq.view_comprobations_tree
 msgid "Advance"
@@ -241,6 +240,12 @@ msgid "Debts Inform"
 msgstr "Informe de Adeudos"
 
 #. module: wobin_ant_liq
+#: model:ir.actions.act_window,name:wobin_ant_liq.action_debts_inform
+#: model:ir.ui.menu,name:wobin_ant_liq.gen_ope_inform_menuitem
+msgid "General Operator Inform"
+msgstr "Informe de Operadores General"
+
+#. module: wobin_ant_liq
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__display_name
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobation_lines__display_name
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__display_name
@@ -291,12 +296,6 @@ msgstr "Seguidores (Canales)"
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__message_partner_ids
 msgid "Followers (Partners)"
 msgstr "Seguidores (Empresas)"
-
-#. module: wobin_ant_liq
-#: model:ir.actions.act_window,name:wobin_ant_liq.action_debts_inform
-#: model:ir.ui.menu,name:wobin_ant_liq.gen_ope_inform_menuitem
-msgid "General Operator Inform"
-msgstr "Informe de Operadores General"
 
 #. module: wobin_ant_liq
 #: model_terms:ir.ui.view,arch_db:wobin_ant_liq.view_settlements_form
@@ -626,6 +625,7 @@ msgstr "Saldado"
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_account_move__settlement_id
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_account_payment__settlement_id
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__settlement_id
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__name
 msgid "Settlement"
 msgstr "Liquidación"
 
