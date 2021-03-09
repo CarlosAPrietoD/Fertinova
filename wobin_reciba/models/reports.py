@@ -18,13 +18,21 @@ class ReportReceiptUninvoiced(models.AbstractModel):
     @api.model
     def _get_report_values(self, docids, data=None):
         report = self.env['receipt.uninvoiced'].browse(docids)
-        tickets_uninvoiced = self.env['reciba.ticket'].search([('operation_type','=','in'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),('destination_id','=',report.location.id),('invoice_id','=',False),'|',('state','=','priceless'),('state','=','confirmed')])
+        tickets = self.env['reciba.ticket'].search([('operation_type','=','in'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),('destination_id','=',report.location.id),('invoice_id','=',False),'|',('state','=','priceless'),('state','=','confirmed')])
         
         sum_net = 0
         count = 0
-        for receipt in tickets_uninvoiced:
+        tickets_uninvoiced = []
+        for receipt in tickets:
             sum_net += receipt.net_weight
             count += 1
+            data = {
+                'name': receipt.name,
+                'date': receipt.date.strftime("%d/%m/%Y %H:%M:%S"),
+                'partner_id': receipt.partner_id,
+                'net_weight': "{:,.0f}".format(receipt.net_weight)
+            }
+            tickets_uninvoiced.append(data)
         
 
         report_data = {
@@ -33,7 +41,7 @@ class ReportReceiptUninvoiced(models.AbstractModel):
             'today' : date.today(),
             'product' : report.product.name,
             'location' : report.location.name,
-            'sum_net' : sum_net,
+            'sum_net' : "{:,.0f}".format(sum_net),
             'count' : count
         }
 
@@ -60,13 +68,21 @@ class ReportReceiptInvoiced(models.AbstractModel):
     @api.model
     def _get_report_values(self, docids, data=None):
         report = self.env['receipt.invoiced'].browse(docids)
-        tickets_invoiced = self.env['reciba.ticket'].search([('operation_type','=','in'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),('destination_id','=',report.location.id),('invoice_id','!=',False),('state','=','confirmed')])
+        tickets = self.env['reciba.ticket'].search([('operation_type','=','in'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),('destination_id','=',report.location.id),('invoice_id','!=',False),('state','=','confirmed')])
         
         sum_net = 0
         count = 0
-        for receipt in tickets_invoiced:
+        tickets_invoiced = []
+        for receipt in tickets:
             sum_net += receipt.net_weight
             count += 1
+            data = {
+                'name': receipt.name,
+                'date': receipt.date.strftime("%d/%m/%Y %H:%M:%S"),
+                'partner_id': receipt.partner_id,
+                'net_weight': "{:,.0f}".format(receipt.net_weight)
+            }
+            tickets_invoiced.append(data)
         
 
         report_data = {
@@ -75,7 +91,7 @@ class ReportReceiptInvoiced(models.AbstractModel):
             'today' : date.today(),
             'product' : report.product.name,
             'location' : report.location.name,
-            'sum_net' : sum_net,
+            'sum_net' : "{:,.0f}".format(sum_net),
             'count' : count
         }
 
@@ -102,14 +118,21 @@ class ReportReceiptPriceless(models.AbstractModel):
     @api.model
     def _get_report_values(self, docids, data=None):
         report = self.env['receipt.priceless'].browse(docids)
-        tickets_priceless = self.env['reciba.ticket'].search([('operation_type','=','in'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),('destination_id','=',report.location.id),('state','=','priceless')])
+        tickets = self.env['reciba.ticket'].search([('operation_type','=','in'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),('destination_id','=',report.location.id),('state','=','priceless')])
         
         sum_net = 0
         count = 0
-        for receipt in tickets_priceless:
+        tickets_priceless = []
+        for receipt in tickets:
             sum_net += receipt.net_weight
             count += 1
-        
+            data = {
+                'name': receipt.name,
+                'date': receipt.date.strftime("%d/%m/%Y %H:%M:%S"),
+                'partner_id': receipt.partner_id,
+                'net_weight': "{:,.0f}".format(receipt.net_weight)
+            }
+            tickets_priceless.append(data)
 
         report_data = {
             'i_date' : report.init_date.strftime("%d/%m/%Y"),
@@ -117,7 +140,7 @@ class ReportReceiptPriceless(models.AbstractModel):
             'today' : date.today(),
             'product' : report.product.name,
             'location' : report.location.name,
-            'sum_net' : sum_net,
+            'sum_net' : "{:,.0f}".format(sum_net),
             'count' : count
         }
 
@@ -214,13 +237,21 @@ class ReportDeliveryUninvoiced(models.AbstractModel):
     @api.model
     def _get_report_values(self, docids, data=None):
         report = self.env['delivery.uninvoiced'].browse(docids)
-        tickets_uninvoiced = self.env['reciba.ticket'].search([('operation_type','=','out'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),('origin_id','=',report.location.id),('state','=','confirmed'),('sale_invoice_status','=','to invoice')])
+        tickets = self.env['reciba.ticket'].search([('operation_type','=','out'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),('origin_id','=',report.location.id),('state','=','confirmed'),('sale_invoice_status','=','to invoice')])
         
         sum_net = 0
         count = 0
-        for delivery in tickets_uninvoiced:
+        tickets_uninvoiced = []
+        for delivery in tickets:
             sum_net += delivery.net_weight
             count += 1
+            data = {
+                'name': delivery.name,
+                'date': delivery.date.strftime("%d/%m/%Y %H:%M:%S"),
+                'partner_id': delivery.partner_id,
+                'net_weight': "{:,.0f}".format(delivery.net_weight)
+            }
+            tickets_uninvoiced.append(data)
         
 
         report_data = {
@@ -229,7 +260,7 @@ class ReportDeliveryUninvoiced(models.AbstractModel):
             'today' : date.today(),
             'product' : report.product.name,
             'location' : report.location.name,
-            'sum_net' : sum_net,
+            'sum_net' : "{:,.0f}".format(sum_net),
             'count' : count
         }
 
@@ -256,13 +287,21 @@ class ReportDeliveryInvoiced(models.AbstractModel):
     @api.model
     def _get_report_values(self, docids, data=None):
         report = self.env['delivery.invoiced'].browse(docids)
-        tickets_invoiced = self.env['reciba.ticket'].search([('operation_type','=','out'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),('origin_id','=',report.location.id),('state','=','confirmed'),('sale_invoice_status','=','invoiced')])
+        tickets = self.env['reciba.ticket'].search([('operation_type','=','out'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),('origin_id','=',report.location.id),('state','=','confirmed'),('sale_invoice_status','=','invoiced')])
         
         sum_net = 0
         count = 0
-        for delivery in tickets_invoiced:
+        tickets_invoiced = []
+        for delivery in tickets:
             sum_net += delivery.net_weight
             count += 1
+            data = {
+                'name': delivery.name,
+                'date': delivery.date.strftime("%d/%m/%Y %H:%M:%S"),
+                'partner_id': delivery.partner_id,
+                'net_weight': "{:,.0f}".format(delivery.net_weight)
+            }
+            tickets_invoiced.append(data)
         
 
         report_data = {
@@ -271,7 +310,7 @@ class ReportDeliveryInvoiced(models.AbstractModel):
             'today' : date.today(),
             'product' : report.product.name,
             'location' : report.location.name,
-            'sum_net' : sum_net,
+            'sum_net' : "{:,.0f}".format(sum_net),
             'count' : count
         }
 
