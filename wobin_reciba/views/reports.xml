@@ -82,7 +82,7 @@
         </template>
 
         <!--Reporte-->
-        <report id="report_receipts_receipt_uninvoiced" model="receipt.uninvoiced" string="Reporte" report_type="qweb-html" name="wobin_reciba.report_receipt_uninvoiced" />
+        <report id="report_receipts_receipt_uninvoiced" model="receipt.uninvoiced" string="Recepciones por facturar" report_type="qweb-html" name="wobin_reciba.report_receipt_uninvoiced" />
 
         <!--Ventana de ingreso de datos-->
         <record model="ir.ui.view" id="report_data_receipt_uninvoiced">
@@ -187,7 +187,7 @@
         </template>
 
         <!--Reporte-->
-        <report id="report_receipts_receipt_invoiced" model="receipt.invoiced" string="Reporte" report_type="qweb-html" name="wobin_reciba.report_receipt_invoiced" />
+        <report id="report_receipts_receipt_invoiced" model="receipt.invoiced" string="Recepciones facturadas" report_type="qweb-html" name="wobin_reciba.report_receipt_invoiced" />
 
         <!--Ventana de ingreso de datos-->
         <record model="ir.ui.view" id="report_data_receipt_invoiced">
@@ -292,7 +292,7 @@
         </template>
 
         <!--Reporte-->
-        <report id="report_receipts_receipt_priceless" model="receipt.priceless" string="Reporte" report_type="qweb-html" name="wobin_reciba.report_receipt_priceless" />
+        <report id="report_receipts_receipt_priceless" model="receipt.priceless" string="Recepciones a deposito" report_type="qweb-html" name="wobin_reciba.report_receipt_priceless" />
 
         <!--Ventana de ingreso de datos-->
         <record model="ir.ui.view" id="report_data_receipt_priceless">
@@ -423,7 +423,7 @@
         </template>
 
         <!--Reporte-->
-        <report id="report_receipts_receipt_producer" model="receipt.producer" string="Reporte" report_type="qweb-html" name="wobin_reciba.report_receipt_producer" />
+        <report id="report_receipts_receipt_producer" model="receipt.producer" string="Recepciones por productor" report_type="qweb-html" name="wobin_reciba.report_receipt_producer" />
 
         <!--Ventana de ingreso de datos-->
         <record model="ir.ui.view" id="report_data_receipt_producer">
@@ -490,7 +490,7 @@
                                     FECHA
                                 </td>
                                 <td style="text-align:center; border: black 1px solid; padding: 5px">
-                                    PROVEEDOR
+                                    CLIENTE
                                 </td>
                                 <td style="text-align:center; border: black 1px solid; padding: 5px">
                                     PESO NETO (KG)
@@ -528,7 +528,7 @@
         </template>
 
         <!--Reporte-->
-        <report id="report_deliveries_delivery_uninvoiced" model="delivery.uninvoiced" string="Reporte" report_type="qweb-html" name="wobin_reciba.report_delivery_uninvoiced" />
+        <report id="report_deliveries_delivery_uninvoiced" model="delivery.uninvoiced" string="Entregas por facturar" report_type="qweb-html" name="wobin_reciba.report_delivery_uninvoiced" />
 
         <!--Ventana de ingreso de datos-->
         <record model="ir.ui.view" id="report_data_delivery_uninvoiced">
@@ -595,7 +595,7 @@
                                     FECHA
                                 </td>
                                 <td style="text-align:center; border: black 1px solid; padding: 5px">
-                                    PROVEEDOR
+                                    CLIENTE
                                 </td>
                                 <td style="text-align:center; border: black 1px solid; padding: 5px">
                                     PESO NETO (KG)
@@ -633,7 +633,7 @@
         </template>
 
         <!--Reporte-->
-        <report id="report_deliveries_delivery_invoiced" model="delivery.invoiced" string="Reporte" report_type="qweb-html" name="wobin_reciba.report_delivery_invoiced" />
+        <report id="report_deliveries_delivery_invoiced" model="delivery.invoiced" string="Entregas facturadas" report_type="qweb-html" name="wobin_reciba.report_delivery_invoiced" />
 
         <!--Ventana de ingreso de datos-->
         <record model="ir.ui.view" id="report_data_delivery_invoiced">
@@ -912,7 +912,7 @@
         </template>
 
         <!--Reporte-->
-        <report id="report_quality_avg_humidity" model="quality.avg.humidity" string="Reporte" report_type="qweb-html" name="wobin_reciba.report_avg_humidity" />
+        <report id="report_quality_avg_humidity" model="quality.avg.humidity" string="Reporte humedad ponderada" report_type="qweb-html" name="wobin_reciba.report_avg_humidity" />
 
         <!--Ventana de ingreso de datos-->
         <record model="ir.ui.view" id="report_data_avg_humidity">
