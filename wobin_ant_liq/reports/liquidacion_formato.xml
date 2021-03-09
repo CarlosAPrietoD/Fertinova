@@ -34,7 +34,11 @@
                                 <tr>
                                     <td class="table-secondary font-weight-bold">Fecha</td>
                                     <td><span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y %H:%M')"/></td>
-                                </tr>                                                                                              
+                                </tr> 
+                                <tr>
+                                    <td class="table-secondary font-weight-bold">Anticipo o Pago Relacionado</td>
+                                    <td><span t-field="doc.advance_related_id.name"/><span t-field="doc.payment_related_id.name"/></td>
+                                </tr>                                                                                                                              
                             </tbody>
                         </table>
 
