@@ -34,35 +34,45 @@
                                 <tr>
                                     <td class="table-secondary font-weight-bold">Fecha</td>
                                     <td><span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y %H:%M')"/></td>
-                                </tr>
-                                <tr>
-                                    <td class="table-secondary font-weight-bold">Circuito</td>
-                                    <td><span t-field="doc.circuit_id.name"/></td>
-                                </tr>                                                                                               
+                                </tr>                                                                                              
                             </tbody>
                         </table>
 
                         <table class="table table-condensed" style="font-size: 12px; margin-top: 40px;">
                             <tr>
-                                <th class="table-secondary">Anticipo</th>                            
-                                <th class="table-secondary">Comprobación</th>
+                                <th class="table-secondary">Operador</th>
                                 <th class="table-secondary">Viaje</th>
-                                <th class="table-secondary">Liquidación</th>
+                                <th class="table-secondary">Anticipos</th>                            
+                                <th class="table-secondary">Comprobaciones</th>
+                                <th class="table-secondary">Saldo a Liquidar</th>
                             </tr>                             
-                            <tr t-foreach='doc.adv_set_lines_ids' t-as='line'>
-                                <td><span t-esc="line.advance_sum_amnt"/></td>                            
-                                <td><span t-esc="line.comprobation_sum_amnt"/></td>
+                            <tr t-foreach='doc.settled_adv_set_lines_ids' t-as='line'>
+                                <td><span t-esc="line.operator_id.name"/></td>                            
                                 <td><span t-esc="line.trip_id.name"/></td>
+                                <td><span t-esc="line.advance_sum_amnt"/></td>
+                                <td><span t-esc="line.comprobation_sum_amnt"/></td>
                                 <td><span t-esc="line.amount_to_settle"/></td>
                             </tr>  
                         </table>  
+
+                        <table class="table borderless" style="font-size: 12px; margin-top: 50px; table-layout: fixed;">                           
+                            <tr>
+                                <td style="width: 100px;"></td>                            
+                                <td style="width: 100px;"></td>
+                                <td style="width: 100px;"></td>
+                                <td style="width: 100px;"></td>
+                                <td style="width: 100px;"></td>
+                                <td>Total de Liquidación</td>
+                                <td><span t-field="doc.total_settlement"/></td>
+                            </tr>  
+                        </table>                                    
             
-                        <div class="float-left text-center" style="font-size: 12px; margin-top: 120px; margin-left: 80px;">
+                        <div class="float-left text-center" style="font-size: 12px; margin-top: 70px; margin-left: 80px;">
                             <p>______________________</p>
                             <p>FIRMA OPERADOR</p>
                         </div>
 
-                        <div class="float-right text-center" style="font-size: 12px; margin-top: 120px; margin-right: 80px;">
+                        <div class="float-right text-center" style="font-size: 12px; margin-top: 70px; margin-right: 80px;">
                             <p>_________________________</p>
                             <p>FIRMA ADMINISTRACIÓN</p>
                         </div>                        

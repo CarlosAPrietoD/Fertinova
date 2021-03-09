@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-03 23:08+0000\n"
-"PO-Revision-Date: 2021-03-03 23:08+0000\n"
+"POT-Creation-Date: 2021-03-09 17:51+0000\n"
+"PO-Revision-Date: 2021-03-09 17:51+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -62,14 +62,7 @@ msgstr "Estado de la actividad"
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__name
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__name
 #: model_terms:ir.ui.view,arch_db:wobin_ant_liq.view_advances_tree
-#: model_terms:ir.ui.view,arch_db:wobin_ant_liq.view_comprobations_tree
 msgid "Advance"
-msgstr "Anticipo"
-
-#. module: wobin_ant_liq
-#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__advance_id
-#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__advance_id
-msgid "Advance ID"
 msgstr "Anticipo"
 
 #. module: wobin_ant_liq
@@ -134,18 +127,14 @@ msgid "Btn Mark Settle"
 msgstr ""
 
 #. module: wobin_ant_liq
-#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__adv_set_lines_ids
-msgid "Circuit Settlements for operator"
-msgstr "Liquidaciones de Circuito por Operador"
+#: model_terms:ir.ui.view,arch_db:wobin_ant_liq.view_settlements_form
+msgid "Charge into New Advance"
+msgstr "Cargarse a Nuevo Viaje"
 
 #. module: wobin_ant_liq
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_account_move__comprobation_id
+#: model_terms:ir.ui.view,arch_db:wobin_ant_liq.view_comprobations_tree
 msgid "Comprobation"
-msgstr "Comprobación"
-
-#. module: wobin_ant_liq
-#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__comprobation_ids
-msgid "Comprobation ID"
 msgstr "Comprobación"
 
 #. module: wobin_ant_liq
@@ -202,7 +191,6 @@ msgstr "Crear Asiento de Comprobación"
 
 #. module: wobin_ant_liq
 #: model_terms:ir.ui.view,arch_db:wobin_ant_liq.view_advances_form
-#: model_terms:ir.ui.view,arch_db:wobin_ant_liq.view_settlements_form
 msgid "Create Payment"
 msgstr "Crear Pago"
 
@@ -238,12 +226,6 @@ msgstr "Fecha"
 #: model:ir.ui.menu,name:wobin_ant_liq.debts_inform_menuitem
 msgid "Debts Inform"
 msgstr "Informe de Adeudos"
-
-#. module: wobin_ant_liq
-#: model:ir.actions.act_window,name:wobin_ant_liq.action_debts_inform
-#: model:ir.ui.menu,name:wobin_ant_liq.gen_ope_inform_menuitem
-msgid "General Operator Inform"
-msgstr "Informe de Operadores General"
 
 #. module: wobin_ant_liq
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__display_name
@@ -298,9 +280,10 @@ msgid "Followers (Partners)"
 msgstr "Seguidores (Empresas)"
 
 #. module: wobin_ant_liq
-#: model_terms:ir.ui.view,arch_db:wobin_ant_liq.view_settlements_form
-msgid "Give amount in New Advance"
-msgstr "Abonarse en Nuevo Anticipo"
+#: model:ir.actions.act_window,name:wobin_ant_liq.action_debts_inform
+#: model:ir.ui.menu,name:wobin_ant_liq.gen_ope_inform_menuitem
+msgid "General Operator Inform"
+msgstr "Informe de Operadores General"
 
 #. module: wobin_ant_liq
 #: model_terms:ir.ui.view,arch_db:wobin_ant_liq.view_advances_tree
@@ -444,8 +427,13 @@ msgstr "Mensajes"
 #. module: wobin_ant_liq
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__mov_lns_ad_set_id
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__mov_lns_ad_set_id
-msgid "Movs Lns Adv Set Id"
+msgid "Mov Lns Ad Set"
 msgstr ""
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__settled
+msgid "Move Settled"
+msgstr "Mov. Saldado"
 
 #. module: wobin_ant_liq
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__activity_date_deadline
@@ -537,6 +525,11 @@ msgid "Overdue"
 msgstr "Atrasado"
 
 #. module: wobin_ant_liq
+#: model_terms:ir.ui.view,arch_db:wobin_ant_liq.view_settlements_form
+msgid "Pay Settlement"
+msgstr "Pagar Liquidación"
+
+#. module: wobin_ant_liq
 #: model:ir.model,name:wobin_ant_liq.model_account_payment
 msgid "Payments"
 msgstr "Pagos"
@@ -557,11 +550,6 @@ msgid "Pending Expenses to Refund"
 msgstr "Gastos Pendientes por Reembolsar"
 
 #. module: wobin_ant_liq
-#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__flag_pending_process
-msgid "Pending Process"
-msgstr "Proceso Pendiente"
-
-#. module: wobin_ant_liq
 #: selection:wobin.advances,activity_state:0
 #: selection:wobin.comprobation.lines,activity_state:0
 #: selection:wobin.comprobations,activity_state:0
@@ -571,13 +559,17 @@ msgid "Planned"
 msgstr "Planeado"
 
 #. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__possible_adv_set_lines_ids
+msgid "Possible Moves for operator"
+msgstr "Movs. Posibles para Operador"
+
+#. module: wobin_ant_liq
 #: selection:wobin.settlements,state:0
 msgid "Ready to settle"
-msgstr "Preparado para saldar"
+msgstr "Preparado por saldar"
 
 #. module: wobin_ant_liq
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__acc_mov_related_id
-#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__acc_mov_related_id
 msgid "Related Account Move"
 msgstr "Movimiento Contable Relacionado"
 
@@ -585,6 +577,16 @@ msgstr "Movimiento Contable Relacionado"
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__advance_related_id
 msgid "Related Advance"
 msgstr "Anticipo Relacionado"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__advance_ids
+msgid "Related Advances"
+msgstr "Anticipos Relacionados"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__comprobation_ids
+msgid "Related Comprobations"
+msgstr "Comprobaciones Relacionadas"
 
 #. module: wobin_ant_liq
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__payment_related_id
@@ -602,11 +604,6 @@ msgid "Responsible User"
 msgstr "Usuario responsable"
 
 #. module: wobin_ant_liq
-#: model_terms:ir.ui.view,arch_db:wobin_ant_liq.view_settlements_form
-msgid "Send to Debtor"
-msgstr "Crear Movimiento de Deudor"
-
-#. module: wobin_ant_liq
 #: model:ir.ui.menu,name:wobin_ant_liq.settings_menu_5
 msgid "Settings"
 msgstr "Ajustes"
@@ -622,12 +619,23 @@ msgid "Settled"
 msgstr "Saldado"
 
 #. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__settled_adv_set_lines_ids
+msgid "Settled Moves for operator"
+msgstr "Movs. Saldados por operador"
+
+#. module: wobin_ant_liq
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_account_move__settlement_id
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_account_payment__settlement_id
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__settlement_id
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__settlement_id
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__name
 msgid "Settlement"
 msgstr "Liquidación"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__settlement_aux_id
+msgid "Settlement Aux"
+msgstr "Liquidación Auxliar"
 
 #. module: wobin_ant_liq
 #: model:ir.actions.act_window,name:wobin_ant_liq.action_settlements
@@ -656,6 +664,11 @@ msgstr "Estado basado en actividades\n"
 "Planificada: futuras actividades."
 
 #. module: wobin_ant_liq
+#: model_terms:ir.ui.view,arch_db:wobin_ant_liq.view_settlements_form
+msgid "Sum Amounts"
+msgstr ""
+
+#. module: wobin_ant_liq
 #: selection:wobin.advances,activity_state:0
 #: selection:wobin.comprobation.lines,activity_state:0
 #: selection:wobin.comprobations,activity_state:0
@@ -670,10 +683,19 @@ msgid "Total $"
 msgstr "Total $"
 
 #. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__total_selected
+msgid "Total of Selected Rows $"
+msgstr "Saldos Seleccionados $"
+
+#. module: wobin_ant_liq
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__total_settlement
+msgid "Total of Settlement $"
+msgstr "Total de Liquidación"
+
+#. module: wobin_ant_liq
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__trip_id
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__trip_id
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__trip_id
-#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__trip_id
 msgid "Trip"
 msgstr "Viaje"
 
