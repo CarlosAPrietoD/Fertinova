@@ -325,6 +325,137 @@
         <!--Menu-->
         <menuitem id="menu_receipt_priceless" name="Recepciones a depósito" parent="menu_receipt_reports" action="action_receipt_priceless" groups="group_reciba_control,group_reciba_responsable"/>
 
+        <!--================================Reporte de recepciones por productor======================================-->
+
+        <!--Plantilla-->
+        <template id="report_receipt_producer">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <br/>
+                    <br/>
+                    <br/>
+                    <div style="width: 100%;">
+                        <table style="width: 100%; text-align: left; font-size: 13px;">
+                            <tr>
+                                <th colspan="10" style="text-align:center; border: black 1px solid; padding: 5px">KARDEX</th>
+                            </tr>
+                            <tr>
+                                <td colspan="10" style="text-align:center; border: black 1px solid; padding: 5px">
+                                    DEL 
+                                    <t t-esc="report_data['i_date']" />
+                                    AL 
+                                    <t t-esc="report_data['e_date']" />
+                                </td>
+                            </tr>
+                            <tr style="height: 40px"></tr>
+                            <tr>
+                                <th colspan="10" style="text-align:center; border: black 1px solid; padding: 5px">RECEPCIONES POR PRODUCTOR (<t t-esc="report_data['producer']" />): <t t-esc="report_data['count']" /></th>
+                            </tr>
+                            <tr>
+                                <th style="text-align:center; border: black 1px solid; padding: 5px">
+                                    FECHA
+                                </th>
+                                <th style="text-align:center; border: black 1px solid; padding: 5px">
+                                    PROVEEDOR
+                                </th>
+                                <th style="text-align:center; border: black 1px solid; padding: 5px">
+                                    BOLETA
+                                </th>
+                                <th style="text-align:center; border: black 1px solid; padding: 5px">
+                                    TIPO DE RECEPCION
+                                </th>
+                                <th style="text-align:center; border: black 1px solid; padding: 5px">
+                                    KG
+                                </th>
+                                <th style="text-align:center; border: black 1px solid; padding: 5px">
+                                    MOVIMIENTO DE ALMACEN
+                                </th>
+                                <th style="text-align:center; border: black 1px solid; padding: 5px">
+                                    ESTADO DE FACTURACIÓN
+                                </th>
+                                <th style="text-align:center; border: black 1px solid; padding: 5px">
+                                    FACTURA
+                                </th>
+                                <th style="text-align:center; border: black 1px solid; padding: 5px">
+                                    CONTACTO
+                                </th>
+                                <th style="text-align:center; border: black 1px solid; padding: 5px">
+                                    ESTADO DE FACTURA
+                                </th>
+                            </tr>
+                            <tr t-foreach="receipts" t-as="receipt">
+                                <td style="text-align:center; border: black 1px solid; padding: 3px">
+                                    <t t-esc="receipt['date']" />
+                                </td>
+                                <td style="text-align:center; border: black 1px solid; padding: 3px">
+                                    <t t-esc="receipt['provider']" />
+                                </td>
+                                <td style="text-align:center; border: black 1px solid; padding: 3px">
+                                    <t t-esc="receipt['name']" />
+                                </td>
+                                <td style="text-align:center; border: black 1px solid; padding: 3px">
+                                    <t t-esc="receipt['reception']" />
+                                </td>
+                                <td style="text-align:center; border: black 1px solid; padding: 3px">
+                                    <t t-esc="receipt['net']" />
+                                </td>
+                                <td style="text-align:center; border: black 1px solid; padding: 3px">
+                                    <t t-esc="receipt['transfer']" />
+                                </td>
+                                <td style="text-align:center; border: black 1px solid; padding: 3px">
+                                    <t t-esc="receipt['status_invoiced']" />
+                                </td>
+                                <td style="text-align:center; border: black 1px solid; padding: 3px">
+                                    <t t-esc="receipt['invoice']" />
+                                </td>
+                                <td style="text-align:center; border: black 1px solid; padding: 3px">
+                                    <t t-esc="receipt['partner_invoice']" />
+                                </td>
+                                <td style="text-align:center; border: black 1px solid; padding: 3px">
+                                    <t t-esc="receipt['invoice_status']" />
+                                </td>
+                            </tr>
+                            
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+        <!--Reporte-->
+        <report id="report_receipts_receipt_producer" model="receipt.producer" string="Reporte" report_type="qweb-html" name="wobin_reciba.report_receipt_producer" />
+
+        <!--Ventana de ingreso de datos-->
+        <record model="ir.ui.view" id="report_data_receipt_producer">
+            <field name="name">report_receipt_producer</field>
+            <field name="model">receipt.producer</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <field name="producer" />
+                            <field name="product" />
+                        </group>
+                        <group>
+                            <field name="init_date" />
+                            <field name="end_date" />
+                        </group>
+                    </group>
+                    <footer>
+                        <button string="Cancel" special="cancel" class="oe_highlight" />
+                        <button name="%(wobin_reciba.report_receipts_receipt_producer)d" string="Submit" type="action" class="oe_highlight" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!--Accion para la ventana emergente-->
+        <act_window id="action_receipt_producer" name="Selecciona el intervalo del reporte" res_model="receipt.producer" view_mode="form" target="new" multi="True" />
+
+        <!--Menu-->
+        <menuitem id="menu_receipt_producer" name="Recepciones por productor" parent="menu_receipt_reports" action="action_receipt_producer" />
+
         <!--================================Reporte de entregas por facturar======================================-->
 
         <!--Plantilla-->

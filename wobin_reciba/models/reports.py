@@ -128,6 +128,76 @@ class ReportReceiptPriceless(models.AbstractModel):
             'receipts' : tickets_priceless
         }
 
+class ReceiptProducer(models.TransientModel):
+    #Recepciones por productor    
+    _name='receipt.producer'
+    
+    producer = fields.Many2one('res.partner', string="Productor")
+    product = fields.Many2one('product.product', string="Producto")
+    init_date = fields.Datetime(string="Fecha inicio")
+    end_date = fields.Datetime(string="Fecha fin")
+
+class ReportReceiptProducer(models.AbstractModel):
+    #Reporte recepciones por productor
+    _name = 'report.wobin_reciba.report_receipt_producer'
+
+    @api.model
+    def _get_report_values(self, docids, data=None):
+        
+        report = self.env['receipt.producer'].browse(docids)
+        tickets = self.env['reciba.ticket'].search([('operation_type','=','in'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),('partner_id','=',report.producer.id),'|',('state','=','priceless'),('state','=','confirmed')])
+        
+        sum_net = 0
+        count = 0
+        tickets_producer = []
+        for receipt in tickets:
+            count += 1
+            data = {
+                'date':receipt.date.strftime("%d/%m/%Y"),
+                'provider': receipt.partner_id.name,
+                'name': receipt.name,
+                'reception': '-',
+                'net': "{:,.0f}".format(receipt.net_weight),
+                'transfer': 'Sin movimiento',
+                'status_invoiced': 'Sin facturar',
+                'invoice': '-',
+                'partner_invoice': '-',
+                'invoice_status': '-'
+            }
+            if receipt.reception == 'price':
+                data['reception'] = 'Con precio'
+            elif receipt.reception == 'priceless':
+                data['reception'] = 'Sin precio'
+            if receipt.transfer_id:
+                data['transfer'] = receipt.transfer_id.name
+            if receipt.invoice_id:
+                data['status_invoiced'] = 'Facturado'
+                data['invoice'] = receipt.invoice_id.number
+                data['partner_invoice'] = receipt.invoice_id.partner_id.name
+                if receipt.invoice_id.state == 'draft':
+                    data['invoice_status'] = 'Borrador'
+                elif receipt.invoice_id.state == 'open':
+                    data['invoice_status'] = 'Abierto'
+                elif receipt.invoice_id.state == 'paid':
+                    data['invoice_status'] = 'Pagado'
+            tickets_producer.append(data)
+        
+        report_data = {
+            'i_date' : report.init_date.strftime("%d/%m/%Y"),
+            'e_date': report.end_date.strftime("%d/%m/%Y"),
+            'today' : date.today(),
+            'product' : report.product.name,
+            'producer' : report.producer.name,
+            'count' : count
+        }
+
+        return {
+            'doc_ids': docids,
+            'doc_model': 'res.partner',
+            'report_data' : report_data,
+            'receipts' : tickets_producer
+        }
+
 class DeliveryUninvoiced(models.TransientModel):
     #Entregas por facturar    
     _name='delivery.uninvoiced'
