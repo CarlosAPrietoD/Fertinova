@@ -56,7 +56,7 @@ class WobinComprobations(models.Model):
 
     def create_acc_mov(self):
         #This method intends to display a Form View of Account Move        
-        context_modified = False
+        #context_modified = False
         line_ids_list    = list()
         item             = tuple()
         dictionary_vals  = dict()
@@ -99,7 +99,7 @@ class WobinComprobations(models.Model):
             line_ids_list.append(item)           
         # | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - |            
 
-
+        """
         #Retrieve related payment of advance in this comprobation:
         payment_related = self.env['account.payment'].search([('advance_id', '=', self.advance_id.id)], limit=1) 
         
@@ -125,7 +125,13 @@ class WobinComprobations(models.Model):
             ctxt = {
                     'default_comprobation_id': self.id,
                     'default_line_ids': line_ids_list
-                   }            
+                   } 
+        """                   
+        
+        ctxt = {
+                'default_comprobation_id': self.id,
+                'default_line_ids': line_ids_list
+               }                               
          
         return {
             #'name':_(""),
