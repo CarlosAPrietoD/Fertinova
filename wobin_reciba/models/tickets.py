@@ -1043,40 +1043,35 @@ class ReportRecibaTicketPriceless(models.AbstractModel):
             'docs': docs
         }
 
+class RecibaInvoice(models.Model):
+    #Campo que relaciona factura con boletas
+    _name = 'reciba.invoice'
+
+    @api.model
+    def create(self, values):
+        #agregamos la relacion de reciba con factura
+        invoice = super(RecibaInvoice, self).create(values)
+        
+        invoice.reciba_id.write({
+            'invoice_id' : invoice.invoice_id.id,
+            'invoice_count' : 1
+        })
+        return invoice
+
+    @api.multi
+    def unlink(self):
+        #Borramos la relacion de la boleta con la factura
+        self.reciba_id.write({
+            'invoice_id' : 0,
+            'invoice_count' : 0
+        })
+        return super(RecibaInvoice, self).unlink()
+
+    invoice_id = fields.Many2one('account.invoice')
+    reciba_id = fields.Many2one('reciba.ticket', domain="[('operation_type','=','in'),('state','=','confirmed'),('invoice_id','=',None)]")
+
 class AccountInvoice(models.Model):
     #Campo que relaciona factura con boletas
     _inherit = 'account.invoice'
 
-    reciba_id = fields.Many2one('reciba.ticket', string="Boleta reciba", domain="[('operation_type','=','in'),('purchase_id.name','=',origin),('state','=','confirmed')]")
-
-    @api.model
-    def create(self, values):
-        #agregamos la relacion de reciba con factura, con sus restricciones al crear la factura
-        invoice = super(AccountInvoice, self).create(values)
-        if invoice.reciba_id.invoice_id:
-            msg = 'La boleta seleccionada ya está relacionada con otra factura'
-            raise UserError(msg)
-        else:
-            invoice.reciba_id.write({
-                'invoice_id' : invoice.id,
-                'invoice_count' : 1
-            })
-        return invoice
-
-    @api.onchange('reciba_id')
-    def _onchange_reciba(self):
-        #agregamos la relacion de reciba con factura, con sus restricciones
-        if self.reciba_id:
-            if self.reciba_id.invoice_id:
-                msg = 'La boleta seleccionada ya está relacionada con otra factura'
-                raise UserError(msg)
-            else:
-                self.reciba_id.write({
-                    'invoice_id' : self._origin.id,
-                    'invoice_count' : 1
-                })
-                if self._origin.reciba_id:
-                    self._origin.reciba_id.write({
-                        'invoice_id' : 0,
-                        'invoice_count' : 1
-                    })
+    reciba_id = fields.One2many('reciba.invoice', 'invoice_id', string="Boleta reciba")
