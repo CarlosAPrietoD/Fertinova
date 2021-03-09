@@ -2,7 +2,7 @@
     <data>
         <!--/////////////////////////////////////-->
         <!-- PERMISSIONS FOR GENERAL ROLE GROUP  -->
-        <!--/////////////////////////////////////-->
+        <!--/////////////////////////////////////
         <record id="general_role_hide_tree_informs" model="ir.ui.view">
         <field name="name">Informs</field>
         <field name="model">hr.employee</field>
@@ -16,6 +16,6 @@
                 </xpath>
             </field>
         </record>  
-
+        -->
     </data>
 </odoo>

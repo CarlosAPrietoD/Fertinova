@@ -57,10 +57,10 @@
       <field name="name">Settlements</field>
       <field name="res_model">wobin.settlements</field>
       <field name="view_mode">tree,form,search</field>
-      <field name="context">{'group_by':'trip_id'}</field>
+      <field name="context">{'group_by':'operator_id'}</field>
     </record>   
 
-    <!-- DEBTS Inform - ACTION  -->
+    <!-- DEBTS Inform - ACTION -->  
     <record id="action_inform" model="ir.actions.act_window">
       <field name="name">Debts Inform</field>
       <field name="res_model">hr.employee</field>
@@ -156,7 +156,6 @@
         <field name="groups_id" eval="[(6,0,[ref('group_wacs_administration')])]"/>        
     </record>               
                           
-
     <menuitem name="Concepts" 
               id="concepts_menuitem" 
               parent="wobin_ant_liq.settings_menu_5" 
@@ -164,6 +163,5 @@
               action="action_concepts"
               sequence="1"/>    
              
-
   </data>
 </odoo>

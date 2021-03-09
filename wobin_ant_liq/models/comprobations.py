@@ -23,19 +23,19 @@ class WobinComprobations(models.Model):
         res = super(WobinComprobations, self).create(vals)  
 
         #Intend to link this record with Wobin Moves Advances Settlements Lines:
-        operator = res.operator_id.id
-        trip     = res.trip_id.id
-        advance  = res.advance_id.id
+        #operator = res.operator_id.id
+        #trip     = res.trip_id.id
+        #advance  = res.advance_id.id
         
-        get_id_mvs = self.env['wobin.moves.adv.set.lines'].search([('operator_id', '=', operator),
-                                                                   ('trip_id', '=', trip),
-                                                                   ('advance_id', '=', advance)], limit=1)
+        #get_id_mvs = self.env['wobin.moves.adv.set.lines'].search([('operator_id', '=', operator),
+        #                                                           ('trip_id', '=', trip),
+        #                                                           ('advance_id', '=', advance)], limit=1)
                                                                        
-        mov_lns_obj = self.env['wobin.moves.adv.set.lines'].browse(get_id_mvs.id)
-        mov_lns_obj.write({'comprobation_id': res.id}) 
+        #mov_lns_obj = self.env['wobin.moves.adv.set.lines'].browse(get_id_mvs.id)
+        #mov_lns_obj.write({'comprobation_id': res.id}) 
 
         #Set value of id for Wobin Moves Advances Settlements Lines in Advances:
-        res.mov_lns_ad_set_id = mov_lns_obj.id                                                                                                   
+        #res.mov_lns_ad_set_id = mov_lns_obj.id                                                                                                   
 
         return res
 
@@ -48,9 +48,9 @@ class WobinComprobations(models.Model):
     trip_id     = fields.Many2one('wobin.logistica.trips', string='Trip', track_visibility='always', ondelete='cascade')
     expenses_to_refund = fields.Float(string='Pending Expenses to Refund', digits=(15,2), compute='set_expenses_to_refund', track_visibility='always')
     acc_mov_related_id = fields.Many2one('account.move', string='Related Account Move', compute='set_related_acc_mov', track_visibility='always', ondelete='cascade')
-    advance_id         = fields.Many2one('wobin.advances', string='Advance ID', ondelete='cascade')
-    mov_lns_ad_set_id  = fields.Many2one('wobin.moves.adv.set.lines', string='Movs Lns Adv Set Id', ondelete='cascade')
-    comprobation_lines_ids  = fields.One2many('wobin.comprobation.lines', 'comprobation_id', string='Concept Lines')
+    #advance_id         = fields.Many2one('wobin.advances', string='Advance ID', ondelete='cascade')
+    mov_lns_ad_set_id  = fields.Many2one('wobin.moves.adv.set.lines', ondelete='cascade')
+    comprobation_lines_ids = fields.One2many('wobin.comprobation.lines', 'comprobation_id', string='Concept Lines')
     
 
 
@@ -151,6 +151,12 @@ class WobinComprobations(models.Model):
         self.amount = sum_amount        
         self.total = sum_amount
 
+        #Sum all amounts of debit concepts and fill up authomatically
+        #amount if concept to input is credit:
+        for line in self.comprobation_lines_ids: 
+            if line.concept_id.credit_flag == True: 
+                line.amount = sum_amount       
+
 
 
     @api.one
@@ -161,7 +167,6 @@ class WobinComprobations(models.Model):
                         WHERE trip_id = %s AND operator_id = %s;"""
         self.env.cr.execute(sql_query, (self.trip_id.id, self.operator_id.id,))
         result = self.env.cr.fetchone()
-        _logger.info('\n\n\n result query %s', result)
 
         if result:                    
             self.expenses_to_refund = result[0]        

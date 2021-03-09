@@ -8,17 +8,22 @@ class WobinMovesAdvSetLines(models.Model):
     _description = 'Wobin Moves Advances Settlements Lines'   
 
 
-    operator_id = fields.Many2one('hr.employee',string='Operator', ondelete='cascade', compute='set_operator', store=True)
-    trip_id     = fields.Many2one('wobin.logistica.trips', string='Trip', ondelete='cascade', compute='set_trip', store=True)
-    advance_id  = fields.Many2one('wobin.advances', string='Advance ID', ondelete='cascade', compute='set_advance', store=True)
-    comprobation_ids = fields.Many2many('wobin.comprobations', string='Comprobation ID', ondelete='cascade', compute='set_comprobations', store=True)
+
+    settlement_id     = fields.Many2one('wobin.settlements', ondelete='cascade')
+    settlement_aux_id = fields.Many2one('wobin.settlements', ondelete='cascade')
+    check_selection = fields.Boolean(string=' ')
+    operator_id     = fields.Many2one('hr.employee',string='Operator', ondelete='cascade')
+    trip_id         = fields.Many2one('wobin.logistica.trips', string='Trip', ondelete='cascade')
+    advance_ids     = fields.One2many('wobin.advances', 'mov_lns_ad_set_id', string='Related Advances', ondelete='cascade', compute='set_advances')
+    comprobation_ids      = fields.One2many('wobin.comprobations', 'mov_lns_ad_set_id', string='Related Comprobations', ondelete='cascade', compute='set_comprobations')
     advance_sum_amnt      = fields.Float(string='Advances', digits=(15,2), compute='set_advance_sum_amnt')
     comprobation_sum_amnt = fields.Float(string='Comprobations', digits=(15,2), compute='set_comprobation_sum_amnt')
     amount_to_settle      = fields.Float(string='Amount to Settle', digits=(15,2), compute='set_amount_to_settle')
-    flag_pending_process  = fields.Boolean(string='Pending Process', compute='set_flag_pending_process')
+    settled               = fields.Boolean(string='Move Settled')
+    #flag_pending_process  = fields.Boolean(string='Pending Process', compute='set_flag_pending_process')
 
 
-
+    """
     @api.one
     def set_operator(self):
         self.operator_id = self.env['wobin.advances'].search([('mov_lns_ad_set_id', '=', self.id)], limit=1).operator_id.id
@@ -27,21 +32,38 @@ class WobinMovesAdvSetLines(models.Model):
     @api.one
     def set_trip(self):
         self.trip_id = self.env['wobin.advances'].search([('mov_lns_ad_set_id', '=', self.id)], limit=1).trip_id.id    
-
-
-    @api.one
-    def set_advance(self):
-        self.advance_id = self.env['wobin.advances'].search([('mov_lns_ad_set_id', '=', self.id)], limit=1).id
-
+    """
 
     @api.one
+    @api.depends('operator_id')
+    def set_advances(self):
+        list_advances = self.env['wobin.advances'].search([('operator_id', '=', self.operator_id.id),
+                                                           ('trip_id', '=', self.trip_id.id)]).ids                                                                   
+        self.advance_ids = [(6, 0, list_advances)]
+        
+    
+
+    @api.one
+    @api.depends('operator_id')
     def set_comprobations(self):
-        self.comprobation_ids = [(6, 0, self.env['wobin.comprobations'].search([('mov_lns_ad_set_id', '=', self.id)]).ids)]
+        #self.comprobation_ids = [(6, 0, self.env['wobin.comprobations'].search([('mov_lns_ad_set_id', '=', self.id)]).ids)]
+        list_comprobations = self.env['wobin.comprobations'].search([('operator_id', '=', self.operator_id.id),
+                                                                     ('trip_id', '=', self.trip_id.id)]).ids                                                                   
+        self.comprobation_ids = [(6, 0, list_comprobations)]        
 
 
     @api.one
     def set_advance_sum_amnt(self):
-        self.advance_sum_amnt = self.env['wobin.advances'].search([('mov_lns_ad_set_id', '=', self.id)], limit=1).amount
+        #self.advance_sum_amnt = self.env['wobin.advances'].search([('mov_lns_ad_set_id', '=', self.id)], limit=1).amount        
+        #Sum amounts from various advances linked to a given operator and trip:
+        sql_query = """SELECT sum(amount) 
+                         FROM wobin_advances 
+                        WHERE operator_id = %s AND trip_id = %s"""
+        self.env.cr.execute(sql_query, (self.operator_id.id, self.trip_id.id,))
+        result = self.env.cr.fetchone()
+        
+        if result:
+            self.advance_sum_amnt = result[0]        
 
 
     @api.one 
@@ -49,13 +71,11 @@ class WobinMovesAdvSetLines(models.Model):
         #Sum amounts from various comprobations linked to an advance:
         sql_query = """SELECT sum(amount) 
                          FROM wobin_comprobations 
-                        WHERE mov_lns_ad_set_id = %s"""
-        self.env.cr.execute(sql_query, (self.id,))
+                        WHERE operator_id = %s AND trip_id = %s"""
+        self.env.cr.execute(sql_query, (self.operator_id.id, self.trip_id.id,))
         result = self.env.cr.fetchone()
-
         if result:                    
             self.comprobation_sum_amnt = result[0]        
-        #self.comprobation_sum_amnt = self.env['wobin.comprobations'].search([('mov_lns_ad_set_id', '=', self.id)], limit=1).amount  
 
 
     @api.one  
@@ -63,7 +83,7 @@ class WobinMovesAdvSetLines(models.Model):
         self.amount_to_settle = self.comprobation_sum_amnt - self.advance_sum_amnt 
 
 
-    
+    """
     @api.one        
     def set_flag_pending_process(self):
         flag_advances = False; flag_comprobations = False
@@ -85,6 +105,7 @@ class WobinMovesAdvSetLines(models.Model):
         #Assign final determination only when both flags are True
         if flag_advances and flag_comprobations:
             self.flag_pending_process = True
+    """
 
 
 

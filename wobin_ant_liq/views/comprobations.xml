@@ -17,7 +17,7 @@
               <field name="trip_id"/>   
               <field name="acc_mov_related_id"/>   
               <group expand="0" string="Group By">
-                  <filter string="Advance" name="name" 
+                  <filter string="Comprobation" name="name" 
                             context="{'group_by':'trip_id'}"/>
               </group>
             </search> 
@@ -63,7 +63,7 @@
                           <field name="trip_id" required="True"/>                           
                         </group>                                                 
                         <group>    
-                          <field name="advance_id" required="True"/>                  
+                          <!--<field name="advance_id" required="True"/>-->                  
                           <field name="expenses_to_refund"/>      
                           <field name="acc_mov_related_id"/>                                     
                         </group> 

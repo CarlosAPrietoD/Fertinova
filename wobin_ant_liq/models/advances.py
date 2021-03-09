@@ -16,13 +16,27 @@ class WobinAdvances(models.Model):
         if vals.get('name', 'New') == 'New':
             sequence = self.env['ir.sequence'].next_by_code(
                 'self.advance') or 'New'
-            vals['name'] = sequence  
+            vals['name'] = sequence 
           
             #Update flag to indicate employee for checking up:
             employee_obj = self.env['hr.employee'].browse(vals['operator_id'])
             employee_obj.flag_employee_active = True
 
             res = super(WobinAdvances, self).create(vals)
+
+            #After record was created successfully and if considering there is a new trip 
+            #with new record for operator then create a new record for Wobin Moves Advances Settlements Lines 
+            existing_movs = self.env['wobin.moves.adv.set.lines'].search([('operator_id', '=', res.operator_id.id),
+                                                                          ('trip_id', '=', res.trip_id.id)]).ids                                                                       
+            if not existing_movs:
+                #Create a new record for Wobin Moves Advances Settlements Lines
+                values = {
+                          'operator_id': res.operator_id.id,
+                          'trip_id': res.trip_id.id,
+                         }
+                self.env['wobin.moves.adv.set.lines'].create(values) 
+
+
 
             #If a new record was created successfully and settlement related exists
             #update that settlement in order to change its state to 'settled':
@@ -31,24 +45,24 @@ class WobinAdvances(models.Model):
                 settlement_obj.update({'state': 'ready'})
 
         #Create a new record for Wobin Moves Advances Settlements Lines
-        values = {
-                  'operator_id': res.operator_id.id,
-                  'trip_id': res.trip_id.id,
-                  'advance_id': res.id
-                 }
-        mov_lns_obj = self.env['wobin.moves.adv.set.lines'].create(values) 
+        #values = {
+        #          'operator_id': res.operator_id.id,
+        #          'trip_id': res.trip_id.id,
+        #          'advance_id': res.id
+        #         }
+        #mov_lns_obj = self.env['wobin.moves.adv.set.lines'].create(values) 
 
         #Set value of id for Wobin Moves Advances Settlements Lines in Advances:
-        res.mov_lns_ad_set_id = mov_lns_obj.id 
+        #res.mov_lns_ad_set_id = mov_lns_obj.id 
 
         #Create a new record for Wobin Settlements:
-        vals_set = {
-                    'name': self.env['ir.sequence'].next_by_code('self.settlement'),  
-                    'operator_id': res.operator_id.id,
-                    'trip_id': res.trip_id.id,
-                    'state': 'pending'
-                   }
-        self.env['wobin.settlements'].create(vals_set)         
+        #vals_set = {
+        #            'name': self.env['ir.sequence'].next_by_code('self.settlement'),  
+        #            'operator_id': res.operator_id.id,
+        #            'trip_id': res.trip_id.id,
+        #            'state': 'pending'
+        #           }
+        #self.env['wobin.settlements'].create(vals_set)         
 
         return res
 
@@ -56,12 +70,12 @@ class WobinAdvances(models.Model):
     name        = fields.Char(string="Advance", readonly=True, required=True, copy=False, default='New')
     operator_id = fields.Many2one('hr.employee',string='Operator', track_visibility='always', ondelete='cascade')
     date        = fields.Date(string='Date', track_visibility='always')
-    amount      = fields.Float(string='Amount $', digits=(15,2), group_operator=False, track_visibility='always')
+    amount      = fields.Float(string='Amount $', digits=(15,2), track_visibility='always')
     trip_id     = fields.Many2one('wobin.logistica.trips', string='Trip', track_visibility='always', ondelete='cascade')
-    expenses_to_check  = fields.Float(string='Pending Expenses to Check', digits=dp.get_precision('Product Unit of Measure'), compute='set_expenses_to_check', track_visibility='always')
+    expenses_to_check  = fields.Float(string='Pending Expenses to Check', digits=(15,2), compute='set_expenses_to_check', track_visibility='always')
     payment_related_id = fields.Many2one('account.payment', string='Related Payment', compute='set_related_payment', ondelete='cascade', track_visibility='always')
-    mov_lns_ad_set_id  = fields.Many2one('wobin.moves.adv.set.lines', string='Movs Lns Adv Set Id', ondelete='cascade')
-    settlement_id      = fields.Many2one('wobin.settlements', string='Settlement')
+    mov_lns_ad_set_id  = fields.Many2one('wobin.moves.adv.set.lines', ondelete='cascade')
+    settlement_id      = fields.Many2one('wobin.settlements', string='Settlement', ondelete='cascade')
 
 
 

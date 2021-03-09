@@ -13,7 +13,7 @@
               <field name="name"/>
               <field name="operator_id"/>            
               <field name="date"/>                 
-              <field name="trip_id"/>
+              <!--<field name="trip_id"/>-->
               <field name="state"/>
             </search> 
         </field> 
@@ -28,7 +28,7 @@
           <field name="name"/>
           <field name="operator_id"/>            
           <field name="date"/>                 
-          <field name="trip_id"/>   
+          <!--<field name="trip_id"/>-->   
           <field name="state"/>
         </tree>
       </field>
@@ -41,10 +41,10 @@
         <field name="arch" type="xml"> 
             <form> 
                 <header>
-                    <button name="create_payment" type="object" string="Create Payment" class="oe_highlight" attrs="{'invisible': ['|', ('btn_crt_payment', '=', False), ('state', '!=', 'pending')]}"/>
+                    <button name="create_payment" type="object" string="Pay Settlement" class="oe_highlight" attrs="{'invisible': ['|', ('btn_crt_payment', '=', False), ('state', '!=', 'pending')]}"/>
                     <button name="mark_settled" type="object" string="Mark Settled" class="oe_highlight" attrs="{'invisible': ['|', ('btn_mark_settle', '=', False), ('state', '!=', 'pending')]}"/>
-                    <button name="send_debtor" type="object" string="Send to Debtor" class="oe_highlight" attrs="{'invisible': ['|', ('btn_debtor_new_adv', '=', False), ('state', '!=', 'pending')]}"/>
-                    <button name="create_advance" type="object" string="Give amount in New Advance" class="oe_highlight" attrs="{'invisible': ['|', ('btn_debtor_new_adv', '=', False), ('state', '!=', 'pending')]}"/> 
+                    <!--<button name="send_debtor" type="object" string="Send to Debtor" class="oe_highlight" attrs="{'invisible': ['|', ('btn_debtor_new_adv', '=', False), ('state', '!=', 'pending')]}"/>-->
+                    <button name="create_advance" type="object" string="Charge into New Advance" class="oe_highlight" attrs="{'invisible': ['|', ('btn_debtor_new_adv', '=', False), ('state', '!=', 'pending')]}"/> 
                     <button name="settle_operation" type="object" string="Settle" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'ready')]}"/> 
                     <field name="state" widget="statusbar" statusbar_visible="pending,ready,settled"/>
                 </header>
@@ -54,37 +54,61 @@
                             <field name="name" readonly="True"/>
                         </h1>
                     </div>
+
                     <div style="margin-top: 50px; margin-bottom: 15px;" class="p-3 bg-info text-white text-center" attrs="{'invisible': [('label_process', '=', False)]}">
                         <field name="label_process"/>
                     </div>
+
                     <group>
                         <group>
                           <field name="operator_id" required="True"/>          
                           <field name="date" required="True"/>
-                          <field name="trip_id" required="True"/>                          
+                          <!--<field name="trip_id" required="True"/>-->                          
                         </group>  
                         <group>
                           <field name="attachments" widget="many2many_binary"/>
                           
                           <field name="btn_crt_payment" invisible="True"/>
                           <field name="payment_related_id" attrs="{'invisible': [('btn_crt_payment', '=', False)]}"/>
-
+                          
                           <field name="btn_mark_settle" invisible="True"/>                                    
 
-                          <field name="btn_debtor_new_adv" invisible="True"/> 
-                          <field name="acc_mov_related_id" attrs="{'invisible': [('btn_debtor_new_adv', '=', False)]}"/>
-                          <field name="advance_related_id" attrs="{'invisible': [('btn_debtor_new_adv', '=', False)]}"/>                     
+                          <field name="btn_debtor_new_adv" invisible="True"/>
+                          <!--<field name="acc_mov_related_id" attrs="{'invisible': [('btn_debtor_new_adv', '=', False)]}"/>-->
+                          <field name="advance_related_id" attrs="{'invisible': [('btn_debtor_new_adv', '=', False)]}"/>                                             
                         </group>                                                
                     </group>
-                    <field name="adv_set_lines_ids" readonly="True">
-                        <tree decoration-danger="flag_pending_process == False">
-                            <field name="advance_sum_amnt" />
-                            <field name="comprobation_sum_amnt"/>
+                    
+                    <field name="possible_adv_set_lines_ids" attrs="{'invisible': [('state', '!=', 'pending')]}">
+                        <tree editable="bottom"> <!--decoration-danger="flag_pending_process == False">-->
+                            <field name="check_selection"/>
+                            <field name="operator_id"/>
                             <field name="trip_id"/>
-                            <field name="amount_to_settle"/>
-                            <field name="flag_pending_process" invisible="True"/>
+                            <field name="advance_sum_amnt"/>                      
+                            <field name="comprobation_sum_amnt"/>
+                            <field name="amount_to_settle" sum="Sum Amounts"/>
                         </tree>
-                    </field>                                                                
+                    </field>
+                    <field name="settled_adv_set_lines_ids" attrs="{'invisible': [('state', '==', 'pending')]}">
+                        <tree editable="bottom">
+                            <field name="check_selection"/>
+                            <field name="operator_id"/>
+                            <field name="trip_id"/>
+                            <field name="advance_sum_amnt"/>                      
+                            <field name="comprobation_sum_amnt"/>
+                            <field name="amount_to_settle" sum="Sum Amounts"/>
+                        </tree>
+                    </field>                    
+                     
+                    <div class="oe_subtotal_footer oe_right font-weight-bold">
+                        <group>
+                            <field name="total_selected" readonly="True" force_save="1" attrs="{'invisible': [('state', '!=', 'pending')]}"/>
+                            <field name="total_settlement" readonly="True" force_save="1" attrs="{'invisible': [('state', '==', 'pending')]}"/>
+                            <!--<field name="amount_to_settle" readonly="True" force_save="1" attrs="{'invisible': [('state', '==', 'pending')]}"/>-->
+                            <field name="advance_sum_amnt" invisible="True"/>
+                            <field name="comprobation_sum_amnt" invisible="True"/>
+                        </group>
+                    </div>                                                                                   
                 </sheet>              
                 <div class="oe_chatter">
                     <field name="message_follower_ids" widget="mail_followers"/>

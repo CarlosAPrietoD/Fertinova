@@ -34,37 +34,68 @@ class WobinSettlements(models.Model):
 
 
     name        = fields.Char(string="Settlement", readonly=True, required=True, copy=False, default='New')
-    operator_id = fields.Many2one('hr.employee',string='Operator', track_visibility='always')
+    operator_id = fields.Many2one('hr.employee',string='Operator', track_visibility='always', ondelete='cascade')
     date        = fields.Date(string='Date', track_visibility='always')
-    trip_id     = fields.Many2one('wobin.logistica.trips', string='Trip', track_visibility='always', ondelete='cascade')
+    #trip_id     = fields.Many2one('wobin.logistica.trips', string='Trip', track_visibility='always', ondelete='cascade')
     attachments = fields.Many2many('ir.attachment', relation='settlements_attachment', string='Attachments', track_visibility='always')
-    adv_set_lines_ids = fields.One2many('wobin.moves.adv.set.lines', 'id', string='Circuit Settlements for operator', compute='_set_adv_set_lines_ids')
-    state             = fields.Selection(selection=[('pending', 'Pending'),
-                                                    ('ready', 'Ready to settle'),
-                                                    ('settled', 'Settled'),
-                                                   ], string='State', required=True, readonly=True, copy=False, tracking=True, default='pending', track_visibility='always')    
+    possible_adv_set_lines_ids = fields.One2many('wobin.moves.adv.set.lines', 'settlement_id', string='Possible Moves for operator')
+    settled_adv_set_lines_ids  = fields.One2many('wobin.moves.adv.set.lines', 'settlement_aux_id', string='Settled Moves for operator')
+    total_selected = fields.Float(string='Total of Selected Rows $', digits=(15,2))
+    total_settlement = fields.Float(string='Total of Settlement $', digits=(15,2))
+    amount_to_settle = fields.Float(string='Amount to Settle $', digits=(15,2))
+    state          = fields.Selection(selection = [('pending', 'Pending'),
+                                                   ('ready', 'Ready to settle'),
+                                                   ('settled', 'Settled'),
+                                                ], string='State', required=True, readonly=True, copy=False, tracking=True, default='pending', track_visibility='always')    
     # Fields for analysis:
-    advance_sum_amnt      = fields.Float(string='Advances', digits=(15,2), compute='set_advance_sum_amnt')
-    comprobation_sum_amnt = fields.Float(string='Comprobations', digits=(15,2), compute='set_comprobation_sum_amnt')
-    amount_to_settle      = fields.Float(string='Amount to Settle $', digits=(15,2), compute='set_amount_to_settle')
+    advance_sum_amnt      = fields.Float(string='Advances', digits=(15,2))#, compute='set_advance_sum_amnt')
+    comprobation_sum_amnt = fields.Float(string='Comprobations', digits=(15,2))#, compute='set_comprobation_sum_amnt')
+    #amount_to_settle      = fields.Float(string='Amount to Settle $', digits=(15,2), compute='set_amount_to_settle')
     btn_crt_payment    = fields.Boolean(compute="set_flag_btn_crt_payment", default=False)
     btn_mark_settle    = fields.Boolean(compute="set_flag_btn_mark_settle", default=False)
     btn_debtor_new_adv = fields.Boolean(compute="set_flag_btn_debtor_new_a", default=False)
     label_process      = fields.Text(string='')
     payment_related_id = fields.Many2one('account.payment', string='Related Payment', compute='set_related_payment', ondelete='cascade')    
-    acc_mov_related_id = fields.Many2one('account.move', string='Related Account Move', compute='set_related_acc_mov', ondelete='cascade')    
+    #acc_mov_related_id = fields.Many2one('account.move', string='Related Account Move', compute='set_related_acc_mov', ondelete='cascade')    
     advance_related_id = fields.Many2one('wobin.advances', string='Related Advance', compute='set_related_advance', ondelete='cascade')    
 
 
 
-    @api.one
-    def _set_adv_set_lines_ids(self):
+    @api.onchange('operator_id')
+    def onchange_adv_set_lines_ids(self):
         #Fill up one2many field with data for current operator and a given trip:
-        self.adv_set_lines_ids = self.env['wobin.moves.adv.set.lines'].search([('operator_id', '=', self.operator_id.id),
-                                                                               ('trip_id','=', self.trip_id.id)]).ids
+        ids_gotten = self.env['wobin.moves.adv.set.lines'].search([('operator_id', '=', self.operator_id.id), ('settled', '=', False)]).ids
+        self.possible_adv_set_lines_ids = [(6, 0, ids_gotten)]                   
 
 
 
+    @api.onchange('possible_adv_set_lines_ids')
+    def _onchange_comprobation_lines_ids(self):        
+        # Only sum up lines which are selected by user:
+        sum_amount = sum(line.amount_to_settle for line in self.possible_adv_set_lines_ids if line.check_selection == True)
+        # Assign to total selected:
+        self.total_selected = sum_amount  
+        self.total_settlement = sum_amount
+        self.amount_to_settle = sum_amount
+
+        sum_advances = sum(line.advance_sum_amnt for line in self.possible_adv_set_lines_ids if line.check_selection == True)
+        self.advance_sum_amnt = sum_advances
+        print('\n\n\n self.advance_sum_amnt', self.advance_sum_amnt)
+
+        sum_comprobations = sum(line.comprobation_sum_amnt for line in self.possible_adv_set_lines_ids if line.check_selection == True)
+        self.comprobation_sum_amnt = sum_comprobations
+        print('\n\n\n self.comprobation_sum_amnt', self.comprobation_sum_amnt)
+
+        list_ids = []
+        for line in self.possible_adv_set_lines_ids:
+            if line.check_selection == True:
+                print()
+                list_ids.append(line.id)          
+
+        self.settled_adv_set_lines_ids = [(6, 0, list_ids)] 
+                         
+
+    '''
     @api.one
     def set_advance_sum_amnt(self):
         #Sum all amounts from the same operator whitin a given trip
@@ -95,21 +126,29 @@ class WobinSettlements(models.Model):
     def set_amount_to_settle(self):
         #Determine 'amount to settle' by doing subtraction comprobation - advance
         self.amount_to_settle = self.comprobation_sum_amnt - self.advance_sum_amnt
+    '''
 
 
     @api.one
     def set_flag_btn_crt_payment(self):
-        #When "amount to settle" is greater than 0 just display button for payments
+        #When "amount to settle" is greater or lesser than 0 just display button for payments
         #through its respectice flag and to aid in xml definition:
-        if self.amount_to_settle > 0:
+        if self.total_selected != 0:
             self.btn_crt_payment = True
 
 
     @api.one
     def set_flag_btn_mark_settle(self):
-        #When "amount to settle" is equal to 0 just display button to settle:
+        #When "amount to settle" is equal to 0 (and validating that
+        # at least user has some rows selected) just display button to settle
         #through its respectice flag and to aid in xml definition:
-        if self.amount_to_settle == 0:           
+        flag = False
+        
+        for line in self.possible_adv_set_lines_ids:
+            if line.check_selection == True:
+                flag = True
+
+        if self.total_selected == 0 and flag ==True:           
             self.btn_mark_settle = True
 
 
@@ -117,8 +156,35 @@ class WobinSettlements(models.Model):
     def set_flag_btn_debtor_new_a(self):  
         #When "amount to settle" is lesser than 0 just display button for acc. move or advances
         #through its respectice flag and to aid in xml definition:        
-        if self.amount_to_settle < 0:
+        if self.total_selected < 0:
             self.btn_debtor_new_adv = True    
+
+
+
+    @api.onchange('total_selected')
+    def reaction_to_selected_total(self):
+        flag = False
+
+        #When "amount to settle" is greater or lesser than 0 just display button for payments
+        #through its respectice flag and to aid in xml definition:
+        if self.total_selected != 0:
+            self.btn_crt_payment = True   
+
+        #When "amount to settle" is equal to 0 (and validating that
+        # at least user has some rows selected) just display button to settle
+        #through its respectice flag and to aid in xml definition:             
+        for line in self.possible_adv_set_lines_ids:
+            if line.check_selection == True:
+                flag = True
+
+        if self.total_selected == 0 and flag ==True:           
+            self.btn_mark_settle = True  
+
+        #When "amount to settle" is lesser than 0 just display button for acc. move or advances
+        #through its respectice flag and to aid in xml definition:        
+        if self.total_selected < 0:
+            self.btn_debtor_new_adv = True  
+                                     
 
 
 
@@ -147,6 +213,7 @@ class WobinSettlements(models.Model):
 
 
 
+
     @api.one
     def mark_settled(self):
         #Change state of this settlement:
@@ -154,6 +221,12 @@ class WobinSettlements(models.Model):
         
         #Display into label this settlement was finished: 
         self.label_process = 'Esta Liquidación ha sido saldada' 
+
+        for line in self.possible_adv_set_lines_ids:
+            if line.check_selection == True:
+                print()
+                line.update({'settled': True})         
+
 
 
     
@@ -182,7 +255,7 @@ class WobinSettlements(models.Model):
 
 
 
-    def create_advance(self):                
+    def create_advance(self):   
         #This method intends to display a Form View of Advances:
         return {
             #'name':_(""),
@@ -216,13 +289,21 @@ class WobinSettlements(models.Model):
             #Display into label this settlement was finished by a payment: 
             self.label_process = 'Esta Liquidación ha sido saldada por Pago ' + self.payment_related_id.name                                                    
 
-        if self.acc_mov_related_id:
+        #if self.acc_mov_related_id:
             #Display into label this settlement was finished by an account move: 
-            self.label_process = 'Esta Liquidación ha sido saldada por Movimiento Contable ' + self.acc_mov_related_id.name                              
+            #self.label_process = 'Esta Liquidación ha sido saldada por Movimiento Contable ' + self.acc_mov_related_id.name                              
 
         if self.advance_related_id:
             #Display into label this settlement was finished by an advance: 
-            self.label_process = 'Esta Liquidación ha sido saldada por Anticipo ' + self.advance_related_id.name                                                         
+            self.label_process = 'Esta Liquidación ha sido saldada por Anticipo ' + self.advance_related_id.name 
+        
+        for line in self.possible_adv_set_lines_ids:
+            if line.check_selection == True:
+                print()
+                line.update({'settled': True})    
+
+        self.amount_to_settle = None                             
+
 
 
 
