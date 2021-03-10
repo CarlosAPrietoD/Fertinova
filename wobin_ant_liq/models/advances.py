@@ -76,6 +76,7 @@ class WobinAdvances(models.Model):
     payment_related_id = fields.Many2one('account.payment', string='Related Payment', compute='set_related_payment', ondelete='cascade', track_visibility='always')
     mov_lns_ad_set_id  = fields.Many2one('wobin.moves.adv.set.lines', ondelete='cascade')
     settlement_id      = fields.Many2one('wobin.settlements', string='Settlement', ondelete='cascade')
+    money_not_consider = fields.Boolean(string='', default=False)
 
 
 

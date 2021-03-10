@@ -121,6 +121,11 @@ class HrEmployee(models.Model):
     @api.one
     def set_advance_sum_amnt(self):
         #Sum all amounts from the same operator
+        advances_gotten = self.env['wobin.advances'].search([('operator_id', '=', self.id), ('money_not_consider', '=', False)])
+        
+        if advances_gotten:
+            self.advance_sum_amnt = sum(line.amount for line in advances_gotten)
+        '''
         sql_query = """SELECT sum(amount) 
                          FROM wobin_advances 
                         WHERE operator_id = %s"""
@@ -129,6 +134,7 @@ class HrEmployee(models.Model):
 
         if result:                    
             self.advance_sum_amnt = result[0]
+        '''
     
 
 

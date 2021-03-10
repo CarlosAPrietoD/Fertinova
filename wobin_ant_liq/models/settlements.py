@@ -80,11 +80,9 @@ class WobinSettlements(models.Model):
 
         sum_advances = sum(line.advance_sum_amnt for line in self.possible_adv_set_lines_ids if line.check_selection == True)
         self.advance_sum_amnt = sum_advances
-        print('\n\n\n self.advance_sum_amnt', self.advance_sum_amnt)
 
         sum_comprobations = sum(line.comprobation_sum_amnt for line in self.possible_adv_set_lines_ids if line.check_selection == True)
         self.comprobation_sum_amnt = sum_comprobations
-        print('\n\n\n self.comprobation_sum_amnt', self.comprobation_sum_amnt)
 
         list_ids = []
         for line in self.possible_adv_set_lines_ids:
@@ -268,7 +266,7 @@ class WobinSettlements(models.Model):
             'nodestroy': True,
             'target': 'new',
             'domain': '[]',
-            'context': {'default_settlement_id': self.id}
+            'context': {'default_settlement_id': self.id, 'default_money_not_consider': True}
         } 
 
     @api.one
