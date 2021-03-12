@@ -175,6 +175,7 @@ class ReportReceiptProducer(models.AbstractModel):
         tickets_producer = []
         for receipt in tickets:
             count += 1
+            sum_net += receipt.net_weight
             data = {
                 'date':receipt.date.strftime("%d/%m/%Y"),
                 'provider': receipt.partner_id.name,
@@ -211,6 +212,7 @@ class ReportReceiptProducer(models.AbstractModel):
             'today' : date.today(),
             'product' : report.product.name,
             'producer' : report.producer.name,
+            'sum_net' : "{:,.0f}".format(sum_net),
             'count' : count
         }
 
