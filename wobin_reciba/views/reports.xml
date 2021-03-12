@@ -356,7 +356,7 @@
                                     FECHA
                                 </th>
                                 <th style="text-align:center; border: black 1px solid; padding: 5px">
-                                    PROVEEDOR
+                                    PRODUCTOR
                                 </th>
                                 <th style="text-align:center; border: black 1px solid; padding: 5px">
                                     BOLETA
@@ -365,7 +365,7 @@
                                     TIPO DE RECEPCION
                                 </th>
                                 <th style="text-align:center; border: black 1px solid; padding: 5px">
-                                    KG
+                                    PESO NETO (KG)
                                 </th>
                                 <th style="text-align:center; border: black 1px solid; padding: 5px">
                                     MOVIMIENTO DE ALMACEN
@@ -377,7 +377,7 @@
                                     FACTURA
                                 </th>
                                 <th style="text-align:center; border: black 1px solid; padding: 5px">
-                                    CONTACTO
+                                    PROVEEDOR
                                 </th>
                                 <th style="text-align:center; border: black 1px solid; padding: 5px">
                                     ESTADO DE FACTURA
@@ -415,7 +415,15 @@
                                     <t t-esc="receipt['invoice_status']" />
                                 </td>
                             </tr>
-                            
+                            <tr>
+                                <th colspan="4" style="text-align:center; border: black 1px solid; padding: 5px">
+                                </th>
+                                <th style="text-align:center; border: black 1px solid; padding: 5px">
+                                    <t t-esc="report_data['sum_net']" />
+                                </th>
+                                <th colspan="5" style="text-align:center; border: black 1px solid; padding: 5px">
+                                </th>
+                            </tr>
                         </table>
                     </div>
                 </t>
