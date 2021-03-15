@@ -174,6 +174,7 @@ class WobinLogisticaTrips(models.Model):
         
                 if inv_init != inv_next:
                     self.income_provisions = self.income_provisions + line.price_subtotal
+                    _logger.info('\n\n\n self.income_provisions %s\n\n\n', self.income_provisions)
             
             inv_next = line.invoice_id.id        
         #self.income_provisions = self.env['account.invoice.line'].search([('trips_id', '=', self.id)], limit=1).price_subtotal
@@ -202,13 +203,14 @@ class WobinLogisticaTrips(models.Model):
         inv_lines_gotten = self.env['account.invoice.line'].search([('trips_id', '=', self.id)])
         
         if inv_lines_gotten:
-            _logger.info('\n\n\n ANTES DE FOR CICLO inv_init %s  Y   inv_NEXT %s\n\n\n', inv_init, inv_next)
+            _logger.info('\n\n\n ANTES DE FOR CICLO {inv_init} %s  Y   [inv_NEXT] %s\n\n\n', inv_init, inv_next)
             for line in inv_lines_gotten:
                 inv_init = line.invoice_id.id
                 _logger.info('\n\n\n DENTRO DE FOR CICLO inv_init %s  Y   inv_NEXT %s\n\n\n', inv_init, inv_next)
 
                 if inv_init != inv_next:
                     self.billed_income = self.billed_income + line.price_subtotal
+                    _logger.info('\n\n\n self.billed_income %s\n\n\n', self.billed_incomet)
             
             inv_next = line.invoice_id.id           
         
