@@ -163,7 +163,20 @@ class WobinLogisticaTrips(models.Model):
 
     @api.one
     def _set_income_prov(self):
-        self.income_provisions = self.env['account.invoice.line'].search([('trips_id', '=', self.id)], limit=1).price_subtotal
+        inv_init = None; inv_next = None
+        inv_lines_gotten = self.env['account.invoice.line'].search([('trips_id', '=', self.id)])
+        
+        if inv_lines_gotten:
+            _logger.info('\n\n\n ANTES DE FOR CICLO inv_init %s  Y   inv_NEXT %s\n\n\n', inv_init, inv_next)
+            for line in inv_lines_gotten:
+                inv_init = line.invoice_id.id
+                _logger.info('\n\n\n DENTRO DE FOR CICLO inv_init %s  Y   inv_NEXT %s\n\n\n', inv_init, inv_next)
+        
+                if inv_init != inv_next:
+                    self.income_provisions = self.income_provisions + line.price_subtotal
+            
+            inv_next = line.invoice_id.id        
+        #self.income_provisions = self.env['account.invoice.line'].search([('trips_id', '=', self.id)], limit=1).price_subtotal
 
 
 
@@ -185,7 +198,21 @@ class WobinLogisticaTrips(models.Model):
     @api.one
     @api.depends('name')
     def _set_billed_income(self):
-        self.billed_income = self.env['account.invoice.line'].search([('trips_id', '=', self.id)], limit=1).price_unit
+        inv_init = None; inv_next = None
+        inv_lines_gotten = self.env['account.invoice.line'].search([('trips_id', '=', self.id)])
+        
+        if inv_lines_gotten:
+            _logger.info('\n\n\n ANTES DE FOR CICLO inv_init %s  Y   inv_NEXT %s\n\n\n', inv_init, inv_next)
+            for line in inv_lines_gotten:
+                inv_init = line.invoice_id.id
+                _logger.info('\n\n\n DENTRO DE FOR CICLO inv_init %s  Y   inv_NEXT %s\n\n\n', inv_init, inv_next)
+
+                if inv_init != inv_next:
+                    self.billed_income = self.billed_income + line.price_subtotal
+            
+            inv_next = line.invoice_id.id           
+        
+        #self.billed_income = self.env['account.invoice.line'].search([('trips_id', '=', self.id)], limit=1).price_unit
 
 
 
