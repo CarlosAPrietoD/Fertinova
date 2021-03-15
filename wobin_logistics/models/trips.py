@@ -163,7 +163,11 @@ class WobinLogisticaTrips(models.Model):
 
     @api.one
     def _set_income_prov(self):
-        self.income_provisions = self.env['account.invoice.line'].search([('trips_id', '=', self.id)], limit=1).price_subtotal
+        inv_lines_gotten = self.env['account.invoice.line'].search([('trips_id', '=', self.id)])
+        
+        if inv_lines_gotten:
+            self.income_provisions = sum(line.price_subtotal for line in inv_lines_gotten)          
+        #self.income_provisions = self.env['account.invoice.line'].search([('trips_id', '=', self.id)], limit=1).price_subtotal
 
 
 
@@ -185,7 +189,11 @@ class WobinLogisticaTrips(models.Model):
     @api.one
     @api.depends('name')
     def _set_billed_income(self):
-        self.billed_income = self.env['account.invoice.line'].search([('trips_id', '=', self.id)], limit=1).price_unit
+        inv_lines_gotten = self.env['account.invoice.line'].search([('trips_id', '=', self.id)])
+        
+        if inv_lines_gotten:
+            self.billed_income = sum(line.price_unit for line in inv_lines_gotten)        
+        #self.billed_income = self.env['account.invoice.line'].search([('trips_id', '=', self.id)], limit=1).price_unit
 
 
 
