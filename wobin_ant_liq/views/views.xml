@@ -61,12 +61,22 @@
     </record>   
 
     <!-- DEBTS Inform - ACTION -->  
+    <!--
     <record id="action_inform" model="ir.actions.act_window">
       <field name="name">Debts Inform</field>
       <field name="res_model">hr.employee</field>
       <field name="view_mode">tree</field>
       <field name="context">{'search_default_flag_act_emp': 1}</field>  
     </record>   
+    -->
+    <record id="action_inform" model="ir.actions.act_window">
+      <field name="name">Debts Inform</field>
+      <field name="res_model">wobin.moves.adv.set.lines</field>
+      <field name="view_id" ref="view_informs_list"/>
+      <field name="search_view_id" ref="view_informs_search"/>
+      <field name="view_mode">tree,form,search</field>
+      <field name="context">{'group_by':'operator_id', 'form_view_ref': 'wobin_ant_liq.view_informs_form'}</field>  
+    </record>     
     <!-- INFORMS - GENERAL ACTION -->
     <record id="action_debts_inform" model="ir.actions.act_window">
         <field name="name">General Operator Inform</field>
@@ -76,6 +86,15 @@
         <field name="domain"></field>
         <field name="context">{'group_by':'operator_id'}</field> 
     </record> 
+    <!-- EXPENSES TO CHECK INFORM - LIST VIEW -->
+    <record id="action_check_expenses_inform" model="ir.actions.act_window">
+      <field name="name">Expenses to Check Inform</field>
+      <field name="res_model">wobin.settlements</field>
+      <field name="view_id" ref="view_check_expenses_inform_list"/>
+      <field name="view_mode">tree</field>
+      <field name="context">{'group_by':'operator_id'}</field>  
+    </record>     
+
 
     <!-- SETTINGS - ACTION -->
     <record id="action_concepts" model="ir.actions.act_window">
@@ -146,6 +165,12 @@
               groups="wobin_ant_liq.group_wacs_general,group_wacs_administration"
               action="action_debts_inform"
               sequence="2"/>  
+    <menuitem name="Expenses to Check Inform" 
+              id="che_exp_inform_menuitem" 
+              parent="wobin_ant_liq.informs_menu_4" 
+              groups="wobin_ant_liq.group_wacs_general,group_wacs_administration"
+              action="action_check_expenses_inform"
+              sequence="3"/>               
 
 
     <menuitem name="Settings" 

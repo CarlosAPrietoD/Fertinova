@@ -79,24 +79,24 @@
                         </group>                                                
                     </group>
                     
-                    <field name="possible_adv_set_lines_ids" attrs="{'invisible': [('state', '!=', 'pending')]}">
+                    <field name="possible_adv_set_lines_ids" force_save="1" attrs="{'invisible': [('state', '!=', 'pending')]}">
                         <tree editable="bottom"> <!--decoration-danger="flag_pending_process == False">-->
                             <field name="check_selection"/>
                             <field name="operator_id"/>
                             <field name="trip_id"/>
-                            <field name="advance_sum_amnt"/>                      
-                            <field name="comprobation_sum_amnt"/>
-                            <field name="amount_to_settle" sum="Sum Amounts"/>
+                            <field name="advance_sum_amnt" force_save="1"/>                      
+                            <field name="comprobation_sum_amnt" force_save="1"/>
+                            <field name="amount_to_settle" sum="Sum Amounts" force_save="1"/>
                         </tree>
                     </field>
-                    <field name="settled_adv_set_lines_ids" attrs="{'invisible': [('state', '==', 'pending')]}">
+                    <field name="settled_adv_set_lines_ids" force_save="1" attrs="{'invisible': [('state', '==', 'pending')]}">
                         <tree editable="bottom">
                             <field name="check_selection"/>
                             <field name="operator_id"/>
                             <field name="trip_id"/>
-                            <field name="advance_sum_amnt"/>                      
-                            <field name="comprobation_sum_amnt"/>
-                            <field name="amount_to_settle" sum="Sum Amounts"/>
+                            <field name="advance_sum_amnt" force_save="1"/>                      
+                            <field name="comprobation_sum_amnt" force_save="1"/>
+                            <field name="amount_to_settle" sum="Sum Amounts" force_save="1"/>
                         </tree>
                     </field>                    
                      
@@ -107,6 +107,7 @@
                             <!--<field name="amount_to_settle" readonly="True" force_save="1" attrs="{'invisible': [('state', '==', 'pending')]}"/>-->
                             <field name="advance_sum_amnt" invisible="True"/>
                             <field name="comprobation_sum_amnt" invisible="True"/>
+                            <field name="trips_related_ids" invisible="True"/>
                         </group>
                     </div>                                                                                   
                 </sheet>              

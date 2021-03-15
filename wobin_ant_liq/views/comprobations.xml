@@ -69,7 +69,7 @@
                         </group> 
                     </group> 
                     <field name="comprobation_lines_ids" context="{'default_comprobation_id': active_id}">
-                        <tree decoration-info="credit_flag == True" editable="top">
+                        <tree decoration-info="credit_flag == True">
                             <field name="comprobation_id" invisible="True"/>
                             <field name="concept_id"/>
                             <field name="amount"/>

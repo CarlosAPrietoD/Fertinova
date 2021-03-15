@@ -40,12 +40,12 @@ class WobinSettlements(models.Model):
     attachments = fields.Many2many('ir.attachment', relation='settlements_attachment', string='Attachments', track_visibility='always')
     possible_adv_set_lines_ids = fields.One2many('wobin.moves.adv.set.lines', 'settlement_id', string='Possible Moves for operator')
     settled_adv_set_lines_ids  = fields.One2many('wobin.moves.adv.set.lines', 'settlement_aux_id', string='Settled Moves for operator')
-    total_selected = fields.Float(string='Total of Selected Rows $', digits=(15,2))
+    total_selected   = fields.Float(string='Total of Selected Rows $', digits=(15,2))
     total_settlement = fields.Float(string='Total of Settlement $', digits=(15,2))
     amount_to_settle = fields.Float(string='Amount to Settle $', digits=(15,2))
-    state          = fields.Selection(selection = [('pending', 'Pending'),
-                                                   ('ready', 'Ready to settle'),
-                                                   ('settled', 'Settled'),
+    state            = fields.Selection(selection = [('pending', 'Pending'),
+                                                     ('ready', 'Ready to settle'),
+                                                     ('settled', 'Settled'),
                                                 ], string='State', required=True, readonly=True, copy=False, tracking=True, default='pending', track_visibility='always')    
     # Fields for analysis:
     advance_sum_amnt      = fields.Float(string='Advances', digits=(15,2))#, compute='set_advance_sum_amnt')
@@ -58,6 +58,7 @@ class WobinSettlements(models.Model):
     payment_related_id = fields.Many2one('account.payment', string='Related Payment', compute='set_related_payment', ondelete='cascade')    
     #acc_mov_related_id = fields.Many2one('account.move', string='Related Account Move', compute='set_related_acc_mov', ondelete='cascade')    
     advance_related_id = fields.Many2one('wobin.advances', string='Related Advance', compute='set_related_advance', ondelete='cascade')    
+    trips_related_ids  = fields.Many2many('wobin.logistica.trips')
 
 
 
@@ -87,10 +88,20 @@ class WobinSettlements(models.Model):
         list_ids = []
         for line in self.possible_adv_set_lines_ids:
             if line.check_selection == True:
-                print()
                 list_ids.append(line.id)          
 
         self.settled_adv_set_lines_ids = [(6, 0, list_ids)] 
+
+
+        list_trips = []
+        for ln in self.possible_adv_set_lines_ids:
+            if ln.check_selection == True:
+                list_trips.append(ln.trip_id.id)
+                print('\n\n\n list_trips ',list_trips)          
+        self.trips_related_ids = [(6, 0, list_trips)] 
+        self.update({'trips_related_ids': [(6, 0, list_trips)]})
+        
+        print('\n\n\n self.trips_id ', self.trips_related_ids)      
                          
 
     '''
@@ -131,7 +142,7 @@ class WobinSettlements(models.Model):
     def set_flag_btn_crt_payment(self):
         #When "amount to settle" is greater or lesser than 0 just display button for payments
         #through its respectice flag and to aid in xml definition:
-        if self.total_selected != 0:
+        if self.total_selected > 0:
             self.btn_crt_payment = True
 
 
@@ -165,7 +176,7 @@ class WobinSettlements(models.Model):
 
         #When "amount to settle" is greater or lesser than 0 just display button for payments
         #through its respectice flag and to aid in xml definition:
-        if self.total_selected != 0:
+        if self.total_selected > 0:
             self.btn_crt_payment = True   
 
         #When "amount to settle" is equal to 0 (and validating that
@@ -367,3 +378,4 @@ class HrEmployee(models.Model):
 
     contact_id = fields.Many2one('res.partner', string='Contact')
     enterprise_id = fields.Many2one('res.partner', string='Enterprise')
+    flag_employee_active  = fields.Boolean(string='Flag') 

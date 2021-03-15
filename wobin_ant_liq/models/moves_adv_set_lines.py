@@ -5,7 +5,8 @@ from odoo.addons import decimal_precision as dp
 
 class WobinMovesAdvSetLines(models.Model):
     _name = 'wobin.moves.adv.set.lines'
-    _description = 'Wobin Moves Advances Settlements Lines'   
+    _description = 'Wobin Moves Advances Settlements Lines'
+    _inherit = ['mail.thread', 'mail.activity.mixin']     
 
 
 
@@ -16,11 +17,11 @@ class WobinMovesAdvSetLines(models.Model):
     trip_id         = fields.Many2one('wobin.logistica.trips', string='Trip', ondelete='cascade')
     advance_ids     = fields.One2many('wobin.advances', 'mov_lns_ad_set_id', string='Related Advances', ondelete='cascade', compute='set_advances')
     comprobation_ids      = fields.One2many('wobin.comprobations', 'mov_lns_ad_set_id', string='Related Comprobations', ondelete='cascade', compute='set_comprobations')
-    advance_sum_amnt      = fields.Float(string='Advances', digits=(15,2), compute='set_advance_sum_amnt')
-    comprobation_sum_amnt = fields.Float(string='Comprobations', digits=(15,2), compute='set_comprobation_sum_amnt')
-    amount_to_settle      = fields.Float(string='Amount to Settle', digits=(15,2), compute='set_amount_to_settle')
+    advance_sum_amnt      = fields.Float(string='Advances', digits=(15,2), compute='set_advance_sum_amnt', store=True)
+    comprobation_sum_amnt = fields.Float(string='Comprobations', digits=(15,2), compute='set_comprobation_sum_amnt', store=True)
+    amount_to_settle      = fields.Float(string='Amount to Settle', digits=(15,2), compute='set_amount_to_settle', store=True)
     settled               = fields.Boolean(string='Move Settled')
-    #flag_pending_process  = fields.Boolean(string='Pending Process', compute='set_flag_pending_process')
+    #flag_pending_process  = fields.Boolean(string='Pending Process', compute='set_flag_pending_process')    
 
 
     """
@@ -109,7 +110,7 @@ class WobinMovesAdvSetLines(models.Model):
 
 
 
-
+'''
 class HrEmployee(models.Model):
     _inherit = 'hr.employee'
 
@@ -125,17 +126,16 @@ class HrEmployee(models.Model):
         
         if advances_gotten:
             self.advance_sum_amnt = sum(line.amount for line in advances_gotten)
-        '''
-        sql_query = """SELECT sum(amount) 
-                         FROM wobin_advances 
-                        WHERE operator_id = %s"""
-        self.env.cr.execute(sql_query, (self.id,))
-        result = self.env.cr.fetchone()
 
-        if result:                    
-            self.advance_sum_amnt = result[0]
-        '''
-    
+
+        #sql_query = """SELECT sum(amount) 
+        #                 FROM wobin_advances 
+        #                WHERE operator_id = %s"""
+        #self.env.cr.execute(sql_query, (self.id,))
+        #result = self.env.cr.fetchone()
+
+        #if result:                    
+        #    self.advance_sum_amnt = result[0]
 
 
     @api.one   
@@ -155,3 +155,4 @@ class HrEmployee(models.Model):
     def set_amount_to_settle(self):
         #Determine 'amount to settle' by doing subtraction comprobation - advance        
         self.amount_to_settle = self.comprobation_sum_amnt - self.advance_sum_amnt  
+'''
