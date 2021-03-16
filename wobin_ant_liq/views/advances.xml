@@ -47,7 +47,7 @@
         <field name="arch" type="xml"> 
             <form> 
                 <header>
-                    <button name="create_payment" type="object" string="Create Payment" class="oe_highlight" attrs="{'invisible': [('name', '=', 'New')]}"/>
+                    <button name="create_payment" type="object" string="Create Payment" class="oe_highlight" attrs="{'invisible': ['|', ('name', '=', 'New'), ('payment_related_id', '!=', False)]}"/>
                 </header>
                 <sheet> 
                     <div class="oe_left oe_title">
