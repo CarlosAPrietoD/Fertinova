@@ -210,7 +210,7 @@ class WobinSettlements(models.Model):
             'nodestroy': True,
             'target': 'new',
             'domain': '[]',
-            'context': {'default_payment_id': self.id}
+            'context': {'default_settlement_id': self.id}
         } 
 
     @api.one
