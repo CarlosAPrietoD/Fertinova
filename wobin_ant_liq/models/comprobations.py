@@ -48,9 +48,10 @@ class WobinComprobations(models.Model):
     trip_id     = fields.Many2one('wobin.logistica.trips', string='Trip', track_visibility='always', ondelete='cascade')
     expenses_to_refund = fields.Float(string='Pending Expenses to Refund', digits=(15,2), compute='set_expenses_to_refund', track_visibility='always')
     acc_mov_related_id = fields.Many2one('account.move', string='Related Account Move', compute='set_related_acc_mov', track_visibility='always', ondelete='cascade')
-    #advance_id         = fields.Many2one('wobin.advances', string='Advance ID', ondelete='cascade')
+    #advance_id        = fields.Many2one('wobin.advances', string='Advance ID', ondelete='cascade')
     mov_lns_ad_set_id  = fields.Many2one('wobin.moves.adv.set.lines', ondelete='cascade')
     comprobation_lines_ids = fields.One2many('wobin.comprobation.lines', 'comprobation_id', string='Concept Lines')
+    invoices_to_refund_ids = fields.Many2many('account.invoice')#, 'comprobation_id')
     
 
 
@@ -161,7 +162,27 @@ class WobinComprobations(models.Model):
         #amount if concept to input is credit:
         for line in self.comprobation_lines_ids: 
             if line.concept_id.credit_flag == True: 
-                line.amount = sum_amount       
+                line.amount = sum_amount     
+
+
+
+    def set_invoices_to_refund_ids(self): 
+        id_fact_x_reem = self.env['wobin.concepts'].search([('name', 'ilike', 'FACTURAS POR REEMBOLSAR')], limit=1).id
+
+        if id_fact_x_reem:
+            query = """DELETE FROM wobin_comprobation_lines 
+                             WHERE comprobation_id = %s AND concept_id = %s;"""
+            self.env.cr.execute(query, (self.id, id_fact_x_reem,))
+
+            for line in self.invoices_to_refund_ids:
+                self.comprobation_lines_ids = [(0, 0, {'concept_id': id_fact_x_reem, 'amount': line.amount_total})]
+
+        # Only sum up lines which are not credit concepts:
+        sum_amount = sum(line.amount for line in self.comprobation_lines_ids if line.concept_id.credit_flag != True)
+        
+        # Assign to amount and total:
+        self.amount = sum_amount        
+        self.total = sum_amount
 
 
 
@@ -178,11 +199,13 @@ class WobinComprobations(models.Model):
             self.expenses_to_refund = result[0]        
 
 
+
     @api.one
     def set_related_acc_mov(self):
         acc_mov_related = self.env['account.move'].search([('comprobation_id', '=', self.id)], limit=1).id
         if acc_mov_related:
             self.acc_mov_related_id = acc_mov_related
+
 
 
 

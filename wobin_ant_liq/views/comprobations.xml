@@ -68,8 +68,23 @@
                           <field name="acc_mov_related_id"/>                                     
                         </group> 
                     </group> 
+                    <group>
+                      <group>
+                        <field name="invoices_to_refund_ids">
+                            <tree editable="bottom">
+                                <field name="number"/>
+                                <field name="partner_id"/>
+                                <field name="amount_total"/>
+                                <field name="state" invisible="True"/>
+                            </tree>
+                        </field>  
+                        </group>
+                        <group>
+                          <button name="set_invoices_to_refund_ids" type="object" string="Add Invoices to Refund" class="oe_highlight"/>
+                        </group>
+                    </group>                   
                     <field name="comprobation_lines_ids" context="{'default_comprobation_id': active_id}">
-                        <tree decoration-info="credit_flag == True">
+                        <tree editable="bottom" decoration-info="credit_flag == True">
                             <field name="comprobation_id" invisible="True"/>
                             <field name="concept_id"/>
                             <field name="amount"/>

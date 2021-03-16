@@ -214,8 +214,7 @@ class WobinLogisticaTrips(models.Model):
                     self.billed_income = self.billed_income + line.price_subtotal
                     _logger.info('\n\n\n self.billed_income %s\n\n\n', self.billed_income)
             
-            inv_next = line.invoice_id.id           
-        
+            inv_next = line.invoice_id.id                   
         #self.billed_income = self.env['account.invoice.line'].search([('trips_id', '=', self.id)], limit=1).price_unit
 
 
