@@ -204,13 +204,14 @@ class WobinLogisticaTrips(models.Model):
         if inv_lines_gotten:
             
             for line in inv_lines_gotten:
-                inv_init = line.invoice_id.id
+                inv_init = line.invoice_id.id                
                 inv_state = self.env['account.invoice'].search([('id', '=', inv_init)]).state
         
                 if inv_init != inv_next and inv_state != 'cancel':
                     self.billed_income = self.billed_income + line.price_subtotal
             
-            inv_next = line.invoice_id.id                   
+            inv_next = line.invoice_id.id
+        #    
         #self.billed_income = self.env['account.invoice.line'].search([('trips_id', '=', self.id)], limit=1).price_unit
 
 
