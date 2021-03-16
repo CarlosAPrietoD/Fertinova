@@ -163,18 +163,20 @@ class WobinLogisticaTrips(models.Model):
 
     @api.one
     def _set_income_prov(self):
-        #inv_init = None; inv_next = None
-        #inv_lines_gotten = self.env['account.invoice.line'].search([('trips_id', '=', self.id)])
-        #
-        #if inv_lines_gotten:
-        #    for line in inv_lines_gotten:
-        #        inv_init = line.invoice_id.id
-        #        
-        #        if inv_init != inv_next:
-        #            self.income_provisions += line.price_subtotal
-        #
-        #        inv_next = line.invoice_id.id                            
-        self.income_provisions = self.env['account.invoice.line'].search([('trips_id', '=', self.id)], limit=1).price_subtotal
+        inv_init = None; inv_next = None
+        inv_lines_gotten = self.env['account.invoice.line'].search([('trips_id', '=', self.id)])
+        
+        if inv_lines_gotten:
+
+            for line in inv_lines_gotten:
+                inv_init = line.invoice_id.id
+                inv_state = self.env['account.invoice'].search([('id', '=', inv_init)]).state
+        
+                if inv_init != inv_next and inv_state != 'cancel':
+                    self.income_provisions = self.income_provisions + line.price_subtotal
+            
+            inv_next = line.invoice_id.id        
+        #self.income_provisions = self.env['account.invoice.line'].search([('trips_id', '=', self.id)], limit=1).price_subtotal
 
 
 
@@ -196,18 +198,20 @@ class WobinLogisticaTrips(models.Model):
     @api.one
     @api.depends('name')
     def _set_billed_income(self):
-        #inv_init = None; inv_next = None
-        #inv_lines_gotten = self.env['account.invoice.line'].search([('trips_id', '=', self.id)])
+        inv_init = None; inv_next = None
+        inv_lines_gotten = self.env['account.invoice.line'].search([('trips_id', '=', self.id)])
         
-        #if inv_lines_gotten:
-        #    for line in inv_lines_gotten:
-        #        inv_init = line.invoice_id.id
-                
-        #        if inv_init != inv_next:
-        #            self.income_provisions += line.price_unit
-
-        #        inv_next = line.invoice_id.id               
-        self.billed_income = self.env['account.invoice.line'].search([('trips_id', '=', self.id)], limit=1).price_unit
+        if inv_lines_gotten:
+            
+            for line in inv_lines_gotten:
+                inv_init = line.invoice_id.id
+                inv_state = self.env['account.invoice'].search([('id', '=', inv_init)]).state
+        
+                if inv_init != inv_next and inv_state != 'cancel':
+                    self.billed_income = self.billed_income + line.price_subtotal
+            
+            inv_next = line.invoice_id.id                   
+        #self.billed_income = self.env['account.invoice.line'].search([('trips_id', '=', self.id)], limit=1).price_unit
 
 
 
