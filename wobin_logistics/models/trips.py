@@ -171,8 +171,9 @@ class WobinLogisticaTrips(models.Model):
             for line in inv_lines_gotten:
                 inv_init = line.invoice_id.id
                 _logger.info('\n\n\n DENTRO DE FOR CICLO inv_init %s  Y   inv_NEXT %s\n\n\n', inv_init, inv_next)
+                inv_state = self.env['account.invoice'].search([('id', '=', inv_init)]).state
         
-                if inv_init != inv_next and line.state != 'cancel':
+                if inv_init != inv_next and inv_state != 'cancel':
                     self.income_provisions = self.income_provisions + line.price_subtotal
                     _logger.info('\n\n\n self.income_provisions %s\n\n\n', self.income_provisions)
             
@@ -207,8 +208,9 @@ class WobinLogisticaTrips(models.Model):
             for line in inv_lines_gotten:
                 inv_init = line.invoice_id.id
                 _logger.info('\n\n\n DENTRO DE FOR CICLO inv_init %s  Y   inv_NEXT %s\n\n\n', inv_init, inv_next)
-
-                if inv_init != inv_next and line.state != 'cancel':
+                inv_state = self.env['account.invoice'].search([('id', '=', inv_init)]).state
+        
+                if inv_init != inv_next and inv_state != 'cancel':
                     self.billed_income = self.billed_income + line.price_subtotal
                     _logger.info('\n\n\n self.billed_income %s\n\n\n', self.billed_income)
             
