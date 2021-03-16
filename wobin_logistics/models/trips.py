@@ -172,7 +172,7 @@ class WobinLogisticaTrips(models.Model):
                 inv_init = line.invoice_id.id
                 _logger.info('\n\n\n DENTRO DE FOR CICLO inv_init %s  Y   inv_NEXT %s\n\n\n', inv_init, inv_next)
         
-                if inv_init != inv_next:
+                if inv_init != inv_next and line.state != 'cancel':
                     self.income_provisions = self.income_provisions + line.price_subtotal
                     _logger.info('\n\n\n self.income_provisions %s\n\n\n', self.income_provisions)
             
@@ -208,7 +208,7 @@ class WobinLogisticaTrips(models.Model):
                 inv_init = line.invoice_id.id
                 _logger.info('\n\n\n DENTRO DE FOR CICLO inv_init %s  Y   inv_NEXT %s\n\n\n', inv_init, inv_next)
 
-                if inv_init != inv_next:
+                if inv_init != inv_next and line.state != 'cancel':
                     self.billed_income = self.billed_income + line.price_subtotal
                     _logger.info('\n\n\n self.billed_income %s\n\n\n', self.billed_income)
             
