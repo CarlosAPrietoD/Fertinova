@@ -16,8 +16,8 @@ class WobinMovesAdvSetLines(models.Model):
     advance_ids     = fields.One2many('wobin.advances', 'mov_lns_ad_set_id', string='Related Advances', ondelete='cascade', compute='set_advances')
     comprobation_ids      = fields.One2many('wobin.comprobations', 'mov_lns_ad_set_id', string='Related Comprobations', ondelete='cascade', compute='set_comprobations')
     advance_sum_amnt      = fields.Float(string='Advances', digits=(15,2), compute='set_advances', store=True)
-    comprobation_sum_amnt = fields.Float(string='Comprobations', digits=(15,2), compute='set_comprobations', store=True)
-    amount_to_settle      = fields.Float(string='Amount to Settle', digits=(15,2), compute='set_amount_to_settle', store=True)
+    comprobation_sum_amnt = fields.Float(string='Comprobations', digits=(15,2), compute='set_comprobation_sum_amnt')
+    amount_to_settle      = fields.Float(string='Amount to Settle', digits=(15,2), compute='set_amount_to_settle')
     settled               = fields.Boolean(string='Move Settled')      
     #flag_pending_process  = fields.Boolean(string='Pending Process', compute='set_flag_pending_process')    
     settlement_id     = fields.Many2one('wobin.settlements', ondelete='cascade')
@@ -62,34 +62,37 @@ class WobinMovesAdvSetLines(models.Model):
                                                            ('trip_id', '=', self.trip_id.id)]).ids                                                                   
         self.advance_ids = [(6, 0, list_advances)]
 
-        sum_amount = sum(line.amount for line in self.advance_ids)
-        self.advance_sum_amnt = sum_amount  
+        if self.advance_ids:
+            sum_amount = sum(line.amount for line in self.advance_ids)
+            self.advance_sum_amnt = sum_amount  
         
     
 
     @api.one
-    @api.depends('operator_id')
+    #@api.depends('operator_id', 'advance_ids')
     def set_comprobations(self):
         #self.comprobation_ids = [(6, 0, self.env['wobin.comprobations'].search([('mov_lns_ad_set_id', '=', self.id)]).ids)]
         list_comprobations = self.env['wobin.comprobations'].search([('operator_id', '=', self.operator_id.id),
                                                                      ('trip_id', '=', self.trip_id.id)]).ids                                                                   
-        self.comprobation_ids = [(6, 0, list_comprobations)]    
+        self.comprobation_ids = [(6, 0, list_comprobations)]
 
-        sum_amount = sum(line.amount for line in self.comprobation_ids)
-        print('\n\n sum_amount', sum_amount)
-        self.comprobation_sum_amnt = sum_amount         
-        self.write({'comprobation_sum_amnt': sum_amount}) 
+        if self.comprobation_ids:
+            sum_amount = sum(line.amount for line in self.comprobation_ids)
+            print('\n\n sum_amount', sum_amount)
+            self.comprobation_sum_amnt = sum_amount         
+            self.write({'comprobation_sum_amnt': sum_amount}) 
 
 
 
     @api.one
     @api.depends('advance_ids')
     def set_advance_sum_amnt(self):
-        #self.advance_sum_amnt = self.env['wobin.advances'].search([('mov_lns_ad_set_id', '=', self.id)], limit=1).amount        
         #Sum amounts from various advances linked to a given operator and trip:        
-        #sum_amount = sum(line.amount for line in self.advance_ids)
-        #self.advance_sum_amnt = sum_amount
+
+        #self.advance_sum_amnt = self.env['wobin.advances'].search([('mov_lns_ad_set_id', '=', self.id)], limit=1).amount                        
         
+        #sum_amount = sum(line.amount for line in self.advance_ids)
+        #self.advance_sum_amnt = sum_amount        
         sql_query = """SELECT sum(amount) 
                          FROM wobin_advances 
                         WHERE operator_id = %s AND trip_id = %s"""
@@ -105,17 +108,39 @@ class WobinMovesAdvSetLines(models.Model):
     @api.one 
     @api.depends('comprobation_ids')
     def set_comprobation_sum_amnt(self):
-        #Sum amounts from various comprobations linked to an advance:        
+        #Sum amounts from various comprobations linked to a comprobation:        
+        
         #sum_amount = sum(line.amount for line in self.comprobation_ids)
         #self.comprobation_sum_amnt = sum_amount
-        
-        sql_query = """SELECT sum(amount) 
-                         FROM wobin_comprobations 
-                        WHERE operator_id = %s AND trip_id = %s"""
-        self.env.cr.execute(sql_query, (self.operator_id.id, self.trip_id.id,))
-        result = self.env.cr.fetchone()
-        if result:                    
-            self.comprobation_sum_amnt = result[0]      
+
+        #self.comprobation_ids = [(6, 0, self.env['wobin.comprobations'].search([('mov_lns_ad_set_id', '=', self.id)]).ids)]
+
+        sum_amount = sum(line.amount for line in self.comprobation_ids)
+        self.comprobation_sum_amnt = sum_amount         
+        self.write({'comprobation_sum_amnt': sum_amount}) 
+              
+
+
+    @api.model 
+    def read_group(self, domain, fields, groupby, offset=0, limit=None, orderby=False, lazy=True):
+        res = super(WobinMovesAdvSetLines, self).read_group(domain, fields, groupby, offset=offset, limit=limit, orderby=orderby, lazy=lazy)
+        if 'comprobation_sum_amnt' in fields:
+            for line in res:
+                if '__domain' in line:
+                    lines = self.search(line['__domain'])
+                    total_due = 0.0
+                    for record in lines:
+                        total_due += record.comprobation_sum_amnt
+                    line['comprobation_sum_amnt'] = total_due
+        if 'amount_to_settle' in fields:
+            for line in res:
+                if '__domain' in line:
+                    lines = self.search(line['__domain'])
+                    total_due = 0.0
+                    for record in lines:
+                        total_due += record.amount_to_settle
+                    line['amount_to_settle'] = total_due                    
+        return res
                 
     
 

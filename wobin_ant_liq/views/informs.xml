@@ -64,7 +64,7 @@
             <field name="advance_ids" widget='many2many_tags' />                     
             <field name="advance_sum_amnt"/> 
             <field name="comprobation_ids" widget='many2many_tags'/>  
-            <field name="comprobation_sum_amnt"/>                
+            <field name="comprobation_sum_amnt" force_save="1"/>                
             <field name="amount_to_settle"/>
             <field name="settlement_id"/> 
             <field name="total_settlement"/> 
