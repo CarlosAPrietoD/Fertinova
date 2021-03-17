@@ -10,18 +10,38 @@ class WobinMovesAdvSetLines(models.Model):
 
 
 
-    settlement_id     = fields.Many2one('wobin.settlements', ondelete='cascade')
-    settlement_aux_id = fields.Many2one('wobin.settlements', ondelete='cascade')
     check_selection = fields.Boolean(string=' ')
     operator_id     = fields.Many2one('hr.employee',string='Operator', ondelete='cascade')
     trip_id         = fields.Many2one('wobin.logistica.trips', string='Trip', ondelete='cascade')
     advance_ids     = fields.One2many('wobin.advances', 'mov_lns_ad_set_id', string='Related Advances', ondelete='cascade', compute='set_advances')
     comprobation_ids      = fields.One2many('wobin.comprobations', 'mov_lns_ad_set_id', string='Related Comprobations', ondelete='cascade', compute='set_comprobations')
-    advance_sum_amnt      = fields.Float(string='Advances', digits=(15,2), compute='set_advance_sum_amnt')
-    comprobation_sum_amnt = fields.Float(string='Comprobationoperator_ids', digits=(15,2), compute='set_comprobation_sum_amnt')
-    amount_to_settle      = fields.Float(string='Amount to Settle', digits=(15,2), compute='set_amount_to_settle')
-    settled               = fields.Boolean(string='Move Settled')
+    advance_sum_amnt      = fields.Float(string='Advances', digits=(15,2), compute='set_advances', store=True)
+    comprobation_sum_amnt = fields.Float(string='Comprobations', digits=(15,2), compute='set_comprobations', store=True)
+    amount_to_settle      = fields.Float(string='Amount to Settle', digits=(15,2), compute='set_amount_to_settle', store=True)
+    settled               = fields.Boolean(string='Move Settled')      
     #flag_pending_process  = fields.Boolean(string='Pending Process', compute='set_flag_pending_process')    
+    settlement_id     = fields.Many2one('wobin.settlements', ondelete='cascade')
+    settlement_aux_id = fields.Many2one('wobin.settlements', ondelete='cascade')
+    total_settlement  = fields.Float(string='Total of Settlement $', digits=(15,2), compute='set_total_settlement')
+    state             = fields.Selection(selection = [('pending', 'Pending'),
+                                                      ('ready', 'Ready to settle'),
+                                                      ('settled', 'Settled'),
+                                                     ], string='State', required=True, readonly=True, copy=False, tracking=True, default='pending', compute='set_state_settlement')        
+
+    
+    
+    @api.one
+    @api.depends('settlement_id')
+    def set_total_settlement(self):
+        self.total_settlement = self.settlement_id.total_settlement
+
+
+    
+    @api.one
+    @api.depends('settlement_id')
+    def set_state_settlement(self):
+        self.state = self.settlement_id.state
+
 
 
     """
@@ -41,6 +61,9 @@ class WobinMovesAdvSetLines(models.Model):
         list_advances = self.env['wobin.advances'].search([('operator_id', '=', self.operator_id.id),
                                                            ('trip_id', '=', self.trip_id.id)]).ids                                                                   
         self.advance_ids = [(6, 0, list_advances)]
+
+        sum_amount = sum(line.amount for line in self.advance_ids)
+        self.advance_sum_amnt = sum_amount  
         
     
 
@@ -50,18 +73,23 @@ class WobinMovesAdvSetLines(models.Model):
         #self.comprobation_ids = [(6, 0, self.env['wobin.comprobations'].search([('mov_lns_ad_set_id', '=', self.id)]).ids)]
         list_comprobations = self.env['wobin.comprobations'].search([('operator_id', '=', self.operator_id.id),
                                                                      ('trip_id', '=', self.trip_id.id)]).ids                                                                   
-        self.comprobation_ids = [(6, 0, list_comprobations)]        
+        self.comprobation_ids = [(6, 0, list_comprobations)]    
+
+        sum_amount = sum(line.amount for line in self.comprobation_ids)
+        print('\n\n sum_amount', sum_amount)
+        self.comprobation_sum_amnt = sum_amount         
+        self.write({'comprobation_sum_amnt': sum_amount}) 
+
 
 
     @api.one
     @api.depends('advance_ids')
     def set_advance_sum_amnt(self):
         #self.advance_sum_amnt = self.env['wobin.advances'].search([('mov_lns_ad_set_id', '=', self.id)], limit=1).amount        
-        #Sum amounts from various advances linked to a given operator and trip:
+        #Sum amounts from various advances linked to a given operator and trip:        
+        #sum_amount = sum(line.amount for line in self.advance_ids)
+        #self.advance_sum_amnt = sum_amount
         
-        sum_amount = sum(line.amount for line in self.advance_ids)
-        self.advance_sum_amnt = sum_amount
-        '''
         sql_query = """SELECT sum(amount) 
                          FROM wobin_advances 
                         WHERE operator_id = %s AND trip_id = %s"""
@@ -70,17 +98,17 @@ class WobinMovesAdvSetLines(models.Model):
         
         if result:
             self.advance_sum_amnt = result[0] 
-        '''       
+        
+
 
 
     @api.one 
     @api.depends('comprobation_ids')
     def set_comprobation_sum_amnt(self):
-        #Sum amounts from various comprobations linked to an advance:
+        #Sum amounts from various comprobations linked to an advance:        
+        #sum_amount = sum(line.amount for line in self.comprobation_ids)
+        #self.comprobation_sum_amnt = sum_amount
         
-        sum_amount = sum(line.amount for line in self.comprobation_ids)
-        self.comprobation_sum_amnt = sum_amount
-        '''        
         sql_query = """SELECT sum(amount) 
                          FROM wobin_comprobations 
                         WHERE operator_id = %s AND trip_id = %s"""
@@ -88,12 +116,18 @@ class WobinMovesAdvSetLines(models.Model):
         result = self.env.cr.fetchone()
         if result:                    
             self.comprobation_sum_amnt = result[0]      
-        '''              
+                
+    
 
-
-    @api.one  
+    
+    @api.one    
+    @api.depends('advance_sum_amnt', 'comprobation_sum_amnt')
     def set_amount_to_settle(self):
-        self.amount_to_settle = self.comprobation_sum_amnt - self.advance_sum_amnt 
+        if self.settled: 
+            self.amount_to_settle = None                      
+        else:
+            self.amount_to_settle = self.comprobation_sum_amnt - self.advance_sum_amnt 
+
 
 
     """

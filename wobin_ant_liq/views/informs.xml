@@ -66,6 +66,9 @@
             <field name="comprobation_ids" widget='many2many_tags'/>  
             <field name="comprobation_sum_amnt"/>                
             <field name="amount_to_settle"/>
+            <field name="settlement_id"/> 
+            <field name="total_settlement"/> 
+            <field name="state"/> 
         </tree>
       </field>
     </record> 
@@ -90,6 +93,8 @@
                           <field name="advance_ids" readonly="True" force_save="1" nolabel="1" >
                               <tree>
                                   <field name="name"/>
+                                  <field name="date"/>
+                                  <field name="payment_related_id"/>
                                   <field name="amount"/>
                               </tree>
                           </field>                                 
@@ -103,6 +108,8 @@
                           <field name="comprobation_ids" readonly="True" force_save="1" nolabel="1" >
                               <tree>
                                   <field name="name"/>
+                                  <field name="date"/>
+                                  <field name="acc_mov_related_id"/>
                                   <field name="amount"/>
                               </tree>
                           </field>                                 
@@ -129,14 +136,12 @@
     </record>        
 
 
-
-    <!-- DEBTS INFORM - LIST VIEW -->
+    <!-- DEBTS INFORM - LIST VIEW 
     <record id="view_debts_inform_list" model="ir.ui.view">
       <field name="name">Settlements</field>
       <field name="model">wobin.settlements</field>
       <field name="arch" type="xml">
         <tree>
-          <!--<field name="trip_id"/>-->
           <field name="operator_id"/>                
           <field name="date"/> 
           <field name="advance_sum_amnt"/>
@@ -151,10 +156,10 @@
         </tree>
       </field>
     </record>   
+    -->    
 
 
-
-    <!-- EXPENSES TO CHECK INFORM - LIST VIEW -->
+    <!-- EXPENSES TO CHECK INFORM - LIST VIEW 
     <record id="view_check_expenses_inform_list" model="ir.ui.view">
       <field name="name">Settlements</field>
       <field name="model">wobin.settlements</field>
@@ -169,6 +174,7 @@
         </tree>
       </field>
     </record> 
+    -->    
 
   </data>  
 </odoo> 

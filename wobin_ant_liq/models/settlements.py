@@ -308,7 +308,6 @@ class WobinSettlements(models.Model):
         
         for line in self.possible_adv_set_lines_ids:
             if line.check_selection == True:
-                print()
                 line.update({'settled': True})    
 
         self.amount_to_settle = None                             
