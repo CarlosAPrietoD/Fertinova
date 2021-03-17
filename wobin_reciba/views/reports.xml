@@ -113,7 +113,7 @@
         <act_window id="action_receipt_uninvoiced" name="Selecciona el intervalo del reporte" res_model="receipt.uninvoiced" view_mode="form" target="new" multi="True" />
 
         <!--Menu-->
-        <menuitem id="menu_receipt_uninvoiced" name="Recepciones por facturar" parent="menu_receipt_reports" action="action_receipt_uninvoiced" />
+        <menuitem id="menu_receipt_uninvoiced" name="Recepciones por facturar v2" parent="menu_receipt_reports" action="action_receipt_uninvoiced" />
 
         <!--================================Reporte de recepciones facturadas======================================-->
 
@@ -218,7 +218,7 @@
         <act_window id="action_receipt_invoiced" name="Selecciona el intervalo del reporte" res_model="receipt.invoiced" view_mode="form" target="new" multi="True" />
 
         <!--Menu-->
-        <menuitem id="menu_receipt_invoiced" name="Recepciones facturadas" parent="menu_receipt_reports" action="action_receipt_invoiced" />
+        <menuitem id="menu_receipt_invoiced" name="Recepciones facturadas v2" parent="menu_receipt_reports" action="action_receipt_invoiced" />
 
         <!--================================Reporte de recepciones a depósito======================================-->
 
@@ -462,7 +462,7 @@
         <act_window id="action_receipt_producer" name="Selecciona el intervalo del reporte" res_model="receipt.producer" view_mode="form" target="new" multi="True" />
 
         <!--Menu-->
-        <menuitem id="menu_receipt_producer" name="Recepciones por productor" parent="menu_receipt_reports" action="action_receipt_producer" />
+        <menuitem id="menu_receipt_producer" name="Recepciones por productor v2" parent="menu_receipt_reports" action="action_receipt_producer" />
 
         <!--================================Reporte de entregas por facturar======================================-->
 
