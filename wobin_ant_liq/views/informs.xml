@@ -119,12 +119,27 @@
                         </group> 
                     </group>  
                     <group>
-                        <group>                                
-                        </group>                                                 
-                        <group>       
-                            <field name="amount_to_settle" readonly="True" force_save="1"/>                                                  
-                        </group> 
-                    </group>                                                                                                                            
+                    <group> 
+                    </group> 
+                    <group> 
+                        <field name="amount_to_settle" readonly="True" force_save="1"/> 
+                    </group> 
+                    </group> 
+                    <group>
+                    </group> 
+                    <group>
+                    
+                      <field name="settlements_ids" readonly="True" force_save="1" nolabel="1" >
+                      <tree>
+                      <field name="name"/>
+                      <field name="date"/>
+                      <field name="payment_related_id"/>
+                      <field name="advance_related_id"/>
+                      <field name="total_settlement"/>
+                      </tree>
+                      </field> 
+                    
+                    </group>                                                                                                                           
                 </sheet>              
                 <div class="oe_chatter">
                     <field name="message_follower_ids" widget="mail_followers"/>

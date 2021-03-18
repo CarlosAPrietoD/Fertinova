@@ -59,7 +59,7 @@ class WobinSettlements(models.Model):
     #acc_mov_related_id = fields.Many2one('account.move', string='Related Account Move', compute='set_related_acc_mov', ondelete='cascade')    
     advance_related_id = fields.Many2one('wobin.advances', string='Related Advance', compute='set_related_advance', ondelete='cascade')    
     trips_related_ids  = fields.Many2many('wobin.logistica.trips')
-
+    mov_lns_ad_set_id  = fields.Many2one('wobin.moves.adv.set.lines', ondelete='cascade')
 
 
     @api.onchange('operator_id')
@@ -88,7 +88,7 @@ class WobinSettlements(models.Model):
         list_ids = []
         for line in self.possible_adv_set_lines_ids:
             if line.check_selection == True:
-                list_ids.append(line.id)          
+                list_ids.append(line.id)       
 
         self.settled_adv_set_lines_ids = [(6, 0, list_ids)] 
 
@@ -306,9 +306,14 @@ class WobinSettlements(models.Model):
             #Display into label this settlement was finished by an advance: 
             self.label_process = 'Esta Liquidación ha sido saldada por Anticipo ' + self.advance_related_id.name 
         
+        for line in self.settled_adv_set_lines_ids:
+            if line.check_selection == True:
+                line.settled = True         
+        
         for line in self.possible_adv_set_lines_ids:
             if line.check_selection == True:
                 line.update({'settled': True})    
+                line.write({'settled': True})
 
         self.amount_to_settle = None                             
 

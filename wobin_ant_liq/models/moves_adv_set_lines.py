@@ -22,6 +22,8 @@ class WobinMovesAdvSetLines(models.Model):
     #flag_pending_process  = fields.Boolean(string='Pending Process', compute='set_flag_pending_process')    
     settlement_id     = fields.Many2one('wobin.settlements', ondelete='cascade')
     settlement_aux_id = fields.Many2one('wobin.settlements', ondelete='cascade')
+    settler_id        = fields.Many2one('wobin.settlements')
+    settlements_ids   = fields.One2many('wobin.settlements', 'mov_lns_ad_set_id', ondelete='cascade', compute='set_settlements_ids')    
     total_settlement  = fields.Float(string='Total of Settlement $', digits=(15,2), compute='set_total_settlement')
     state             = fields.Selection(selection = [('pending', 'Pending'),
                                                       ('ready', 'Ready to settle'),
@@ -31,18 +33,24 @@ class WobinMovesAdvSetLines(models.Model):
     
     
     @api.one
-    @api.depends('settlement_id')
+    @api.depends('settler_id')
     def set_total_settlement(self):
-        self.total_settlement = self.settlement_id.total_settlement
+        self.total_settlement = self.settler_id.total_settlement
 
 
     
     @api.one
-    @api.depends('settlement_id')
+    @api.depends('settler_id')
     def set_state_settlement(self):
-        self.state = self.settlement_id.state
+        self.state = self.settler_id.state
 
 
+
+    @api.one
+    @api.depends('settler_id')
+    def set_settlements_ids(self):
+        list_settlements = self.env['wobin.settlements'].search([('id', '=', self.settler_id.id)]).ids 
+        self.settlements_ids = [(6, 0, list_settlements)]
 
     """
     @api.one
