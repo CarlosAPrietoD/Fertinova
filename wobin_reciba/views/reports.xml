@@ -323,7 +323,7 @@
         <act_window id="action_receipt_priceless" name="Selecciona el intervalo del reporte" res_model="receipt.priceless" view_mode="form" target="new" multi="True" />
 
         <!--Menu-->
-        <menuitem id="menu_receipt_priceless" name="Recepciones a depósito" parent="menu_receipt_reports" action="action_receipt_priceless" groups="group_reciba_control,group_reciba_responsable"/>
+        <menuitem id="menu_receipt_priceless" name="Recepciones a depósito v2" parent="menu_receipt_reports" action="action_receipt_priceless" groups="group_reciba_control,group_reciba_responsable"/>
 
         <!--================================Reporte de recepciones por productor======================================-->
 
@@ -567,7 +567,7 @@
         <act_window id="action_delivery_uninvoiced" name="Selecciona el intervalo del reporte" res_model="delivery.uninvoiced" view_mode="form" target="new" multi="True" />
 
         <!--Menu-->
-        <menuitem id="menu_delivery_uninvoiced" name="Entregas por facturar" parent="menu_delivery_reports" action="action_delivery_uninvoiced" />
+        <menuitem id="menu_delivery_uninvoiced" name="Entregas por facturar v2" parent="menu_delivery_reports" action="action_delivery_uninvoiced" />
 
         <!--================================Reporte de entregas facturadas======================================-->
 
@@ -672,7 +672,7 @@
         <act_window id="action_delivery_invoiced" name="Selecciona el intervalo del reporte" res_model="delivery.invoiced" view_mode="form" target="new" multi="True" />
 
         <!--Menu-->
-        <menuitem id="menu_delivery_invoiced" name="Entregas facturadas" parent="menu_delivery_reports" action="action_delivery_invoiced" />
+        <menuitem id="menu_delivery_invoiced" name="Entregas facturadas v2" parent="menu_delivery_reports" action="action_delivery_invoiced" />
 
         <!--================================Reporte de calidad humedad ponderada============================================-->
 
