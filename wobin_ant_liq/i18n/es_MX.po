@@ -679,7 +679,7 @@ msgstr "Liquidación"
 #. module: wobin_ant_liq
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__settlement_aux_id
 msgid "Settlement Aux"
-msgstr "Liquidación Auxliar"
+msgstr "Liquidación"
 
 #. module: wobin_ant_liq
 #: model:ir.actions.act_window,name:wobin_ant_liq.action_settlements

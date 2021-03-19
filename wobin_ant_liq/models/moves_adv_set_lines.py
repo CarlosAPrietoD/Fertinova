@@ -30,26 +30,30 @@ class WobinMovesAdvSetLines(models.Model):
                                                       ('settled', 'Settled'),
                                                      ], string='State', required=True, readonly=True, copy=False, tracking=True, default='pending', compute='set_state_settlement')        
 
-    
+    #@api.one
+    #def set_settler(self):
+    #    settlement_recordsets = self.env['wobin.settlements'].search([('operator_id', '=', self.operator_id.id)])
+
+
     
     @api.one
-    @api.depends('settler_id')
+    @api.depends('settlement_aux_id')
     def set_total_settlement(self):
-        self.total_settlement = self.settler_id.total_settlement
+        self.total_settlement = self.settlement_aux_id.total_settlement
 
 
     
     @api.one
-    @api.depends('settler_id')
+    @api.depends('settlement_aux_id')
     def set_state_settlement(self):
-        self.state = self.settler_id.state
+        self.state = self.settlement_aux_id.state
 
 
 
     @api.one
-    @api.depends('settler_id')
+    @api.depends('settlement_aux_id')
     def set_settlements_ids(self):
-        list_settlements = self.env['wobin.settlements'].search([('id', '=', self.settler_id.id)]).ids 
+        list_settlements = self.env['wobin.settlements'].search([('id', '=', self.settlement_aux_id.id)]).ids 
         self.settlements_ids = [(6, 0, list_settlements)]
 
     """
