@@ -21,8 +21,7 @@ class WobinMovesAdvSetLines(models.Model):
     settled               = fields.Boolean(string='Move Settled')      
     #flag_pending_process  = fields.Boolean(string='Pending Process', compute='set_flag_pending_process')    
     settlement_id     = fields.Many2one('wobin.settlements', ondelete='cascade')
-    settlement_aux_id = fields.Many2one('wobin.settlements', ondelete='cascade')
-    settler_id        = fields.Many2one('wobin.settlements')
+    settlement_aux_id = fields.Many2one('wobin.settlements', string='Settlement', ondelete='cascade')
     settlements_ids   = fields.One2many('wobin.settlements', 'mov_lns_ad_set_id', ondelete='cascade', compute='set_settlements_ids')    
     total_settlement  = fields.Float(string='Total of Settlement $', digits=(15,2), compute='set_total_settlement')
     state             = fields.Selection(selection = [('pending', 'Pending'),
@@ -136,6 +135,15 @@ class WobinMovesAdvSetLines(models.Model):
     @api.model 
     def read_group(self, domain, fields, groupby, offset=0, limit=None, orderby=False, lazy=True):
         res = super(WobinMovesAdvSetLines, self).read_group(domain, fields, groupby, offset=offset, limit=limit, orderby=orderby, lazy=lazy)
+        if 'advance_sum_amnt' in fields:
+            for line in res:
+                if '__domain' in line:
+                    lines = self.search(line['__domain'])
+                    total_due = 0.0
+                    for record in lines:
+                        if not record.settlement_aux_id:
+                            total_due += record.advance_sum_amnt
+                    line['advance_sum_amnt'] = total_due        
         if 'comprobation_sum_amnt' in fields:
             for line in res:
                 if '__domain' in line:

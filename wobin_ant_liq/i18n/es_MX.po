@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-17 23:40+0000\n"
-"PO-Revision-Date: 2021-03-17 23:40+0000\n"
+"POT-Creation-Date: 2021-03-22 15:08+0000\n"
+"PO-Revision-Date: 2021-03-22 15:08+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -457,6 +457,7 @@ msgstr "Dinero a no considerar"
 #. module: wobin_ant_liq
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__mov_lns_ad_set_id
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_comprobations__mov_lns_ad_set_id
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__mov_lns_ad_set_id
 msgid "Mov Lns Ad Set"
 msgstr ""
 
@@ -671,18 +672,15 @@ msgstr "Movs. Saldados por operador"
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_account_move__settlement_id
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_account_payment__settlement_id
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__settlement_id
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__settlement_aux_id
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__settlement_id
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__name
 msgid "Settlement"
 msgstr "Liquidación"
 
 #. module: wobin_ant_liq
-#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__settlement_aux_id
-msgid "Settlement Aux"
-msgstr "Liquidación"
-
-#. module: wobin_ant_liq
 #: model:ir.actions.act_window,name:wobin_ant_liq.action_settlements
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_moves_adv_set_lines__settlements_ids
 #: model:ir.ui.menu,name:wobin_ant_liq.settlemens_menu_3
 msgid "Settlements"
 msgstr "Liquidaciones"
