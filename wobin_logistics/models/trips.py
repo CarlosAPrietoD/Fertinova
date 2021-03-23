@@ -38,6 +38,7 @@ class WobinLogisticaTrips(models.Model):
     # General Data / - / - / - / - / - / - / - / - / - /
     name              = fields.Char(string="Trip", readonly=True, required=True, copy=False, default='New')
     trip_number_tag   = fields.Char(string='Trip Number (Analytic Tag)', track_visibility='always')
+    without_charge    = fields.Boolean(string="Trip Without Charge", default=True)
     contracts_id      = fields.Many2one('wobin.logistica.contracts', string='Contracts', track_visibility='always', ondelete='set null')
     sucursal_id       = fields.Many2one('stock.warehouse', string='Branch Office', track_visibility='always')
     client_id         = fields.Many2one('res.partner', string='Client', track_visibility='always')
@@ -60,18 +61,21 @@ class WobinLogisticaTrips(models.Model):
     real_download_qty  = fields.Float(string='Real Download Quantity (kg)', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always')
     attachment_downld  = fields.Many2many('ir.attachment', relation='second_dwn_att_relation', string='Download Attachments', track_visibility='always')
     qty_to_bill        = fields.Float(string='Quantiy to bill $', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always', compute='_set_qty_to_bill') 
+    discharged_flag    = fields.Boolean(string="Discharged Trip?")
     conformity         = fields.Binary(string='Conformity and Settlement', track_visibility='always')
     checked            = fields.Boolean(string=" ")
     discharge_location = fields.Char(string='Discharge Location', track_visibility='always')
     sales_order_id     = fields.Many2one('sale.order', string='Sales Order Generated', track_visibility='always', compute='_set_sale_order', ondelete='set null')    
-    state              = fields.Selection(selection=[('assigned', 'Assigned'),
+    state              = fields.Selection(selection=[('without_charge', 'Without Charge'),
+                                                     ('assigned', 'Assigned'),
                                                      ('route', 'En route'),
                                                      ('discharged', 'Discharged')], 
-                                                    string='State', required=True, readonly=True, copy=False, tracking=True, default='assigned', compute="set_status", track_visibility='always')
-    state_aux          = fields.Selection(selection=[('assigned', 'Assigned'),
+                                                    string='State', required=True, readonly=True, copy=False, tracking=True, default='without_charge', compute="set_status", track_visibility='always')
+    state_aux          = fields.Selection(selection=[('without_charge', 'Without Charge'),
+                                                     ('assigned', 'Assigned'),
                                                      ('route', 'En route'),
-                                                     ('discharged', 'Discharged')], 
-                                                    string='State', required=True, readonly=True, copy=False, tracking=True, default='assigned', store=True)                                                    
+                                                     ('discharged', 'Discharged')],  
+                                                    string='State', required=True, readonly=True, copy=False, tracking=True, default='without_charge', store=True)                                                    
 
     # Analysis Fields / - / - / - / - / - / - / - / - / - / - /
     trip_taxes        = fields.Many2many('account.tax', string='Taxes', compute="_set_trip_taxes", track_visibility='always')
@@ -92,16 +96,19 @@ class WobinLogisticaTrips(models.Model):
         
     @api.one
     def set_status(self):
-        '''Set up state in base a which fields are filled up'''
-        if self.contracts_id and self.sucursal_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty and self.upload_location and self.download_date and self.real_download_qty and self.checked and self.discharge_location:
+        '''Set up state in base a which fields are filled up'''          
+        if not self.without_charge and self.contracts_id and self.sucursal_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty and self.upload_location and self.download_date and self.real_download_qty and self.discharged_flag and self.checked and self.discharge_location:
             self.state = 'discharged'  
             self.write({'state_aux': self.state})        
-        elif self.contracts_id and self.sucursal_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty and self.upload_location:
+        elif not self.without_charge and self.contracts_id and self.sucursal_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty and self.upload_location:
             self.state = 'route'
             self.write({'state_aux': self.state})  
-        else:
+        elif not self.without_charge:
             self.state = 'assigned'
-            self.write({'state_aux': self.state})  
+            self.write({'state_aux': self.state})
+        elif self.without_charge:
+            self.state = 'without_charge'
+            self.write({'state_aux': self.state})              
         
 
 

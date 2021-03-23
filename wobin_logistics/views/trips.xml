@@ -104,7 +104,7 @@
         <field name="arch" type="xml"> 
             <form> 
                 <header>
-                    <field name="state" widget="statusbar" statusbar_visible="assigned,route,discharged"/>
+                    <field name="state" widget="statusbar" statusbar_visible="without_charge,assigned,route,discharged"/>
                 </header> 
                 <sheet>
                     <div class="oe_left oe_title">
@@ -117,7 +117,8 @@
                           <div style="margin-top: 27px !important;">
                             <div style="padding-top: 30px !important;">
                               <h3 style="background: #fff none repeat scroll 0 0; height: auto; margin-left: 20px; padding: 3px 5px; position: absolute; margin-top: -47px; border: 1px solid #337ab7; border-radius: 8px;"><strong>Datos Generales</strong></h3>                                
-                              <group>                         
+                              <group>                          
+                                <field name="without_charge"/> 
                                 <field name="contracts_id"/>  
                                 <field name="sucursal_id"/>                              
                                 <field name="client_id"/>
@@ -161,6 +162,7 @@
                                   <field name="real_download_qty"/>
                                   <field name="attachment_downld" widget="many2many_binary"/>
                                   <field name="qty_to_bill"/>
+                                  <field name="discharged_flag"/>
                                   <label for="conformity"/>
                                   <div>
                                       <field name="conformity" class="oe_inline" style="padding-right: 10px"/>
