@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-02 19:43+0000\n"
-"PO-Revision-Date: 2021-02-02 19:43+0000\n"
+"POT-Creation-Date: 2021-03-23 22:28+0000\n"
+"PO-Revision-Date: 2021-03-23 22:28+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -275,7 +275,7 @@ msgstr "Análisis de Liquidación de Operadores"
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__analytic_accnt_id
 msgid "Analytic Account"
-msgstr "Cuenta Analítica"
+msgstr "Cuenta analítica"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_account_analytic_tag__analytic_tag_type
@@ -511,6 +511,11 @@ msgid "Discharged"
 msgstr "Descargado"
 
 #. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__discharged_flag
+msgid "Discharged Trip?"
+msgstr "¿Viaje Descargado?"
+
+#. module: wobin_logistics
 #: model:ir.ui.menu,name:wobin_logistics.sub_menuitem_discharged_trips
 msgid "Discharged Trips"
 msgstr "Viajes Descargados"
@@ -564,6 +569,11 @@ msgstr ""
 #: selection:wobin.logistica.trips,state_aux:0
 msgid "En route"
 msgstr "En Ruta"
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.analytic_tagform_inherited
+msgid "Estado de facturación"
+msgstr ""
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__estimated_qty
@@ -882,6 +892,12 @@ msgid "Origin"
 msgstr "Origen"
 
 #. module: wobin_logistics
+#: selection:wobin.logistica.contracts,activity_state:0
+#: selection:wobin.logistica.trips,activity_state:0
+msgid "Overdue"
+msgstr "Atrasado"
+
+#. module: wobin_logistics
 #: model_terms:ir.ui.view,arch_db:wobin_logistics.reporte_carta_porte_view
 msgid "PRODUCTO"
 msgstr ""
@@ -1134,6 +1150,11 @@ msgid "Trip Number (Analytic Tag)"
 msgstr "Número de Viaje (Etiqueta Analítica)"
 
 #. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__without_charge
+msgid "Trip Without Charge"
+msgstr "Viaje Sin Carga"
+
+#. module: wobin_logistics
 #: model:ir.actions.act_window,name:wobin_logistics.action_logistics_trips
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__trips
 #: model:ir.ui.menu,name:wobin_logistics.sub_menuitem_trips
@@ -1226,6 +1247,12 @@ msgid "With Contract"
 msgstr "Con Contrato"
 
 #. module: wobin_logistics
+#: selection:wobin.logistica.trips,state:0
+#: selection:wobin.logistica.trips,state_aux:0
+msgid "Without Charge"
+msgstr "Sin Carga"
+
+#. module: wobin_logistics
 #: model:ir.ui.menu,name:wobin_logistics.menu_root
 msgid "Wobin Logistics"
 msgstr "Wobin Logística"
@@ -1233,7 +1260,7 @@ msgstr "Wobin Logística"
 #. module: wobin_logistics
 #: model_terms:ir.ui.view,arch_db:wobin_logistics.reporte_carta_porte_view
 msgid "kg"
-msgstr "kg"
+msgstr ""
 
 #. module: wobin_logistics
 #: model_terms:ir.ui.view,arch_db:wobin_logistics.wizard_delete_contract
