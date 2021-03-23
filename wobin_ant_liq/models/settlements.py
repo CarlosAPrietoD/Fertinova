@@ -88,10 +88,7 @@ class WobinSettlements(models.Model):
         list_ids = []
         for line in self.possible_adv_set_lines_ids:
             if line.check_selection == True:
-                list_ids.append(line.id)  
-                print('\n\n\n  self._context(active_ids)', self.env.context)
-                #line.settler = self.env.context.get('active_ids', [])     
-
+                list_ids.append(line.id)     
         self.settled_adv_set_lines_ids = [(6, 0, list_ids)] 
 
 
@@ -234,8 +231,7 @@ class WobinSettlements(models.Model):
         self.label_process = 'Esta Liquidación ha sido saldada' 
 
         for line in self.possible_adv_set_lines_ids:
-            if line.check_selection == True:
-                print()
+            if line.check_selection == True:        
                 line.update({'settled': True})         
 
 
