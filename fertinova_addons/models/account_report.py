@@ -26,11 +26,25 @@ class ReportReceiptUninvoiced(models.AbstractModel):
                 accounts.append(line.account_id.id)
 
         new_lines = []
+        accounts.sort()
 
         for account in accounts:
+            partners = []
+            lines_partner = []
+            array_lines = []
             for line in lines:
                 if line.account_id.id == account:
-                    new_lines.append(line)
+                    lines_partner.append(line)
+                    partners.append(line.partner_id.id)
+            
+            partners.sort()
+            for p in partners:
+                for lp in lines_partner:
+                    if lp.partner_id.id == p:
+                        array_lines.append(lp)
+            new_lines.append(array_lines)
+
+                
 
 
         report_data = {
@@ -42,5 +56,5 @@ class ReportReceiptUninvoiced(models.AbstractModel):
             'doc_ids': docids,
             'doc_model': 'res.partner',
             'report_data' : report_data,
-            'lines' : new_lines
+            'data' : new_lines
         }

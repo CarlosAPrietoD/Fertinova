@@ -27,26 +27,35 @@
                                 Referencia
                             </td>
                         </tr>
-                        <tr t-foreach="lines" t-as="line">
-                            <td style="text-align:center; border: black 1px solid; padding: 5px">
-                                <t t-esc="line['account_id'].display_name" />
-                            </td>
-                            <td style="text-align:center; border: black 1px solid; padding: 5px">
-                                <t t-esc="line['partner_id'].name" />
-                            </td>
-                            <td style="text-align:center; border: black 1px solid; padding: 5px">
-                                <t t-esc="line['quantity']" />
-                            </td>
-                            <td style="text-align:center; border: black 1px solid; padding: 5px">
-                                <t t-esc="line['debit']" />
-                            </td>
-                            <td style="text-align:center; border: black 1px solid; padding: 5px">
-                                <t t-esc="line['credit']" />
-                            </td>
-                            <td style="text-align:center; border: black 1px solid; padding: 5px">
-                                <t t-esc="line['ref']" />
-                            </td>
-                        </tr>
+                        <t t-foreach="data" t-as="lines">
+                            <tr>
+                                <td style="border: black 1px solid; padding: 5px">
+                                    <t t-esc="lines[0].account_id.display_name" />
+                                </td>
+                                <td colspan="5" style="border: black 1px solid; padding: 5px">
+                                </td>
+                            </tr>
+                            <tr t-foreach="lines" t-as="line">
+                                <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                    <!--<t t-esc="line['account_id'].display_name" />-->
+                                </td>
+                                <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                    <t t-esc="line['partner_id'].name" />
+                                </td>
+                                <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                    <t t-esc="line['quantity']" />
+                                </td>
+                                <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                    <t t-esc="line['debit']" />
+                                </td>
+                                <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                    <t t-esc="line['credit']" />
+                                </td>
+                                <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                    <t t-esc="line['ref']" />
+                                </td>
+                            </tr>
+                        </t>
                     </table>
                 </div>
             </t>
