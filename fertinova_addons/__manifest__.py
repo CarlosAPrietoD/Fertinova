@@ -28,6 +28,7 @@
         'views/stock_picking_inherited_view.xml',
         'views/cfdi.xml',
 
+        'views/report.xml',
 
         #Wizards:
         'wizard/account_move_inherited_view.xml',
