@@ -41,7 +41,7 @@ class WobinLogisticaTrips(models.Model):
     contracts_id      = fields.Many2one('wobin.logistica.contracts', string='Contracts', track_visibility='always', ondelete='set null')
     sucursal_id       = fields.Many2one('stock.warehouse', string='Branch Office', track_visibility='always')
     client_id         = fields.Many2one('res.partner', string='Client', track_visibility='always')
-    vehicle_id        = fields.Char(string='Vehicle', track_visibility='always')     
+    vehicle_id        = fields.Many2one('wobin.logistica.vehicles', string='Vehicle', track_visibility='always')     
     analytic_accnt_id = fields.Many2one('account.analytic.account', string='Analytic Account', track_visibility='always')
     operator_id       = fields.Many2one('hr.employee',string='Operator', track_visibility='always')
     route             = fields.Char(string='Route', track_visibility='always')
@@ -60,8 +60,10 @@ class WobinLogisticaTrips(models.Model):
     real_download_qty  = fields.Float(string='Real Download Quantity (kg)', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always')
     attachment_downld  = fields.Many2many('ir.attachment', relation='second_dwn_att_relation', string='Download Attachments', track_visibility='always')
     qty_to_bill        = fields.Float(string='Quantiy to bill $', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always', compute='_set_qty_to_bill') 
+    discharged_flag    = fields.Boolean(string="Discharged Trip?")    
     conformity         = fields.Binary(string='Conformity and Settlement', track_visibility='always')
     checked            = fields.Boolean(string=" ")
+    checked_aux        = fields.Boolean(string="Conformity and Settlement", compute='_set_checked')
     discharge_location = fields.Char(string='Discharge Location', track_visibility='always')
     sales_order_id     = fields.Many2one('sale.order', string='Sales Order Generated', track_visibility='always', compute='_set_sale_order', ondelete='set null')    
     state              = fields.Selection(selection=[('assigned', 'Assigned'),
@@ -109,6 +111,14 @@ class WobinLogisticaTrips(models.Model):
     @api.depends('name')    
     def _set_sale_order(self):
         self.sales_order_id = self.env['sale.order'].search([('trips_id', '=', self.id)]).id
+
+
+
+    @api.one
+    @api.depends('checked')  
+    def _set_checked(self):
+        #Fill this field according to check and thus show this aid field in list view
+        self.checked_aux = self.checked
 
 
 

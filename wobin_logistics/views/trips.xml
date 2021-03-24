@@ -91,7 +91,9 @@
           <field name="real_upload_qty"/>
           <field name="download_date"/>
           <field name="real_download_qty"/>
-          <field name="sales_order_id"/>  
+          <field name="sales_order_id"/>
+          <field name="checked_aux"/>
+          <field name="discharged_flag"/>  
           <field name="state"/>          
         </tree>
       </field>
@@ -161,6 +163,7 @@
                                   <field name="real_download_qty"/>
                                   <field name="attachment_downld" widget="many2many_binary"/>
                                   <field name="qty_to_bill"/>
+                                  <field name="discharged_flag"/>
                                   <label for="conformity"/>
                                   <div>
                                       <field name="conformity" class="oe_inline" style="padding-right: 10px"/>
