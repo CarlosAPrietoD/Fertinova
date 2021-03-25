@@ -18,7 +18,7 @@ class ReportReceiptUninvoiced(models.AbstractModel):
     @api.model
     def _get_report_values(self, docids, data=None):
         report = self.env['receipt.uninvoiced'].browse(docids)
-        tickets = self.env['reciba.ticket'].search([('operation_type','=','in'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),('destination_id','=',report.location.id),('invoice_id','=',False),'|',('state','=','priceless'),('state','=','confirmed')])
+        tickets = self.env['reciba.ticket'].search([('operation_type','=','in'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),('destination_id','=',report.location.id),('invoice_id','=',False),('company_id','=',self.env.user.company_id.id),'|',('state','=','priceless'),('state','=','confirmed')])
         
         sum_net = 0
         count = 0
@@ -68,7 +68,7 @@ class ReportReceiptInvoiced(models.AbstractModel):
     @api.model
     def _get_report_values(self, docids, data=None):
         report = self.env['receipt.invoiced'].browse(docids)
-        tickets = self.env['reciba.ticket'].search([('operation_type','=','in'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),('destination_id','=',report.location.id),('invoice_id','!=',False),('state','=','confirmed')])
+        tickets = self.env['reciba.ticket'].search([('operation_type','=','in'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),('destination_id','=',report.location.id),('invoice_id','!=',False),('state','=','confirmed'),('company_id','=',self.env.user.company_id.id)])
         
         sum_net = 0
         count = 0
@@ -118,7 +118,7 @@ class ReportReceiptPriceless(models.AbstractModel):
     @api.model
     def _get_report_values(self, docids, data=None):
         report = self.env['receipt.priceless'].browse(docids)
-        tickets = self.env['reciba.ticket'].search([('operation_type','=','in'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),('destination_id','=',report.location.id),('state','=','priceless')])
+        tickets = self.env['reciba.ticket'].search([('operation_type','=','in'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),('destination_id','=',report.location.id),('state','=','priceless'),('company_id','=',self.env.user.company_id.id)])
         
         sum_net = 0
         count = 0
@@ -168,7 +168,7 @@ class ReportReceiptProducer(models.AbstractModel):
     def _get_report_values(self, docids, data=None):
         
         report = self.env['receipt.producer'].browse(docids)
-        tickets = self.env['reciba.ticket'].search([('operation_type','=','in'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),('partner_id','=',report.producer.id),'|',('state','=','priceless'),('state','=','confirmed')])
+        tickets = self.env['reciba.ticket'].search([('operation_type','=','in'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),('partner_id','=',report.producer.id),('company_id','=',self.env.user.company_id.id),'|',('state','=','priceless'),('state','=','confirmed')])
         
         sum_net = 0
         count = 0
@@ -239,7 +239,7 @@ class ReportDeliveryUninvoiced(models.AbstractModel):
     @api.model
     def _get_report_values(self, docids, data=None):
         report = self.env['delivery.uninvoiced'].browse(docids)
-        tickets = self.env['reciba.ticket'].search([('operation_type','=','out'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),('origin_id','=',report.location.id),('state','=','confirmed'),('sale_invoice_status','=','to invoice')])
+        tickets = self.env['reciba.ticket'].search([('operation_type','=','out'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),('origin_id','=',report.location.id),('state','=','confirmed'),('sale_invoice_status','=','to invoice'),('company_id','=',self.env.user.company_id.id)])
         
         sum_net = 0
         count = 0
@@ -289,7 +289,7 @@ class ReportDeliveryInvoiced(models.AbstractModel):
     @api.model
     def _get_report_values(self, docids, data=None):
         report = self.env['delivery.invoiced'].browse(docids)
-        tickets = self.env['reciba.ticket'].search([('operation_type','=','out'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),('origin_id','=',report.location.id),('state','=','confirmed'),('sale_invoice_status','=','invoiced')])
+        tickets = self.env['reciba.ticket'].search([('operation_type','=','out'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),('origin_id','=',report.location.id),('state','=','confirmed'),('sale_invoice_status','=','invoiced'),('company_id','=',self.env.user.company_id.id)])
         
         sum_net = 0
         count = 0
@@ -339,8 +339,8 @@ class ReportAvgHumidity(models.AbstractModel):
     @api.model
     def _get_report_values(self, docids, data=None):
         report = self.env['quality.avg.humidity'].browse(docids)
-        tickets_receipt = self.env['reciba.ticket'].search([('operation_type','=','in'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),('destination_id','=',report.location.id),'|',('state','=','priceless'),('state','=','confirmed')])
-        tickets_delivery = self.env['reciba.ticket'].search([('operation_type','=','out'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),('origin_id','=',report.location.id),('state','=','confirmed')])    
+        tickets_receipt = self.env['reciba.ticket'].search([('operation_type','=','in'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),('destination_id','=',report.location.id),('company_id','=',self.env.user.company_id.id),'|',('state','=','priceless'),('state','=','confirmed')])
+        tickets_delivery = self.env['reciba.ticket'].search([('operation_type','=','out'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),('origin_id','=',report.location.id),('state','=','confirmed'),('company_id','=',self.env.user.company_id.id)])    
 
         sum_net_receipt = 0
         sum_humidity_receipt = 0
