@@ -21,6 +21,7 @@ class WobinVehicles(models.Model):
     name  = fields.Char(track_visibility='always')
     model = fields.Char(string='Model', track_visibility='always')
     year  = fields.Char(string='Year', track_visibility='always')
+    license_plate     = fields.Char(string='License Plate', track_visibility='always') 
     current_trip      = fields.Many2one('wobin.logistica.trips', string='Current Trip', compute="_set_current_trip", track_visibility='always')
     analytic_accnt_id = fields.Many2one('account.analytic.account', string='Analytic Account', track_visibility='always')
     trip_history      = fields.One2many('wobin.logistica.trips', 'vehicle_id', string='Trips History', default=_set_history)

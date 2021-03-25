@@ -223,6 +223,7 @@
                         <group>
                             <field name="model"/> 
                             <field name="year"/>
+                            <field name="license_plate"/>
                             <field name="current_trip"/>           
                             <field name="analytic_accnt_id"/>               
                         </group>                                                 
