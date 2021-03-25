@@ -6,7 +6,7 @@
 
     <report
         id="reporte_carta_porte"
-        model="logistics.trips"
+        model="wobin.logistica.trips"
         string="Carta Porte"
         name="wobin_logistics.reporte_carta_porte_view"
         file="wobin_logistics.report_carta_porte"

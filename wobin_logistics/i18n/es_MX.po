@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-23 22:28+0000\n"
-"PO-Revision-Date: 2021-03-23 22:28+0000\n"
+"POT-Creation-Date: 2021-03-25 19:02+0000\n"
+"PO-Revision-Date: 2021-03-25 19:02+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -225,6 +225,7 @@ msgstr ""
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__message_needaction
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__message_needaction
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__message_needaction
 msgid "Action Needed"
 msgstr "Acción Necesaria"
 
@@ -236,12 +237,14 @@ msgstr "Activo"
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__activity_ids
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__activity_ids
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__activity_ids
 msgid "Activities"
 msgstr "Actividades"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__activity_state
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__activity_state
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__activity_state
 msgid "Activity State"
 msgstr "Estado de la actividad"
 
@@ -274,6 +277,7 @@ msgstr "Análisis de Liquidación de Operadores"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__analytic_accnt_id
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__analytic_accnt_id
 msgid "Analytic Account"
 msgstr "Cuenta analítica"
 
@@ -296,6 +300,7 @@ msgstr "Asignado"
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__message_attachment_count
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__message_attachment_count
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__message_attachment_count
 msgid "Attachment Count"
 msgstr "Conteo de archivos adjuntos"
 
@@ -386,6 +391,7 @@ msgid "Closed"
 msgstr "Cerrado"
 
 #. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__checked_aux
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__conformity
 msgid "Conformity and Settlement"
 msgstr "Conformidad y Finiquito"
@@ -444,6 +450,7 @@ msgstr "Crear Viaje"
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_quotations__create_uid
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_routes__create_uid
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__create_uid
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__create_uid
 msgid "Created by"
 msgstr "Creado por"
 
@@ -453,6 +460,7 @@ msgstr "Creado por"
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_quotations__create_date
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_routes__create_date
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__create_date
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__create_date
 msgid "Created on"
 msgstr "Creado el"
 
@@ -468,6 +476,11 @@ msgid "Cuando se trate de cargas que por su naturaleza peso volumen, embalaje de
 "                                    demás artículos o al material rodante salvo que la empresa de que se trate tenga el equipo\n"
 "                                    adecuado."
 msgstr ""
+
+#. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__current_trip
+msgid "Current Trip"
+msgstr "Viaje Actual"
 
 #. module: wobin_logistics
 #: model_terms:ir.ui.view,arch_db:wobin_logistics.reporte_carta_porte_view
@@ -531,6 +544,7 @@ msgstr "Viajes Descargados y Órdenes de Venta a Procesar"
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_quotations__display_name
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_routes__display_name
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__display_name
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__display_name
 msgid "Display Name"
 msgstr "Nombre mostrado"
 
@@ -608,18 +622,21 @@ msgstr "Bandera para indicar que la Orden de Venta tiene Viaje"
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__message_follower_ids
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__message_follower_ids
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__message_follower_ids
 msgid "Followers"
 msgstr "Seguidores"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__message_channel_ids
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__message_channel_ids
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__message_channel_ids
 msgid "Followers (Channels)"
 msgstr "Seguidores (Canales)"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__message_partner_ids
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__message_partner_ids
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__message_partner_ids
 msgid "Followers (Partners)"
 msgstr "Seguidores (Empresas)"
 
@@ -629,6 +646,7 @@ msgstr "Seguidores (Empresas)"
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_quotations__id
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_routes__id
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__id
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__id
 msgid "ID"
 msgstr "ID"
 
@@ -645,18 +663,21 @@ msgstr ""
 #. module: wobin_logistics
 #: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_contracts__message_unread
 #: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_trips__message_unread
+#: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_vehicles__message_unread
 msgid "If checked new messages require your attention."
 msgstr "Si está marcado, hay nuevos mensajes que requieren su atención"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_contracts__message_needaction
 #: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_trips__message_needaction
+#: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_vehicles__message_needaction
 msgid "If checked, new messages require your attention."
 msgstr "Si está marcado, hay nuevos mensajes que requieren su atención."
 
 #. module: wobin_logistics
 #: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_contracts__message_has_error
 #: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_trips__message_has_error
+#: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_vehicles__message_has_error
 msgid "If checked, some messages have a delivery error."
 msgstr "Si se encuentra marcado, algunos mensajes tienen error de envío."
 
@@ -664,6 +685,11 @@ msgstr "Si se encuentra marcado, algunos mensajes tienen error de envío."
 #: selection:wobin.logistica.trips,invoice_status:0
 msgid "In Payment"
 msgstr "En Pago"
+
+#. module: wobin_logistics
+#: selection:wobin.logistica.vehicles,state:0
+msgid "In Use"
+msgstr "En Uso"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__income_provisions
@@ -698,6 +724,7 @@ msgstr "Análisis de Facturación"
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__message_is_follower
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__message_is_follower
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__message_is_follower
 msgid "Is Follower"
 msgstr "Es un seguidor"
 
@@ -728,6 +755,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_quotations____last_update
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_routes____last_update
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips____last_update
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles____last_update
 msgid "Last Modified on"
 msgstr "Última modificación en"
 
@@ -737,6 +765,7 @@ msgstr "Última modificación en"
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_quotations__write_uid
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_routes__write_uid
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__write_uid
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__write_uid
 msgid "Last Updated by"
 msgstr "Última actualización por"
 
@@ -746,6 +775,7 @@ msgstr "Última actualización por"
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_quotations__write_date
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_routes__write_date
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__write_date
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__write_date
 msgid "Last Updated on"
 msgstr "Última actualización el"
 
@@ -770,73 +800,95 @@ msgid "Logistics Trips"
 msgstr "Viajes Logística"
 
 #. module: wobin_logistics
+#: model:ir.model,name:wobin_logistics.model_wobin_logistica_vehicles
+msgid "Logistics Vehicles"
+msgstr "Vehículos Logística"
+
+#. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__message_main_attachment_id
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__message_main_attachment_id
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__message_main_attachment_id
 msgid "Main Attachment"
 msgstr "Adjuntos principales"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__message_has_error
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__message_has_error
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__message_has_error
 msgid "Message Delivery error"
 msgstr "Error de Envío de Mensaje"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__message_ids
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__message_ids
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__message_ids
 msgid "Messages"
 msgstr "Mensajes"
 
 #. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__model
+msgid "Model"
+msgstr "Modelo"
+
+#. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_quotations__name
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__name
 msgid "Name"
 msgstr "Nombre"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__activity_date_deadline
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__activity_date_deadline
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__activity_date_deadline
 msgid "Next Activity Deadline"
 msgstr "Siguiente plazo de actividad"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__activity_summary
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__activity_summary
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__activity_summary
 msgid "Next Activity Summary"
 msgstr "Resumen de la siguiente actividad"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__activity_type_id
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__activity_type_id
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__activity_type_id
 msgid "Next Activity Type"
 msgstr "Siguiente tipo de actividad"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__message_needaction_counter
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__message_needaction_counter
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__message_needaction_counter
 msgid "Number of Actions"
 msgstr "Número de acciones"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__message_has_error_counter
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__message_has_error_counter
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__message_has_error_counter
 msgid "Number of error"
 msgstr "Número de error"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_contracts__message_needaction_counter
 #: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_trips__message_needaction_counter
+#: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_vehicles__message_needaction_counter
 msgid "Number of messages which requires an action"
 msgstr "Número de mensajes que requieren una acción"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_contracts__message_has_error_counter
 #: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_trips__message_has_error_counter
+#: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_vehicles__message_has_error_counter
 msgid "Number of messages with delivery error"
 msgstr "Número de mensajes con error de envío"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_contracts__message_unread_counter
 #: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_trips__message_unread_counter
+#: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_vehicles__message_unread_counter
 msgid "Number of unread messages"
 msgstr "Número de mensajes no leidos"
 
@@ -894,6 +946,7 @@ msgstr "Origen"
 #. module: wobin_logistics
 #: selection:wobin.logistica.contracts,activity_state:0
 #: selection:wobin.logistica.trips,activity_state:0
+#: selection:wobin.logistica.vehicles,activity_state:0
 msgid "Overdue"
 msgstr "Atrasado"
 
@@ -918,6 +971,7 @@ msgstr ""
 #. module: wobin_logistics
 #: selection:wobin.logistica.contracts,activity_state:0
 #: selection:wobin.logistica.trips,activity_state:0
+#: selection:wobin.logistica.vehicles,activity_state:0
 msgid "Planned"
 msgstr "Planeado"
 
@@ -1014,6 +1068,7 @@ msgstr "Informes"
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__activity_user_id
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__activity_user_id
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__activity_user_id
 msgid "Responsible User"
 msgstr "Usuario responsable"
 
@@ -1075,6 +1130,7 @@ msgstr "Fecha de inicio"
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__status
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__state
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__state_aux
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__state
 msgid "State"
 msgstr "Estado"
 
@@ -1086,6 +1142,7 @@ msgstr "Estado"
 #. module: wobin_logistics
 #: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_contracts__activity_state
 #: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_trips__activity_state
+#: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_vehicles__activity_state
 msgid "Status based on activities\n"
 "Overdue: Due date is already passed\n"
 "Today: Activity date is today\n"
@@ -1128,6 +1185,7 @@ msgstr "Por Comenzar"
 #. module: wobin_logistics
 #: selection:wobin.logistica.contracts,activity_state:0
 #: selection:wobin.logistica.trips,activity_state:0
+#: selection:wobin.logistica.vehicles,activity_state:0
 msgid "Today"
 msgstr "Hoy"
 
@@ -1163,6 +1221,11 @@ msgid "Trips"
 msgstr "Viajes"
 
 #. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__trip_history
+msgid "Trips History"
+msgstr "Historial de Viajes"
+
+#. module: wobin_logistics
 #: model:ir.ui.menu,name:wobin_logistics.sub_menuitem_profitability
 msgid "Trips Profitability"
 msgstr "Rentabilidad de Viajes"
@@ -1180,12 +1243,14 @@ msgstr "Viajes Relacionados"
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__message_unread
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__message_unread
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__message_unread
 msgid "Unread Messages"
 msgstr "Mensajes por leer"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__message_unread_counter
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__message_unread_counter
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__message_unread_counter
 msgid "Unread Messages Counter"
 msgstr "Contador de mensajes sin leer"
 
@@ -1225,6 +1290,12 @@ msgid "Vehicle"
 msgstr "Vehículo"
 
 #. module: wobin_logistics
+#: model:ir.actions.act_window,name:wobin_logistics.action_vehicles_inform
+#: model:ir.ui.menu,name:wobin_logistics.sub_menuitem_vehicles
+msgid "Vehicles"
+msgstr "Vehículos"
+
+#. module: wobin_logistics
 #: model_terms:ir.ui.view,arch_db:wobin_logistics.view_logistics_trips_form
 msgid "WOBIN Logistics"
 msgstr "WOBIN Logística"
@@ -1232,14 +1303,21 @@ msgstr "WOBIN Logística"
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__website_message_ids
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__website_message_ids
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__website_message_ids
 msgid "Website Messages"
 msgstr "Mensajes del sitio web"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_contracts__website_message_ids
 #: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_trips__website_message_ids
+#: model:ir.model.fields,help:wobin_logistics.field_wobin_logistica_vehicles__website_message_ids
 msgid "Website communication history"
 msgstr "Historial de comunicaciones del sitio web"
+
+#. module: wobin_logistics
+#: selection:wobin.logistica.vehicles,state:0
+msgid "Whitout Charge"
+msgstr "Sin Carga"
 
 #. module: wobin_logistics
 #: model_terms:ir.ui.view,arch_db:wobin_logistics.view_invoice_report_search
@@ -1256,6 +1334,11 @@ msgstr "Sin Carga"
 #: model:ir.ui.menu,name:wobin_logistics.menu_root
 msgid "Wobin Logistics"
 msgstr "Wobin Logística"
+
+#. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__year
+msgid "Year"
+msgstr "Año"
 
 #. module: wobin_logistics
 #: model_terms:ir.ui.view,arch_db:wobin_logistics.reporte_carta_porte_view
