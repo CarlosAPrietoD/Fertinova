@@ -138,6 +138,13 @@ class WobinLogisticaTrips(models.Model):
 
 
 
+    @api.onchange('vehicle_id')
+    def _onchange_vehicle(self):
+        #Authomatic assignation for analytic account from vehicle_id's input
+        self.analytic_accnt_id = self.env['wobin.logistica.vehicles'].search([('id', '=', self.vehicle_id.id)]).analytic_accnt_id.id
+
+
+
     @api.one
     @api.depends('name')
     def _set_purchase_orders(self):            
