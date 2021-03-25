@@ -3,7 +3,6 @@
     <!--::::::::::::::::::::::::::::::::::::::::::::-->
     <!-- REPORT & TEMPLATE -->
     <!--::::::::::::::::::::::::::::::::::::::::::::-->    
-
     <report
         id="reporte_carta_porte"
         model="wobin.logistica.trips"
@@ -80,8 +79,12 @@
                                 </tr>
                                 <tr>
                                     <td class="w-25 table-info font-weight-bold">VEHÍCULO</td>  
-                                    <td class="w-50"><span t-field="doc.vehicle_id"/></td>
-                                </tr>                               
+                                    <td class="w-50"><span t-field="doc.vehicle_id.name"/></td>
+                                </tr>  
+                                <tr>
+                                    <td class="w-25 table-info font-weight-bold">PLACA</td>  
+                                    <td class="w-50"><span t-field="doc.vehicle_id.license_plate"/></td>
+                                </tr>                                                             
                             </tbody>
                         </table>                        
 

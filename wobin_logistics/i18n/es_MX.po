@@ -780,6 +780,11 @@ msgid "Last Updated on"
 msgstr "Última actualización el"
 
 #. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__license_plate
+msgid "License Plate"
+msgstr "Placa"
+
+#. module: wobin_logistics
 #: model:ir.model,name:wobin_logistics.model_wobin_logistica_contracts
 msgid "Logistics Contracts"
 msgstr "Contratos Logística"
