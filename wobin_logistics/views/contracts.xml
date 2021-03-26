@@ -32,7 +32,7 @@
         <field name="arch" type="xml"> 
             <form> 
                 <header>
-                    <button name="create_trip" type="object" string="Create Trip" class="oe_highlight" attrs="{'invisible': [('name', '=', 'New')]}" groups="wobin_logistics.group_wl_access_logistics"/>
+                    <button name="create_trip" type="object" string="Create Trip" class="oe_highlight" attrs="{'invisible': ['|', ('name', '=', 'New'), ('status', '=', 'close')]}" groups="wobin_logistics.group_wl_access_logistics"/>
                     <button name="close_contract" type="object" string="Close Contract" attrs="{'invisible': ['|', ('name', '=', 'New'), ('status', '=', 'close')]}"/>
                     <field name="status" widget="statusbar" statusbar_visible="active,close"/>
                 </header>

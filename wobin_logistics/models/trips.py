@@ -39,7 +39,7 @@ class WobinLogisticaTrips(models.Model):
     # General Data / - / - / - / - / - / - / - / - / - /
     name              = fields.Char(string="Trip", readonly=True, required=True, copy=False, default='New')
     trip_number_tag   = fields.Char(string='Trip Number (Analytic Tag)', track_visibility='always')
-    contracts_id      = fields.Many2one('wobin.logistica.contracts', string='Contracts', track_visibility='always', ondelete='set null')
+    contracts_id      = fields.Many2one('wobin.logistica.contracts', string='Contracts', track_visibility='always', ondelete='set null', domain=[('status', '=', 'active')])
     sucursal_id       = fields.Many2one('stock.warehouse', string='Branch Office', track_visibility='always')
     client_id         = fields.Many2one('res.partner', string='Client', track_visibility='always')
     vehicle_id        = fields.Many2one('wobin.logistica.vehicles', string='Vehicle', track_visibility='always')     
