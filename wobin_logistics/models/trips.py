@@ -111,6 +111,7 @@ class WobinLogisticaTrips(models.Model):
     @api.one
     @api.depends('name')    
     def _set_sale_order(self):
+        #Assign Sales Order from trip input on it
         self.sales_order_id = self.env['sale.order'].search([('trips_id', '=', self.id)]).id
 
 
