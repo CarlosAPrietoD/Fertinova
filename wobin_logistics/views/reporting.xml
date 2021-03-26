@@ -16,6 +16,8 @@
       </field>
     </record>
 
+
+
     <!-- ANALYSIS (TRIPS) in accordance to trips - LIST VIEW --> 
     <record id="view_trips_analysis" model="ir.ui.view">
       <field name="name">Trips Analysis</field>
@@ -43,6 +45,8 @@
         </field>
     </record>          
 
+
+
     <!-- ANALYSIS Profitabilty Trips - LIST VIEW --> 
     <record id="view_profitability_trips" model="ir.ui.view">
       <field name="name">Trips Profitability</field>
@@ -57,6 +61,8 @@
       </field>
     </record>
 
+
+
     <!-- ANALYSIS Contracts Status- LIST VIEW --> 
     <record id="view_contracts_status" model="ir.ui.view">
       <field name="name">Contracts Status</field>
@@ -69,6 +75,8 @@
         </tree>
       </field>
     </record>
+
+    
 
     <!-- Discharged Trips - SEARCH VIEW --> 
     <record id="view_search_discharged_trips" model="ir.ui.view"> 
@@ -85,7 +93,6 @@
             </search> 
         </field> 
     </record>
-
     <!-- Discharged Trips - LIST VIEW --> 
     <record id="view_discharged_trips" model="ir.ui.view">
       <field name="name">Discharged Trips and Sale Orders to Process</field>
@@ -99,6 +106,8 @@
         </tree>
       </field>
     </record>
+
+
 
     <!-- Settlements - LIST VIEW --> 
     <record id="view_trip_settlements" model="ir.ui.view">
@@ -115,6 +124,7 @@
         </tree>
       </field>
     </record>
+
 
     <!-- Billing related to their Contracts & Trips - SEARCH VIEW --> 
     <record id="view_invoice_report_search" model="ir.ui.view">
@@ -190,6 +200,8 @@
       </field>
     </record>      
 
+
+
     <!-- Vehicles - LIST VIEW --> 
     <record id="view_vehicles_list" model="ir.ui.view">
       <field name="name">Vehicles</field>
@@ -199,13 +211,13 @@
           <field name="name"/> 
           <field name="model"/> 
           <field name="year"/>
+          <field name="license_plate"/>
           <field name="current_trip"/>           
           <field name="analytic_accnt_id"/>
           <field name="state"/> 
         </tree>
       </field>
     </record>  
-
     <!-- Vehicles - FORM VIEW -->
     <record id="view_vehicles_form" model="ir.ui.view"> 
         <field name="name">Vehicles</field> 
@@ -251,7 +263,6 @@
             </form> 
         </field> 
     </record>      
-
 
   </data>  
 </odoo>     
