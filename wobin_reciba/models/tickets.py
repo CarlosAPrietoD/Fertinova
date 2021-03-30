@@ -227,6 +227,8 @@ class RecibaTicket(models.Model):
     operation_type_id = fields.Many2one('stock.picking.type', string="Tipo de operacion", track_visibility='onchange', required=True)
     reception = fields.Selection([('price', 'Con precio'),
     ('priceless', 'Sin precio')], string="Tipo de recepción", default='price', required=True, track_visibility='onchange')
+    delivery = fields.Selection([('price', 'Con precio'),
+    ('priceless', 'Sin precio')], string="Tipo de entrega", default='price', required=True, track_visibility='onchange')
     transfer_type = fields.Selection([('int', 'Misma sucursal'),
     ('in', 'Entrada'), 
     ('out','Salida')], string="Tipo de transferencia", default='int', track_visibility='onchange')
@@ -278,6 +280,7 @@ class RecibaTicket(models.Model):
     net_weight = fields.Float(string="Peso Neto", compute='_get_net_weight', store=True)
     net_date = fields.Datetime(string="Fecha y hora", compute='_default_net_date', store=True)
     net_expected = fields.Float(string="Pendiente por surtir")
+    net_original = fields.Float(string="Peso neto original")
     qty_manufacturing = fields.Float(string="Cantidad a producir", track_visibility='onchange')
     bom_id = fields.Many2one('mrp.bom', string="Lista de materiales", domain="[('product_id', '=', product_id)]", track_visibility='onchange')
 
@@ -431,9 +434,10 @@ class RecibaTicket(models.Model):
                     self.credit_id = credit.id
                     self.credit_count = 1
             self.state = 'confirmed'
-        if self.reception == 'priceless':
+        if self.state == 'draft' and self.reception == 'priceless':
             #Estado confirmado sin precio si no se tiene asignado
             self.state = 'priceless'
+            self.net_original = self.net_weight
 
     def reverse_receipt_ticket(self):
         #Metodo para dar reversa a la boleta de entrada
@@ -512,7 +516,7 @@ class RecibaTicket(models.Model):
         if self.humidity <= 0 or self.impurity <= 0 or self.temperature <= 0 or self.density <= 0:
             msg = 'Los valores de humedad, impureza, densidad y temperatura deben ser mayores a 0'
             raise UserError(msg)
-        if self.net_expected < self.net_weight:
+        if self.delivery == 'price' and self.net_expected < self.net_weight:
             msg = 'El peso neto es mayor a la cantidad pendiente por surtir'
             raise UserError(msg)
         if self.state == 'draft':
@@ -527,28 +531,32 @@ class RecibaTicket(models.Model):
                     self.name = self.origin_id.display_name + '/' + '0001'
         
         #Creacion y asignación de la transferencia, si ya se tiene un precio asignado
-        values={
-        'picking_type_id': self.operation_type_id.id,
-        'location_id': self.origin_id.id,
-        'location_dest_id' : self.destination_id.id,
-        'scheduled_date': datetime.today(),
-        'reciba_id': self.id,
-        'sale_id': self.sale_id.id,
-        'partner_id': self.partner_id.id,
-        'move_ids_without_package': [(0,0,{
-            'name': self.product_id.name,
-            'product_id': self.product_id.id,
-            'product_uom_qty': self.net_weight,
-            'quantity_done': self.net_weight,
-            'product_uom': self.product_id.uom_po_id.id,
+        if self.delivery == 'price':
+            values={
+            'picking_type_id': self.operation_type_id.id,
+            'location_id': self.origin_id.id,
             'location_dest_id' : self.destination_id.id,
-            'sale_line_id': self.sale_id.order_line[0].id,
-        })]}
-        picking = self.env['stock.picking'].create(values)
-        picking.button_validate()
-        self.transfer_id = picking.id
-        self.transfer_count = 1
-        self.state = 'confirmed'
+            'scheduled_date': datetime.today(),
+            'reciba_id': self.id,
+            'sale_id': self.sale_id.id,
+            'partner_id': self.partner_id.id,
+            'move_ids_without_package': [(0,0,{
+                'name': self.product_id.name,
+                'product_id': self.product_id.id,
+                'product_uom_qty': self.net_weight,
+                'quantity_done': self.net_weight,
+                'product_uom': self.product_id.uom_po_id.id,
+                'location_dest_id' : self.destination_id.id,
+                'sale_line_id': self.sale_id.order_line[0].id,
+            })]}
+            picking = self.env['stock.picking'].create(values)
+            picking.button_validate()
+            self.transfer_id = picking.id
+            self.transfer_count = 1
+            self.state = 'confirmed'
+        
+        if self.delivery == 'priceless':
+            self.state = 'priceless'
 
     def reverse_delivery_ticket(self):
         #Metodo para dar reversa a la boleta de salida
