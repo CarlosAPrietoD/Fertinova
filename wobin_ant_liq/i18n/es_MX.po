@@ -633,6 +633,7 @@ msgstr "Comprobaciones Relacionadas"
 
 #. module: wobin_ant_liq
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__payment_related_id
+#: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_advances__payment_related_id_aux
 #: model:ir.model.fields,field_description:wobin_ant_liq.field_wobin_settlements__payment_related_id
 msgid "Related Payment"
 msgstr "Pago Relacionado"

@@ -73,7 +73,8 @@ class WobinAdvances(models.Model):
     amount      = fields.Float(string='Amount $', digits=(15,2), track_visibility='always')
     trip_id     = fields.Many2one('wobin.logistica.trips', string='Trip', track_visibility='always', ondelete='cascade')
     expenses_to_check  = fields.Float(string='Pending Expenses to Check', digits=(15,2), compute='set_expenses_to_check', track_visibility='always')
-    payment_related_id = fields.Many2one('account.payment', string='Related Payment', compute='set_related_payment', ondelete='cascade', track_visibility='always')
+    payment_related_id = fields.Many2one('account.payment', string='Related Payment', compute='set_related_payment', track_visibility='always')
+    payment_related_id_aux = fields.Many2one('account.payment', string='Related Payment')
     mov_lns_ad_set_id  = fields.Many2one('wobin.moves.adv.set.lines', ondelete='cascade')
     settlement_id      = fields.Many2one('wobin.settlements', string='Settlement', ondelete='cascade')
     money_not_consider = fields.Boolean(string='', default=False)
@@ -114,8 +115,11 @@ class WobinAdvances(models.Model):
 
 
     @api.one
+    #@api.depends('name')
     def set_related_payment(self):
         #Retrieve related payment to this advance
         payment_related = self.env['account.payment'].search([('advance_id', '=', self.id)], limit=1).id 
+
         if payment_related:
             self.payment_related_id = payment_related
+            self.write({'payment_related_id_aux': payment_related})

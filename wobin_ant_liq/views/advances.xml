@@ -14,12 +14,11 @@
               <field name="operator_id"/>            
               <field name="date"/>                 
               <field name="amount"/>
-              <field name="trip_id"/>   
-              <field name="payment_related_id"/>   
+              <field name="trip_id"/>     
               <group expand="0" string="Group By">
                   <filter string="Advance" name="name" 
                             context="{'group_by':'trip_id'}"/>
-              </group>
+              </group>           
             </search> 
         </field> 
     </record>    
@@ -35,7 +34,7 @@
           <field name="date"/>                 
           <field name="amount"/>
           <field name="trip_id"/>
-          <field name="payment_related_id"/>   
+          <field name="payment_related_id" force_save="1"/>   
         </tree>
       </field>
     </record>    
