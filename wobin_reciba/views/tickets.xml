@@ -153,7 +153,8 @@
                                 </group>
                                 <group>
                                     <group>
-                                        <field name="gross_weight" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="net_original" readonly="1" force_save="1" attrs="{'invisible':['|',('state', '=', 'draft'),('net_original', '=', '0')]}"/>
+                                        <field name="gross_weight" required="1" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')]}" />
                                         <field name="tare_weight" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
                                         <field name="net_weight" />
                                     </group>
@@ -310,10 +311,10 @@
             <field name="arch" type="xml">
                 <form string="Entregas">
                     <header>
-                        <button name="confirm_delivery_ticket" type="object" states="draft" string="Confirmar" class="btn-primary" />
+                        <button name="confirm_delivery_ticket" type="object" states="draft,priceless" string="Confirmar" class="btn-primary" />
                         <button name="reverse_delivery_ticket" type="object" states="confirmed" string="Reversa" class="btn-primary" />
                         <button name="%(wobin_reciba.report_ticket_price)d" string="Imprimir" states="confirmed" type="action" class="btn-primary" />
-                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,priceless,confirmed" />
                     </header>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
@@ -340,7 +341,8 @@
                                 <field name="operation_type_id" domain="['|',('name','=','Delivery Orders'),('name','=','Órdenes de entrega')]" attrs="{'readonly':[('state', '!=', 'draft')]}" />
                                 <field name="weigher" />
                                 <field name="product_id" attrs="{'readonly':[('state', '!=', 'draft')]}" />
-                                <field name="sale_id" required="1" domain="['|',('state','=','done'),('state','=','sale')]" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')]}" />
+                                <field name="delivery" required="1" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')]}" />
+                                <field name="sale_id" domain="['|',('state','=','done'),('state','=','sale')]" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')],'required':[('delivery', '=', 'price')],'invisible':[('delivery', '!=', 'price')]}" />
                                 <field name="sale_invoice_status" />
                                 <field name="partner_id" string="Cliente" attrs="{'readonly':[('state', '!=', 'draft')]}" />
                             </group>
