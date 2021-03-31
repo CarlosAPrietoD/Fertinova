@@ -209,8 +209,11 @@
       <field name="arch" type="xml">
         <tree>
           <field name="name"/> 
+          <field name="mark"/> 
           <field name="model"/> 
           <field name="year"/>
+          <field name="description"/> 
+          <field name="series"/> 
           <field name="license_plate"/>
           <field name="current_trip"/>           
           <field name="analytic_accnt_id"/>
@@ -233,8 +236,11 @@
                     </group>
                     <group>
                         <group>
+                            <field name="mark"/> 
                             <field name="model"/> 
                             <field name="year"/>
+                            <field name="description"/> 
+                            <field name="series"/> 
                             <field name="license_plate"/>
                             <field name="current_trip"/>           
                             <field name="analytic_accnt_id"/>               
