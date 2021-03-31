@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-25 19:02+0000\n"
-"PO-Revision-Date: 2021-03-25 19:02+0000\n"
+"POT-Creation-Date: 2021-03-31 16:26+0000\n"
+"PO-Revision-Date: 2021-03-31 16:26+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -498,6 +498,11 @@ msgid "Delete Contract"
 msgstr "Eliminar Contrato"
 
 #. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__description
+msgid "Description"
+msgstr "Descripción"
+
+#. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__destination_id
 msgid "Destination"
 msgstr "Destino"
@@ -817,6 +822,11 @@ msgid "Main Attachment"
 msgstr "Adjuntos principales"
 
 #. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__mark
+msgid "Mark"
+msgstr "Marca"
+
+#. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__message_has_error
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__message_has_error
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__message_has_error
@@ -954,6 +964,11 @@ msgstr "Origen"
 #: selection:wobin.logistica.vehicles,activity_state:0
 msgid "Overdue"
 msgstr "Atrasado"
+
+#. module: wobin_logistics
+#: model_terms:ir.ui.view,arch_db:wobin_logistics.reporte_carta_porte_view
+msgid "PLACA"
+msgstr ""
 
 #. module: wobin_logistics
 #: model_terms:ir.ui.view,arch_db:wobin_logistics.reporte_carta_porte_view
@@ -1114,6 +1129,11 @@ msgstr "Order de Venta Generada"
 msgid "Se entenderá que se tienen por aceptado los términos y condiciones aquí pactadas cuando el\n"
 "                            “Remitente” documente el “Envío” de acurdo con la presente carta Porte."
 msgstr ""
+
+#. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_vehicles__series
+msgid "Series"
+msgstr "Serie"
 
 #. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__settlement
