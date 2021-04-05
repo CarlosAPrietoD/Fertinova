@@ -259,12 +259,14 @@ class WobinLogisticaTrips(models.Model):
     @api.one
     @api.depends('name')
     def set_advances(self):
-        list_advances = self.env['wobin.advances'].search([('operator_id', '=', self.operator_id.id),
-                                                           ('trip_id', '=', self.id)]).ids
+        sql_query = """SELECT sum(amount) 
+                         FROM wobin_advances 
+                        WHERE operator_id = %s AND trip_id =%s"""
+        self.env.cr.execute(sql_query, (self.operator_id.id, self.id,))
+        result = self.env.cr.fetchone()
 
-        if list_advances:
-            sum_amount = sum(line.amount for line in list_advances)
-            self.advance_sum_amnt = sum_amount
+        if result: 
+            self.advance_sum_amnt = result[0]
 
 
 
