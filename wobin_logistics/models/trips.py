@@ -263,7 +263,7 @@ class WobinLogisticaTrips(models.Model):
                                                            ('trip_id', '=', self.id)]).ids
 
         if list_advances:
-            sum_amount = sum(line.amount for line in self.advance_ids)
+            sum_amount = sum(line.amount for line in list_advances)
             self.advance_sum_amnt = sum_amount
 
 
