@@ -260,7 +260,7 @@ class WobinLogisticaTrips(models.Model):
     @api.depends('name')
     def set_advances(self):
         list_advances = self.env['wobin.advances'].search([('operator_id', '=', self.operator_id.id),
-                                                           ('trip_id', '=', self.trip_id.id)]).ids
+                                                           ('trip_id', '=', self.id)]).ids
 
         if list_advances:
             sum_amount = sum(line.amount for line in self.advance_ids)
