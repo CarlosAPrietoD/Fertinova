@@ -6,7 +6,7 @@
 
     <report
         id="report_contract"
-        model="logistics.contracts"
+        model="wobin.logistica.contracts"
         string="Carrying Letter"
         name="wobin_logistics.report_contract_view"
         file="wobin_logistics.report_contract"

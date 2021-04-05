@@ -38,10 +38,10 @@ class WobinLogisticaTrips(models.Model):
     # General Data / - / - / - / - / - / - / - / - / - /
     name              = fields.Char(string="Trip", readonly=True, required=True, copy=False, default='New')
     trip_number_tag   = fields.Char(string='Trip Number (Analytic Tag)', track_visibility='always')
-    contracts_id      = fields.Many2one('wobin.logistica.contracts', string='Contracts', track_visibility='always', ondelete='set null')
+    contracts_id      = fields.Many2one('wobin.logistica.contracts', string='Contracts', track_visibility='always', ondelete='set null', domain=[('status', '=', 'active')])
     sucursal_id       = fields.Many2one('stock.warehouse', string='Branch Office', track_visibility='always')
     client_id         = fields.Many2one('res.partner', string='Client', track_visibility='always')
-    vehicle_id        = fields.Char(string='Vehicle', track_visibility='always')     
+    vehicle_id        = fields.Many2one('wobin.logistica.vehicles', string='Vehicle', track_visibility='always')     
     analytic_accnt_id = fields.Many2one('account.analytic.account', string='Analytic Account', track_visibility='always')
     operator_id       = fields.Many2one('hr.employee',string='Operator', track_visibility='always')
     route             = fields.Char(string='Route', track_visibility='always')
@@ -60,8 +60,10 @@ class WobinLogisticaTrips(models.Model):
     real_download_qty  = fields.Float(string='Real Download Quantity (kg)', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always')
     attachment_downld  = fields.Many2many('ir.attachment', relation='second_dwn_att_relation', string='Download Attachments', track_visibility='always')
     qty_to_bill        = fields.Float(string='Quantiy to bill $', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always', compute='_set_qty_to_bill') 
+    discharged_flag    = fields.Boolean(string="Discharged Trip?")    
     conformity         = fields.Binary(string='Conformity and Settlement', track_visibility='always')
     checked            = fields.Boolean(string=" ")
+    checked_aux        = fields.Boolean(string="Conformity and Settlement", compute='_set_checked')
     discharge_location = fields.Char(string='Discharge Location', track_visibility='always')
     sales_order_id     = fields.Many2one('sale.order', string='Sales Order Generated', track_visibility='always', compute='_set_sale_order', ondelete='set null')    
     state              = fields.Selection(selection=[('assigned', 'Assigned'),
@@ -93,7 +95,7 @@ class WobinLogisticaTrips(models.Model):
     @api.one
     def set_status(self):
         '''Set up state in base a which fields are filled up'''
-        if self.contracts_id and self.sucursal_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty and self.upload_location and self.download_date and self.real_download_qty and self.checked and self.discharge_location:
+        if self.contracts_id and self.sucursal_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty and self.upload_location and self.download_date and self.real_download_qty and self.discharged_flag and self.checked and self.discharge_location:
             self.state = 'discharged'  
             self.write({'state_aux': self.state})        
         elif self.contracts_id and self.sucursal_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty and self.upload_location:
@@ -112,6 +114,14 @@ class WobinLogisticaTrips(models.Model):
 
 
 
+    @api.one
+    @api.depends('checked')  
+    def _set_checked(self):
+        #Fill this field according to check and thus show this aid field in list view
+        self.checked_aux = self.checked
+
+
+
     @api.onchange('contracts_id')
     def _onchange_contract(self):
         '''Authomatic assignation for fields in Trips from contracts_id's input'''
@@ -125,6 +135,13 @@ class WobinLogisticaTrips(models.Model):
             self.route = origin_obj.name + ', ' + destination_obj.name
         else:
             self.route = ""
+
+
+
+    @api.onchange('vehicle_id')
+    def _onchange_vehicle(self):
+        #Authomatic assignation for analytic account from vehicle_id's input
+        self.analytic_accnt_id = self.env['wobin.logistica.vehicles'].search([('id', '=', self.vehicle_id.id)]).analytic_accnt_id.id
 
 
 
@@ -167,15 +184,13 @@ class WobinLogisticaTrips(models.Model):
         inv_lines_gotten = self.env['account.invoice.line'].search([('trips_id', '=', self.id)])
         
         if inv_lines_gotten:
-            _logger.info('\n\n\n ANTES DE FOR CICLO inv_init %s  Y   inv_NEXT %s\n\n\n', inv_init, inv_next)
+
             for line in inv_lines_gotten:
                 inv_init = line.invoice_id.id
-                _logger.info('\n\n\n DENTRO DE FOR CICLO inv_init %s  Y   inv_NEXT %s\n\n\n', inv_init, inv_next)
                 inv_state = self.env['account.invoice'].search([('id', '=', inv_init)]).state
         
                 if inv_init != inv_next and inv_state != 'cancel':
                     self.income_provisions = self.income_provisions + line.price_subtotal
-                    _logger.info('\n\n\n self.income_provisions %s\n\n\n', self.income_provisions)
             
             inv_next = line.invoice_id.id        
         #self.income_provisions = self.env['account.invoice.line'].search([('trips_id', '=', self.id)], limit=1).price_subtotal
@@ -204,17 +219,16 @@ class WobinLogisticaTrips(models.Model):
         inv_lines_gotten = self.env['account.invoice.line'].search([('trips_id', '=', self.id)])
         
         if inv_lines_gotten:
-            _logger.info('\n\n\n ANTES DE FOR CICLO {inv_init} %s  Y   [inv_NEXT] %s\n\n\n', inv_init, inv_next)
+            
             for line in inv_lines_gotten:
-                inv_init = line.invoice_id.id
-                _logger.info('\n\n\n DENTRO DE FOR CICLO inv_init %s  Y   inv_NEXT %s\n\n\n', inv_init, inv_next)
+                inv_init = line.invoice_id.id                
                 inv_state = self.env['account.invoice'].search([('id', '=', inv_init)]).state
         
                 if inv_init != inv_next and inv_state != 'cancel':
                     self.billed_income = self.billed_income + line.price_subtotal
-                    _logger.info('\n\n\n self.billed_income %s\n\n\n', self.billed_income)
             
-            inv_next = line.invoice_id.id                   
+            inv_next = line.invoice_id.id
+        #    
         #self.billed_income = self.env['account.invoice.line'].search([('trips_id', '=', self.id)], limit=1).price_unit
 
 

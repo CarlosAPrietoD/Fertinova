@@ -3,3 +3,4 @@ access_wobin_logistica_contracts,wobin_logistics.wobin_logistica_contracts,model
 access_wobin_logistica_quotations,wobin_logistics.wobin_logistica_quotations,model_wobin_logistica_quotations,,1,1,1,1
 access_wobin_logistica_trips,wobin_logistics.wobin_logistica_trips,model_wobin_logistica_trips,,1,1,1,1
 access_wobin_logistica_routes,wobin_logistics.wobin_logistica_routes,model_wobin_logistica_routes,,1,1,1,1
+access_wobin_logistica_vehicles,access_wobin_logistica_vehicles,model_wobin_logistica_vehicles,,1,1,1,1 
