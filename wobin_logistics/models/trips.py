@@ -79,6 +79,7 @@ class WobinLogisticaTrips(models.Model):
     billed_income     = fields.Float(string='Billed Income', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always', compute='_set_billed_income')                                      
     expenses          = fields.Float(string='Expenses', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always', compute='_set_expenses')                                      
     profitability     = fields.Float(string='Profitability', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always', compute='_set_profitability') 
+    advance_payment   = fields.Float(string='Advance Payment', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always', compute='_set_advance_payment') 
     advance_sum_amnt = fields.Float(string='Advances', digits=(15,2), compute='set_advances')
     settlement        = fields.Float(string='Settlement', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always', compute='_set_settlement')     
     invoice_status    =  fields.Selection([('draft','Draft'),
