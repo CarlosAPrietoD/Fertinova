@@ -110,7 +110,7 @@
           <field name="state"/> 
           <field name="operator_id"/> 
           <field name="expenses"/> 
-          <field name="advance_payment"/> 
+          <field name="advance_sum_amnt"/>
           <field name="settlement"/>           
         </tree>
       </field>

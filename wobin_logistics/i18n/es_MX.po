@@ -246,9 +246,9 @@ msgid "Activity State"
 msgstr "Estado de la actividad"
 
 #. module: wobin_logistics
-#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__advance_payment
-msgid "Advance Payment"
-msgstr "Anticipo"
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__advance_sum_amnt
+msgid "Advances"
+msgstr "Anticipos"
 
 #. module: wobin_logistics
 #: model_terms:ir.ui.view,arch_db:wobin_logistics.wizard_delete_contract

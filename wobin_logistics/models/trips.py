@@ -79,7 +79,7 @@ class WobinLogisticaTrips(models.Model):
     billed_income     = fields.Float(string='Billed Income', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always', compute='_set_billed_income')                                      
     expenses          = fields.Float(string='Expenses', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always', compute='_set_expenses')                                      
     profitability     = fields.Float(string='Profitability', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always', compute='_set_profitability') 
-    advance_payment   = fields.Float(string='Advance Payment', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always', compute='_set_advance_payment') 
+    advance_sum_amnt = fields.Float(string='Advances', digits=(15,2), compute='set_advances')
     settlement        = fields.Float(string='Settlement', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always', compute='_set_settlement')     
     invoice_status    =  fields.Selection([('draft','Draft'),
                                            ('open', 'Open'),
@@ -253,6 +253,18 @@ class WobinLogisticaTrips(models.Model):
     def _set_settlement(self):
         self.settlement = (self.income_provisions + self.expenses) - self.advance_payment
    
+
+
+    @api.one
+    @api.depends('name')
+    def set_advances(self):
+        list_advances = self.env['wobin.advances'].search([('operator_id', '=', self.operator_id.id),
+                                                           ('trip_id', '=', self.trip_id.id)]).ids
+
+        if list_advances:
+            sum_amount = sum(line.amount for line in self.advance_ids)
+            self.advance_sum_amnt = sum_amount
+
 
 
 
