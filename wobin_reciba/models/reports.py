@@ -359,20 +359,34 @@ class ReportAvgHumidity(models.AbstractModel):
             })
             sum_net_receipt += receipt.net_weight
             sum_humidity_receipt += receipt.net_weight * receipt.humidity
-        avg_humidity_receipt = sum_humidity_receipt/sum_net_receipt
+        
+        if sum_net_receipt > 0:
+            avg_humidity_receipt = sum_humidity_receipt/sum_net_receipt
 
         deliveries = []
         for delivery in tickets_delivery:
-            deliveries.append({
-                'name' : delivery.name,
-                'date' : delivery.date.strftime("%d/%m/%Y %H:%M:%S"),
-                'net_weight' : "{:,.0f}".format(delivery.net_weight),
-                'humidity' : "{:.2f}".format(delivery.humidity)
-            })
-            sum_net_delivery += delivery.net_weight
-            sum_humidity_delivery += delivery.net_weight * delivery.humidity
+            if delivery.net_weight > 0:
+                deliveries.append({
+                    'name' : delivery.name,
+                    'date' : delivery.date.strftime("%d/%m/%Y %H:%M:%S"),
+                    'net_weight' : "{:,.0f}".format(delivery.net_weight),
+                    'humidity' : "{:.2f}".format(delivery.humidity)
+                })
+                sum_net_delivery += delivery.net_weight
+                sum_humidity_delivery += delivery.net_weight * delivery.humidity
+            else:
+                deliveries.append({
+                    'name' : delivery.name,
+                    'date' : delivery.date.strftime("%d/%m/%Y %H:%M:%S"),
+                    'net_weight' : "{:,.0f}".format(delivery.net_weight*-1),
+                    'humidity' : "{:.2f}".format(delivery.humidity)
+                })
+                sum_net_delivery += delivery.net_weight*-1
+                sum_humidity_delivery += (delivery.net_weight*-1) * delivery.humidity
         
-        avg_humidity_delivery = sum_humidity_delivery/sum_net_delivery
+        if sum_net_delivery > 0:
+            avg_humidity_delivery = sum_humidity_delivery/sum_net_delivery
+        
         dif_net = sum_net_receipt - sum_net_delivery
         dif_avg = avg_humidity_receipt - avg_humidity_delivery
         tolerance = sum_net_receipt * dif_avg
