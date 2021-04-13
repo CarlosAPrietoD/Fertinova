@@ -144,7 +144,7 @@
                                 <group>
                                     <group>
                                         <field name="origin_id" attrs="{'readonly':[('state', '!=', 'draft')]}" />
-                                        <field name="destination_id" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="destination_id" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
                                     </group>
                                     <group>
                                         <field name="origin_date" />
@@ -405,7 +405,7 @@
                                 <group>
                                     <group>
                                         <field name="origin_id" attrs="{'readonly':[('state', '!=', 'draft')]}" />
-                                        <field name="destination_id" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="destination_id" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
                                     </group>
                                     <group>
                                         <field name="origin_date" />
@@ -634,7 +634,7 @@
                                 <group>
                                     <group>
                                         <field name="origin_id" attrs="{'readonly':[('state', '!=', 'draft')]}" />
-                                        <field name="destination_id" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="destination_id" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
                                     </group>
                                     <group>
                                         <field name="origin_date" />
@@ -848,7 +848,7 @@
                                 <group>
                                     <group>
                                         <field name="origin_id" attrs="{'readonly':[('state', '!=', 'draft')]}" />
-                                        <field name="destination_id" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="destination_id"  required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
                                     </group>
                                     <group>
                                         <field name="origin_date" />
@@ -1062,7 +1062,7 @@
                                 <group>
                                     <group>
                                         <field name="origin_id" attrs="{'readonly':[('state', '!=', 'draft')]}" />
-                                        <field name="destination_id" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="destination_id" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
                                     </group>
                                     <group>
                                         <field name="origin_date" />
@@ -1250,7 +1250,7 @@
                                 <group>
                                     <group>
                                         <field name="origin_id" attrs="{'readonly':[('state', '!=', 'draft')]}" />
-                                        <field name="destination_id" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="destination_id" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
                                     </group>
                                     <group>
                                         <field name="origin_date" />

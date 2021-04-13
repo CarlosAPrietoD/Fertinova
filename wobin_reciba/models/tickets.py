@@ -226,9 +226,9 @@ class RecibaTicket(models.Model):
     ('transfer','Transferencias internas')], string="Tipo de operacion")
     operation_type_id = fields.Many2one('stock.picking.type', string="Tipo de operacion", track_visibility='onchange', required=True)
     reception = fields.Selection([('price', 'Con precio'),
-    ('priceless', 'Sin precio')], string="Tipo de recepción", default='price', required=True, track_visibility='onchange')
+    ('priceless', 'Sin precio')], string="Tipo de recepción", default='price', track_visibility='onchange')
     delivery = fields.Selection([('price', 'Con precio'),
-    ('priceless', 'Sin precio')], string="Tipo de entrega", default='price', required=True, track_visibility='onchange')
+    ('priceless', 'Sin precio')], string="Tipo de entrega", default='price', track_visibility='onchange')
     transfer_type = fields.Selection([('int', 'Misma sucursal'),
     ('in', 'Entrada'), 
     ('out','Salida')], string="Tipo de transferencia", default='int', track_visibility='onchange')
@@ -240,7 +240,7 @@ class RecibaTicket(models.Model):
     sale_invoice_status = fields.Selection(related='sale_id.invoice_status', string="Estatus de facturación")
     purchase_id = fields.Many2one('purchase.order', string="Pedido de compra", domain="[('company_id','=',company_id)]", track_visibility='onchange')
     purchase_invoice_status = fields.Selection(related='purchase_id.invoice_status', string="Estatus de facturación")
-    partner_id = fields.Many2one('res.partner', string="Contacto", track_visibility='onchange', required=True)
+    partner_id = fields.Many2one('res.partner', string="Contacto", track_visibility='onchange')
     list_production_id = fields.Many2one('mrp.bom', string="Lista de materiales")
     origin = fields.Char(string="Documento origen", track_visibility='onchange')
     
@@ -269,7 +269,7 @@ class RecibaTicket(models.Model):
     #-----------------------------------Datos de ubicaciones-----------------------------
     origin_id = fields.Many2one('stock.location', string="Ubicación origen", track_visibility='onchange', required=True)
     origin_date = fields.Datetime(string="Fecha y hora", compute='_default_origin_date', store=True)
-    destination_id = fields.Many2one('stock.location', string="Ubicación destino", track_visibility='onchange', required=True)
+    destination_id = fields.Many2one('stock.location', string="Ubicación destino", track_visibility='onchange')
     destination_date = fields.Datetime(string="Fecha y hora", compute='_default_destination_date', store=True)
 
     #-----------------------------------Datos de pesaje----------------------------------
