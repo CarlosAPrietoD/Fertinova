@@ -1,5 +1,7 @@
 from odoo import models, fields, api
 
+#==================================================================================================
+
 #======================================= Account module ===========================================
 
 class AccountInvoice(models.Model):
@@ -640,6 +642,7 @@ class PaymentIcon(models.Model):
 
 
 #===============================================================================================
+#===============================================================================================
 
 #================================== Sale module ================================================
 
@@ -941,7 +944,8 @@ class MailActivityType(models.Model):
     mail_template_ids = fields.Many2many(track_visibility='onchange')
 
 
-#===============================================================================================
+#===================================================================================================
+#===================================================================================================
 
 #================================== Purchase module ================================================
 
@@ -985,7 +989,7 @@ class PurchaseOrder(models.Model):
 class PurchaseRequisition(models.Model):
     _inherit = 'purchase.requisition'
 
-    
+
     name = fields.Char(track_visibility='onchange')
     user_id = fields.Many2one(track_visibility='onchange')
     type_id = fields.Many2one(track_visibility='onchange')
@@ -1137,4 +1141,248 @@ class StockInventory(models.Model):
         ('done', 'Validated')], track_visibility='onchange')
     
     
-    #(track_visibility='onchange')
+#===================================================================================================
+#===================================================================================================
+
+#================================== INVENTORY Module ===============================================
+
+class StockPicking(models.Model):
+    _inherit = 'stock.picking'
+
+    partner_id = fields.Many2one(track_visibility='onchange')
+    picking_type_id = fields.Many2one(track_visibility='onchange')
+    location_dest_id = fields.Many2one(track_visibility='onchange')
+    x_studio_aplica_flete = fields.Boolean(track_visibility='onchange')
+    scheduled_date = fields.Datetime(track_visibility='onchange')
+    date_done = fields.Datetime(track_visibility='onchange')
+    origin = fields.Char(track_visibility='onchange')
+    reciba_id = fields.Many2one(track_visibility='onchange')
+    move_ids_without_package = fields.Many2many(track_visibility='onchange')
+    company_id = fields.Many2one(track_visibility='onchange')
+    group_id = fields.Many2one(track_visibility='onchange')
+    note = fields.Text(track_visibility='onchange')
+
+
+
+class StockInventory(models.Model):
+    _inherit = ['stock.inventory', 'mail.thread']
+
+    #See a more detailed inheritance in 2 stanzas above with all fields already defined
+    line_ids = fields.One2many(track_visibility='onchange')
+    move_ids = fields.One2many(track_visibility='onchange')
+
+
+
+class StockScrap(models.Model):
+    _inherit = ['stock.scrap', 'mail.thread']
+
+    name = fields.Char(track_visibility='onchange')
+    product_id = fields.Many2one(track_visibility='onchange')
+    scrap_qty = fields.Float(track_visibility='onchange')
+    product_uom_id = fields.Many2one(track_visibility='onchange')
+    location_id = fields.Many2one(track_visibility='onchange')
+    scrap_location_id = fields.Many2one(track_visibility='onchange')
+    origin = fields.Char(track_visibility='onchange')
+    date_expected = fields.Datetime(track_visibility='onchange')
+    state = fields.Selection([
+        ('draft', 'Draft'),
+        ('done', 'Done')], string='Status', default="draft", track_visibility='onchange')
+
+
+
+class ProductTemplate(models.Model):
+    _inherit = 'product.template' 
+
+    #In "Sales Module" is already and completely defined all fields of this view
+    email_template_id = fields.Many2one(track_visibility='onchange')
+
+
+
+class StockWarehouseOrderpoint(models.Model):
+    _inherit = ['stock.warehouse.orderpoint', 'mail.thread']
+
+    name = fields.Char(track_visibility='onchange')
+    product_id = fields.Many2one(track_visibility='onchange')
+    product_id = fields.Many2one(track_visibility='onchange')
+    warehouse_id = fields.Many2one(track_visibility='onchange')
+    product_uom = fields.Many2one(track_visibility='onchange')
+    location_id = fields.Many2one(track_visibility='onchange')
+    group_id = fields.Many2one(track_visibility='onchange')
+    company_id = fields.Many2one(track_visibility='onchange')
+    product_min_qty = fields.Float(track_visibility='onchange')
+    product_max_qty = fields.Float(track_visibility='onchange')
+    qty_multiple = fields.Float(track_visibility='onchange')
+    lead_type = fields.Integer(track_visibility='onchange')
+    lead_type = fields.Selection(
+        [('net', 'Day(s) to get the products'), 
+         ('supplier', 'Day(s) to purchase')], 
+        'Lead Type',
+        required=True, default='supplier', track_visibility='onchange')    
+
+
+
+class StockMove(models.Model):
+    _inherit = ['stock.move', 'mail.thread']
+
+    #In "Purchase Module" is already and completely defined all fields of this view
+    date = fields.Datetime(track_visibility='onchange')
+
+
+
+class StockMoveLine(models.Model):
+    _inherit = ['stock.move.line', 'mail.thread']
+
+    date = fields.Datetime(track_visibility='onchange')
+    reference = fields.Char(track_visibility='onchange')
+    picking_id = fields.Many2one(track_visibility='onchange')
+    product_id = fields.Many2one(track_visibility='onchange')
+    location_id = fields.Many2one(track_visibility='onchange')
+    location_dest_id = fields.Many2one(track_visibility='onchange')
+    x_studio_asiento_contable = fields.Many2one(track_visibility='onchange')
+    x_studio_fecha_contable = fields.Date(track_visibility='onchange')
+    x_studio_tipo_de_operacion_descripcion = ields.Char(track_visibility='onchange')
+    qty_done = fields.Float(track_visibility='onchange')
+    product_uom_id = fields.Many2one(track_visibility='onchange')
+    state = fields.Selection(related='move_id.state', store=True, related_sudo=False, readonly=False, track_visibility='onchange')
+
+
+
+class StockWarehouse(models.Model):
+    _inherit = ['stock.warehouse', 'mail.thread']
+
+    name = fields.Char(track_visibility='onchange')
+    code = fields.Char(track_visibility='onchange')
+    lot_stock_id = fields.Many2one(track_visibility='onchange')
+    company_id = fields.Many2one(track_visibility='onchange')
+    partner_id = fields.Many2one(track_visibility='onchange')
+    reception_steps = fields.Selection([
+        ('one_step', 'Receive goods directly (1 step)'),
+        ('two_steps', 'Receive goods in input and then stock (2 steps)'),
+        ('three_steps', 'Receive goods in input, then quality and then stock (3 steps)')],
+        'Incoming Shipments', default='one_step', required=True,
+        help="Default incoming route to follow", track_visibility='onchange')
+    delivery_steps = fields.Selection([
+        ('ship_only', 'Deliver goods directly (1 step)'),
+        ('pick_ship', 'Send goods in output and then deliver (2 steps)'),
+        ('pick_pack_ship', 'Pack goods, send goods in output and then deliver (3 steps)')],
+        'Outgoing Shipments', default='ship_only', required=True,
+        help="Default outgoing route to follow", track_visibility='onchange')  
+    buy_to_resupply = fields.Boolean(track_visibility='onchange')
+    manufacture_to_resupply = fields.Boolean(track_visibility='onchange')        
+    manufacture_steps = fields.Selection([
+        ('mrp_one_step', 'Manufacture (1 step)'),
+        ('pbm', 'Pick components and then manufacture (2 steps)'),
+        ('pbm_sam', 'Pick components, manufacture and then store products (3 steps)')],
+        'Manufacture', default='mrp_one_step', required=True,
+        help="Produce : Move the raw materials to the production location\
+        directly and start the manufacturing process.\nPick / Produce : Unload\
+        the raw materials from the Stock to Input location first, and then\
+        transfer it to the Production location.", track_visibility='onchange')
+    resupply_wh_ids = fields.Many2many(track_visibility='onchange')    
+    wh_input_stock_loc_id = fields.Many2one(track_visibility='onchange')
+    wh_qc_stock_loc_id = fields.Many2one(track_visibility='onchange')
+    wh_pack_stock_loc_id = fields.Many2one(track_visibility='onchange')        
+    wh_output_stock_loc_id = fields.Many2one(track_visibility='onchange')
+    sam_loc_id = fields.Many2one(track_visibility='onchange')
+    pbm_loc_id = fields.Many2one(track_visibility='onchange')
+    in_type_id = fields.Many2one(track_visibility='onchange')
+    int_type_id = fields.Many2one(track_visibility='onchange')
+    pick_type_id = fields.Many2one(track_visibility='onchange')
+    pack_type_id = fields.Many2one(track_visibility='onchange')
+    out_type_id = fields.Many2one(track_visibility='onchange')
+    sam_type_id = fields.Many2one(track_visibility='onchange')           
+    pbm_type_id = fields.Many2one(track_visibility='onchange')           
+    manu_type_id = fields.Many2one(track_visibility='onchange')   
+
+
+
+class StockLocation(models.Model):
+    _inherit = ['stock.location', 'mail.thread']  
+
+    name = fields.Char(track_visibility='onchange')
+    location_id = fields.Many2one(track_visibility='onchange') 
+    usage = fields.Selection([
+        ('supplier', 'Vendor Location'),
+        ('view', 'View'),
+        ('internal', 'Internal Location'),
+        ('customer', 'Customer Location'),
+        ('inventory', 'Inventory Loss'),
+        ('procurement', 'Procurement'),
+        ('production', 'Production'),
+        ('transit', 'Transit Location')], string='Location Type',
+        default='internal', index=True, required=True,
+        help="* Vendor Location: Virtual location representing the source location for products coming from your vendors"
+             "\n* View: Virtual location used to create a hierarchical structures for your warehouse, aggregating its child locations ; can't directly contain products"
+             "\n* Internal Location: Physical locations inside your own warehouses,"
+             "\n* Customer Location: Virtual location representing the destination location for products sent to your customers"
+             "\n* Inventory Loss: Virtual location serving as counterpart for inventory operations used to correct stock levels (Physical inventories)"
+             "\n* Procurement: Virtual location serving as temporary counterpart for procurement operations when the source (vendor or production) is not known yet. This location should be empty when the procurement scheduler has finished running."
+             "\n* Production: Virtual counterpart location for production operations: this location consumes the raw material and produces finished products"
+             "\n* Transit Location: Counterpart location that should be used in inter-company or inter-warehouses operations",
+        track_visibility='onchange')
+    allow_negative_stock = fields.Boolean(track_visibility='onchange')
+    partner_id = fields.Many2one(track_visibility='onchange') 
+    company_id = fields.Many2one(track_visibility='onchange') 
+    scrap_location = fields.Boolean(track_visibility='onchange')
+    return_location = fields.Boolean(track_visibility='onchange')
+    removal_strategy_id = fields.Many2one(track_visibility='onchange') 
+    putaway_strategy_id = fields.Many2one(track_visibility='onchange')
+    posx = fields.Integer(track_visibility='onchange')
+    posy = fields.Integer(track_visibility='onchange')
+    posz = fields.Integer(track_visibility='onchange')
+    barcode = fields.Char(track_visibility='onchange')
+    comment = fields.Text(track_visibility='onchange')
+
+
+
+class StockRule(models.Model):
+    _inherit = ['stock.rule', 'mail.thread'] 
+
+    name = fields.Char(track_visibility='onchange')
+    action = fields.Selection(
+        selection=[('pull', 'Pull From'), 
+                   ('push', 'Push To'), 
+                   ('pull_push', 'Pull & Push')], string='Action',
+        required=True, track_visibility='onchange')
+    picking_type_id = fields.Many2one(track_visibility='onchange')
+    location_src_id = fields.Many2one(track_visibility='onchange')
+    location_id = fields.Many2one(track_visibility='onchange')
+    procure_method = fields.Selection([
+        ('make_to_stock', 'Take From Stock'),
+        ('make_to_order', 'Trigger Another Rule')], string='Move Supply Method',
+        default='make_to_stock', required=True,
+        help="""Create Procurement: A procurement will be created in the source location and the system will try to find a rule to resolve it. The available stock will be ignored.
+             Take from Stock: The products will be taken from the available stock.""",
+        track_visibility='onchange')   
+    route_id = fields.Many2one(track_visibility='onchange')
+    warehouse_id = fields.Many2one(track_visibility='onchange')
+    company_id = fields.Many2one(track_visibility='onchange')     
+    sequence = fields.Integer(track_visibility='onchange')
+    group_propagation_option = fields.Selection([
+        ('none', 'Leave Empty'),
+        ('propagate', 'Propagate'),
+        ('fixed', 'Fixed')], string="Propagation of Procurement Group", default='propagate',
+        track_visibility='onchange')      
+    propagate = fields.Boolean(track_visibility='onchange')   
+    propagate_warehouse_id = fields.Many2one(track_visibility='onchange')
+    partner_address_id = fields.Many2one(track_visibility='onchange')
+    delay = fields.Integer(track_visibility='onchange')
+
+
+
+class StockLocationRoute(models.Model):
+    _inherit = ['stock.location.route', 'mail.thread'] 
+
+    name = fields.Char(track_visibility='onchange') 
+    sequence = fields.Integer(track_visibility='onchange')   
+    company_id = fields.Many2one(track_visibility='onchange')  
+    product_categ_selectable = fields.Boolean(track_visibility='onchange')  
+    product_selectable = fields.Boolean(track_visibility='onchange')  
+    warehouse_selectable = fields.Boolean(track_visibility='onchange') 
+    sale_selectable = fields.Boolean(track_visibility='onchange') 
+    rule_ids = fields.One2many(track_visibility='onchange')
+
+
+
+class StockLocationRoute(models.Model):
+    _inherit = ['stock.location.route', 'mail.thread'] 
