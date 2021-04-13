@@ -35,7 +35,19 @@ class WobinComprobations(models.Model):
         #mov_lns_obj.write({'comprobation_id': res.id}) 
 
         #Set value of id for Wobin Moves Advances Settlements Lines in Advances:
-        #res.mov_lns_ad_set_id = mov_lns_obj.id                                                                                                   
+        #res.mov_lns_ad_set_id = mov_lns_obj.id   
+            
+        #After record was created successfully and if considering there is a new trip 
+        #with new record for operator then create a new record for Wobin Moves Advances Settlements Lines 
+        existing_movs = self.env['wobin.moves.adv.set.lines'].search([('operator_id', '=', res.operator_id.id),
+                                                                      ('trip_id', '=', res.trip_id.id)]).ids                                                                       
+        if not existing_movs:
+            #Create a new record for Wobin Moves Advances Settlements Lines
+            values = {
+                      'operator_id': res.operator_id.id,
+                      'trip_id': res.trip_id.id,
+                     }
+        self.env['wobin.moves.adv.set.lines'].create(values)                                                                                                     
 
         return res
 
