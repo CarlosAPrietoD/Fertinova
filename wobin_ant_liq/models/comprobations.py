@@ -64,8 +64,7 @@ class WobinComprobations(models.Model):
     mov_lns_ad_set_id  = fields.Many2one('wobin.moves.adv.set.lines', ondelete='cascade')
     comprobation_lines_ids = fields.One2many('wobin.comprobation.lines', 'comprobation_id', string='Concept Lines')
     invoices_to_refund_ids = fields.Many2many('account.invoice')#, 'comprobation_id')
-    company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('wobin_ant_liq'))
-    
+    company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('wobin.comprobations'))
 
 
     def create_acc_mov(self):
@@ -233,7 +232,7 @@ class WobinComprobationLines(models.Model):
     concept_id      = fields.Many2one('wobin.concepts', string='Concept', track_visibility='always')
     amount          = fields.Float(string='Amount $', digits=(15,2), track_visibility='always')
     credit_flag     = fields.Boolean(string='Concept Set Like Credit', compute='set_flag')
-    company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('wobin_ant_liq'))
+    company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('wobin.comprobation.lines'))
 
 
     @api.one
