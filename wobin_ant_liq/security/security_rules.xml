@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="advances_company_rule" model="ir.rule">
+        <field name="name">Advances Multi Company Rule</field>
+        <field name="model_id" ref="model_wobin_advances"/>
+        <field eval="True" name="global"/>
+        <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+    </record>   
+
+    <record id="comprobations_company_rule" model="ir.rule">
+        <field name="name">Comprobations Multi Company Rule</field>
+        <field name="model_id" ref="model_wobin_comprobations"/>
+        <field eval="True" name="global"/>
+        <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+    </record> 
+
+    <record id="comprobation_lines_company_rule" model="ir.rule">
+        <field name="name">Comprobations Lines Multi Company Rule</field>
+        <field name="model_id" ref="model_wobin_comprobation_lines"/>
+        <field eval="True" name="global"/>
+        <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+    </record> 
+
+    <record id="moves_adv_set_lines_company_rule" model="ir.rule">
+        <field name="name">Wobin Moves Lines Multi Company Rule</field>
+        <field name="model_id" ref="model_wobin_moves_adv_set_lines"/>
+        <field eval="True" name="global"/>
+        <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+    </record> 
+
+    <record id="wobin_concepts_company_rule" model="ir.rule">
+        <field name="name">Concepts Multi Company Rule</field>
+        <field name="model_id" ref="model_wobin_concepts"/>
+        <field eval="True" name="global"/>
+        <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+    </record> 
+
+    <record id="wobin_settlements_company_rule" model="ir.rule">
+        <field name="name">Settlements Multi Company Rule</field>
+        <field name="model_id" ref="model_wobin_settlements"/>
+        <field eval="True" name="global"/>
+        <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+    </record>   
+
+</odoo>
