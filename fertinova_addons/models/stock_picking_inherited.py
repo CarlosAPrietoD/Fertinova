@@ -27,12 +27,19 @@ class StockPicking(models.Model):
         #where its stock pickings are empty and its
         #origin field is indicated with that document
         if self.origin:
-            if 'OV0803' in self.origin or self.id == 26195 or self.id == 26023:
+            if 'OV0803' in self.origin:
                 if not self.partner_id:
                     #Retrieve partner_id from field Client of Sale Order OV0803
                     #and assign them to empty pickings:
                     partner_gotten = self.env['sale.order'].search([('id', '=', 2842)]).partner_id.id
                     self.partner_id = partner_gotten
+        
+        if self.id == 26195 or self.id == 26023:
+            if not self.partner_id:
+                #Retrieve partner_id from field Client of Sale Order OV0803
+                #and assign them to empty pickings:
+                partner_gotten = self.env['sale.order'].search([('id', '=', 2842)]).partner_id.id
+                self.partner_id = partner_gotten            
 
 #//////////////////////////////////////////////////////////////////////////////////////////////#
 # TICKET Error in Fertinova, OV0803 has not assigned its field Partner_id  -- END
