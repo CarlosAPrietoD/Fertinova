@@ -1193,7 +1193,7 @@ class StockScrap(models.Model):
 class ProductTemplate(models.Model):
     _inherit = 'product.template' 
 
-    #In "Sales Module" is already and completely defined all fields of this view
+    #In "Sales Module" is already and more completely defined all fields of this view
     email_template_id = fields.Many2one(track_visibility='onchange')
 
 
@@ -1224,7 +1224,7 @@ class StockWarehouseOrderpoint(models.Model):
 class StockMove(models.Model):
     _inherit = ['stock.move', 'mail.thread']
 
-    #In "Purchase Module" is already and completely defined all fields of this view
+    #In "Purchase Module" is already and more completely defined all fields of this view
     date = fields.Datetime(track_visibility='onchange')
 
 
@@ -1379,10 +1379,67 @@ class StockLocationRoute(models.Model):
     product_categ_selectable = fields.Boolean(track_visibility='onchange')  
     product_selectable = fields.Boolean(track_visibility='onchange')  
     warehouse_selectable = fields.Boolean(track_visibility='onchange') 
+    warehouse_ids = fields.Many2many(track_visibility='onchange')
     sale_selectable = fields.Boolean(track_visibility='onchange') 
     rule_ids = fields.One2many(track_visibility='onchange')
 
 
 
-class StockLocationRoute(models.Model):
-    _inherit = ['stock.location.route', 'mail.thread'] 
+class StockPickingType(models.Model):
+    _inherit = ['stock.picking.type', 'mail.thread'] 
+
+    name = fields.Char(track_visibility='onchange') 
+    sequence_id = fields.Many2one(track_visibility='onchange') 
+    warehouse_id = fields.Many2one(track_visibility='onchange') 
+    barcode = fields.Char(track_visibility='onchange')
+    code = fields.Selection([('incoming', 'Vendors'), 
+                             ('outgoing', 'Customers'), 
+                             ('internal', 'Internal')], 
+                            'Type of Operation', required=True,
+                            track_visibility='onchange')
+    return_picking_type_id = fields.Many2one(track_visibility='onchange')
+    show_operations = fields.Boolean(track_visibility='onchange')
+    show_reserved = fields.Boolean(track_visibility='onchange')
+    default_location_src_id = fields.Many2one(track_visibility='onchange')
+    default_location_dest_id = fields.Many2one(track_visibility='onchange')
+
+
+
+class ProductCategory(models.Model):
+    _inherit = ['product.category', 'mail.thread']
+
+    #In "ACCOUNTING Module" is already and more completely defined all fields of this view
+    allow_negative_stock = fields.Boolean(track_visibility='onchange')
+
+
+
+#Values for selection field upc_ean_conv
+UPC_EAN_CONVERSIONS = [
+    ('none','Never'),
+    ('ean2upc','EAN-13 to UPC-A'),
+    ('upc2ean','UPC-A to EAN-13'),
+    ('always','Always'),
+]
+class BarcodeNomenclature(models.Model):
+    _inherit = ['barcode.nomenclature', 'mail.thread']
+
+    name = fields.Char(track_visibility='onchange') 
+    upc_ean_conv =
+    upc_ean_conv = fields.Selection(UPC_EAN_CONVERSIONS, string='UPC/EAN Conversion', required=True, default='always',
+        help="UPC Codes can be converted to EAN by prefixing them with a zero. This setting determines if a UPC/EAN barcode should be automatically converted in one way or another when trying to match a rule with the other encoding.",
+        track_visibility='onchange')
+    rule_ids = fields.One2many(track_visibility='onchange')
+
+
+
+#class UomCategory(models.Model):
+#    _inherit = ['uom.category', 'mail.thread']
+
+    #In "SALES Module" is already and more completely defined all fields of this view    
+
+
+
+#class UomUom(models.Model):
+#    _inherit = ['uom.uom', 'mail.thread']
+
+    #In "ACCOUNTING Module" is already and more completely defined all fields of this view  
