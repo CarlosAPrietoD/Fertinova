@@ -12,7 +12,7 @@ class WobinConcepts(models.Model):
     name = fields.Char(string='Concept', track_visibility='always')
     account_account_id = fields.Many2one('account.account', string='Accounting Account', track_visibility='always', ondelete='cascade')
     credit_flag = fields.Boolean(string='Concept Set Like Credit')
-    company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('wobin.concepts'))
+    company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('your.module'))
 
 
 
@@ -61,7 +61,7 @@ class WobinSettlements(models.Model):
     advance_related_id = fields.Many2one('wobin.advances', string='Related Advance', compute='set_related_advance', ondelete='cascade')    
     trips_related_ids  = fields.Many2many('wobin.logistica.trips')
     mov_lns_ad_set_id  = fields.Many2one('wobin.moves.adv.set.lines', ondelete='cascade')
-    company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('wobin.settlements'))
+    company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('your.module'))
 
 
     @api.onchange('operator_id')
