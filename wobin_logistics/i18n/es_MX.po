@@ -1233,6 +1233,11 @@ msgid "Trip Number (Analytic Tag)"
 msgstr "Número de Viaje (Etiqueta Analítica)"
 
 #. module: wobin_logistics
+#: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__without_charge
+msgid "Trip Without Charge"
+msgstr "Viaje Sin Carga"
+
+#. module: wobin_logistics
 #: model:ir.actions.act_window,name:wobin_logistics.action_logistics_trips
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_contracts__trips
 #: model:ir.ui.menu,name:wobin_logistics.sub_menuitem_trips
@@ -1343,6 +1348,12 @@ msgstr "Sin Carga"
 #: model_terms:ir.ui.view,arch_db:wobin_logistics.view_invoice_report_search
 msgid "With Contract"
 msgstr "Con Contrato"
+
+#. module: wobin_logistics
+#: selection:wobin.logistica.trips,state:0
+#: selection:wobin.logistica.trips,state_aux:0
+msgid "Without Charge"
+msgstr "Sin Carga"
 
 #. module: wobin_logistics
 #: model:ir.ui.menu,name:wobin_logistics.menu_root

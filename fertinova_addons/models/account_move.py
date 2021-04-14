@@ -1,6 +1,11 @@
 from odoo import models, fields, api
 from odoo.osv import expression
 
+class StockPicking(models.Model):
+    _inherit='stock.picking'
+    
+    x_studio_aplica_flete= fields.Boolean()
+
 class AccountMove(models.Model):
     _inherit = 'account.move'
 
@@ -245,3 +250,8 @@ class SaleOrder(models.Model):
                 'invoice_ids': invoice_ids.ids + refund_ids.ids,
                 'invoice_status': invoice_status
             })
+
+class StockReturnPickingLine(models.TransientModel):
+    _inherit = "stock.return.picking.line"
+
+    to_refund = fields.Boolean(default=True)
