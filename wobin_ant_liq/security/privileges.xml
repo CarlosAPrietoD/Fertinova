@@ -1,0 +1,21 @@
+<odoo>
+    <data>
+        <!--/////////////////////////////////////-->
+        <!-- PERMISSIONS FOR GENERAL ROLE GROUP  -->
+        <!--/////////////////////////////////////
+        <record id="general_role_hide_tree_informs" model="ir.ui.view">
+        <field name="name">Informs</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="wobin_ant_liq.view_informs_list"/>
+        <field name="groups_id" eval="[(4,ref('wobin_ant_liq.group_wacs_general'))]"/>
+            <field name="arch" type="xml">
+                <xpath expr="/tree" position="attributes">
+                    <attribute name="create">false</attribute>
+                    <attribute name="edit">false</attribute>
+                    <attribute name="delete">false</attribute>
+                </xpath>
+            </field>
+        </record>  
+        -->
+    </data>
+</odoo>

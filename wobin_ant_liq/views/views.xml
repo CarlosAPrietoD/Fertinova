@@ -1,0 +1,199 @@
+<odoo>
+  <data>
+
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+    <!-- INHERITANCES -->
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+    <!--Add a new many2one field of Contact Debtor/Creditor into Account Move model-->
+    <record id="move_with_contact_form_inherit" model="ir.ui.view">
+        <field name="name">account.move.form.inherit</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+           <xpath expr="//tree/field[@name='partner_id']" position="after">
+                <field name="contact_deb_cred_id"/>
+            </xpath>        
+        </field>
+    </record>
+    <!--Add a new many2one fields of Contact & Company into Hr Employee model-->
+    <record id="hr_employee_contact_comp_form_inherit" model="ir.ui.view">
+        <field name="name">hr.employee.form.inherit</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+           <xpath expr="//field[@name='category_ids']" position="before">
+               <group>
+                  <group> 
+                      <field name="contact_id"/>
+                      <field name="enterprise_id"/>
+                  </group>
+                </group>
+            </xpath>        
+        </field>
+    </record>       
+
+
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+    <!-- ACTIONS -->
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+    <!-- ADVANCES - GENERAL ACTION -->
+    <record id="action_advances" model="ir.actions.act_window">
+      <field name="name">Advances</field>
+      <field name="res_model">wobin.advances</field>
+      <field name="view_mode">tree,form,search</field>
+      <field name="context">{'group_by':'trip_id'}</field>
+    </record>
+
+
+    <!-- COMPROBATIONS - GENERAL ACTION -->
+    <record id="action_comprobations" model="ir.actions.act_window">
+      <field name="name">Comprobations</field>
+      <field name="res_model">wobin.comprobations</field>
+      <field name="view_mode">tree,form,search</field>
+      <field name="context">{'group_by':'trip_id'}</field>
+    </record>     
+
+
+    <!-- SETTLEMENTS - GENERAL ACTION -->
+    <record id="action_settlements" model="ir.actions.act_window">
+      <field name="name">Settlements</field>
+      <field name="res_model">wobin.settlements</field>
+      <field name="view_mode">tree,form,search</field>
+      <field name="context">{'group_by':'operator_id'}</field>
+    </record>   
+
+
+    <!-- DEBTS Inform - ACTION -->  
+    <!--
+    <record id="action_inform" model="ir.actions.act_window">
+      <field name="name">Debts Inform</field>
+      <field name="res_model">hr.employee</field>
+      <field name="view_mode">tree</field>
+      <field name="context">{'search_default_flag_act_emp': 1}</field>  
+    </record>   
+    -->
+    <record id="action_inform" model="ir.actions.act_window">
+      <field name="name">Debts Inform</field>
+      <field name="res_model">wobin.moves.adv.set.lines</field>
+      <field name="view_id" ref="view_informs_list"/>
+      <field name="search_view_id" ref="view_informs_search"/>
+      <field name="view_mode">tree,form,search</field>
+      <field name="context">{'group_by':'operator_id', 'form_view_ref': 'wobin_ant_liq.view_informs_form'}</field>  
+    </record>   
+
+
+    <!-- INFORMS - GENERAL ACTION 
+    <record id="action_debts_inform" model="ir.actions.act_window">
+        <field name="name">Settlements Inform</field>
+        <field name="res_model">wobin.settlements</field>
+        <field name="view_mode">tree,form</field>        
+        <field name="view_id" ref="wobin_ant_liq.view_debts_inform_list"/>
+        <field name="domain"></field>
+        <field name="context">{'group_by':'operator_id'}</field> 
+    </record> -->
+    <!-- EXPENSES TO CHECK INFORM - LIST VIEW 
+    <record id="action_check_expenses_inform" model="ir.actions.act_window">
+      <field name="name">Expenses to Check Inform</field>
+      <field name="res_model">wobin.settlements</field>
+      <field name="view_id" ref="view_check_expenses_inform_list"/>
+      <field name="view_mode">tree</field>
+      <field name="context">{'group_by':'operator_id'}</field>  
+    </record> --> 
+
+
+    <!-- SETTINGS - ACTION -->
+    <record id="action_concepts" model="ir.actions.act_window">
+        <field name="name">Concepts</field>
+        <field name="res_model">wobin.concepts</field>
+        <field name="view_mode">tree,form</field>        
+        <field name="domain"></field>
+        <field name="context"></field> 
+    </record>              
+    
+    
+
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+    <!-- MENUITEMS -->    
+    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+    
+    <!-- Top Menu Item {ROOT} -->
+    <menuitem id="wobin_ant_liq.menu_root"
+              name="Advances and Settlements" 
+              groups="wobin_ant_liq.group_wacs_general,group_wacs_administration"                             
+              web_icon="wobin_ant_liq,static/description/icon.png"/>
+
+    <!-- Menu Categories {SUB MENUITEMS} -->
+    <menuitem name="Advances" 
+              id="advances_menu_1" 
+              parent="wobin_ant_liq.menu_root" 
+              groups="wobin_ant_liq.group_wacs_administration"
+              action="action_advances"/>
+    <record model="ir.ui.menu" id="wobin_ant_liq.advances_menu_1">
+        <field name="groups_id" eval="[(6,0,[ref('group_wacs_administration')])]"/>
+    </record>  
+
+
+    <menuitem name="Comprobations" 
+              id="comprobations_menu_2" 
+              parent="wobin_ant_liq.menu_root"
+              groups="wobin_ant_liq.group_wacs_administration" 
+              action="action_comprobations"/>
+    <record model="ir.ui.menu" id="wobin_ant_liq.comprobations_menu_2">
+        <field name="groups_id" eval="[(6,0,[ref('group_wacs_administration')])]"/>
+    </record>
+
+
+    <menuitem name="Settlements" 
+              id="settlemens_menu_3" 
+              parent="wobin_ant_liq.menu_root" 
+              groups="wobin_ant_liq.group_wacs_administration"
+              action="action_settlements"/>
+    <record model="ir.ui.menu" id="wobin_ant_liq.settlemens_menu_3">
+        <field name="groups_id" eval="[(6,0,[ref('group_wacs_administration')])]"/>
+    </record>              
+
+
+    <menuitem name="Informs" 
+              id="informs_menu_4" 
+              parent="wobin_ant_liq.menu_root" 
+              groups="wobin_ant_liq.group_wacs_general,group_wacs_administration"/>
+
+    <menuitem name="Debts Inform" 
+              id="debts_inform_menuitem" 
+              parent="wobin_ant_liq.informs_menu_4" 
+              groups="wobin_ant_liq.group_wacs_general,group_wacs_administration"
+              action="action_inform"
+              sequence="1"/>
+    <!--
+    <menuitem name="Settlements Inform" 
+              id="settlements_inform_menuitem" 
+              parent="wobin_ant_liq.informs_menu_4" 
+              groups="wobin_ant_liq.group_wacs_general,group_wacs_administration"
+              action="action_debts_inform"
+              sequence="2"/>  
+    <menuitem name="Expenses to Check Inform" 
+              id="che_exp_inform_menuitem" 
+              parent="wobin_ant_liq.informs_menu_4" 
+              groups="wobin_ant_liq.group_wacs_general,group_wacs_administration"
+              action="action_check_expenses_inform"
+              sequence="3"/> 
+    -->                                          
+
+
+    <menuitem name="Settings" 
+              id="settings_menu_5" 
+              parent="wobin_ant_liq.menu_root" 
+              groups="wobin_ant_liq.group_wacs_administration"/>
+    <record model="ir.ui.menu" id="wobin_ant_liq.settings_menu_5">
+        <field name="groups_id" eval="[(6,0,[ref('group_wacs_administration')])]"/>        
+    </record>               
+                          
+    <menuitem name="Concepts" 
+              id="concepts_menuitem" 
+              parent="wobin_ant_liq.settings_menu_5" 
+              groups="wobin_ant_liq.group_wacs_administration"
+              action="action_concepts"
+              sequence="1"/>    
+             
+  </data>
+</odoo>
