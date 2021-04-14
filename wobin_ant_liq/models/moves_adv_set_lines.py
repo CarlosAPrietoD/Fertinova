@@ -28,7 +28,7 @@ class WobinMovesAdvSetLines(models.Model):
                                                       ('ready', 'Ready to settle'),
                                                       ('settled', 'Settled'),
                                                      ], string='State', required=True, readonly=True, copy=False, tracking=True, default='pending', compute='set_state_settlement')        
-    company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('your.module'))                                                     
+    company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('wobin_ant_liq'))                                                     
 
     #@api.one
     #def set_settler(self):
