@@ -1,0 +1,1488 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--===========================================Recepciones============================================-->
+
+        <record model="ir.ui.view" id="graph_view_reception">
+            <field name="name">reciba.ticket.graph</field>
+            <field name="model">reciba.ticket</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Graficas">
+                    <field name="destination_id" />
+                    <field name="state" group="True" />
+                    <field name="net_weight" type="measure" />
+                </graph>
+            </field>
+        </record>
+
+        <record id="pivot_view_reception" model="ir.ui.view">
+            <field name="name">reciba.ticket.pivot</field>
+            <field name="model">reciba.ticket</field>
+            <field name="arch" type="xml">
+                <pivot string="Pivote">
+                    <field name="destination_id" type="row" />
+                    <field name="net_weight" type="measure" />
+                    <field name="reception" type="col" />
+                    <field name="state" type="col" />
+                </pivot>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="form_view_reception">
+            <field name="name">reciba.ticket.form</field>
+            <field name="model">reciba.ticket</field>
+            <field name="arch" type="xml">
+                <form string="Recepciones">
+                    <header>
+                        <button name="confirm_receipt_ticket" type="object" states="draft,priceless" string="Confirmar" class="btn-primary" />
+                        <button name="reverse_receipt_ticket" type="object" states="confirmed" string="Reversa" class="btn-primary" />
+                        <button name="cancel_receipt_ticket" type="object" states="priceless" string="Cancelar" />
+                        <button name="%(wobin_reciba.report_ticket_price)d" string="Imprimir con precio" states="confirmed" type="action" class="btn-primary" />
+                        <button name="%(wobin_reciba.report_priceless)d" string="Imprimir sin precio" states="priceless,confirmed" type="action" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,priceless,confirmed" />
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button type="object" name="action_view_invoice" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible':[('invoice_count', '=', 0)]}">
+                                <field name="invoice_count" widget="statinfo" string="Factura relacionada" />
+                            </button>
+                            <button type="object" name="action_view_credit" class="oe_stat_button" icon="fa-archive" attrs="{'invisible':[('credit_count', '=', 0)]}">
+                                <field name="credit_count" widget="statinfo" string="Nota de crédito por descuento" />
+                            </button>
+                            <button type="object" name="action_view_transfer" class="oe_stat_button" icon="fa-archive">
+                                <field name="transfer_count" widget="statinfo" string="Transferencia" />
+                            </button>
+                            <button type="object" name="action_view_reverse" class="oe_stat_button" icon="fa-rotate-left" attrs="{'invisible':[('transfer_reverse_count', '=', 0)]}">
+                                <field name="transfer_reverse_count" widget="statinfo" string="Reversa" />
+                            </button>
+                            <button type="object" name="action_view_ticket" class="oe_stat_button" icon="fa-file-text-o" attrs="{'invisible':[('ticket_count', '=', 0)]}">
+                                <field name="ticket_count" widget="statinfo" string="Boleta relacionada" />
+                            </button>
+                        </div>
+                        <div class="alert alert-info" role="alert" style="margin-bottom:0px;" attrs="{'invisible':['|','|','|',('state', '!=', 'priceless'),('purchase_id','&gt;',0),('total_bonus','=','0'),('apply_bonus','=',False)]}">
+                            Se detectaron
+                            <b>bonificaciones</b>
+                            , se debe seleccionar una nueva
+                            <b>orden de compra</b>
+                        </div>
+                        <group>
+                            <h1>
+                                <field name="name" readonly="1" force_save="1" />
+                            </h1>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="company_id" invisible="1" />
+                                <field name="date" readonly="True" />
+                                <field name="operation_type" invisible="1" />
+                                <field name="operation_type_id" domain="['|',('name','=','Receipts'),('name','=','Recepciones')]" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                <field name="weigher" />
+                                <field name="product_id" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                <field name="reception" required="True" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')]}" />
+                                <field name="purchase_id" domain="['|',('state','=','purchase'),('state','=','done')]" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')], 'required':[('reception', '=', 'price')], 'invisible':[('reception', '=', 'priceless')]}" />
+                                <field name="partner_id" string="Proveedor" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                            </group>
+                            <group>
+                                <field name="origin" readonly="1" />
+                                <field name="apply_discount" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                <field name="apply_bonus" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Calidad" name="quality_page">
+                                <br />
+                                <group>
+                                    <field name="quality_id" domain="[('product_id','=',product_id)]" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="humidity" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="impurity" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="density" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="temperature" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                    </group>
+                                    <group>
+                                        <field name="humidity_discount" attrs="{'invisible':[('apply_discount', '!=', True)]}" />
+                                        <field name="impurity_discount" attrs="{'invisible':[('apply_discount', '!=', True)]}" />
+                                    </group>
+                                </group>
+                                <br />
+                                <field name="params_id" attrs="{'readonly':[('state', '!=', 'draft')]}">
+                                    <tree editable="bottom" decoration-danger="value &gt; max_value" delete="0">
+                                        <field name="quality_params_id" readonly="True" force_save="1" />
+                                        <field name="max_value" />
+                                        <field name="unit" />
+                                        <field name="value" />
+                                    </tree>
+                                </field>
+                                <group>
+                                    <group>
+                                        <field name="sum_damage" />
+                                    </group>
+                                    <group>
+                                        <field name="sum_broken" />
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Recepción" name="reception_page">
+                                <br />
+                                <group>
+                                    <field name="driver" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="type_vehicle" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="plate_vehicle" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                    </group>
+                                    <group>
+                                        <field name="plate_trailer" attrs="{'readonly':[('state', '!=', 'draft')], 'invisible':['|',('type_vehicle', '=', 'van'),('type_vehicle', '=', 'torton')], 'required':['|',('type_vehicle', '=', 'trailer'),('type_vehicle', '=', 'full')]}" />
+                                        <field name="plate_second_trailer" attrs="{'readonly':[('state', '!=', 'draft')], 'invisible':[('type_vehicle', '!=', 'full')], 'required':[('type_vehicle', '=', 'full')]}" />
+                                    </group>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="origin_id" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="destination_id" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                    </group>
+                                    <group>
+                                        <field name="origin_date" />
+                                        <field name="destination_date" />
+                                    </group>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="net_original" readonly="1" force_save="1" attrs="{'invisible':['|',('state', '=', 'draft'),('net_original', '=', '0')]}"/>
+                                        <field name="gross_weight" required="1" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')]}" />
+                                        <field name="tare_weight" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="net_weight" />
+                                    </group>
+                                    <group>
+                                        <field name="gross_date" />
+                                        <field name="tare_date" />
+                                        <field name="net_date" />
+                                    </group>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="price_po" attrs="{'invisible':[('reception', '=', 'priceless')]}" />
+                                        <field name="currency_id" attrs="{'invisible':[('reception', '=', 'priceless')],'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')]}" />
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Descuentos" name="discount_page" attrs="{'invisible':[('apply_discount', '!=', True)]}">
+                                <br />
+                                <group>
+                                    <group>
+                                        <field name="humidity_total_discount" />
+                                        <field name="discount" />
+                                    </group>
+                                    <group>
+                                        <field name="impurity_total_discount" />
+                                        <field name="total_weight" />
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Bonificaciones" name="bonus_page" attrs="{'invisible':[('apply_bonus', '!=', True)]}">
+                                <br />
+                                <group>
+                                    <group>
+                                        <field name="broken_bonus" />
+                                        <field name="impurity_bonus" />
+                                    </group>
+                                    <group>
+                                        <field name="damage_bonus" />
+                                        <field name="humidity_bonus" />
+                                    </group>
+                                </group>
+                                <group>
+                                    <field name="total_bonus" />
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="tree_view_reception" model="ir.ui.view">
+            <field name="name">reciba.ticket.reception.tree</field>
+            <field name="model">reciba.ticket</field>
+            <field name="arch" type="xml">
+                <tree string="Recepciones" delete="0" default_order="id desc">
+                    <field name="id" />
+                    <field name="name" />
+                    <field name="date" />
+                    <field name="reception" />
+                    <field name="product_id" />
+                    <field name="partner_id" string="Proveedor" />
+                    <field name="origin_id" />
+                    <field name="destination_id" />
+                    <field name="net_weight" />
+                    <field name="humidity_total_discount" />
+                    <field name="impurity_total_discount" />
+                    <field name="total_weight" />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="tickets_reception" model="ir.actions.act_window">
+            <field name="name">Recepciones</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">reciba.ticket</field>
+            <field name="domain">[('operation_type','=','in')]</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="context">{'default_operation_type': 'in', 'default_apply_discount': True, 'default_apply_bonus': True}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a track value.
+                </p>
+            </field>
+        </record>
+
+        <record id="reciba_pivot_reception_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="tickets_reception" />
+            <field name="view_id" ref="pivot_view_reception" />
+            <field name="view_mode">pivot</field>
+        </record>
+
+        <record id="reciba_graph_reception_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="tickets_reception" />
+            <field name="view_id" ref="graph_view_reception" />
+            <field name="view_mode">graph</field>
+        </record>
+
+        <record id="reciba_tree_reception_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="tickets_reception" />
+            <field name="view_id" ref="tree_view_reception" />
+            <field name="view_mode">tree</field>
+        </record>
+
+        <record id="reciba_form_reception_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="tickets_reception" />
+            <field name="view_id" ref="form_view_reception" />
+            <field name="view_mode">form</field>
+        </record>
+
+        <menuitem name="Reciba" id="reciba_root" sequence="40" web_icon="wobin_reciba,static/description/reciba_icon.png" />
+
+        <menuitem id="operation_menu" name="Tipo de operación" parent="reciba_root" sequence="1" groups="group_reciba_control,group_reciba_responsable" />
+
+        <menuitem id="reception_ticket_menu" name="Recepcion" parent="operation_menu" action="tickets_reception" sequence="1" />
+
+
+        <!--==========================================Entregas================================================-->
+
+        <record model="ir.ui.view" id="graph_view_delivery">
+            <field name="name">reciba.ticket.graph</field>
+            <field name="model">reciba.ticket</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Graficas">
+                    <field name="origin_id" />
+                    <field name="state" group="True" />
+                    <field name="net_weight" type="measure" />
+                </graph>
+            </field>
+        </record>
+
+        <record id="pivot_view_delivery" model="ir.ui.view">
+            <field name="name">reciba.ticket.pivot</field>
+            <field name="model">reciba.ticket</field>
+            <field name="arch" type="xml">
+                <pivot string="Pivote">
+                    <field name="origin_id" type="row" />
+                    <field name="net_weight" type="measure" />
+                    <field name="state" type="col" />
+                </pivot>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="form_view_delivery">
+            <field name="name">reciba.ticket.form</field>
+            <field name="model">reciba.ticket</field>
+            <field name="arch" type="xml">
+                <form string="Entregas">
+                    <header>
+                        <button name="confirm_delivery_ticket" type="object" states="draft,priceless" string="Confirmar" class="btn-primary" />
+                        <button name="reverse_delivery_ticket" type="object" states="confirmed" string="Reversa" class="btn-primary" />
+                        <button name="%(wobin_reciba.report_ticket_price)d" string="Imprimir" states="confirmed" type="action" class="btn-primary" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,priceless,confirmed" />
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button type="object" name="action_view_transfer" class="oe_stat_button" icon="fa-archive">
+                                <field name="transfer_count" widget="statinfo" string="Transferencia" />
+                            </button>
+                            <button type="object" name="action_view_reverse" class="oe_stat_button" icon="fa-rotate-left" attrs="{'invisible':[('transfer_reverse_count', '=', 0)]}">
+                                <field name="transfer_reverse_count" widget="statinfo" string="Reversa" />
+                            </button>
+                            <button type="object" name="action_view_ticket" class="oe_stat_button" icon="fa-file-text-o" attrs="{'invisible':[('ticket_count', '=', 0)]}">
+                                <field name="ticket_count" widget="statinfo" string="Boleta relacionada" />
+                            </button>
+                        </div>
+                        <group>
+                            <h1>
+                                <field name="name" readonly="1" force_save="1" />
+                            </h1>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="company_id" invisible="1" />
+                                <field name="date" readonly="True" />
+                                <field name="operation_type" invisible="1" />
+                                <field name="operation_type_id" domain="['|',('name','=','Delivery Orders'),('name','=','Órdenes de entrega')]" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                <field name="weigher" />
+                                <field name="product_id" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                <field name="delivery" required="1" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')]}" />
+                                <field name="sale_id" domain="['|',('state','=','done'),('state','=','sale')]" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')],'required':[('delivery', '=', 'price')],'invisible':[('delivery', '!=', 'price')]}" />
+                                <field name="sale_invoice_status" />
+                                <field name="partner_id" string="Cliente" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                            </group>
+                            <group>
+                                <field name="origin" readonly="1" />
+                                <field name="apply_discount" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Calidad" name="quality_page">
+                                <br />
+                                <group>
+                                    <field name="quality_id" domain="[('product_id','=',product_id)]" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="humidity" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="impurity" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="density" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="temperature" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                    </group>
+                                    <group>
+                                        <field name="humidity_discount" attrs="{'invisible':[('apply_discount', '!=', True)]}" />
+                                        <field name="impurity_discount" attrs="{'invisible':[('apply_discount', '!=', True)]}" />
+                                    </group>
+                                </group>
+                                <br />
+                                <field name="params_id" attrs="{'readonly':[('state', '!=', 'draft')]}">
+                                    <tree editable="bottom" decoration-danger="value &gt; max_value" delete="0">
+                                        <field name="quality_params_id" readonly="True" force_save="1" />
+                                        <field name="max_value" />
+                                        <field name="unit" />
+                                        <field name="value" />
+                                    </tree>
+                                </field>
+                                <group>
+                                    <group>
+                                        <field name="sum_damage" />
+                                    </group>
+                                    <group>
+                                        <field name="sum_broken" />
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Entrega" name="delivery_page">
+                                <br />
+                                <group>
+                                    <field name="driver" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="type_vehicle" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="plate_vehicle" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                    </group>
+                                    <group>
+                                        <field name="plate_trailer" attrs="{'readonly':[('state', '!=', 'draft')], 'invisible':['|',('type_vehicle', '=', 'van'),('type_vehicle', '=', 'torton')]}" />
+                                        <field name="plate_second_trailer" attrs="{'readonly':[('state', '!=', 'draft')], 'invisible':[('type_vehicle', '!=', 'full')]}" />
+                                    </group>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="origin_id" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="destination_id" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                    </group>
+                                    <group>
+                                        <field name="origin_date" />
+                                        <field name="destination_date" />
+                                    </group>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="gross_weight" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="tare_weight" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="net_weight" />
+                                        <field name="net_expected" readonly="1" force_save="1" />
+                                    </group>
+                                    <group>
+                                        <field name="gross_date" />
+                                        <field name="tare_date" />
+                                        <field name="net_date" />
+                                    </group>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="price_so" />
+                                        <field name="currency_id" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')]}" />
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Descuentos" name="discount_page" attrs="{'invisible':[('apply_discount', '!=', True)]}">
+                                <br />
+                                <group>
+                                    <group>
+                                        <field name="humidity_total_discount" />
+                                        <field name="discount" />
+                                    </group>
+                                    <group>
+                                        <field name="impurity_total_discount" />
+                                        <field name="total_weight" />
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="tree_view_delivery" model="ir.ui.view">
+            <field name="name">reciba.ticket.reception.tree</field>
+            <field name="model">reciba.ticket</field>
+            <field name="arch" type="xml">
+                <tree string="Entregas" delete="0" default_order="id desc">
+                    <field name="id" />
+                    <field name="name" />
+                    <field name="date" />
+                    <field name="product_id" />
+                    <field name="partner_id" string="Cliente" />
+                    <field name="origin_id" />
+                    <field name="destination_id" />
+                    <field name="net_weight" />
+                    <field name="humidity_total_discount" />
+                    <field name="impurity_total_discount" />
+                    <field name="total_weight" />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="tickets_delivery" model="ir.actions.act_window">
+            <field name="name">Entregas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">reciba.ticket</field>
+            <field name="domain">[('operation_type','=','out')]</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="context">{'default_operation_type': 'out', 'default_apply_discount': False}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a track value.
+                </p>
+            </field>
+        </record>
+
+        <record id="reciba_pivot_delivery_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="tickets_delivery" />
+            <field name="view_id" ref="pivot_view_delivery" />
+            <field name="view_mode">pivot</field>
+        </record>
+
+        <record id="reciba_graph_delivery_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="tickets_delivery" />
+            <field name="view_id" ref="graph_view_delivery" />
+            <field name="view_mode">graph</field>
+        </record>
+
+        <record id="reciba_tree_delivery_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="tickets_delivery" />
+            <field name="view_id" ref="tree_view_delivery" />
+            <field name="view_mode">tree</field>
+        </record>
+
+        <record id="reciba_form_delivery_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="tickets_delivery" />
+            <field name="view_id" ref="form_view_delivery" />
+            <field name="view_mode">form</field>
+        </record>
+
+        <menuitem id="deliveries_ticket_menu" name="Entregas" parent="operation_menu" action="tickets_delivery" sequence="2" />
+
+        <!--==========================================Devoluciones sobre ventas================================================-->
+
+        <record model="ir.ui.view" id="graph_view_sale_devolution">
+            <field name="name">reciba.ticket.graph</field>
+            <field name="model">reciba.ticket</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Graficas">
+                    <field name="destination_id" />
+                    <field name="state" group="True" />
+                    <field name="net_weight" type="measure" />
+                </graph>
+            </field>
+        </record>
+
+        <record id="pivot_view_sale_devolution" model="ir.ui.view">
+            <field name="name">reciba.ticket.pivot</field>
+            <field name="model">reciba.ticket</field>
+            <field name="arch" type="xml">
+                <pivot string="Pivote">
+                    <field name="destination_id" type="row" />
+                    <field name="net_weight" type="measure" />
+                    <field name="state" type="col" />
+                </pivot>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="form_view_sale_devolution">
+            <field name="name">reciba.ticket.form</field>
+            <field name="model">reciba.ticket</field>
+            <field name="arch" type="xml">
+                <form string="Devolución">
+                    <header>
+                        <button name="confirm_dev_sale_ticket" type="object" states="draft" string="Confirmar" class="btn-primary" />
+                        <button name="%(wobin_reciba.report_ticket_price)d" string="Imprimir" states="confirmed" type="action" class="btn-primary" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed" />
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button type="object" name="action_view_transfer" class="oe_stat_button" icon="fa-archive">
+                                <field name="transfer_count" widget="statinfo" string="Transferencia" />
+                            </button>
+                            <button type="object" name="action_view_ticket" class="oe_stat_button" icon="fa-file-text-o" attrs="{'invisible':[('ticket_count', '=', 0)]}">
+                                <field name="ticket_count" widget="statinfo" string="Boleta relacionada" />
+                            </button>
+                        </div>
+                        <group>
+                            <h1>
+                                <field name="name" readonly="1" force_save="1" />
+                            </h1>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="company_id" invisible="1" />
+                                <field name="date" readonly="True" />
+                                <field name="operation_type" invisible="1" />
+                                <field name="operation_type_id" domain="[('name','=','Devolucion de Órdenes de entrega')]" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                <field name="weigher" />
+                                <field name="product_id" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                <field name="sale_id" required="1" domain="['|',('state','=','done'),('state','=','sale')]" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')]}" />
+                                <field name="sale_invoice_status" />
+                                <field name="partner_id" string="Cliente" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                            </group>
+                            <group>
+                                <field name="origin" readonly="1" />
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Calidad" name="quality_page">
+                                <br />
+                                <group>
+                                    <field name="quality_id" domain="[('product_id','=',product_id)]" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="humidity" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="impurity" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="density" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="temperature" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                    </group>
+                                </group>
+                                <br />
+                                <field name="params_id" attrs="{'readonly':[('state', '!=', 'draft')]}">
+                                    <tree editable="bottom" decoration-danger="value &gt; max_value" delete="0">
+                                        <field name="quality_params_id" readonly="True" force_save="1" />
+                                        <field name="max_value" />
+                                        <field name="unit" />
+                                        <field name="value" />
+                                    </tree>
+                                </field>
+                                <group>
+                                    <group>
+                                        <field name="sum_damage" />
+                                    </group>
+                                    <group>
+                                        <field name="sum_broken" />
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Devolución Entrega" name="delivery_page">
+                                <br />
+                                <group>
+                                    <field name="driver" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="type_vehicle" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="plate_vehicle" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                    </group>
+                                    <group>
+                                        <field name="plate_trailer" attrs="{'readonly':[('state', '!=', 'draft')], 'invisible':['|',('type_vehicle', '=', 'van'),('type_vehicle', '=', 'torton')]}" />
+                                        <field name="plate_second_trailer" attrs="{'readonly':[('state', '!=', 'draft')], 'invisible':[('type_vehicle', '!=', 'full')]}" />
+                                    </group>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="origin_id" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="destination_id" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                    </group>
+                                    <group>
+                                        <field name="origin_date" />
+                                        <field name="destination_date" />
+                                    </group>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="gross_weight" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="tare_weight" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="net_weight" />
+                                    </group>
+                                    <group>
+                                        <field name="gross_date" />
+                                        <field name="tare_date" />
+                                        <field name="net_date" />
+                                    </group>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="price_so" />
+                                        <field name="currency_id" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')]}" />
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="tree_view_sale_devolution" model="ir.ui.view">
+            <field name="name">reciba.ticket.reception.tree</field>
+            <field name="model">reciba.ticket</field>
+            <field name="arch" type="xml">
+                <tree string="Devolución" delete="0" default_order="id desc">
+                    <field name="id" />
+                    <field name="name" />
+                    <field name="date" />
+                    <field name="product_id" />
+                    <field name="partner_id" string="Cliente" />
+                    <field name="origin_id" />
+                    <field name="destination_id" />
+                    <field name="net_weight" />
+                    <field name="humidity_total_discount" />
+                    <field name="impurity_total_discount" />
+                    <field name="total_weight" />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="sales_devolution" model="ir.actions.act_window">
+            <field name="name">Devoluciones sobre venta</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">reciba.ticket</field>
+            <field name="domain">[('operation_type','=','dev_sale')]</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="context">{'default_operation_type': 'dev_sale'}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a track value.
+                </p>
+            </field>
+        </record>
+
+        <record id="reciba_pivot_sale_devolution_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="sales_devolution" />
+            <field name="view_id" ref="pivot_view_sale_devolution" />
+            <field name="view_mode">pivot</field>
+        </record>
+
+        <record id="reciba_graph_sale_devolution_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="sales_devolution" />
+            <field name="view_id" ref="graph_view_sale_devolution" />
+            <field name="view_mode">graph</field>
+        </record>
+
+        <record id="reciba_tree_sale_devolution_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="sales_devolution" />
+            <field name="view_id" ref="tree_view_sale_devolution" />
+            <field name="view_mode">tree</field>
+        </record>
+
+        <record id="reciba_form_sale_devolution_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="sales_devolution" />
+            <field name="view_id" ref="form_view_sale_devolution" />
+            <field name="view_mode">form</field>
+        </record>
+
+        <menuitem id="devolution_sale_menu" name="Devoluciones sobre venta" parent="operation_menu" action="sales_devolution" sequence="3" />
+
+        <!--==========================================Devoluciones sobre compra================================================-->
+
+        <record model="ir.ui.view" id="graph_view_purchase_devolution">
+            <field name="name">reciba.ticket.graph</field>
+            <field name="model">reciba.ticket</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Graficas">
+                    <field name="origin_id" />
+                    <field name="state" group="True" />
+                    <field name="net_weight" type="measure" />
+                </graph>
+            </field>
+        </record>
+
+        <record id="pivot_view_purchase_devolution" model="ir.ui.view">
+            <field name="name">reciba.ticket.pivot</field>
+            <field name="model">reciba.ticket</field>
+            <field name="arch" type="xml">
+                <pivot string="Pivote">
+                    <field name="origin_id" type="row" />
+                    <field name="net_weight" type="measure" />
+                    <field name="state" type="col" />
+                </pivot>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="form_view_purchase_devolution">
+            <field name="name">reciba.ticket.form</field>
+            <field name="model">reciba.ticket</field>
+            <field name="arch" type="xml">
+                <form string="Devolución">
+                    <header>
+                        <button name="confirm_dev_purchase_ticket" type="object" states="draft" string="Confirmar" class="btn-primary" />
+                        <button name="%(wobin_reciba.report_ticket_price)d" string="Imprimir" states="confirmed" type="action" class="btn-primary" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed" />
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button type="object" name="action_view_transfer" class="oe_stat_button" icon="fa-archive">
+                                <field name="transfer_count" widget="statinfo" string="Transferencia" />
+                            </button>
+                            <button type="object" name="action_view_ticket" class="oe_stat_button" icon="fa-file-text-o" attrs="{'invisible':[('ticket_count', '=', 0)]}">
+                                <field name="ticket_count" widget="statinfo" string="Boleta relacionada" />
+                            </button>
+                        </div>
+                        <group>
+                            <h1>
+                                <field name="name" readonly="1" force_save="1" />
+                            </h1>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="company_id" invisible="1" />
+                                <field name="date" readonly="True" />
+                                <field name="operation_type" invisible="1" />
+                                <field name="operation_type_id" domain="[('name','=','Devolucion de Recepciones')]" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                <field name="weigher" />
+                                <field name="product_id" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                <field name="purchase_id" required="1" domain="['|',('state','=','purchase'),('state','=','done')]" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')]}" />
+                                <field name="partner_id" string="Proveedor" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                            </group>
+                            <group>
+                                <field name="origin" readonly="1" />
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Calidad" name="quality_page">
+                                <br />
+                                <group>
+                                    <field name="quality_id" domain="[('product_id','=',product_id)]" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="humidity" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="impurity" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="density" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="temperature" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                    </group>
+                                </group>
+                                <br />
+                                <field name="params_id" attrs="{'readonly':[('state', '!=', 'draft')]}">
+                                    <tree editable="bottom" decoration-danger="value &gt; max_value" delete="0">
+                                        <field name="quality_params_id" readonly="True" force_save="1" />
+                                        <field name="max_value" />
+                                        <field name="unit" />
+                                        <field name="value" />
+                                    </tree>
+                                </field>
+                                <group>
+                                    <group>
+                                        <field name="sum_damage" />
+                                    </group>
+                                    <group>
+                                        <field name="sum_broken" />
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Devolución Recepción" name="delivery_page">
+                                <br />
+                                <group>
+                                    <field name="driver" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="type_vehicle" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="plate_vehicle" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                    </group>
+                                    <group>
+                                        <field name="plate_trailer" attrs="{'readonly':[('state', '!=', 'draft')], 'invisible':['|',('type_vehicle', '=', 'van'),('type_vehicle', '=', 'torton')]}" />
+                                        <field name="plate_second_trailer" attrs="{'readonly':[('state', '!=', 'draft')], 'invisible':[('type_vehicle', '!=', 'full')]}" />
+                                    </group>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="origin_id" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="destination_id"  required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                    </group>
+                                    <group>
+                                        <field name="origin_date" />
+                                        <field name="destination_date" />
+                                    </group>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="gross_weight" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="tare_weight" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="net_weight" />
+                                    </group>
+                                    <group>
+                                        <field name="gross_date" />
+                                        <field name="tare_date" />
+                                        <field name="net_date" />
+                                    </group>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="price_po" />
+                                        <field name="currency_id" attrs="{'readonly':[('state', '!=', 'draft'),('state', '!=', 'priceless')]}" />
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="tree_view_purchase_devolution" model="ir.ui.view">
+            <field name="name">reciba.ticket.reception.tree</field>
+            <field name="model">reciba.ticket</field>
+            <field name="arch" type="xml">
+                <tree string="Devolución" delete="0" default_order="id desc">
+                    <field name="id" />
+                    <field name="name" />
+                    <field name="date" />
+                    <field name="product_id" />
+                    <field name="partner_id" string="Proveedor" />
+                    <field name="origin_id" />
+                    <field name="destination_id" />
+                    <field name="net_weight" />
+                    <field name="humidity_total_discount" />
+                    <field name="impurity_total_discount" />
+                    <field name="total_weight" />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="purchases_devolution" model="ir.actions.act_window">
+            <field name="name">Devoluciones sobre compra</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">reciba.ticket</field>
+            <field name="domain">[('operation_type','=','dev_purchase')]</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="context">{'default_operation_type': 'dev_purchase'}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a track value.
+                </p>
+            </field>
+        </record>
+
+        <record id="reciba_pivot_purchase_devolution_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="purchases_devolution" />
+            <field name="view_id" ref="pivot_view_purchase_devolution" />
+            <field name="view_mode">pivot</field>
+        </record>
+
+        <record id="reciba_graph_purchase_devolution_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="purchases_devolution" />
+            <field name="view_id" ref="graph_view_purchase_devolution" />
+            <field name="view_mode">graph</field>
+        </record>
+
+        <record id="reciba_tree_purchase_devolution_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="purchases_devolution" />
+            <field name="view_id" ref="tree_view_purchase_devolution" />
+            <field name="view_mode">tree</field>
+        </record>
+
+        <record id="reciba_form_purchase_devolution_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="purchases_devolution" />
+            <field name="view_id" ref="form_view_purchase_devolution" />
+            <field name="view_mode">form</field>
+        </record>
+
+        <menuitem id="devolution_purchase_menu" name="Devoluciones sobre compra" parent="operation_menu" action="purchases_devolution" sequence="4" />
+
+        <!--==========================================Transferencias internas================================================-->
+
+        <record model="ir.ui.view" id="graph_view_internal_transfer">
+            <field name="name">reciba.ticket.graph</field>
+            <field name="model">reciba.ticket</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Graficas">
+                    <field name="destination_id" />
+                    <field name="product_id" />
+                    <field name="net_weight" type="measure" />
+                </graph>
+            </field>
+        </record>
+
+        <record id="pivot_view_internal_transfer" model="ir.ui.view">
+            <field name="name">reciba.ticket.pivot</field>
+            <field name="model">reciba.ticket</field>
+            <field name="arch" type="xml">
+                <pivot string="Pivote">
+                    <field name="destination_id" type="row" />
+                    <field name="product_id" type="col" />
+                    <field name="net_weight" type="measure" />
+                </pivot>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="form_view_internal_transfer">
+            <field name="name">reciba.ticket.form</field>
+            <field name="model">reciba.ticket</field>
+            <field name="arch" type="xml">
+                <form string="Transferencia">
+                    <header>
+                        <button name="confirm_transfer_ticket" type="object" states="draft" string="Confirmar" class="btn-primary" />
+                        <button name="%(wobin_reciba.report_priceless)d" string="Imprimir" states="confirmed" type="action" class="btn-primary" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed" />
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button type="object" name="action_view_transfer" class="oe_stat_button" icon="fa-archive">
+                                <field name="transfer_count" widget="statinfo" string="Transferencia" />
+                            </button>
+                            <button type="object" name="action_view_ticket" class="oe_stat_button" icon="fa-file-text-o" attrs="{'invisible':[('ticket_count', '=', 0)]}">
+                                <field name="ticket_count" widget="statinfo" string="Boleta relacionada" />
+                            </button>
+                        </div>
+                        <group>
+                            <h1>
+                                <field name="name" readonly="1" force_save="1" />
+                            </h1>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="company_id" invisible="1" />
+                                <field name="date" readonly="True" />
+                                <field name="operation_type" invisible="1" />
+                                <field name="operation_type_id" domain="[('name','=','Transferencias internas')]" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                <field name="weigher" />
+                                <field name="product_id" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                <field name="transfer_type" required="1" />
+                                <field name="ticket_id" attrs="{'invisible':['|',('transfer_type', '!=', 'in'),('state', '=', 'confirmed')], 'required':[('transfer_type', '=', 'in')]}" domain="[('transfer_type','=','out')]" />
+                            </group>
+                            <group>
+                                <field name="origin" readonly="1" />
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Calidad" name="quality_page">
+                                <br />
+                                <group>
+                                    <field name="quality_id" domain="[('product_id','=',product_id)]" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="humidity" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="impurity" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="density" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="temperature" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                    </group>
+                                </group>
+                                <br />
+                                <field name="params_id" attrs="{'readonly':[('state', '!=', 'draft')]}">
+                                    <tree editable="bottom" decoration-danger="value &gt; max_value" delete="0">
+                                        <field name="quality_params_id" readonly="True" force_save="1" />
+                                        <field name="max_value" />
+                                        <field name="unit" />
+                                        <field name="value" />
+                                    </tree>
+                                </field>
+                                <group>
+                                    <group>
+                                        <field name="sum_damage" />
+                                    </group>
+                                    <group>
+                                        <field name="sum_broken" />
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Pesaje" name="delivery_page">
+                                <br />
+                                <group>
+                                    <field name="driver" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="type_vehicle" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="plate_vehicle" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                    </group>
+                                    <group>
+                                        <field name="plate_trailer" attrs="{'readonly':[('state', '!=', 'draft')], 'invisible':['|',('type_vehicle', '=', 'van'),('type_vehicle', '=', 'torton')]}" />
+                                        <field name="plate_second_trailer" attrs="{'readonly':[('state', '!=', 'draft')], 'invisible':[('type_vehicle', '!=', 'full')]}" />
+                                    </group>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="origin_id" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="destination_id" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                    </group>
+                                    <group>
+                                        <field name="origin_date" />
+                                        <field name="destination_date" />
+                                    </group>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="gross_weight" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="tare_weight" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="net_weight" />
+                                    </group>
+                                    <group>
+                                        <field name="gross_date" />
+                                        <field name="tare_date" />
+                                        <field name="net_date" />
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="tree_view_internal_transfer" model="ir.ui.view">
+            <field name="name">reciba.ticket.reception.tree</field>
+            <field name="model">reciba.ticket</field>
+            <field name="arch" type="xml">
+                <tree string="Transferencia" delete="0" default_order="id desc">
+                    <field name="id" />
+                    <field name="name" />
+                    <field name="date" />
+                    <field name="transfer_type" />
+                    <field name="product_id" />
+                    <field name="origin_id" />
+                    <field name="destination_id" />
+                    <field name="net_weight" />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="internal_transfer" model="ir.actions.act_window">
+            <field name="name">Transferencia internas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">reciba.ticket</field>
+            <field name="domain">[('operation_type','=','transfer')]</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="context">{'default_operation_type': 'transfer'}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a track value.
+                </p>
+            </field>
+        </record>
+
+        <record id="reciba_pivot_internal_transfer_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="internal_transfer" />
+            <field name="view_id" ref="pivot_view_internal_transfer" />
+            <field name="view_mode">pivot</field>
+        </record>
+
+        <record id="reciba_graph_internal_transfer_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="internal_transfer" />
+            <field name="view_id" ref="graph_view_internal_transfer" />
+            <field name="view_mode">graph</field>
+        </record>
+
+        <record id="reciba_tree_internal_transfer_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="internal_transfer" />
+            <field name="view_id" ref="tree_view_internal_transfer" />
+            <field name="view_mode">tree</field>
+        </record>
+
+        <record id="reciba_form_internal_transfer_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="internal_transfer" />
+            <field name="view_id" ref="form_view_internal_transfer" />
+            <field name="view_mode">form</field>
+        </record>
+
+        <menuitem id="internal_transfer_menu" name="Transferencias internas" parent="operation_menu" action="internal_transfer" sequence="5" />
+
+        <!--==========================================Fabricación================================================-->
+
+        <record model="ir.ui.view" id="graph_view_manufacturing">
+            <field name="name">reciba.ticket.graph</field>
+            <field name="model">reciba.ticket</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Graficas">
+                    <field name="origin_id" />
+                    <field name="product_id" />
+                    <field name="qty_manufacturing" type="measure" />
+                </graph>
+            </field>
+        </record>
+
+        <record id="pivot_view_manufacturing" model="ir.ui.view">
+            <field name="name">reciba.ticket.pivot</field>
+            <field name="model">reciba.ticket</field>
+            <field name="arch" type="xml">
+                <pivot string="Pivote">
+                    <field name="origin_id" type="row" />
+                    <field name="product_id" type="col" />
+                    <field name="qty_manufacturing" type="measure" />
+                </pivot>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="form_view_manufacturing">
+            <field name="name">reciba.ticket.form</field>
+            <field name="model">reciba.ticket</field>
+            <field name="arch" type="xml">
+                <form string="Transferencia">
+                    <header>
+                        <button name="confirm_manufacturing_ticket" type="object" states="draft" string="Confirmar" class="btn-primary" />
+                        <button name="unbuild_manufacturing_ticket" type="object" states="confirmed" string="Desconstruir" class="btn-primary" />
+                        <button name="%(wobin_reciba.report_priceless)d" string="Imprimir" states="confirmed" type="action" class="btn-primary" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed" />
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button type="object" name="action_view_manufacturing" class="oe_stat_button" icon="fa-archive">
+                                <field name="manu_count" widget="statinfo" string="Fabricación" />
+                            </button>
+                            <button type="object" name="action_view_unbuild" class="oe_stat_button" icon="fa-rotate-left" attrs="{'invisible':[('unbuild_count', '=', 0)]}">
+                                <field name="unbuild_count" widget="statinfo" string="Desconstrucción" />
+                            </button>
+                        </div>
+                        <group>
+                            <h1>
+                                <field name="name" readonly="1" force_save="1" />
+                            </h1>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="company_id" invisible="1" />
+                                <field name="date" readonly="True" />
+                                <field name="operation_type" invisible="1" />
+                                <field name="operation_type_id" domain="['|',('name','=','Manufacturing'),('name','=','Fabricación')]" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                <field name="weigher" />
+                                <field name="product_id" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Calidad" name="quality_page">
+                                <br />
+                                <group>
+                                    <field name="quality_id" domain="[('product_id','=',product_id)]" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="humidity" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="impurity" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="density" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="temperature" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                    </group>
+                                </group>
+                                <br />
+                                <field name="params_id" attrs="{'readonly':[('state', '!=', 'draft')]}">
+                                    <tree editable="bottom" decoration-danger="value &gt; max_value" delete="0">
+                                        <field name="quality_params_id" readonly="True" force_save="1" />
+                                        <field name="max_value" />
+                                        <field name="unit" />
+                                        <field name="value" />
+                                    </tree>
+                                </field>
+                                <group>
+                                    <group>
+                                        <field name="sum_damage" />
+                                    </group>
+                                    <group>
+                                        <field name="sum_broken" />
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Fabricación" name="delivery_page">
+                                <br />
+                                <group>
+                                    <group>
+                                        <field name="origin_id" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="destination_id" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                    </group>
+                                    <group>
+                                        <field name="origin_date" />
+                                        <field name="destination_date" />
+                                    </group>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="qty_manufacturing" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                        <field name="bom_id" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="tree_view_manufacturing" model="ir.ui.view">
+            <field name="name">reciba.ticket.reception.tree</field>
+            <field name="model">reciba.ticket</field>
+            <field name="arch" type="xml">
+                <tree string="Transferencia" delete="0" default_order="id desc">
+                    <field name="id" />
+                    <field name="name" />
+                    <field name="date" />
+                    <field name="transfer_type" />
+                    <field name="product_id" />
+                    <field name="origin_id" />
+                    <field name="destination_id" />
+                    <field name="net_weight" />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="manufacturing" model="ir.actions.act_window">
+            <field name="name">Fabricación</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">reciba.ticket</field>
+            <field name="domain">[('operation_type','=','manufacturing')]</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="context">{'default_operation_type': 'manufacturing'}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a track value.
+                </p>
+            </field>
+        </record>
+
+        <record id="reciba_pivot_manufacturing_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="manufacturing" />
+            <field name="view_id" ref="pivot_view_manufacturing" />
+            <field name="view_mode">pivot</field>
+        </record>
+
+        <record id="reciba_graph_manufacturing_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="manufacturing" />
+            <field name="view_id" ref="graph_view_manufacturing" />
+            <field name="view_mode">graph</field>
+        </record>
+
+        <record id="reciba_tree_manufacturing_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="manufacturing" />
+            <field name="view_id" ref="tree_view_manufacturing" />
+            <field name="view_mode">tree</field>
+        </record>
+
+        <record id="reciba_form_manufacturing_ticket_action" model="ir.actions.act_window.view">
+            <field name="act_window_id" ref="manufacturing" />
+            <field name="view_id" ref="form_view_manufacturing" />
+            <field name="view_mode">form</field>
+        </record>
+
+        <menuitem id="manufacturing_menu" name="Fabricación" parent="operation_menu" action="manufacturing" sequence="6" />
+
+        <!--==========================================Parametros de calidad=======================================-->
+
+        <record model="ir.ui.view" id="form_view_quality">
+            <field name="name">reciba.quality.form</field>
+            <field name="model">reciba.quality</field>
+            <field name="arch" type="xml">
+                <form string="Recepciones">
+                    <sheet>
+                        <group>
+                            <field name="name" />
+                            <field name="product_id" />
+                        </group>
+                        <group>
+                            <field name="params">
+                                <tree string="Quality Tree" editable="bottom">
+                                    <field name="name" />
+                                    <field name="value" />
+                                    <field name="unit" />
+                                    <field name="damage" />
+                                    <field name="broken" />
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="tree_view_quality" model="ir.ui.view">
+            <field name="name">reciba.quality.tree</field>
+            <field name="model">reciba.quality</field>
+            <field name="arch" type="xml">
+                <tree string="Calidad" delete="0" default_order="id desc">
+                    <field name="name" />
+                    <field name="product_id" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="reciba_quality" model="ir.actions.act_window">
+            <field name="name">Parametros de calidad</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">reciba.quality</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click para agregar parametros de calidad.
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="configuration_menu" name="Configuración" parent="reciba_root" sequence="5" />
+
+        <menuitem id="quality_menu" name="Parametros de calidad" parent="configuration_menu" action="reciba_quality" sequence="1" groups="group_reciba_responsable" />
+
+
+        <!--==============================================Transferencias====================================-->
+
+        <record id="reciba_transfer" model="ir.actions.act_window">
+            <field name="name">Recepciones</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">stock.picking</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a Picking.
+                </p>
+            </field>
+        </record>
+
+        <!--==============================================Notas de credito====================================-->
+
+        <record id="reciba_credit" model="ir.actions.act_window">
+            <field name="name">Notas de crédito</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a Invoice.
+                </p>
+            </field>
+        </record>
+
+        <!--==============================================Fabricaciones====================================-->
+
+        <record id="reciba_manufacturing" model="ir.actions.act_window">
+            <field name="name">Fabricación</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">mrp.production</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a Manufacturing.
+                </p>
+            </field>
+        </record>
+
+        <!--==============================================Desconstrucciones====================================-->
+
+        <record id="reciba_unbuild" model="ir.actions.act_window">
+            <field name="name">Fabricación</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">mrp.unbuild</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a Unbuild.
+                </p>
+            </field>
+        </record>
+
+        <!--==============================================Facturas====================================-->
+
+
+        <record id="reciba_invoice" model="ir.actions.act_window">
+            <field name="name">Facturación</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a Unbuild.
+                </p>
+            </field>
+        </record>
+
+        <record id="view_invoice_form_inherit" model="ir.ui.view">
+            <field name="name">account.invoice.form.inherit</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//page[2]" position="after">
+                    <page string="reciba" name="reciba_page">
+                        <field name="reciba_id" attrs="{'readonly':[('state', '!=', 'draft')]}">
+                            <tree editable="bottom">
+                                <field name="reciba_id" />
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+
+</odoo>
