@@ -1,0 +1,92 @@
+<odoo>
+    <template id="account_lines">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <br />
+                <br />
+                <br />
+                <div style="width: 100%;">
+                    <table style="width: 100%; text-align: left;">
+                        <tr>
+                            <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                Cuenta
+                            </td>
+                            <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                Empresa
+                            </td>
+                            <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                Cantidad
+                            </td>
+                            <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                Debe
+                            </td>
+                            <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                Haber
+                            </td>
+                            <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                Referencia
+                            </td>
+                        </tr>
+                        <t t-foreach="data" t-as="lines">
+                            <tr>
+                                <td style="border: black 1px solid; padding: 5px">
+                                    <t t-esc="lines[0].account_id.display_name" />
+                                </td>
+                                <td colspan="5" style="border: black 1px solid; padding: 5px">
+                                </td>
+                            </tr>
+                            <tr t-foreach="lines" t-as="line">
+                                <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                </td>
+                                <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                    <t t-esc="line['partner_id'].name" />
+                                </td>
+                                <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                    <t t-esc="line['quantity']" />
+                                </td>
+                                <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                    <t t-esc="line['debit']" />
+                                </td>
+                                <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                    <t t-esc="line['credit']" />
+                                </td>
+                                <td style="text-align:center; border: black 1px solid; padding: 5px">
+                                    <t t-esc="line['ref']" />
+                                </td>
+                            </tr>
+                        </t>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <!--Reporte-->
+    <report id="report_account_lines" model="account.lines" string="Cuentas" report_type="qweb-html" name="fertinova_addons.account_lines" />
+
+    <!--Ventana de ingreso de datos-->
+    <record model="ir.ui.view" id="report_data_account_lines">
+        <field name="name">report_account_lines</field>
+        <field name="model">account.lines</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="init_date" />
+                    <field name="end_date" />
+                </group>
+                <footer>
+                    <button string="Cancel" special="cancel" class="oe_highlight" />
+                    <button name="%(fertinova_addons.report_account_lines)d" string="Submit" type="action" class="oe_highlight" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!--Accion para la ventana emergente-->
+    <act_window id="action_account_lines" name="Selecciona el intervalo del reporte" res_model="account.lines" view_mode="form" target="new" multi="True" />
+
+    <!--Menu-->
+    <menuitem id="menu_account_lines" name="Reporte apuntes contables" parent="account.menu_finance_reports" action="action_account_lines" />
+
+</odoo>

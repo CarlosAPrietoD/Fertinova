@@ -35,7 +35,19 @@ class WobinComprobations(models.Model):
         #mov_lns_obj.write({'comprobation_id': res.id}) 
 
         #Set value of id for Wobin Moves Advances Settlements Lines in Advances:
-        #res.mov_lns_ad_set_id = mov_lns_obj.id                                                                                                   
+        #res.mov_lns_ad_set_id = mov_lns_obj.id   
+            
+        #After record was created successfully and if considering there is a new trip 
+        #with new record for operator then create a new record for Wobin Moves Advances Settlements Lines 
+        existing_movs = self.env['wobin.moves.adv.set.lines'].search([('operator_id', '=', res.operator_id.id),
+                                                                      ('trip_id', '=', res.trip_id.id)]).ids                                                                       
+        if not existing_movs:
+            #Create a new record for Wobin Moves Advances Settlements Lines
+            values = {
+                      'operator_id': res.operator_id.id,
+                      'trip_id': res.trip_id.id,
+                     }
+            self.env['wobin.moves.adv.set.lines'].create(values)                                                                                                     
 
         return res
 
@@ -52,7 +64,7 @@ class WobinComprobations(models.Model):
     mov_lns_ad_set_id  = fields.Many2one('wobin.moves.adv.set.lines', ondelete='cascade')
     comprobation_lines_ids = fields.One2many('wobin.comprobation.lines', 'comprobation_id', string='Concept Lines')
     invoices_to_refund_ids = fields.Many2many('account.invoice')#, 'comprobation_id')
-    
+    company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('your.module'))
 
 
     def create_acc_mov(self):
@@ -220,6 +232,7 @@ class WobinComprobationLines(models.Model):
     concept_id      = fields.Many2one('wobin.concepts', string='Concept', track_visibility='always')
     amount          = fields.Float(string='Amount $', digits=(15,2), track_visibility='always')
     credit_flag     = fields.Boolean(string='Concept Set Like Credit', compute='set_flag')
+    company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('your.module'))
 
 
     @api.one
