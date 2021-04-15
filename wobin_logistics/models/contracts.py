@@ -12,6 +12,7 @@ class WobinLogisticaRoutes(models.Model):
     _description = 'Logistics Routes'
 
     name = fields.Char(string="City to add for origins & destinations")
+    company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('your.module'))
 
 
 
@@ -45,6 +46,7 @@ class WobinLogisticaContracts(models.Model):
                                                   ('close', 'Closed'),
                                                  ], string='State', required=True, readonly=True, copy=False, tracking=True, default='active', track_visibility='always')    
     # -- These fields were created for analysis not to be shown in main view of contracts -- #
+    company_id         = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('your.module'))
     trips              = fields.Char(string='Trips', compute='_set_trips')
     trip_delivered_qty = fields.Float(string='Trip Delivered Qty', digits=dp.get_precision('Product Unit of Measure'), compute='_set_trp_del_qty')
     difference_qty     = fields.Float(string='Difference Qty', digits=dp.get_precision('Product Unit of Measure'), compute='_set_dif_qty')

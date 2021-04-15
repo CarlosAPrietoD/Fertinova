@@ -77,12 +77,13 @@ class WobinLogisticaTrips(models.Model):
                                                     string='State', required=True, readonly=True, copy=False, tracking=True, default='assigned', store=True)                                                    
 
     # Analysis Fields / - / - / - / - / - / - / - / - / - / - /
+    company_id        = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('your.module'))
     trip_taxes        = fields.Many2many('account.tax', string='Taxes', compute="_set_trip_taxes", track_visibility='always')
     income_provisions = fields.Float(string='Income Provisions', digits=dp.get_precision('Product Unit of Measure'), compute='_set_income_prov', track_visibility='always')                                                    
     billed_income     = fields.Float(string='Billed Income', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always', compute='_set_billed_income')                                      
     expenses          = fields.Float(string='Expenses', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always', compute='_set_expenses')                                      
     profitability     = fields.Float(string='Profitability', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always', compute='_set_profitability')     
-    advance_sum_amnt = fields.Float(string='Advances', digits=(15,2), compute='set_advances')
+    advance_sum_amnt  = fields.Float(string='Advances', digits=(15,2), compute='set_advances')
     settlement        = fields.Float(string='Settlement', digits=dp.get_precision('Product Unit of Measure'), track_visibility='always', compute='_set_settlement')     
     invoice_status    =  fields.Selection([('draft','Draft'),
                                            ('open', 'Open'),

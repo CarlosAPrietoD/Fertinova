@@ -31,6 +31,7 @@ class WobinVehicles(models.Model):
     state             = fields.Selection(selection=[('in_use', 'In Use'),
                                                     ('without_charge', 'Whitout Charge')], 
                                                     string='State', required=True, readonly=True, copy=False, tracking=True, default='without_charge', compute="_set_state", track_visibility='always')
+    company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('your.module'))                                                    
 
 
     @api.one
