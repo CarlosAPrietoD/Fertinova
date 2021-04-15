@@ -196,7 +196,7 @@ class RecibaTicket(models.Model):
         return self.env.user.name
     
     #------------------------------------Datos---------------------------------------------
-    company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('your.module'))
+    company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('reciba.ticket'))
     state = fields.Selection([('draft', 'Borrador'),
     ('priceless', 'Confirmado sin precio'),
     ('confirmed', 'Confirmado'),
