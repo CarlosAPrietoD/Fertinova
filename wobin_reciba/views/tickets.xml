@@ -238,7 +238,7 @@
             <field name="res_model">reciba.ticket</field>
             <field name="domain">[('operation_type','=','in')]</field>
             <field name="view_type">form</field>
-            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="view_mode">tree,form</field>
             <field name="context">{'default_operation_type': 'in', 'default_apply_discount': True, 'default_apply_bonus': True}</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
