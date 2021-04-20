@@ -121,7 +121,7 @@ class WobinLogisticaTrips(models.Model):
                 self.state = 'billed'  
                 self.write({'state_aux': self.state}) 
 
-        if self.contracts_id        and self.sucursal_id       and self.client_id       and self.vehicle_id and \
+        elif self.contracts_id        and self.sucursal_id       and self.client_id       and self.vehicle_id and \
             self.analytic_accnt_id  and self.operator_id       and self.route           and self.start_date and \
             self.upload_date        and self.estimated_qty     and self.real_upload_qty and self.upload_location and \
             self.download_date      and self.real_download_qty and self.discharged_flag and self.checked and \
@@ -129,7 +129,7 @@ class WobinLogisticaTrips(models.Model):
                 self.state = 'to_invoice'  
                 self.write({'state_aux': self.state}) 
 
-        if self.contracts_id        and self.sucursal_id       and self.client_id       and self.vehicle_id and \
+        elif self.contracts_id        and self.sucursal_id       and self.client_id       and self.vehicle_id and \
             self.analytic_accnt_id  and self.operator_id       and self.route           and self.start_date and \
             self.upload_date        and self.estimated_qty     and self.real_upload_qty and self.upload_location and \
             self.download_date      and self.real_download_qty and self.discharged_flag and not self.checked and \
@@ -137,14 +137,14 @@ class WobinLogisticaTrips(models.Model):
                 self.state = 'discharged'  
                 self.write({'state_aux': self.state})   
 
-        if self.contracts_id        and self.sucursal_id       and self.client_id       and self.vehicle_id and \
+        elif self.contracts_id        and self.sucursal_id       and self.client_id       and self.vehicle_id and \
             self.analytic_accnt_id  and self.operator_id       and self.route           and self.start_date and \
             self.upload_date        and self.estimated_qty     and self.real_upload_qty and self.upload_location and \
             not self.download_date      and not self.real_download_qty and not self.discharged_flag and not self.checked and \
             not self.discharge_location and not invoice_line_w_trip:
                 self.state = 'route'
                 self.write({'state_aux': self.state})  
-                
+
         else:
             self.state = 'assigned'
             self.write({'state_aux': self.state})  
