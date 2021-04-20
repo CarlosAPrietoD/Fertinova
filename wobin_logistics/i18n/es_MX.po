@@ -305,6 +305,12 @@ msgid "Attachment Count"
 msgstr "Conteo de archivos adjuntos"
 
 #. module: wobin_logistics
+#: selection:wobin.logistica.trips,state:0
+#: selection:wobin.logistica.trips,state_aux:0
+msgid "Billed"
+msgstr "Facturado"
+
+#. module: wobin_logistics
 #: model:ir.model.fields,field_description:wobin_logistics.field_wobin_logistica_trips__billed_income
 msgid "Billed Income"
 msgstr "Importe a Facturar"
@@ -1206,6 +1212,12 @@ msgstr "Impuestos"
 #: selection:wobin.logistica.contracts,trip_status:0
 msgid "To Do"
 msgstr "Por Comenzar"
+
+#. module: wobin_logistics
+#: selection:wobin.logistica.trips,state:0
+#: selection:wobin.logistica.trips,state_aux:0
+msgid "To Invoice"
+msgstr "Por Facturar"
 
 #. module: wobin_logistics
 #: selection:wobin.logistica.contracts,activity_state:0
