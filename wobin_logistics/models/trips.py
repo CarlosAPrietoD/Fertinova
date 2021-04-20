@@ -103,7 +103,7 @@ class WobinLogisticaTrips(models.Model):
         '''Set up state in base a which fields are filled up'''
 
         #Determine for consulting Account Invoice Lines Model if exists an invoice with current trip:
-        invoice_line_w_trip = self.env['account.invoice.line'].search([('trips_id', '=', self.id)]).id
+        invoice_line_w_trip = self.env['account.invoice.line'].search([('trips_id', '=', self.id)], limit=1).id
 
         #Dertemine states
         # 'assigned'   --> without, few or empty fields in Trips Form
