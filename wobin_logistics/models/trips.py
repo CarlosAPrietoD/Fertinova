@@ -69,11 +69,15 @@ class WobinLogisticaTrips(models.Model):
     sales_order_id     = fields.Many2one('sale.order', string='Sales Order Generated', track_visibility='always', compute='_set_sale_order', ondelete='set null')    
     state              = fields.Selection(selection=[('assigned', 'Assigned'),
                                                      ('route', 'En route'),
-                                                     ('discharged', 'Discharged')], 
+                                                     ('discharged', 'Discharged'),
+                                                     ('to_invoice', 'To Invoice'),
+                                                     ('billed', 'Billed')], 
                                                     string='State', required=True, readonly=True, copy=False, tracking=True, default='assigned', compute="set_status", track_visibility='always')
     state_aux          = fields.Selection(selection=[('assigned', 'Assigned'),
                                                      ('route', 'En route'),
-                                                     ('discharged', 'Discharged')], 
+                                                     ('discharged', 'Discharged'),
+                                                     ('to_invoice', 'To Invoice'),
+                                                     ('billed', 'Billed')], 
                                                     string='State', required=True, readonly=True, copy=False, tracking=True, default='assigned', store=True)                                                    
 
     # Analysis Fields / - / - / - / - / - / - / - / - / - / - /
@@ -97,7 +101,25 @@ class WobinLogisticaTrips(models.Model):
     @api.one
     def set_status(self):
         '''Set up state in base a which fields are filled up'''
+
+        #Determine for consulting Account Invoice Lines Model if exists an invoice with current trip:
+        invoice_line_w_trip = self.env['account.invoice.line'].search([('trips_id', '=', self.id)]).id
+
+        #Dertemine states
+        # 'assigned'   --> without, few or empty fields in Trips Form
+        # 'route'      --> just with General and Upload fields filled in Trips Form
+        # 'discharged' --> just with General, Upload and Download fields filled until "discharged_flag" in Trips Form
+        # 'to_invoice' --> Only with General, Upload and Download fields filled until "discharged_flag"  and "conformity" in Trips Form
+        # 'billed'     --> With General, Upload and Download fields filled (including "discharged_flag"  and "conformity")
+        #                  and with a invoice related in Trips Form    
+        
+        if self.contracts_id and self.sucursal_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty and self.upload_location and self.download_date and self.real_download_qty and self.discharged_flag and self.checked and self.discharge_location and invoice_line_w_trip:
+            self.state = 'billed'  
+            self.write({'state_aux': self.state}) 
         if self.contracts_id and self.sucursal_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty and self.upload_location and self.download_date and self.real_download_qty and self.discharged_flag and self.checked and self.discharge_location:
+            self.state = 'to_invoice'  
+            self.write({'state_aux': self.state}) 
+        if self.contracts_id and self.sucursal_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty and self.upload_location and self.download_date and self.real_download_qty and self.discharged_flag and self.discharge_location:
             self.state = 'discharged'  
             self.write({'state_aux': self.state})        
         elif self.contracts_id and self.sucursal_id and self.client_id and self.vehicle_id and self.analytic_accnt_id and self.operator_id and self.route and self.start_date and self.upload_date and self.estimated_qty and self.real_upload_qty and self.upload_location:
