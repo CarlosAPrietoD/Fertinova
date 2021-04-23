@@ -187,7 +187,7 @@ class WobinComprobations(models.Model):
     def _onchange_operator_id(self):                
         _logger.info('\n\n\n UPDATE self.mov_lns_ad_set_id_aux.id %s\n\n\n', self.mov_lns_ad_set_id_aux.id)
         _logger.info('\n\n\n UPDATE origin.mov_lns_ad_set_id_aux.id %s\n\n\n', self._origin.mov_lns_ad_set_id_aux.id)
-        movs_obj = self.env['wobin.moves.adv.set.lines'].search([('id', '=', self.self._origin.mov_lns_ad_set_id_aux.id)])
+        movs_obj = self.env['wobin.moves.adv.set.lines'].search([('id', '=', self._origin.mov_lns_ad_set_id_aux.id)])
         _logger.info('\n\n\n movs.id UPDATE ID %s\n\n\n', movs_obj)
         movs_obj.update({'operator_id': self.operator_id.id})
 
