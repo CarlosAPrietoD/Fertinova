@@ -49,6 +49,7 @@ class WobinComprobations(models.Model):
                      }
             row_created = self.env['wobin.moves.adv.set.lines'].create(values) 
             if row_created: 
+                self.ensure_one()
                 self.mov_lns_ad_set_id_aux = row_created.id                                                                                                 
 
         return res
