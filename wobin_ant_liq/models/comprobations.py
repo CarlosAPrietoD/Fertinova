@@ -190,7 +190,8 @@ class WobinComprobations(models.Model):
         movs_obj = self.env['wobin.moves.adv.set.lines'].search([('id', '=', self._origin.mov_lns_ad_set_id_aux.id)])
         _logger.info('\n\n\n movs.id UPDATE ID %s\n\n\n', movs_obj)
         #movs_obj.update({'operator_id': self._origin.operator_id.id})
-        movs_obj.operator_id = self.operator_id.id
+        if movs_obj:
+            movs_obj.operator_id = self.operator_id.id
 
 
 
