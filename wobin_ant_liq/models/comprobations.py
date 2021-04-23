@@ -193,9 +193,12 @@ class WobinComprobations(models.Model):
         _logger.info('\n\n\n movs.id UPDATE ID %s\n\n\n', movs_obj)
         #movs_obj.update({'operator_id': self._origin.operator_id.id})
         if movs_obj:
-            _logger.info('\n\n\n movs_obj.operator_id UPDATE ID %s\n\n\n', movs_obj.operator_id)
-            movs_obj.operator_id = self._origin.operator_id.id
-            _logger.info('\n\n\n movs_obj.operator_id UPDATE ID %s\n\n\n', movs_obj.operator_id)
+            _logger.info('\n\n\n ANTES movs_obj.operator_id UPDATE ID %s\n\n\n', movs_obj.operator_id)
+            #movs_obj.operator_id = self._origin.operator_id.id
+            movs_obj.update({'operator_id': self._origin.operator_id.id})            
+            _logger.info('\n\n\n con Update movs_obj.operator_id UPDATE ID %s\n\n\n', movs_obj.operator_id)
+            movs_obj.write({'operator_id': self._origin.operator_id.id})
+            _logger.info('\n\n\n con write movs_obj.operator_id UPDATE ID %s\n\n\n', movs_obj.operator_id)
 
 
 
