@@ -34,7 +34,9 @@ class WobinAdvances(models.Model):
                           'operator_id': res.operator_id.id,
                           'trip_id': res.trip_id.id,
                          }
-                self.env['wobin.moves.adv.set.lines'].create(values) 
+                row_created = self.env['wobin.moves.adv.set.lines'].create(values) 
+                self.mov_lns_ad_set_id_aux = row_created.id
+
 
 
 
@@ -75,9 +77,10 @@ class WobinAdvances(models.Model):
     expenses_to_check  = fields.Float(string='Pending Expenses to Check', digits=(15,2), compute='set_expenses_to_check', track_visibility='always')
     payment_related_id = fields.Many2one('account.payment', string='Related Payment', compute='set_related_payment', track_visibility='always')
     payment_related_id_aux = fields.Many2one('account.payment', string='Related Payment')
-    mov_lns_ad_set_id  = fields.Many2one('wobin.moves.adv.set.lines', ondelete='cascade')
-    settlement_id      = fields.Many2one('wobin.settlements', string='Settlement', ondelete='cascade')
-    money_not_consider = fields.Boolean(string='', default=False)
+    mov_lns_ad_set_id      = fields.Many2one('wobin.moves.adv.set.lines', ondelete='cascade')
+    mov_lns_ad_set_id_aux  = fields.Many2one('wobin.moves.adv.set.lines', ondelete='cascade')
+    settlement_id          = fields.Many2one('wobin.settlements', string='Settlement', ondelete='cascade')
+    money_not_consider     = fields.Boolean(string='', default=False)
     company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('your.module'))
 
 
@@ -123,3 +126,10 @@ class WobinAdvances(models.Model):
         if payment_related:
             self.payment_related_id = payment_related
             self.write({'payment_related_id_aux': payment_related})
+
+
+
+    @api.onchange('operator_id')
+    def _onchange_operator_id(self):        
+        mov_lns_ad_set_obj = self.env['wobin.moves.adv.set.lines'].browse([('id', '=', self.mov_lns_ad_set_id_aux.id)])
+        mov_lns_ad_set_obj.operator_id = self.operator_id.id
