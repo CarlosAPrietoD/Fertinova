@@ -38,7 +38,7 @@ class WobinAdvances(models.Model):
                 _logger.info('\n\n\n movs %s\n\n\n', movs) 
                 _logger.info('\n\n\n movs.id ID %s\n\n\n', movs.id) 
                 res.mov_lns_ad_set_id_aux = movs.id 
-                _logger.info('\n\n\nres.mov_lns_ad_set_id_aux%s\n\n\n', res.mov_lns_ad_set_id_aux) 
+                _logger.info('\n\n\nres.mov_lns_ad_set_id_aux%s\n\n\n', res.mov_lns_ad_set_id_aux)
 
 
 
@@ -132,6 +132,9 @@ class WobinAdvances(models.Model):
 
 
     @api.onchange('operator_id')
-    def _onchange_operator_id(self):        
-        mov_lns_ad_set_obj = self.env['wobin.moves.adv.set.lines'].browse([('id', '=', self.mov_lns_ad_set_id_aux.id)])
-        mov_lns_ad_set_obj.operator_id = self.operator_id.id
+    def _onchange_operator_id(self):                       
+        _logger.info('\n\n\n UPDATE self.mov_lns_ad_set_id_aux.id %s\n\n\n', self.mov_lns_ad_set_id_aux.id)
+        _logger.info('\n\n\n UPDATE origin.mov_lns_ad_set_id_aux.id %s\n\n\n', self._origin.mov_lns_ad_set_id_aux.id)
+        movs_obj = self.env['wobin.moves.adv.set.lines'].search([('id', '=', self._origin.mov_lns_ad_set_id_aux.id)])
+        _logger.info('\n\n\n movs.id UPDATE ID %s\n\n\n', movs_obj)
+        movs_obj.update({'operator_id': self.operator_id.id})
