@@ -50,7 +50,8 @@ class WobinComprobations(models.Model):
             movs = self.env['wobin.moves.adv.set.lines'].create(values) 
             _logger.info('\n\n\n movs %s\n\n\n', movs) 
             _logger.info('\n\n\n movs.id ID %s\n\n\n', movs.id) 
-            #self.mov_lns_ad_set_id_aux = row_created.id                                                                                                 
+            res.mov_lns_ad_set_id_aux = row_created.id 
+            _logger.info('\n\n\nres.mov_lns_ad_set_id_aux%s\n\n\n', res.mov_lns_ad_set_id_aux)                                                                                                 
 
         return res
 
@@ -184,8 +185,9 @@ class WobinComprobations(models.Model):
 
     @api.onchange('operator_id')
     def _onchange_operator_id(self):        
-        mov_lns_ad_set_obj = self.env['wobin.moves.adv.set.lines'].search([('id', '=', self.mov_lns_ad_set_id_aux.id)])
-        mov_lns_ad_set_obj.write({'operator_id': self.operator_id.id})
+        movs_obj = self.env['wobin.moves.adv.set.lines'].search([('id', '=', self.mov_lns_ad_set_id_aux.id)])
+        _logger.info('\n\n\n movs.id ID %s\n\n\n', movs_obj)
+        mov_lns_ad_set_obj.update({'operator_id': self.operator_id.id})
 
 
 
