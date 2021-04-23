@@ -50,7 +50,7 @@ class WobinComprobations(models.Model):
             movs = self.env['wobin.moves.adv.set.lines'].create(values) 
             _logger.info('\n\n\n movs %s\n\n\n', movs) 
             _logger.info('\n\n\n movs.id ID %s\n\n\n', movs.id) 
-            res.mov_lns_ad_set_id_aux = row_created.id 
+            res.mov_lns_ad_set_id_aux = movs.id 
             _logger.info('\n\n\nres.mov_lns_ad_set_id_aux%s\n\n\n', res.mov_lns_ad_set_id_aux)                                                                                                 
 
         return res
