@@ -1005,10 +1005,11 @@ class AccountInvoice(models.Model):
     @api.multi
     def unlink(self):
         #Metodo para eliminar la relacion de notas de crédito cuando una es eliminada
-        ticket = self.env['reciba.ticket'].search([('credit_id','=',self.id)])
-        if ticket:
-            ticket.credit_id = 0
-            ticket.credit_count = 0
+        if self.type == 'out_refund' or self.type == 'in_refund':
+            ticket = self.env['reciba.ticket'].search([('credit_id','=',self.id)])
+            if ticket:
+                ticket.write({'credit_id' : 0,
+                            'credit_count' : 0})
         return super(AccountInvoice, self).unlink()
 
 class ReportRecibaTicket(models.AbstractModel):
