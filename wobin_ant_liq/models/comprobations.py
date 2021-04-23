@@ -11,7 +11,6 @@ class WobinComprobations(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']     
 
     
-    @api.one
     @api.model
     def create(self, vals):  
         """This method intends to create a sequence for a given comprobation"""
@@ -48,9 +47,10 @@ class WobinComprobations(models.Model):
                       'operator_id': res.operator_id.id,
                       'trip_id': res.trip_id.id,
                      }
-            record = self.env['wobin.moves.adv.set.lines'].create(values) 
-            if record: 
-                self.mov_lns_ad_set_id_aux = row_created.id                                                                                                 
+            movs = self.env['wobin.moves.adv.set.lines'].create(values) 
+            _logger.info('\n\n\n movs %s\n\n\n', movs) 
+            _logger.info('\n\n\n movs.id ID %s\n\n\n', movs.id) 
+            #self.mov_lns_ad_set_id_aux = row_created.id                                                                                                 
 
         return res
 
