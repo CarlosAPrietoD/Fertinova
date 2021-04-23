@@ -999,18 +999,6 @@ class StockPicking(models.Model):
     x_studio_aplica_flete= fields.Boolean()
     reciba_id = fields.Many2one('reciba.ticket', string="Reciba")
 
-class AccountInvoice(models.Model):
-    _inherit='account.invoice'
-    
-    @api.multi
-    def unlink(self):
-        #Metodo para eliminar la relacion de notas de crédito cuando una es eliminada
-        if self.type == 'out_refund' or self.type == 'in_refund':
-            ticket = self.env['reciba.ticket'].search([('credit_id','=',self.id)])
-            if ticket:
-                ticket.write({'credit_id' : 0,
-                            'credit_count' : 0})
-        return super(AccountInvoice, self).unlink()
 
 class ReportRecibaTicket(models.AbstractModel):
     #Reporte recepción con precio
