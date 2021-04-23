@@ -47,9 +47,8 @@ class WobinComprobations(models.Model):
                       'operator_id': res.operator_id.id,
                       'trip_id': res.trip_id.id,
                      }
-            row_created = self.env['wobin.moves.adv.set.lines'].create(values) 
-            if row_created: 
-                self.mov_lns_ad_set_id_aux = row_created.id                                                                                                 
+            movs = self.env['wobin.moves.adv.set.lines'].create(values)
+            res.mov_lns_ad_set_id_aux = movs.id                                                                                              
 
         return res
 
@@ -183,8 +182,8 @@ class WobinComprobations(models.Model):
 
     @api.onchange('operator_id')
     def _onchange_operator_id(self):        
-        mov_lns_ad_set_obj = self.env['wobin.moves.adv.set.lines'].browse([('id', '=', self.mov_lns_ad_set_id_aux.id)])
-        mov_lns_ad_set_obj.operator_id = self.operator_id.id                   
+        movs_obj = self.env['wobin.moves.adv.set.lines'].search([('id', '=', self._origin.mov_lns_ad_set_id_aux.id)])
+        movs_obj.update({​'operator_id': self.operator_id.id}​)               
 
 
 
