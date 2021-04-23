@@ -47,7 +47,8 @@ class WobinComprobations(models.Model):
                       'operator_id': res.operator_id.id,
                       'trip_id': res.trip_id.id,
                      }
-            self.env['wobin.moves.adv.set.lines'].create(values)                                                                                                     
+            row_created = self.env['wobin.moves.adv.set.lines'].create(values) 
+            self.mov_lns_ad_set_id_aux = row_created.id                                                                                                   
 
         return res
 
@@ -62,6 +63,7 @@ class WobinComprobations(models.Model):
     acc_mov_related_id = fields.Many2one('account.move', string='Related Account Move', compute='set_related_acc_mov', track_visibility='always', ondelete='cascade')
     #advance_id        = fields.Many2one('wobin.advances', string='Advance ID', ondelete='cascade')
     mov_lns_ad_set_id  = fields.Many2one('wobin.moves.adv.set.lines', ondelete='cascade')
+    mov_lns_ad_set_id_aux  = fields.Many2one('wobin.moves.adv.set.lines', ondelete='cascade')
     comprobation_lines_ids = fields.One2many('wobin.comprobation.lines', 'comprobation_id', string='Concept Lines')
     invoices_to_refund_ids = fields.Many2many('account.invoice')#, 'comprobation_id')
     company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('your.module'))
@@ -174,7 +176,14 @@ class WobinComprobations(models.Model):
         #amount if concept to input is credit:
         for line in self.comprobation_lines_ids: 
             if line.concept_id.credit_flag == True: 
-                line.amount = sum_amount     
+                line.amount = sum_amount  
+
+
+
+    @api.onchange('operator_id')
+    def _onchange_operator_id(self):        
+        mov_lns_ad_set_obj = self.env['wobin.moves.adv.set.lines'].browse([('id', '=', self.mov_lns_ad_set_id_aux.id)])
+        mov_lns_ad_set_obj.operator_id = self.operator_id.id                   
 
 
 
