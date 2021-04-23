@@ -34,8 +34,9 @@ class WobinAdvances(models.Model):
                           'operator_id': res.operator_id.id,
                           'trip_id': res.trip_id.id,
                          }
-                row_created = self.env['wobin.moves.adv.set.lines'].create(values) 
-                self.mov_lns_ad_set_id_aux = row_created.id
+                row_created = self.env['wobin.moves.adv.set.lines'].create(values)
+                if row_created: 
+                    self.mov_lns_ad_set_id_aux = row_created.id
 
 
 
