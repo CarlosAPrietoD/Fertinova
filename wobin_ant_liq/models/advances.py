@@ -31,11 +31,15 @@ class WobinAdvances(models.Model):
             if not existing_movs:
                 #Create a new record for Wobin Moves Advances Settlements Lines
                 values = {
-                          'operator_id': res.operator_id.id,
-                          'trip_id': res.trip_id.id,
-                         }
-                movs = self.env['wobin.moves.adv.set.lines'].create(values)
-                res.mov_lns_ad_set_id_aux = movs.id
+                        'operator_id': res.operator_id.id,
+                        'trip_id': res.trip_id.id,
+                        }
+                movs = self.env['wobin.moves.adv.set.lines'].create(values) 
+                _logger.info('\n\n\n movs %s\n\n\n', movs) 
+                _logger.info('\n\n\n movs.id ID %s\n\n\n', movs.id) 
+                res.mov_lns_ad_set_id_aux = movs.id 
+                _logger.info('\n\n\nres.mov_lns_ad_set_id_aux%s\n\n\n', res.mov_lns_ad_set_id_aux)
+
 
 
             #If a new record was created successfully and settlement related exists
@@ -128,6 +132,11 @@ class WobinAdvances(models.Model):
 
 
     @api.onchange('operator_id')
-    def _onchange_operator_id(self):        
+    def _onchange_operator_id(self):                       
+        _logger.info('\n\n\n UPDATE self.mov_lns_ad_set_id_aux.id %s\n\n\n', self.mov_lns_ad_set_id_aux.id)
+        _logger.info('\n\n\n UPDATE origin.mov_lns_ad_set_id_aux.id %s\n\n\n', self._origin.mov_lns_ad_set_id_aux.id)
         movs_obj = self.env['wobin.moves.adv.set.lines'].search([('id', '=', self._origin.mov_lns_ad_set_id_aux.id)])
-        movs_obj.update({​'operator_id': self.operator_id.id}​) 
+        _logger.info('\n\n\n movs.id UPDATE ID %s\n\n\n', movs_obj)
+        #movs_obj.update({'operator_id': self._origin.operator_id.id})
+        if movs_obj:
+            movs_obj.operator_id = self.operator_id.id

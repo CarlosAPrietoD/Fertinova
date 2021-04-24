@@ -25,6 +25,7 @@
         #security
         'security/ir.model.access.csv',
         'security/logistics_groups.xml',
+        'security/security_rules.xml',
 
         #views
         'views/sequences.xml',

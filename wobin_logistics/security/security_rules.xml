@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="wobin_routes_company_rule" model="ir.rule">
+        <field name="name">Routes Logistics Multi Company Rule</field>
+        <field name="model_id" ref="model_wobin_logistica_routes"/>
+        <field eval="True" name="global"/>
+        <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+    </record>   
+
+    <record id="wobin_contracts_company_rule" model="ir.rule">
+        <field name="name">Contracts Logistics Multi Company Rule</field>
+        <field name="model_id" ref="model_wobin_logistica_contracts"/>
+        <field eval="True" name="global"/>
+        <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+    </record> 
+
+    <record id="wobin_trips_company_rule" model="ir.rule">
+        <field name="name">Trips Logistics Multi Company Rule</field>
+        <field name="model_id" ref="model_wobin_logistica_trips"/>
+        <field eval="True" name="global"/>
+        <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+    </record> 
+
+    <record id="wobin_vehicles_company_rule" model="ir.rule">
+        <field name="name">Vehicles Logistics Multi Company Rule</field>
+        <field name="model_id" ref="model_wobin_logistica_vehicles"/>
+        <field eval="True" name="global"/>
+        <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+    </record> 
+
+</odoo>
