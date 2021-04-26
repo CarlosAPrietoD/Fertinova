@@ -61,6 +61,21 @@ class WobinSettlements(models.Model):
     company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('your.module'))
 
 
+
+    @api.multi
+    def write(self, vals):
+        #Override write method in order to detect fields changed:
+        res = super(WobinSettlements, self).write(vals)        
+        
+        #Detect changes in field "possible_adv_set_lines_ids" and pass only the selected ones
+        #to field "settled_adv_set_lines_ids": 
+        if vals.get('possible_adv_set_lines_ids', False):
+            self.settled_adv_set_lines_ids = self.possible_adv_set_lines_ids.filtered(lambda o: o.check_selection)        
+             
+        return res 
+
+
+
     @api.onchange('operator_id')
     def onchange_adv_set_lines_ids(self):
         #Fill up one2many field with data for current operator and a given trip:
@@ -70,7 +85,7 @@ class WobinSettlements(models.Model):
 
 
     @api.onchange('possible_adv_set_lines_ids')
-    def _onchange_comprobation_lines_ids(self):        
+    def _onchange_comprobation_lines_ids(self):     
         # Only sum up lines which are selected by user:
         sum_amount = sum(line.amount_to_settle for line in self.possible_adv_set_lines_ids if line.check_selection == True)
         # Assign to total selected:
@@ -84,23 +99,14 @@ class WobinSettlements(models.Model):
         sum_comprobations = sum(line.comprobation_sum_amnt for line in self.possible_adv_set_lines_ids if line.check_selection == True)
         self.comprobation_sum_amnt = sum_comprobations
 
-        list_ids = []
-        for line in self.possible_adv_set_lines_ids:
-            if line.check_selection == True:
-                list_ids.append(line.id)     
-        self.settled_adv_set_lines_ids = [(6, 0, list_ids)] 
-
-
         list_trips = []
         for ln in self.possible_adv_set_lines_ids:
             if ln.check_selection == True:
                 list_trips.append(ln.trip_id.id)
                 print('\n\n\n list_trips ',list_trips)          
         self.trips_related_ids = [(6, 0, list_trips)] 
-        self.update({'trips_related_ids': [(6, 0, list_trips)]})
-        
-        print('\n\n\n self.trips_id ', self.trips_related_ids)      
-
+        self.update({'trips_related_ids': [(6, 0, list_trips)]}) 
+          
 
 
     @api.one

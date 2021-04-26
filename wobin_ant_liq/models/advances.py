@@ -101,7 +101,7 @@ class WobinAdvances(models.Model):
             mov_lns_obj = self.env['wobin.moves.adv.set.lines'].browse(self.mov_lns_aux_id.id)
             
             if mov_lns_obj:
-                mov_lns_obj.trip_id = vals['trip_id']                
+                mov_lns_obj.trip_id = vals['trip_id']                                
 
         return res        
 
