@@ -1261,7 +1261,7 @@
                                     <group>
                                         <field name="qty_manufacturing" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
                                         <field name="bom_id" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
-                                    </group>
+           ',                         </group>
                                 </group>
                             </page>
                         </notebook>

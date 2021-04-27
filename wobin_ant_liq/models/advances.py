@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api
 from odoo.addons import decimal_precision as dp
+import logging
+_logger = logging.getLogger(__name__)
 
 
 class WobinAdvances(models.Model):
@@ -31,11 +33,11 @@ class WobinAdvances(models.Model):
             if not existing_movs:
                 #Create a new record for Wobin Moves Advances Settlements Lines
                 values = {
-                          'operator_id': res.operator_id.id,
-                          'trip_id': res.trip_id.id,
-                         }
+                        'operator_id': res.operator_id.id,
+                        'trip_id': res.trip_id.id,
+                        'advance_id': res.id,
+                        }
                 self.env['wobin.moves.adv.set.lines'].create(values) 
-
 
 
             #If a new record was created successfully and settlement related exists
@@ -67,6 +69,7 @@ class WobinAdvances(models.Model):
         return res
 
 
+
     name        = fields.Char(string="Advance", readonly=True, required=True, copy=False, default='New')
     operator_id = fields.Many2one('hr.employee',string='Operator', track_visibility='always', ondelete='cascade')
     date        = fields.Date(string='Date', track_visibility='always')
@@ -75,10 +78,40 @@ class WobinAdvances(models.Model):
     expenses_to_check  = fields.Float(string='Pending Expenses to Check', digits=(15,2), compute='set_expenses_to_check', track_visibility='always')
     payment_related_id = fields.Many2one('account.payment', string='Related Payment', compute='set_related_payment', track_visibility='always')
     payment_related_id_aux = fields.Many2one('account.payment', string='Related Payment')
-    mov_lns_ad_set_id  = fields.Many2one('wobin.moves.adv.set.lines', ondelete='cascade')
-    settlement_id      = fields.Many2one('wobin.settlements', string='Settlement', ondelete='cascade')
-    money_not_consider = fields.Boolean(string='', default=False)
+    mov_lns_ad_set_id      = fields.Many2one('wobin.moves.adv.set.lines', ondelete='cascade')
+    mov_lns_aux_id         = fields.Many2one('wobin.moves.adv.set.lines', compute='_set_mov_lns_aux')
+    settlement_id          = fields.Many2one('wobin.settlements', string='Settlement', ondelete='cascade')
+    money_not_consider     = fields.Boolean(string='', default=False)
     company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('your.module'))
+
+
+    @api.multi
+    def write(self, vals):
+        #Override write method in order to detect fields changed:
+        res = super(WobinAdvances, self).write(vals)  
+
+        #If in fields changed are operator_id and trip_id update 
+        #that data in its respective wobin.moves.adv.set.lines rows:
+        if vals.get('operator_id', False):
+            _logger.info('\n\n\n VALS: %s\n\n\n', vals)
+
+            mov_lns_obj = self.env['wobin.moves.adv.set.lines'].browse(self.mov_lns_aux_id.id)
+            
+            if mov_lns_obj:
+                mov_lns_obj.operator_id = vals['operator_id']
+                _logger.info('\n\n\n Mov_lns_aux_id.operator_id: %s\n\n\n', mov_lns_obj.operator_id)
+
+        if vals.get('trip_id', False):
+            _logger.info('\n\n\n VALS: %s\n\n\n', vals)
+            _logger.info('\n\n\n self.id: %s\n\n\n', self.id)
+
+            mov_lns_obj = self.env['wobin.moves.adv.set.lines'].browse(self.mov_lns_aux_id.id)
+            
+            if mov_lns_obj:
+                mov_lns_obj.trip_id = vals['trip_id']
+                _logger.info('\n\n\n Mov_lns_aux_id.trip_id: %s\n\n\n', mov_lns_obj.trip_id)                              
+
+        return res                
 
 
 
@@ -123,3 +156,9 @@ class WobinAdvances(models.Model):
         if payment_related:
             self.payment_related_id = payment_related
             self.write({'payment_related_id_aux': payment_related})
+
+
+
+    @api.one
+    def _set_mov_lns_aux(self):
+        self.mov_lns_aux_id = self.env['wobin.moves.adv.set.lines'].search([('advance_id', '=', self.id)])
