@@ -109,6 +109,7 @@ class WobinSettlements(models.Model):
           
 
 
+
     @api.one
     def set_flag_btn_crt_payment(self):
         #When "amount to settle" is greater or lesser than 0 just display button for payments
