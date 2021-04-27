@@ -62,7 +62,7 @@ class WobinComprobations(models.Model):
     expenses_to_refund = fields.Float(string='Pending Expenses to Refund', digits=(15,2), compute='set_expenses_to_refund', track_visibility='always')
     acc_mov_related_id = fields.Many2one('account.move', string='Related Account Move', compute='set_related_acc_mov', track_visibility='always', ondelete='cascade')
     mov_lns_ad_set_id  = fields.Many2one('wobin.moves.adv.set.lines', ondelete='cascade')
-    mov_lns_aux_id     = fields.Many2one('wobin.moves.adv.set.lines') 
+    mov_lns_aux_id     = fields.Many2one('wobin.moves.adv.set.lines', compute='_set_mov_lns_aux')
     comprobation_lines_ids = fields.One2many('wobin.comprobation.lines', 'comprobation_id', string='Concept Lines')
     invoices_to_refund_ids = fields.Many2many('account.invoice')#, 'comprobation_id')
     company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('your.module'))
@@ -83,9 +83,8 @@ class WobinComprobations(models.Model):
         #that data in its respective wobin.moves.adv.set.lines rows:
         if vals.get('operator_id', False):
             _logger.info('\n\n\n VALS: %s\n\n\n', vals)
-            _logger.info('\n\n\n self.id: %s\n\n\n', self.id)
 
-            mov_lns_obj = self.env['wobin.moves.adv.set.lines'].search([('advance_id', '=', self.id)])
+            mov_lns_obj = self.env['wobin.moves.adv.set.lines'].browse(self.mov_lns_aux_id.id)
             
             if mov_lns_obj:
                 mov_lns_obj.operator_id = vals['operator_id']
@@ -95,11 +94,11 @@ class WobinComprobations(models.Model):
             _logger.info('\n\n\n VALS: %s\n\n\n', vals)
             _logger.info('\n\n\n self.id: %s\n\n\n', self.id)
 
-            mov_lns_obj = self.env['wobin.moves.adv.set.lines'].search([('advance_id', '=', self.id)])
+            mov_lns_obj = self.env['wobin.moves.adv.set.lines'].browse(self.mov_lns_aux_id.id)
             
             if mov_lns_obj:
                 mov_lns_obj.trip_id = vals['trip_id']
-                _logger.info('\n\n\n Mov_lns_aux_id.trip_id: %s\n\n\n', mov_lns_obj.trip_id)                                  
+                _logger.info('\n\n\n Mov_lns_aux_id.trip_id: %s\n\n\n', mov_lns_obj.trip_id)                                 
 
         return res  
 
@@ -255,6 +254,12 @@ class WobinComprobations(models.Model):
         acc_mov_related = self.env['account.move'].search([('comprobation_id', '=', self.id)], limit=1).id
         if acc_mov_related:
             self.acc_mov_related_id = acc_mov_related
+
+
+
+    @api.one
+    def _set_mov_lns_aux(self):
+        self.mov_lns_aux_id = self.env['wobin.moves.adv.set.lines'].search([('comprobation_id', '=', self.id)])
 
 
 

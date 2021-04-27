@@ -79,6 +79,7 @@ class WobinAdvances(models.Model):
     payment_related_id = fields.Many2one('account.payment', string='Related Payment', compute='set_related_payment', track_visibility='always')
     payment_related_id_aux = fields.Many2one('account.payment', string='Related Payment')
     mov_lns_ad_set_id      = fields.Many2one('wobin.moves.adv.set.lines', ondelete='cascade')
+    mov_lns_aux_id         = fields.Many2one('wobin.moves.adv.set.lines', compute='_set_mov_lns_aux')
     settlement_id          = fields.Many2one('wobin.settlements', string='Settlement', ondelete='cascade')
     money_not_consider     = fields.Boolean(string='', default=False)
     company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('your.module'))
@@ -93,9 +94,8 @@ class WobinAdvances(models.Model):
         #that data in its respective wobin.moves.adv.set.lines rows:
         if vals.get('operator_id', False):
             _logger.info('\n\n\n VALS: %s\n\n\n', vals)
-            _logger.info('\n\n\n self.id: %s\n\n\n', self.id)
 
-            mov_lns_obj = self.env['wobin.moves.adv.set.lines'].search([('advance_id', '=', self.id)])
+            mov_lns_obj = self.env['wobin.moves.adv.set.lines'].browse(self.mov_lns_aux_id.id)
             
             if mov_lns_obj:
                 mov_lns_obj.operator_id = vals['operator_id']
@@ -105,7 +105,7 @@ class WobinAdvances(models.Model):
             _logger.info('\n\n\n VALS: %s\n\n\n', vals)
             _logger.info('\n\n\n self.id: %s\n\n\n', self.id)
 
-            mov_lns_obj = self.env['wobin.moves.adv.set.lines'].search([('advance_id', '=', self.id)])
+            mov_lns_obj = self.env['wobin.moves.adv.set.lines'].browse(self.mov_lns_aux_id.id)
             
             if mov_lns_obj:
                 mov_lns_obj.trip_id = vals['trip_id']
@@ -156,3 +156,9 @@ class WobinAdvances(models.Model):
         if payment_related:
             self.payment_related_id = payment_related
             self.write({'payment_related_id_aux': payment_related})
+
+
+
+    @api.one
+    def _set_mov_lns_aux(self):
+        self.mov_lns_aux_id = self.env['wobin.moves.adv.set.lines'].search([('advance_id', '=', self.id)])
