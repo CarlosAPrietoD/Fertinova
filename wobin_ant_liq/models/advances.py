@@ -35,11 +35,9 @@ class WobinAdvances(models.Model):
                 values = {
                         'operator_id': res.operator_id.id,
                         'trip_id': res.trip_id.id,
+                        'advance_id': res.id,
                         }
                 movs = self.env['wobin.moves.adv.set.lines'].create(values) 
-                _logger.info('\n\n\n movs.id : %s\n\n\n', movs.id )
-                res.mov_lns_aux_id = movs.id 
-                _logger.info('\n\n\n res.mov_lns_aux_id: %s\n\n\n', res.mov_lns_aux_id)
 
 
             #If a new record was created successfully and settlement related exists
@@ -81,7 +79,6 @@ class WobinAdvances(models.Model):
     payment_related_id = fields.Many2one('account.payment', string='Related Payment', compute='set_related_payment', track_visibility='always')
     payment_related_id_aux = fields.Many2one('account.payment', string='Related Payment')
     mov_lns_ad_set_id      = fields.Many2one('wobin.moves.adv.set.lines', ondelete='cascade')
-    mov_lns_aux_id         = fields.Many2one('wobin.moves.adv.set.lines') 
     settlement_id          = fields.Many2one('wobin.settlements', string='Settlement', ondelete='cascade')
     money_not_consider     = fields.Boolean(string='', default=False)
     company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('your.module'))
@@ -96,18 +93,23 @@ class WobinAdvances(models.Model):
         #that data in its respective wobin.moves.adv.set.lines rows:
         if vals.get('operator_id', False):
             _logger.info('\n\n\n VALS: %s\n\n\n', vals)
-            _logger.info('\n\n\n self.mov_lns_aux_id.id: %s\n\n\n', self.mov_lns_aux_id)
+            _logger.info('\n\n\n self.id: %s\n\n\n', self.id)
+
+            mov_lns_obj = self.env['wobin.moves.adv.set.lines'].search([('advance_id', '=', self.id)])
             
-            if self.mov_lns_aux_id:
-                self.mov_lns_aux_id.operator_id = vals['operator_id']
-                _logger.info('\n\n\n Mov_lns_aux_id.operator_id: %s\n\n\n', self.mov_lns_aux_id.operator_id)
+            if mov_lns_obj:
+                mov_lns_obj.operator_id = vals['operator_id']
+                _logger.info('\n\n\n Mov_lns_aux_id.operator_id: %s\n\n\n', mov_lns_obj.operator_id)
 
         if vals.get('trip_id', False):
             _logger.info('\n\n\n VALS: %s\n\n\n', vals)
+            _logger.info('\n\n\n self.id: %s\n\n\n', self.id)
 
-            if self.mov_lns_aux_id:
-                self.mov_lns_aux_id.operator_id = vals['trip_id']
-                _logger.info('\n\n\n Mov_lns_aux_id.operator_id: %s\n\n\n', self.mov_lns_aux_id.trip_id)                               
+            mov_lns_obj = self.env['wobin.moves.adv.set.lines'].search([('advance_id', '=', self.id)])
+            
+            if mov_lns_obj:
+                mov_lns_obj.trip_id = vals['trip_id']
+                _logger.info('\n\n\n Mov_lns_aux_id.trip_id: %s\n\n\n', mov_lns_obj.trip_id)                              
 
         return res                
 

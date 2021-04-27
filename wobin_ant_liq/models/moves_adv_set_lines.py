@@ -20,6 +20,8 @@ class WobinMovesAdvSetLines(models.Model):
     amount_to_settle      = fields.Float(string='Amount to Settle', digits=(15,2), compute='set_amount_to_settle')
     settled               = fields.Boolean(string='Move Settled')      
     #flag_pending_process  = fields.Boolean(string='Pending Process', compute='set_flag_pending_process')    
+    advance_id        = fields.Many2one('wobin.advances')
+    comprobation_id   = fields.Many2one('wobin.comprobations')
     settlement_id     = fields.Many2one('wobin.settlements')
     settlement_aux_id = fields.Many2one('wobin.settlements', string='Settlement')
     settlements_ids   = fields.One2many('wobin.settlements', 'mov_lns_ad_set_id', compute='set_settlements_ids')    

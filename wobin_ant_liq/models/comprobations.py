@@ -46,9 +46,9 @@ class WobinComprobations(models.Model):
             values = {
                       'operator_id': res.operator_id.id,
                       'trip_id': res.trip_id.id,
+                      'comprobation_id': res.id,
                      }
-            movs = self.env['wobin.moves.adv.set.lines'].create(values) 
-            res.mov_lns_aux_id = movs.id                                                                                               
+            movs = self.env['wobin.moves.adv.set.lines'].create(values)                                                                                              
 
         return res
 
