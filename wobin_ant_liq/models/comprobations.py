@@ -74,6 +74,11 @@ class WobinComprobations(models.Model):
         #Override write method in order to detect fields changed:
         res = super(WobinComprobations, self).write(vals)        
         
+        print('\n\n\n res 0', res)   
+        self.ensure_one()
+        print('\n\n\n res.mov_lns_aux_id.id', self.mov_lns_aux_id.id) 
+
+        
         #If in fields changed are operator_id and trip_id update 
         #that data in its respective wobin.moves.adv.set.lines rows:
         if vals.get('operator_id', False):
@@ -92,9 +97,9 @@ class WobinComprobations(models.Model):
             if mov_lns_obj:
                 mov_lns_obj.trip_id = vals['trip_id']  
                 _logger.info('\n\n\n mov_lns_obj: %s\n\n\n', mov_lns_obj)      
-                _logger.info('\n\n\n mov_lns_obj.operator_id: %s\n\n\n', mov_lns_obj.operator_id)        
+                _logger.info('\n\n\n mov_lns_obj.operator_id: %s\n\n\n', mov_lns_obj.operator_id)                                 
 
-        return res 
+        return res  
 
 
 
