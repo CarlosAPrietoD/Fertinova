@@ -92,14 +92,14 @@ class WobinAdvances(models.Model):
         res = super(WobinAdvances, self).write(vals)  
         print('\n\n\n res 0', res)   
         self.ensure_one()
-        print('\n\n\n res.mov_lns_aux_id.id', self.mov_lns_aux_id.id) 
+        _logger.info('\n\n\n self.mov_lns_aux_id.id: %s\n\n\n', self.mov_lns_aux_id.id)
 
         
         #If in fields changed are operator_id and trip_id update 
         #that data in its respective wobin.moves.adv.set.lines rows:
         if vals.get('operator_id', False):
             _logger.info('\n\n\n VALS: %s\n\n\n', vals)
-            mov_lns_obj = self.env['wobin.moves.adv.set.lines'].browse(self.mov_lns_aux_id.id)
+            mov_lns_obj = self.env['wobin.moves.adv.set.lines'].search([('id', '=', self.mov_lns_aux_id.id)])
             _logger.info('\n\n\n mov_lns_obj: %s\n\n\n', mov_lns_obj)
             
             if mov_lns_obj:
