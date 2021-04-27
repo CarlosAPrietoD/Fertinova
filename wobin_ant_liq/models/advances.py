@@ -95,7 +95,7 @@ class WobinAdvances(models.Model):
         #that data in its respective wobin.moves.adv.set.lines rows:
         if vals.get('operator_id', False):
             _logger.info('\n\n\n VALS: %s\n\n\n', vals)
-            mov_lns_obj = self.env['wobin.moves.adv.set.lines'].browse(self.mov_lns_aux_id.id)
+            mov_lns_obj = self.env['wobin.moves.adv.set.lines'].browse(res.mov_lns_aux_id.id)
             _logger.info('\n\n\n mov_lns_obj: %s\n\n\n', mov_lns_obj)
             
             if mov_lns_obj:
@@ -104,7 +104,7 @@ class WobinAdvances(models.Model):
 
         if vals.get('trip_id', False):
             _logger.info('\n\n\n VALS: %s\n\n\n', vals)
-            mov_lns_obj = self.env['wobin.moves.adv.set.lines'].browse(self.mov_lns_aux_id.id)
+            mov_lns_obj = self.env['wobin.moves.adv.set.lines'].browse(res.mov_lns_aux_id.id)
             
             if mov_lns_obj:
                 mov_lns_obj.trip_id = vals['trip_id']  
