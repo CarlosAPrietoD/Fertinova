@@ -15,7 +15,7 @@ class WobinMovesAdvSetLines(models.Model):
     trip_id         = fields.Many2one('wobin.logistica.trips', string='Trip', ondelete='cascade')
     advance_ids     = fields.One2many('wobin.advances', 'mov_lns_ad_set_id', string='Related Advances', ondelete='cascade', compute='set_advances')
     comprobation_ids      = fields.One2many('wobin.comprobations', 'mov_lns_ad_set_id', string='Related Comprobations', ondelete='cascade', compute='set_comprobations')
-    advance_sum_amnt      = fields.Float(string='Advances', digits=(15,2), compute='set_advances', store=True)
+    advance_sum_amnt      = fields.Float(string='Advances', digits=(15,2), compute='set_advances')
     comprobation_sum_amnt = fields.Float(string='Comprobations', digits=(15,2), compute='set_comprobation_sum_amnt')
     amount_to_settle      = fields.Float(string='Amount to Settle', digits=(15,2), compute='set_amount_to_settle')
     settled               = fields.Boolean(string='Move Settled')      
