@@ -37,7 +37,9 @@ class WobinAdvances(models.Model):
                         'trip_id': res.trip_id.id,
                         }
                 movs = self.env['wobin.moves.adv.set.lines'].create(values) 
+                _logger.info('\n\n\n movs.id : %s\n\n\n', movs.id )
                 res.mov_lns_aux_id = movs.id 
+                _logger.info('\n\n\n res.mov_lns_aux_id: %s\n\n\n', res.mov_lns_aux_id)
 
 
             #If a new record was created successfully and settlement related exists
