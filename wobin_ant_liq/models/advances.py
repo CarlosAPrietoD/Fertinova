@@ -85,7 +85,6 @@ class WobinAdvances(models.Model):
     company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('your.module'))
 
 
-
     @api.multi
     def write(self, vals):
         #Override write method in order to detect fields changed:
@@ -103,14 +102,12 @@ class WobinAdvances(models.Model):
 
         if vals.get('trip_id', False):
             _logger.info('\n\n\n VALS: %s\n\n\n', vals)
-            mov_lns_obj = self.env['wobin.moves.adv.set.lines'].browse(self.mov_lns_aux_id.id)
-            
-            if mov_lns_obj:
-                mov_lns_obj.trip_id = vals['trip_id']  
-                _logger.info('\n\n\n mov_lns_obj: %s\n\n\n', mov_lns_obj)      
-                _logger.info('\n\n\n mov_lns_obj.operator_id: %s\n\n\n', mov_lns_obj.operator_id)                                 
 
-        return res        
+            if self.mov_lns_aux_id:
+                self.mov_lns_aux_id.operator_id = vals['trip_id']
+                _logger.info('\n\n\n Mov_lns_aux_id.operator_id: %s\n\n\n', self.mov_lns_aux_id.trip_id)                               
+
+        return res                
 
 
 
