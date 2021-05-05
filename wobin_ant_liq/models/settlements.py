@@ -34,18 +34,12 @@ class WobinSettlements(models.Model):
 
 
 
-    @api.one
-    def _set_settled_lines(self):
-        self.settled_adv_set_lines_ids = [(6, 0, self.possible_adv_set_lines_ids.filtered(lambda o: o.check_selection).ids)]
-
-
-
     name        = fields.Char(string="Settlement", readonly=True, required=True, copy=False, default='New')
     operator_id = fields.Many2one('hr.employee',string='Operator', track_visibility='always', ondelete='cascade')
     date        = fields.Date(string='Date', track_visibility='always')
     attachments = fields.Many2many('ir.attachment', relation='settlements_attachment', string='Attachments', track_visibility='always')
     possible_adv_set_lines_ids = fields.One2many('wobin.moves.adv.set.lines', 'settlement_id', string='Possible Moves for operator')
-    settled_adv_set_lines_ids  = fields.One2many('wobin.moves.adv.set.lines', 'settlement_aux_id', string='Settled Moves for operator', default=_set_settled_lines)
+    settled_adv_set_lines_ids  = fields.One2many('wobin.moves.adv.set.lines', 'settlement_aux_id', string='Settled Moves for operator', compute='_set_settled_lines')
     total_selected   = fields.Float(string='Total of Selected Rows $', digits=(15,2))
     total_settlement = fields.Float(string='Total of Settlement $', digits=(15,2))
     amount_to_settle = fields.Float(string='Amount to Settle $', digits=(15,2))
@@ -97,7 +91,13 @@ class WobinSettlements(models.Model):
                 print('\n\n\n list_trips ',list_trips)          
         self.trips_related_ids = [(6, 0, list_trips)] 
         self.update({'trips_related_ids': [(6, 0, list_trips)]}) 
-          
+
+    
+    
+    @api.one
+    @api.depends('possible_adv_set_lines_ids')
+    def _set_settled_lines(self):
+        self.settled_adv_set_lines_ids = [(6, 0, self.possible_adv_set_lines_ids.filtered(lambda o: o.check_selection).ids)]                  
 
 
 
