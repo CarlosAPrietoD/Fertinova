@@ -34,12 +34,18 @@ class WobinSettlements(models.Model):
 
 
 
+    @api.one
+    def _set_settled_lines(self):
+        self.settled_adv_set_lines_ids = [(6, 0, self.possible_adv_set_lines_ids.filtered(lambda o: o.check_selection).ids)]
+
+
+
     name        = fields.Char(string="Settlement", readonly=True, required=True, copy=False, default='New')
     operator_id = fields.Many2one('hr.employee',string='Operator', track_visibility='always', ondelete='cascade')
     date        = fields.Date(string='Date', track_visibility='always')
     attachments = fields.Many2many('ir.attachment', relation='settlements_attachment', string='Attachments', track_visibility='always')
     possible_adv_set_lines_ids = fields.One2many('wobin.moves.adv.set.lines', 'settlement_id', string='Possible Moves for operator')
-    settled_adv_set_lines_ids  = fields.One2many('wobin.moves.adv.set.lines', 'settlement_aux_id', string='Settled Moves for operator')
+    settled_adv_set_lines_ids  = fields.One2many('wobin.moves.adv.set.lines', 'settlement_aux_id', string='Settled Moves for operator', default=_set_settled_lines)
     total_selected   = fields.Float(string='Total of Selected Rows $', digits=(15,2))
     total_settlement = fields.Float(string='Total of Settlement $', digits=(15,2))
     amount_to_settle = fields.Float(string='Amount to Settle $', digits=(15,2))
@@ -59,21 +65,6 @@ class WobinSettlements(models.Model):
     trips_related_ids  = fields.Many2many('wobin.logistica.trips')
     mov_lns_ad_set_id  = fields.Many2one('wobin.moves.adv.set.lines')
     company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('your.module'))
-
-
-
-    @api.multi
-    def write(self, vals):
-        #Override write method in order to detect fields changed:
-        res = super(WobinSettlements, self).write(vals)        
-        
-        #Detect changes in field "possible_adv_set_lines_ids" and pass only the selected ones
-        #to field "settled_adv_set_lines_ids": 
-        if vals.get('possible_adv_set_lines_ids', False):
-            self.settled_adv_set_lines_ids = self.possible_adv_set_lines_ids.filtered(lambda o: o.check_selection)        
-             
-        return res 
-
 
 
     @api.onchange('operator_id')
