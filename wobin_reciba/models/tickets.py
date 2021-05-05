@@ -377,7 +377,7 @@ class RecibaTicket(models.Model):
         if self.state == 'draft':
             #Asignacion del nombre de acuerdo al destino si esta en modo borrador
             if self.destination_id:
-                tickets = self.env['reciba.ticket'].search(['&',('destination_id','=',self.destination_id.id),('state','!=','draft')])
+                tickets = self.env['reciba.ticket'].search([('destination_id','=',self.destination_id.id),('state','!=','draft'),'|',('operation_type','=','in'),('operation_type','=','out')])
                 if tickets:
                     name_location = self.destination_id.display_name
                     number = str(len(tickets)+1).zfill(4)
@@ -522,7 +522,7 @@ class RecibaTicket(models.Model):
         if self.state == 'draft':
             #Asignacion del nombre de acuerdo al destino si esta en modo borrador
             if self.origin_id:
-                tickets = self.env['reciba.ticket'].search(['&',('origin_id','=',self.origin_id.id),('state','!=','draft')])
+                tickets = self.env['reciba.ticket'].search([('origin_id','=',self.origin_id.id),('state','!=','draft'),'|',('operation_type','=','in'),('operation_type','=','out')])
                 if tickets:
                     name_location = self.origin_id.display_name
                     number = str(len(tickets)+1).zfill(4)
@@ -637,7 +637,7 @@ class RecibaTicket(models.Model):
         if self.state == 'draft':
             #Asignacion del nombre de acuerdo al destino si esta en modo borrador
             if self.destination_id:
-                tickets = self.env['reciba.ticket'].search(['&',('destination_id','=',self.destination_id.id),('state','!=','draft')])
+                tickets = self.env['reciba.ticket'].search([('destination_id','=',self.destination_id.id),('state','!=','draft'),('operation_type','=','dev_sale')])
                 if tickets:
                     name_location = self.destination_id.display_name
                     number = str(len(tickets)+1).zfill(4)
@@ -685,7 +685,7 @@ class RecibaTicket(models.Model):
         if self.state == 'draft':
             #Asignacion del nombre de acuerdo al destino si esta en modo borrador
             if self.origin_id:
-                tickets = self.env['reciba.ticket'].search(['&',('origin_id','=',self.origin_id.id),('state','!=','draft')])
+                tickets = self.env['reciba.ticket'].search([('origin_id','=',self.origin_id.id),('state','!=','draft'),('operation_type','=','dev_purchase')])
                 if tickets:
                     name_location = self.origin_id.display_name
                     number = str(len(tickets)+1).zfill(4)
@@ -731,7 +731,7 @@ class RecibaTicket(models.Model):
             #Asignacion del nombre de acuerdo al tipo de transferencia
             if self.transfer_type == 'int' or self.transfer_type == 'in':
                 if self.destination_id:
-                    tickets = self.env['reciba.ticket'].search(['&',('destination_id','=',self.destination_id.id),('state','!=','draft')])
+                    tickets = self.env['reciba.ticket'].search([('destination_id','=',self.destination_id.id),('state','!=','draft'),('operation_type','=','transfer')])
                     if tickets:
                         name_location = self.destination_id.display_name
                         number = str(len(tickets)+1).zfill(4)
@@ -740,7 +740,7 @@ class RecibaTicket(models.Model):
                         self.name = self.destination_id.display_name + '/' + '0001'
             elif self.transfer_type == 'out':
                 if self.origin_id:
-                    tickets = self.env['reciba.ticket'].search([('origin_id','=',self.origin_id.id),('state','!=','draft'),('transfer_type','=','out')])
+                    tickets = self.env['reciba.ticket'].search([('origin_id','=',self.origin_id.id),('state','!=','draft'),('transfer_type','=','out'),('operation_type','=','transfer')])
                     if tickets:
                         name_location = self.origin_id.display_name
                         number = str(len(tickets)+1).zfill(4)
@@ -819,7 +819,7 @@ class RecibaTicket(models.Model):
         if self.state == 'draft':
             #Asignacion del nombre de acuerdo al destino si esta en modo borrador
             if self.origin_id:
-                tickets = self.env['reciba.ticket'].search(['&',('origin_id','=',self.origin_id.id),('state','!=','draft')])
+                tickets = self.env['reciba.ticket'].search([('origin_id','=',self.origin_id.id),('state','!=','draft'),('operation_type','=','manufacturing')])
                 if tickets:
                     name_location = self.origin_id.display_name
                     number = str(len(tickets)+1).zfill(4)
@@ -999,17 +999,6 @@ class StockPicking(models.Model):
     x_studio_aplica_flete= fields.Boolean()
     reciba_id = fields.Many2one('reciba.ticket', string="Reciba")
 
-class AccountInvoice(models.Model):
-    _inherit='account.invoice'
-    
-    @api.multi
-    def unlink(self):
-        #Metodo para eliminar la relacion de notas de crédito cuando una es eliminada
-        ticket = self.env['reciba.ticket'].search([('credit_id','=',self.id)])
-        if ticket:
-            ticket.credit_id = 0
-            ticket.credit_count = 0
-        return super(AccountInvoice, self).unlink()
 
 class ReportRecibaTicket(models.AbstractModel):
     #Reporte recepción con precio

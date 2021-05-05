@@ -339,8 +339,8 @@ class ReportAvgHumidity(models.AbstractModel):
     @api.model
     def _get_report_values(self, docids, data=None):
         report = self.env['quality.avg.humidity'].browse(docids)
-        tickets_receipt = self.env['reciba.ticket'].search([('operation_type','=','in'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),('destination_id','=',report.location.id),('company_id','=',self.env.user.company_id.id),'|',('state','=','priceless'),('state','=','confirmed')])
-        tickets_delivery = self.env['reciba.ticket'].search([('operation_type','=','out'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),('origin_id','=',report.location.id),('company_id','=',self.env.user.company_id.id),'|',('state','=','priceless'),('state','=','confirmed')])    
+        tickets_receipt = self.env['reciba.ticket'].search([('operation_type','=','in'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),'|',('destination_id.location_id','=',report.location.id),('destination_id','=',report.location.id),('company_id','=',self.env.user.company_id.id),'|',('state','=','priceless'),('state','=','confirmed')])
+        tickets_delivery = self.env['reciba.ticket'].search([('operation_type','=','out'),('date','>',report.init_date),('date','<',report.end_date),('product_id','=',report.product.id),'|',('origin_id.location_id','=',report.location.id),('origin_id','=',report.location.id),('company_id','=',self.env.user.company_id.id),'|',('state','=','priceless'),('state','=','confirmed')])    
 
         sum_net_receipt = 0
         sum_humidity_receipt = 0
