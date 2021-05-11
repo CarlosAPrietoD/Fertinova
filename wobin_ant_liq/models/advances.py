@@ -93,23 +93,18 @@ class WobinAdvances(models.Model):
         #If in fields changed are operator_id and trip_id update 
         #that data in its respective wobin.moves.adv.set.lines rows:
         if vals.get('operator_id', False):
-            _logger.info('\n\n\n VALS: %s\n\n\n', vals)
-
+            
             mov_lns_obj = self.env['wobin.moves.adv.set.lines'].browse(self.mov_lns_aux_id.id)
             
             if mov_lns_obj:
                 mov_lns_obj.operator_id = vals['operator_id']
-                _logger.info('\n\n\n Mov_lns_aux_id.operator_id: %s\n\n\n', mov_lns_obj.operator_id)
 
         if vals.get('trip_id', False):
-            _logger.info('\n\n\n VALS: %s\n\n\n', vals)
-            _logger.info('\n\n\n self.id: %s\n\n\n', self.id)
 
             mov_lns_obj = self.env['wobin.moves.adv.set.lines'].browse(self.mov_lns_aux_id.id)
             
             if mov_lns_obj:
-                mov_lns_obj.trip_id = vals['trip_id']
-                _logger.info('\n\n\n Mov_lns_aux_id.trip_id: %s\n\n\n', mov_lns_obj.trip_id)  
+                mov_lns_obj.trip_id = vals['trip_id'] 
 
                 sql_query = """SELECT count(*) 
                                FROM wobin_moves_adv_set_lines
@@ -117,11 +112,24 @@ class WobinAdvances(models.Model):
                 self.env.cr.execute(sql_query, (self.operator_id.id, self.trip_id.id,))
                 result = self.env.cr.fetchone()
 
-                if result:   
-                    _logger.info('\n\n\n result[0]: %s\n\n\n', result[0])                  
+                if result:                   
                     if result[0] > 1:
-                        _logger.info('\n\n\n sí entró: %s\n\n\n')  
                         self.env['wobin.moves.adv.set.lines'].browse(self.mov_lns_aux_id.id).unlink()
+            
+            else:                
+                #Considering there is a new trip with new record for operator 
+                #then create a new record for Wobin Moves Advances Settlements Lines 
+                existing_movs = self.env['wobin.moves.adv.set.lines'].search([('operator_id', '=', res.operator_id.id),
+                                                                            ('trip_id', '=', res.trip_id.id)]).ids                                                                       
+                if not existing_movs:
+                    #Create a new record for Wobin Moves Advances Settlements Lines
+                    values = {
+                            'operator_id': res.operator_id.id,
+                            'trip_id': res.trip_id.id,
+                            'advance_id': res.id,
+                            }
+                    self.env['wobin.moves.adv.set.lines'].create(values)   
+
         return res                
 
 
