@@ -123,6 +123,14 @@ class WobinAdvances(models.Model):
                         _logger.info('\n\n\n sí entró: %s\n\n\n')  
                         self.env['wobin.moves.adv.set.lines'].browse(self.mov_lns_aux_id.id).unlink()
 
+                        sql_query = """SELECT id 
+                                    FROM wobin_moves_adv_set_lines
+                                    WHERE operator_id = %s AND trip_id = %s"""
+                        self.env.cr.execute(sql_query, (self.operator_id.id, self.trip_id.id,))
+                        result = self.env.cr.fetchone()
+
+                        if result:  
+
         return res                
 
 
@@ -173,4 +181,9 @@ class WobinAdvances(models.Model):
 
     @api.one
     def _set_mov_lns_aux(self):
-        self.mov_lns_aux_id = self.env['wobin.moves.adv.set.lines'].search([('advance_id', '=', self.id)])
+        mov_lns_id = self.env['wobin.moves.adv.set.lines'].search([('advance_id', '=', self.id)]).id
+        if mov_lns_id: 
+            self.mov_lns_aux_id = mov_lns_id 
+        else:
+            self.mov_lns_aux_id = self.env['wobin.moves.adv.set.lines'].search([('operator_id', '=', self.operator_id.id),
+                                                                                ('trip_id', '=', self.trip_id.id)], limit=1).id
