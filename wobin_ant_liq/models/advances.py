@@ -122,15 +122,6 @@ class WobinAdvances(models.Model):
                     if result[0] > 1:
                         _logger.info('\n\n\n sí entró: %s\n\n\n')  
                         self.env['wobin.moves.adv.set.lines'].browse(self.mov_lns_aux_id.id).unlink()
-
-                        sql_query = """SELECT id 
-                                    FROM wobin_moves_adv_set_lines
-                                    WHERE operator_id = %s AND trip_id = %s"""
-                        self.env.cr.execute(sql_query, (self.operator_id.id, self.trip_id.id,))
-                        result = self.env.cr.fetchone()
-
-                        if result:  
-
         return res                
 
 
