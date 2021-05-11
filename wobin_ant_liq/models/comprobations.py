@@ -91,14 +91,35 @@ class WobinComprobations(models.Model):
                 _logger.info('\n\n\n Mov_lns_aux_id.operator_id: %s\n\n\n', mov_lns_obj.operator_id)
 
         if vals.get('trip_id', False):
-            _logger.info('\n\n\n VALS: %s\n\n\n', vals)
-            _logger.info('\n\n\n self.id: %s\n\n\n', self.id)
 
             mov_lns_obj = self.env['wobin.moves.adv.set.lines'].browse(self.mov_lns_aux_id.id)
             
             if mov_lns_obj:
-                mov_lns_obj.trip_id = vals['trip_id']
-                _logger.info('\n\n\n Mov_lns_aux_id.trip_id: %s\n\n\n', mov_lns_obj.trip_id)                                 
+                mov_lns_obj.trip_id = vals['trip_id'] 
+
+                sql_query = """SELECT count(*) 
+                               FROM wobin_moves_adv_set_lines
+                               WHERE operator_id = %s AND trip_id = %s"""
+                self.env.cr.execute(sql_query, (self.operator_id.id, self.trip_id.id,))
+                result = self.env.cr.fetchone()
+
+                if result:                   
+                    if result[0] > 1:
+                        self.env['wobin.moves.adv.set.lines'].browse(self.mov_lns_aux_id.id).unlink()
+            
+            else:                
+                #Considering there is a new trip with new record for operator 
+                #then create a new record for Wobin Moves Advances Settlements Lines 
+                existing_movs = self.env['wobin.moves.adv.set.lines'].search([('operator_id', '=', self.operator_id.id),
+                                                                              ('trip_id', '=', self.trip_id.id)]).ids                                                                       
+                if not existing_movs:
+                    #Create a new record for Wobin Moves Advances Settlements Lines
+                    values = {
+                            'operator_id': self.operator_id.id,
+                            'trip_id': self.trip_id.id,
+                            'comprobation_id': self.id,
+                            }
+                    self.env['wobin.moves.adv.set.lines'].create(values)                                  
 
         return res  
 
@@ -259,7 +280,12 @@ class WobinComprobations(models.Model):
 
     @api.one
     def _set_mov_lns_aux(self):
-        self.mov_lns_aux_id = self.env['wobin.moves.adv.set.lines'].search([('comprobation_id', '=', self.id)])
+        mov_lns_id = self.env['wobin.moves.adv.set.lines'].search([('comprobation_id', '=', self.id)]).id
+        if mov_lns_id: 
+            self.mov_lns_aux_id = mov_lns_id 
+        else:
+            self.mov_lns_aux_id = self.env['wobin.moves.adv.set.lines'].search([('operator_id', '=', self.operator_id.id),
+                                                                                ('trip_id', '=', self.trip_id.id)], limit=1).id
 
 
 
