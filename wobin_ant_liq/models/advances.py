@@ -93,7 +93,7 @@ class WobinAdvances(models.Model):
         #If in fields changed are operator_id and trip_id update 
         #that data in its respective wobin.moves.adv.set.lines rows:
         if vals.get('operator_id', False):
-            
+
             mov_lns_obj = self.env['wobin.moves.adv.set.lines'].browse(self.mov_lns_aux_id.id)
             
             if mov_lns_obj:
@@ -119,14 +119,14 @@ class WobinAdvances(models.Model):
             else:                
                 #Considering there is a new trip with new record for operator 
                 #then create a new record for Wobin Moves Advances Settlements Lines 
-                existing_movs = self.env['wobin.moves.adv.set.lines'].search([('operator_id', '=', res.operator_id.id),
-                                                                            ('trip_id', '=', res.trip_id.id)]).ids                                                                       
+                existing_movs = self.env['wobin.moves.adv.set.lines'].search([('operator_id', '=', self.operator_id.id),
+                                                                              ('trip_id', '=', self.trip_id.id)]).ids                                                                       
                 if not existing_movs:
                     #Create a new record for Wobin Moves Advances Settlements Lines
                     values = {
-                            'operator_id': res.operator_id.id,
-                            'trip_id': res.trip_id.id,
-                            'advance_id': res.id,
+                            'operator_id': self.operator_id.id,
+                            'trip_id': self.trip_id.id,
+                            'advance_id': self.id,
                             }
                     self.env['wobin.moves.adv.set.lines'].create(values)   
 
