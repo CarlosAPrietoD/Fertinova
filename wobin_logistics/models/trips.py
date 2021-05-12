@@ -227,20 +227,29 @@ class WobinLogisticaTrips(models.Model):
     def _set_income_prov(self):
         set_invoice_lns = set()
         inv_init = None; inv_next = None  
+        _logger.info('\n\n\n ID DE VIAJE %s', self.id)
+
         #Get all possible invoice lines given a trip:      
         inv_lines_gotten = self.env['account.invoice.line'].search([('trips_id', '=', self.id)])
+        _logger.info('\n\n\n inv_lines_gotten  %s', inv_lines_gotten )
         
         if inv_lines_gotten:
             #Input those possible invoices into a set
             #in order to avoid duplicate values:
             set_invoice_lns = {inv.invoice_id.id for inv in inv_lines_gotten}
+            _logger.info('\n\n\n set_invoice_lns %s', set_invoice_lns)
 
             #Iterate invoices and just sum up when state is not "cancel":
             for ln in set_invoice_lns:
                 inv_state = self.env['account.invoice'].search([('id', '=', ln)]).state
+                _logger.info('\n\n\n DENTRO de FOR inv_state %s', inv_state)
                 
                 if inv_state != 'cancel':
+                    _logger.info('\n\n\n %s',)
+                    _logger.info('\n\n\n FOR -- ANTES self.income_provisions %s', self.income_provisions)
                     self.income_provisions = self.income_provisions + float(self.env['account.invoice'].search([('id', '=', ln)]).amount_untaxed)
+                    _logger.info('\n\n\n FOR -- DESPUES self.income_provisions %s', self.income_provisions)
+
 
 
 
