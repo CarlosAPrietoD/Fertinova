@@ -37,10 +37,9 @@ class WobinSettlements(models.Model):
     name        = fields.Char(string="Settlement", readonly=True, required=True, copy=False, default='New')
     operator_id = fields.Many2one('hr.employee',string='Operator', track_visibility='always', ondelete='cascade')
     date        = fields.Date(string='Date', track_visibility='always')
-    #trip_id     = fields.Many2one('wobin.logistica.trips', string='Trip', track_visibility='always', ondelete='cascade')
     attachments = fields.Many2many('ir.attachment', relation='settlements_attachment', string='Attachments', track_visibility='always')
     possible_adv_set_lines_ids = fields.One2many('wobin.moves.adv.set.lines', 'settlement_id', string='Possible Moves for operator')
-    settled_adv_set_lines_ids  = fields.One2many('wobin.moves.adv.set.lines', 'settlement_aux_id', string='Settled Moves for operator')
+    settled_adv_set_lines_ids  = fields.One2many('wobin.moves.adv.set.lines', 'settlement_aux_id', string='Settled Moves for operator', compute='_set_settled_lines')
     total_selected   = fields.Float(string='Total of Selected Rows $', digits=(15,2))
     total_settlement = fields.Float(string='Total of Settlement $', digits=(15,2))
     amount_to_settle = fields.Float(string='Amount to Settle $', digits=(15,2))
@@ -51,16 +50,14 @@ class WobinSettlements(models.Model):
     # Fields for analysis:
     advance_sum_amnt      = fields.Float(string='Advances', digits=(15,2))#, compute='set_advance_sum_amnt')
     comprobation_sum_amnt = fields.Float(string='Comprobations', digits=(15,2))#, compute='set_comprobation_sum_amnt')
-    #amount_to_settle      = fields.Float(string='Amount to Settle $', digits=(15,2), compute='set_amount_to_settle')
     btn_crt_payment    = fields.Boolean(compute="set_flag_btn_crt_payment", default=False)
     btn_mark_settle    = fields.Boolean(compute="set_flag_btn_mark_settle", default=False)
     btn_debtor_new_adv = fields.Boolean(compute="set_flag_btn_debtor_new_a", default=False)
     label_process      = fields.Text(string='')
-    payment_related_id = fields.Many2one('account.payment', string='Related Payment', compute='set_related_payment', ondelete='cascade')    
-    #acc_mov_related_id = fields.Many2one('account.move', string='Related Account Move', compute='set_related_acc_mov', ondelete='cascade')    
-    advance_related_id = fields.Many2one('wobin.advances', string='Related Advance', compute='set_related_advance', ondelete='cascade')    
+    payment_related_id = fields.Many2one('account.payment', string='Related Payment', compute='set_related_payment')    
+    advance_related_id = fields.Many2one('wobin.advances', string='Related Advance', compute='set_related_advance')    
     trips_related_ids  = fields.Many2many('wobin.logistica.trips')
-    mov_lns_ad_set_id  = fields.Many2one('wobin.moves.adv.set.lines', ondelete='cascade')
+    mov_lns_ad_set_id  = fields.Many2one('wobin.moves.adv.set.lines')
     company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('your.module'))
 
 
@@ -73,7 +70,7 @@ class WobinSettlements(models.Model):
 
 
     @api.onchange('possible_adv_set_lines_ids')
-    def _onchange_comprobation_lines_ids(self):        
+    def _onchange_comprobation_lines_ids(self):     
         # Only sum up lines which are selected by user:
         sum_amount = sum(line.amount_to_settle for line in self.possible_adv_set_lines_ids if line.check_selection == True)
         # Assign to total selected:
@@ -87,56 +84,21 @@ class WobinSettlements(models.Model):
         sum_comprobations = sum(line.comprobation_sum_amnt for line in self.possible_adv_set_lines_ids if line.check_selection == True)
         self.comprobation_sum_amnt = sum_comprobations
 
-        list_ids = []
-        for line in self.possible_adv_set_lines_ids:
-            if line.check_selection == True:
-                list_ids.append(line.id)     
-        self.settled_adv_set_lines_ids = [(6, 0, list_ids)] 
-
-
         list_trips = []
         for ln in self.possible_adv_set_lines_ids:
             if ln.check_selection == True:
                 list_trips.append(ln.trip_id.id)
                 print('\n\n\n list_trips ',list_trips)          
         self.trips_related_ids = [(6, 0, list_trips)] 
-        self.update({'trips_related_ids': [(6, 0, list_trips)]})
-        
-        print('\n\n\n self.trips_id ', self.trips_related_ids)      
-                         
+        self.update({'trips_related_ids': [(6, 0, list_trips)]}) 
 
-    '''
-    @api.one
-    def set_advance_sum_amnt(self):
-        #Sum all amounts from the same operator whitin a given trip
-        sql_query = """SELECT sum(amount) 
-                         FROM wobin_advances 
-                        WHERE trip_id = %s AND operator_id = %s"""
-        self.env.cr.execute(sql_query, (self.trip_id.id, self.operator_id.id,))
-        result = self.env.cr.fetchone()
-
-        if result:                    
-            self.advance_sum_amnt = result[0]
     
+    
+    @api.one
+    @api.depends('possible_adv_set_lines_ids')
+    def _set_settled_lines(self):
+        self.settled_adv_set_lines_ids = [(6, 0, self.possible_adv_set_lines_ids.filtered(lambda o: o.check_selection).ids)]                  
 
-    @api.one   
-    def set_comprobation_sum_amnt(self):
-        #Sum all amounts from the same operator whitin a given trip
-        sql_query = """SELECT sum(amount) 
-                         FROM wobin_comprobations 
-                        WHERE trip_id = %s AND operator_id = %s"""
-        self.env.cr.execute(sql_query, (self.trip_id.id, self.operator_id.id,))
-        result = self.env.cr.fetchone()
-
-        if result:                    
-            self.comprobation_sum_amnt = result[0]
-
-
-    @api.one  
-    def set_amount_to_settle(self):
-        #Determine 'amount to settle' by doing subtraction comprobation - advance
-        self.amount_to_settle = self.comprobation_sum_amnt - self.advance_sum_amnt
-    '''
 
 
     @api.one

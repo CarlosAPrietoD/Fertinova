@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api
 from odoo.addons import decimal_precision as dp
+import logging
+_logger = logging.getLogger(__name__)
 
 
 class WobinAdvances(models.Model):
@@ -31,11 +33,11 @@ class WobinAdvances(models.Model):
             if not existing_movs:
                 #Create a new record for Wobin Moves Advances Settlements Lines
                 values = {
-                          'operator_id': res.operator_id.id,
-                          'trip_id': res.trip_id.id,
-                         }
+                        'operator_id': res.operator_id.id,
+                        'trip_id': res.trip_id.id,
+                        'advance_id': res.id,
+                        }
                 self.env['wobin.moves.adv.set.lines'].create(values) 
-
 
 
             #If a new record was created successfully and settlement related exists
@@ -67,6 +69,7 @@ class WobinAdvances(models.Model):
         return res
 
 
+
     name        = fields.Char(string="Advance", readonly=True, required=True, copy=False, default='New')
     operator_id = fields.Many2one('hr.employee',string='Operator', track_visibility='always', ondelete='cascade')
     date        = fields.Date(string='Date', track_visibility='always')
@@ -75,10 +78,59 @@ class WobinAdvances(models.Model):
     expenses_to_check  = fields.Float(string='Pending Expenses to Check', digits=(15,2), compute='set_expenses_to_check', track_visibility='always')
     payment_related_id = fields.Many2one('account.payment', string='Related Payment', compute='set_related_payment', track_visibility='always')
     payment_related_id_aux = fields.Many2one('account.payment', string='Related Payment')
-    mov_lns_ad_set_id  = fields.Many2one('wobin.moves.adv.set.lines', ondelete='cascade')
-    settlement_id      = fields.Many2one('wobin.settlements', string='Settlement', ondelete='cascade')
-    money_not_consider = fields.Boolean(string='', default=False)
+    mov_lns_ad_set_id      = fields.Many2one('wobin.moves.adv.set.lines', ondelete='cascade')
+    mov_lns_aux_id         = fields.Many2one('wobin.moves.adv.set.lines', compute='_set_mov_lns_aux')
+    settlement_id          = fields.Many2one('wobin.settlements', string='Settlement', ondelete='cascade')
+    money_not_consider     = fields.Boolean(string='', default=False)
     company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('your.module'))
+
+
+    @api.multi
+    def write(self, vals):
+        #Override write method in order to detect fields changed:
+        res = super(WobinAdvances, self).write(vals)  
+
+        #If in fields changed are operator_id and trip_id update 
+        #that data in its respective wobin.moves.adv.set.lines rows:
+        if vals.get('operator_id', False):
+
+            mov_lns_obj = self.env['wobin.moves.adv.set.lines'].browse(self.mov_lns_aux_id.id)
+            
+            if mov_lns_obj:
+                mov_lns_obj.operator_id = vals['operator_id']
+
+        if vals.get('trip_id', False):
+
+            mov_lns_obj = self.env['wobin.moves.adv.set.lines'].browse(self.mov_lns_aux_id.id)
+            
+            if mov_lns_obj:
+                mov_lns_obj.trip_id = vals['trip_id'] 
+
+                sql_query = """SELECT count(*) 
+                               FROM wobin_moves_adv_set_lines
+                               WHERE operator_id = %s AND trip_id = %s"""
+                self.env.cr.execute(sql_query, (self.operator_id.id, self.trip_id.id,))
+                result = self.env.cr.fetchone()
+
+                if result:                   
+                    if result[0] > 1:
+                        self.env['wobin.moves.adv.set.lines'].browse(self.mov_lns_aux_id.id).unlink()
+            
+            else:                
+                #Considering there is a new trip with new record for operator 
+                #then create a new record for Wobin Moves Advances Settlements Lines 
+                existing_movs = self.env['wobin.moves.adv.set.lines'].search([('operator_id', '=', self.operator_id.id),
+                                                                              ('trip_id', '=', self.trip_id.id)]).ids                                                                       
+                if not existing_movs:
+                    #Create a new record for Wobin Moves Advances Settlements Lines
+                    values = {
+                            'operator_id': self.operator_id.id,
+                            'trip_id': self.trip_id.id,
+                            'advance_id': self.id,
+                            }
+                    self.env['wobin.moves.adv.set.lines'].create(values)   
+
+        return res                
 
 
 
@@ -123,3 +175,14 @@ class WobinAdvances(models.Model):
         if payment_related:
             self.payment_related_id = payment_related
             self.write({'payment_related_id_aux': payment_related})
+
+
+
+    @api.one
+    def _set_mov_lns_aux(self):
+        mov_lns_id = self.env['wobin.moves.adv.set.lines'].search([('advance_id', '=', self.id)]).id
+        if mov_lns_id: 
+            self.mov_lns_aux_id = mov_lns_id 
+        else:
+            self.mov_lns_aux_id = self.env['wobin.moves.adv.set.lines'].search([('operator_id', '=', self.operator_id.id),
+                                                                                ('trip_id', '=', self.trip_id.id)], limit=1).id

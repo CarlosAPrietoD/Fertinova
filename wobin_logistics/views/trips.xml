@@ -171,7 +171,7 @@
                                   </div>  
                                   <field name="discharge_location"/>
                                   <field name="advance_ids" widget="many2many_tags"/>                                                                    
-                                  <field name="sales_order_id" attrs="{'invisible': [('state', '!=', 'discharged')]}" readonly="True"/>
+                                  <field name="sales_order_id" readonly="True"/>
                               </group>
                             </div>  
                           </div> 
