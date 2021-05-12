@@ -255,14 +255,20 @@ class WobinLogisticaTrips(models.Model):
         #Get possible invoices given this trip from lines of invoices:       
         inv_lines_gotten = self.env['account.invoice.line'].search([('trips_id', '=', self.id)])
         
-        if inv_lines_gotten:            
-            #Iterate over those invoices but stop proccess at the moment when a invoice not canceled is retrieved    
-            for line in inv_lines_gotten:                
-                inv_state = self.env['account.invoice'].search([('id', '=', line.invoice_id.id)]).state        
-                
-                if inv_state != 'cancel':                
-                    self.invoice_status = inv_state
-                    break
+        if inv_lines_gotten:               
+            if len(inv_lines_gotten) == 1:         
+                invoice_id = self.env['account.invoice.line'].search([('trips_id', '=', self.id)], limit=1).invoice_id.id
+                self.invoice_status = self.env['account.invoice'].search([('id', '=', invoice_id)]).state                
+
+            else:
+                # Iterate over those invoices but stop proccess 
+                # at the moment when a invoice not canceled is retrieved    
+                for line in inv_lines_gotten:                
+                    inv_state = self.env['account.invoice'].search([('id', '=', line.invoice_id.id)]).state        
+                    
+                    if inv_state != 'cancel':                
+                        self.invoice_status = inv_state
+                        break
 
 
 
