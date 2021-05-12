@@ -261,7 +261,7 @@ class WobinLogisticaTrips(models.Model):
                 inv_state = self.env['account.invoice'].search([('id', '=', line.invoice_id.id)]).state        
                 
                 if inv_state != 'cancel':                
-                    self.invoice_status = self.env['account.invoice'].search([('id', '=', invoice_id)]).state
+                    self.invoice_status = self.env['account.invoice'].search([('id', '=', line.invoice_id.id)]).state
                     break
 
 
