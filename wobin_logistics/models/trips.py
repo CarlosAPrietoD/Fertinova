@@ -225,20 +225,23 @@ class WobinLogisticaTrips(models.Model):
 
     @api.one
     def _set_income_prov(self):
-        inv_init = None; inv_next = None
+        set_invoice_lns = set()
+        inv_init = None; inv_next = None  
+
+        #Get all possible invoice lines given a trip:      
         inv_lines_gotten = self.env['account.invoice.line'].search([('trips_id', '=', self.id)])
         
         if inv_lines_gotten:
+            #Input those possible invoices into a set
+            #in order to avoid duplicate values:
+            set_invoice_lns = {inv.invoice_id.id for inv in inv_lines_gotten}
 
-            for line in inv_lines_gotten:
-                inv_init = line.invoice_id.id
-                inv_state = self.env['account.invoice'].search([('id', '=', inv_init)]).state
-        
-                if inv_init != inv_next and inv_state != 'cancel':
-                    self.income_provisions = self.income_provisions + line.price_subtotal
-            
-            inv_next = line.invoice_id.id        
-        #self.income_provisions = self.env['account.invoice.line'].search([('trips_id', '=', self.id)], limit=1).price_subtotal
+            #Iterate invoices and just sum up when state is not "cancel":
+            for ln in set_invoice_lns:
+                inv_state = self.env['account.invoice'].search([('id', '=', ln)]).state
+                
+                if inv_state != 'cancel':
+                    self.income_provisions = self.income_provisions + float(self.env['account.invoice'].search([('id', '=', ln)]).amount_untaxed)
 
 
 

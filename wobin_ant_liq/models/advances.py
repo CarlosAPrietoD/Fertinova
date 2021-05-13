@@ -170,7 +170,8 @@ class WobinAdvances(models.Model):
     #@api.depends('name')
     def set_related_payment(self):
         #Retrieve related payment to this advance
-        payment_related = self.env['account.payment'].search([('advance_id', '=', self.id)], limit=1).id 
+        payment_related = self.env['account.payment'].search([('advance_id', '=', self.id), 
+                                                              ('state', '!=', 'cancelled')], limit=1).id 
 
         if payment_related:
             self.payment_related_id = payment_related
