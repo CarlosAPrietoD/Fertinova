@@ -39,7 +39,7 @@ class WobinSettlements(models.Model):
     date        = fields.Date(string='Date', track_visibility='always')
     attachments = fields.Many2many('ir.attachment', relation='settlements_attachment', string='Attachments', track_visibility='always')
     possible_adv_set_lines_ids = fields.One2many('wobin.moves.adv.set.lines', 'settlement_id', string='Possible Moves for operator')
-    settled_adv_set_lines_ids  = fields.One2many('wobin.moves.adv.set.lines', 'settlement_aux_id', string='Settled Moves for operator', compute='_set_settled_lines')
+    settled_adv_set_lines_ids  = fields.One2many('wobin.moves.adv.set.lines', 'settlement_aux_id', string='Settled Moves for operator', compute='_set_settled_lines', store=True)
     total_selected   = fields.Float(string='Total of Selected Rows $', digits=(15,2))
     total_settlement = fields.Float(string='Total of Settlement $', digits=(15,2))
     amount_to_settle = fields.Float(string='Amount to Settle $', digits=(15,2))
