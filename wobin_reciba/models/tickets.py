@@ -194,6 +194,20 @@ class RecibaTicket(models.Model):
     def _get_name_weigher(self):
         #Obtener analista
         return self.env.user.name
+
+    @api.model
+    def _get_operation_type(self):
+        type_id = 0
+        if self.operation_type == 'in':
+            type_id = self.env['stock.picking.type'].search([('display_name','=','Warehouse: Recepciones')]).id
+        elif self.operation_type == 'out':
+            type_id = self.env['stock.picking.type'].search([('display_name','=','Warehouse: Órdenes de entrega')]).id
+        elif self.operation_type == 'dev_sale':
+            type_id = self.env['stock.picking.type'].search([('display_name','=','Warehouse: Devolucion de Órdenes de entrega')]).id
+        elif self.operation_type == 'dev_purchase':
+            type_id = self.env['stock.picking.type'].search([('display_name','=','Warehouse: Devolucion de Recepciones')]).id
+        
+
     
     #------------------------------------Datos---------------------------------------------
     company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('reciba.ticket'))
@@ -308,17 +322,17 @@ class RecibaTicket(models.Model):
         #metodo para obtener el tipo de operacion
         operation_id = 0
         if self.operation_type=='in':
-            operation_id = self.env['stock.picking.type'].search(['|',('name','=','Recepciones'),('name','=','Receipts')], limit=1).id
+            operation_id = self.env['stock.picking.type'].search(['|',('name','=','Recepciones'),('name','=','Receipts'),('warehouse_id.name','=','Warehouse')], limit=1).id
         elif self.operation_type=='out':
-            operation_id = self.env['stock.picking.type'].search(['|',('name','=','Órdenes de entrega'),('name','=','Delivery Orders')], limit=1).id
+            operation_id = self.env['stock.picking.type'].search(['|',('name','=','Órdenes de entrega'),('name','=','Delivery Orders'),('warehouse_id.name','=','Warehouse')], limit=1).id
         elif self.operation_type=='dev_sale':
-            operation_id = self.env['stock.picking.type'].search([('name','=','Devolucion de Órdenes de entrega')], limit=1).id
+            operation_id = self.env['stock.picking.type'].search([('name','=','Devolucion de Órdenes de entrega'),('warehouse_id.name','=','Warehouse')], limit=1).id
         elif self.operation_type=='dev_purchase':
-            operation_id = self.env['stock.picking.type'].search([('name','=','Devolucion de Recepciones')], limit=1).id
+            operation_id = self.env['stock.picking.type'].search([('name','=','Devolucion de Recepciones'),('warehouse_id.name','=','Warehouse')], limit=1).id
         elif self.operation_type=='transfer':
-            operation_id = self.env['stock.picking.type'].search([('name','=','Transferencias internas')], limit=1).id
+            operation_id = self.env['stock.picking.type'].search([('name','=','Transferencias internas'),('warehouse_id.name','=','Warehouse')], limit=1).id
         elif self.operation_type=='manufacturing':
-            operation_id = self.env['stock.picking.type'].search(['|',('name','=','Fabricación'),('name','=','Manufacturing')], limit=1).id
+            operation_id = self.env['stock.picking.type'].search(['|',('name','=','Fabricación'),('name','=','Manufacturing'),('warehouse_id.name','=','Warehouse')], limit=1).id
         self.operation_type_id = operation_id
 
     @api.onchange('quality_id')
