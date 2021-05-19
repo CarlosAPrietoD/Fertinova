@@ -193,20 +193,7 @@ class RecibaTicket(models.Model):
     @api.model
     def _get_name_weigher(self):
         #Obtener analista
-        return self.env.user.name
-
-    @api.model
-    def _get_operation_type(self):
-        type_id = 0
-        if self.operation_type == 'in':
-            type_id = self.env['stock.picking.type'].search([('display_name','=','Warehouse: Recepciones')]).id
-        elif self.operation_type == 'out':
-            type_id = self.env['stock.picking.type'].search([('display_name','=','Warehouse: Órdenes de entrega')]).id
-        elif self.operation_type == 'dev_sale':
-            type_id = self.env['stock.picking.type'].search([('display_name','=','Warehouse: Devolucion de Órdenes de entrega')]).id
-        elif self.operation_type == 'dev_purchase':
-            type_id = self.env['stock.picking.type'].search([('display_name','=','Warehouse: Devolucion de Recepciones')]).id
-        
+        return self.env.user.name        
 
     
     #------------------------------------Datos---------------------------------------------
@@ -1090,3 +1077,22 @@ class AccountInvoice(models.Model):
     _inherit = 'account.invoice'
 
     reciba_id = fields.One2many('reciba.invoice', 'invoice_id', string="Boleta reciba")
+
+#=============================================Warehouse fedault==================================================
+class SaleOrder(models.Model):
+    _inherit = 'sale.order'
+
+    def _get_warehouse(self):
+        warehouse = self.env['stock.warehouse'].search([('name','=','Warehouse')], limit=1).id
+        self.warehouse_id = warehouse
+
+    warehouse_id = fields.Many2one(default=_get_warehouse)
+
+class PurchaseOrder(models.Model):
+    _inherit = 'purchase.order'
+
+    def _get_warehouse(self):
+        warehouse = self.env['stock.picking.type'].search(['|',('name','=','Recepciones'),('name','=','Receipts'),('warehouse_id.name','=','Warehouse')], limit=1).id
+        self.warehouse_id = warehouse
+
+    picking_type_id = fields.Many2one(default=_get_warehouse)
