@@ -1084,7 +1084,7 @@ class SaleOrder(models.Model):
 
     def _get_warehouse(self):
         warehouse = self.env['stock.warehouse'].search([('name','=','Warehouse')], limit=1).id
-        self.warehouse_id = warehouse
+        return warehouse
 
     warehouse_id = fields.Many2one(default=_get_warehouse)
 
@@ -1093,6 +1093,6 @@ class PurchaseOrder(models.Model):
 
     def _get_warehouse(self):
         warehouse = self.env['stock.picking.type'].search(['|',('name','=','Recepciones'),('name','=','Receipts'),('warehouse_id.name','=','Warehouse')], limit=1).id
-        self.warehouse_id = warehouse
+        return warehouse
 
     picking_type_id = fields.Many2one(default=_get_warehouse)
