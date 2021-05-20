@@ -309,19 +309,19 @@ class RecibaTicket(models.Model):
         operation_id = 0
         if self.operation_type=='in':
             operation_id = self.env['stock.picking.type'].search(['|',('name','=','Recepciones'),('name','=','Receipts'),('warehouse_id.name','=','Warehouse')], limit=1).id
-            location = self.env['stock.picking.type'].search([('display_name','=','Ubicaciones de socios/Proveedores')], limit=1).id
+            location = self.env['stock.location'].search([('display_name','=','Ubicaciones de socios/Proveedores')], limit=1).id
             self.origin_id = location
         elif self.operation_type=='out':
             operation_id = self.env['stock.picking.type'].search(['|',('name','=','Órdenes de entrega'),('name','=','Delivery Orders'),('warehouse_id.name','=','Warehouse')], limit=1).id
-            location = self.env['stock.picking.type'].search([('display_name','=','Ubicaciones de socios/Clientes')], limit=1).id
+            location = self.env['stock.location'].search([('display_name','=','Ubicaciones de socios/Clientes')], limit=1).id
             self.destination_id = location
         elif self.operation_type=='dev_sale':
             operation_id = self.env['stock.picking.type'].search([('name','=','Devolucion de Órdenes de entrega'),('warehouse_id.name','=','Warehouse')], limit=1).id
-            location = self.env['stock.picking.type'].search([('display_name','=','Ubicaciones de socios/Clientes')], limit=1).id
+            location = self.env['stock.location'].search([('display_name','=','Ubicaciones de socios/Clientes')], limit=1).id
             self.origin_id = location
         elif self.operation_type=='dev_purchase':
             operation_id = self.env['stock.picking.type'].search([('name','=','Devolucion de Recepciones'),('warehouse_id.name','=','Warehouse')], limit=1).id
-            location = self.env['stock.picking.type'].search([('display_name','=','Ubicaciones de socios/Proveedores')], limit=1).id
+            location = self.env['stock.location'].search([('display_name','=','Ubicaciones de socios/Proveedores')], limit=1).id
             self.destination_id = location
         elif self.operation_type=='transfer':
             operation_id = self.env['stock.picking.type'].search([('name','=','Transferencias internas'),('warehouse_id.name','=','Warehouse')], limit=1).id
