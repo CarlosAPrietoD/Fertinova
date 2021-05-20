@@ -193,8 +193,7 @@ class RecibaTicket(models.Model):
     @api.model
     def _get_name_weigher(self):
         #Obtener analista
-        return self.env.user.name        
-
+        return self.env.user.name      
     
     #------------------------------------Datos---------------------------------------------
     company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('reciba.ticket'))
@@ -310,12 +309,20 @@ class RecibaTicket(models.Model):
         operation_id = 0
         if self.operation_type=='in':
             operation_id = self.env['stock.picking.type'].search(['|',('name','=','Recepciones'),('name','=','Receipts'),('warehouse_id.name','=','Warehouse')], limit=1).id
+            location = self.env['stock.picking.type'].search([('display_name','=','Ubicaciones de socios/Proveedores')], limit=1).id
+            self.origin_id = location
         elif self.operation_type=='out':
             operation_id = self.env['stock.picking.type'].search(['|',('name','=','Órdenes de entrega'),('name','=','Delivery Orders'),('warehouse_id.name','=','Warehouse')], limit=1).id
+            location = self.env['stock.picking.type'].search([('display_name','=','Ubicaciones de socios/Clientes')], limit=1).id
+            self.destination_id = location
         elif self.operation_type=='dev_sale':
             operation_id = self.env['stock.picking.type'].search([('name','=','Devolucion de Órdenes de entrega'),('warehouse_id.name','=','Warehouse')], limit=1).id
+            location = self.env['stock.picking.type'].search([('display_name','=','Ubicaciones de socios/Clientes')], limit=1).id
+            self.origin_id = location
         elif self.operation_type=='dev_purchase':
             operation_id = self.env['stock.picking.type'].search([('name','=','Devolucion de Recepciones'),('warehouse_id.name','=','Warehouse')], limit=1).id
+            location = self.env['stock.picking.type'].search([('display_name','=','Ubicaciones de socios/Proveedores')], limit=1).id
+            self.destination_id = location
         elif self.operation_type=='transfer':
             operation_id = self.env['stock.picking.type'].search([('name','=','Transferencias internas'),('warehouse_id.name','=','Warehouse')], limit=1).id
         elif self.operation_type=='manufacturing':
@@ -1082,17 +1089,16 @@ class AccountInvoice(models.Model):
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
+    @api.onchange('partner_id')
     def _get_warehouse(self):
         warehouse = self.env['stock.warehouse'].search([('name','=','Warehouse')], limit=1).id
-        return warehouse
+        self.warehouse_id = warehouse
 
-    warehouse_id = fields.Many2one(default=_get_warehouse)
 
 class PurchaseOrder(models.Model):
     _inherit = 'purchase.order'
 
+    @api.onchange('partner_id')
     def _get_warehouse(self):
         warehouse = self.env['stock.picking.type'].search(['|',('name','=','Recepciones'),('name','=','Receipts'),('warehouse_id.name','=','Warehouse')], limit=1).id
-        return warehouse
-
-    picking_type_id = fields.Many2one(default=_get_warehouse)
+        self.picking_type_id = warehouse
