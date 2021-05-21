@@ -240,7 +240,7 @@ class RecibaTicket(models.Model):
     sale_invoice_status = fields.Selection(related='sale_id.invoice_status', string="Estatus de facturación")
     purchase_id = fields.Many2one('purchase.order', string="Pedido de compra", domain="[('company_id','=',company_id)]", track_visibility='onchange')
     purchase_invoice_status = fields.Selection(related='purchase_id.invoice_status', string="Estatus de facturación")
-    partner_id = fields.Many2one('res.partner', string="Contacto", track_visibility='onchange')
+    partner_id = fields.Many2one('res.partner', string="Contacto", domain="[('company_id','=',company_id)]", track_visibility='onchange')
     list_production_id = fields.Many2one('mrp.bom', string="Lista de materiales")
     origin = fields.Char(string="Documento origen", track_visibility='onchange')
     
