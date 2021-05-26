@@ -25,6 +25,7 @@
       <field name="arch" type="xml">
         <tree>
           <field name="name"/>  
+          <field name="client_id"/>
           <field name="state"/> 
           <field name="contracts_id"/>
           <field name="trip_taxes" widget="many2many_tags"/> 
