@@ -42,8 +42,11 @@ class StockPicking(models.Model):
 
             #Fill with this fixed data 
             picking_type     = self.env['stock.picking.type'].search([('id', '=', 173)]).id 
-            location_id      = self.env['stock.location'].search([('id', '=', 9)]).id                                   
+            _logger.info('\n\n\n picking_type: %s\n\n\n', picking_type)
+            location_id      = self.env['stock.location'].search([('id', '=', 9)]).id    
+            _logger.info('\n\n\n ocation_id: %s\n\n\n', location_id)
             location_dest_id = self.env['stock.location'].search([('id', '=', 1257)]).id 
+            _logger.info('\n\n\n location_id_des: %s\n\n\n', location_dest_id)
 
             #Context to pre-fill with data new window:
             ctxt = {
@@ -97,7 +100,9 @@ class StockPicking(models.Model):
 
             #Fill with this fixed data 
             picking_type     = self.env['stock.picking.type'].search([('id', '=', 170)]).id 
-            location_id      = self.env['stock.location'].search([('name', '=', self.location_id.name)]).id                                                                    
+            _logger.info('\n\n\n picking_type : %s\n\n\n', picking_type)
+            location_id      = self.env['stock.location'].search([('name', '=', self.location_id.name)]).id    
+            _logger.info('\n\n\n location_id: %s\n\n\n', ocation_id)
 
             #Context to pre-fill with data new window:
             ctxt = {
