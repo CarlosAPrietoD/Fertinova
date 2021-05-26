@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from collections import defaultdict
 from odoo import models, fields, api
+import logging
+_logger = logging.getLogger(__name__)
 
 
 class StockPicking(models.Model):
@@ -15,7 +17,9 @@ class StockPicking(models.Model):
     def open_stock_picking_waste(self):
         #Get current company_id from user where this process will apply just to GRANERO:
         company_aux_id = self.env['res.company'].browse(self.env['res.company']._company_default_get('your.module')).id
+        _logger.info('\n\n\n company_aux_id: %s\n\n\n', company_aux_id)
         company_id = company_aux_id.id
+        _logger.info('\n\n\n company_id: %s\n\n\n', company_id)
 
         #GRANERO is ID '2' in Companies:
         if company_id == 2:
