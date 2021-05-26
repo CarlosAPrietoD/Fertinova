@@ -102,7 +102,7 @@ class StockPicking(models.Model):
             picking_type     = self.env['stock.picking.type'].search([('id', '=', 170)]).id 
             _logger.info('\n\n\n picking_type : %s\n\n\n', picking_type)
             location_id      = self.env['stock.location'].search([('name', '=', self.location_id.name)]).id    
-            _logger.info('\n\n\n location_id: %s\n\n\n', ocation_id)
+            _logger.info('\n\n\n location_id: %s\n\n\n', location_id)
 
             #Context to pre-fill with data new window:
             ctxt = {
