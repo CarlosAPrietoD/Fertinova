@@ -34,7 +34,9 @@ class StockPicking(models.Model):
             for line in self.move_ids_without_package:  
                 #Construct tuple item for each line (0, 0, dictionary_vals)
                 dictionary_vals = {
-                    'product_id': line.product_id.id
+                    'name': line.name,
+                    'product_id': line.product_id.id,
+                    'is_locked': False
                 }
                 item = (0, 0, dictionary_vals)
                 #Append into list which it will be used later in context:
@@ -93,7 +95,9 @@ class StockPicking(models.Model):
             for line in self.move_ids_without_package:  
                 #Construct tuple item for each line (0, 0, dictionary_vals)
                 dictionary_vals = {
-                    'product_id': line.product_id.id
+                    'name': line.name,
+                    'product_id': line.product_id.id,
+                    'is_locked': False
                 }
                 item = (0, 0, dictionary_vals)
                 #Append into list which it will be used later in context:
