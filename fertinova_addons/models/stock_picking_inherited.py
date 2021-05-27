@@ -35,8 +35,11 @@ class StockPicking(models.Model):
                 #Construct tuple item for each line (0, 0, dictionary_vals)
                 dictionary_vals = {
                     'name': line.name,
+                    'state': 'draft',
                     'product_id': line.product_id.id,
-                    'is_locked': False
+                    'date_expected': lambda self: fields.datetime.now(),
+                    'is_locked': False,
+                    'show_operations': False
                 }
                 item = (0, 0, dictionary_vals)
                 #Append into list which it will be used later in context:
@@ -96,8 +99,11 @@ class StockPicking(models.Model):
                 #Construct tuple item for each line (0, 0, dictionary_vals)
                 dictionary_vals = {
                     'name': line.name,
+                    'state': 'draft',
                     'product_id': line.product_id.id,
-                    'is_locked': False
+                    'date_expected': lambda self: fields.datetime.now(),
+                    'is_locked': False,
+                    'show_operations': False
                 }
                 item = (0, 0, dictionary_vals)
                 #Append into list which it will be used later in context:
