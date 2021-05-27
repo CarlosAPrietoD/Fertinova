@@ -114,7 +114,7 @@ class StockPicking(models.Model):
 
             #Context to pre-fill with data new window:
             ctxt = {
-                'default_name': 'EXC/' + self.name,
+                'default_name': name_seq,
                 'default_picking_type_id': picking_type,
                 'default_location_id': self.location_id.id,
                 'default_origin_transfer_id': self.id,
