@@ -50,6 +50,7 @@ class StockPicking(models.Model):
 
             #Context to pre-fill with data new window:
             ctxt = {
+                'default_name': 'MER/' + self.name,
                 'default_picking_type_id': picking_type,
                 'default_location_id': location_id,
                 'default_location_dest_id': location_dest_id,
@@ -106,6 +107,7 @@ class StockPicking(models.Model):
 
             #Context to pre-fill with data new window:
             ctxt = {
+                'default_name': 'EXC/' + self.name,
                 'default_picking_type_id': picking_type,
                 'default_location_id': self.location_id.id,
                 'default_origin_transfer_id': self.id,
