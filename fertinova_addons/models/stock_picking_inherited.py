@@ -9,6 +9,7 @@ class StockPicking(models.Model):
 
     origin_transfer_id = fields.Many2one('stock.picking', string='Transferencia Origen', track_visibility='always')
 
+    
 
 
     @api.multi
@@ -72,6 +73,7 @@ class StockPicking(models.Model):
             }  
 
 
+        
 
     @api.multi
     def open_stock_picking_surplus(self):
