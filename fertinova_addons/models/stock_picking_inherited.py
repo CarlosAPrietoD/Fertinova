@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from collections import defaultdict
 from odoo import models, fields, api
-import logging
-_logger = logging.getLogger(__name__)
 
 
 class StockPicking(models.Model):
@@ -17,9 +15,7 @@ class StockPicking(models.Model):
     def open_stock_picking_waste(self):
         #Get current company_id from user where this process will apply just to GRANERO:
         company_aux_id = self.env['res.company'].browse(self.env['res.company']._company_default_get('your.module')).id
-        _logger.info('\n\n\n company_aux_id: %s\n\n\n', company_aux_id)
         company_id = company_aux_id.id
-        _logger.info('\n\n\n company_id: %s\n\n\n', company_id)
 
         #GRANERO is ID '2' in Companies:
         if company_id == 2:
@@ -37,7 +33,7 @@ class StockPicking(models.Model):
                     'name': line.name,
                     'state': 'draft',
                     'product_id': line.product_id.id,
-                    'date_expected': lambda self: fields.datetime.now(),
+                    'date_expected': fields.datetime.now(),
                     'is_locked': False,
                     'show_operations': False
                 }
@@ -47,11 +43,8 @@ class StockPicking(models.Model):
 
             #Fill with this fixed data 
             picking_type     = self.env['stock.picking.type'].search([('id', '=', 173)]).id 
-            _logger.info('\n\n\n picking_type: %s\n\n\n', picking_type)
-            location_id      = self.env['stock.location'].search([('id', '=', 9)]).id    
-            _logger.info('\n\n\n ocation_id: %s\n\n\n', location_id)
+            location_id      = self.env['stock.location'].search([('id', '=', 9)]).id                                   
             location_dest_id = self.env['stock.location'].search([('id', '=', 1257)]).id 
-            _logger.info('\n\n\n location_id_des: %s\n\n\n', location_dest_id)
 
             #Context to pre-fill with data new window:
             ctxt = {
@@ -101,7 +94,7 @@ class StockPicking(models.Model):
                     'name': line.name,
                     'state': 'draft',
                     'product_id': line.product_id.id,
-                    'date_expected': lambda self: fields.datetime.now(),
+                    'date_expected': fields.datetime.now(),
                     'is_locked': False,
                     'show_operations': False
                 }
@@ -111,9 +104,7 @@ class StockPicking(models.Model):
 
             #Fill with this fixed data 
             picking_type     = self.env['stock.picking.type'].search([('id', '=', 170)]).id 
-            _logger.info('\n\n\n picking_type : %s\n\n\n', picking_type)
-            location_id      = self.env['stock.location'].search([('name', '=', self.location_id.name)]).id    
-            _logger.info('\n\n\n location_id: %s\n\n\n', location_id)
+            location_id      = self.env['stock.location'].search([('name', '=', self.location_id.name)]).id                                                                    
 
             #Context to pre-fill with data new window:
             ctxt = {
@@ -137,4 +128,4 @@ class StockPicking(models.Model):
                 'target': 'current',
                 'domain': '[]',
                 'context': ctxt            
-            }           
+            }
