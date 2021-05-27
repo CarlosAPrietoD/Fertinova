@@ -30,20 +30,28 @@ class StockPicking(models.Model):
             for line in self.move_ids_without_package:  
                 #Construct tuple item for each line (0, 0, dictionary_vals)
                 dictionary_vals = {
-                    'product_id': line.product_id.id
+                    'name': line.name,
+                    'state': 'draft',
+                    'product_id': line.product_id.id,
+                    'date_expected': fields.datetime.now(),
+                    'product_uom': line.product_uom.id,
+                    'is_locked': False,
+                    'show_operations': False
                 }
                 item = (0, 0, dictionary_vals)
                 #Append into list which it will be used later in context:
                 line_ids_list.append(item)    
 
             #Fill with this fixed data 
+            sequence         = self.env['ir.sequence'].next_by_code('self.wastestock') or 'New'
+            name_seq         = sequence 
             picking_type     = self.env['stock.picking.type'].search([('id', '=', 173)]).id 
             location_id      = self.env['stock.location'].search([('id', '=', 9)]).id                                   
             location_dest_id = self.env['stock.location'].search([('id', '=', 1257)]).id 
 
             #Context to pre-fill with data new window:
             ctxt = {
-                'default_name': 'MER/' + self.name,
+                'default_name': name_seq,
                 'default_picking_type_id': picking_type,
                 'default_location_id': location_id,
                 'default_location_dest_id': location_dest_id,
@@ -86,13 +94,21 @@ class StockPicking(models.Model):
             for line in self.move_ids_without_package:  
                 #Construct tuple item for each line (0, 0, dictionary_vals)
                 dictionary_vals = {
-                    'product_id': line.product_id.id
+                    'name': line.name,
+                    'state': 'draft',
+                    'product_id': line.product_id.id,
+                    'date_expected': fields.datetime.now(),
+                    'product_uom': line.product_uom.id,
+                    'is_locked': False,
+                    'show_operations': False
                 }
                 item = (0, 0, dictionary_vals)
                 #Append into list which it will be used later in context:
                 line_ids_list.append(item)       
 
             #Fill with this fixed data 
+            sequence         = self.env['ir.sequence'].next_by_code('self.surplustock') or 'New'
+            name_seq         = sequence             
             picking_type     = self.env['stock.picking.type'].search([('id', '=', 170)]).id 
             location_id      = self.env['stock.location'].search([('name', '=', self.location_id.name)]).id                                                                    
 
