@@ -7,10 +7,10 @@
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_partner_form"/>	
         <field name="arch" type="xml">          
-            <!--[START] Add required attribute to fields-->
+            <!--[START] Add required attribute to fields
             <field name="city_id" position="attributes">
                 <attribute name="required">1</attribute>
-            </field>           
+            </field>  -->         
             <field name="zip" position="attributes">
                 <attribute name="required">1</attribute>
             </field>          
