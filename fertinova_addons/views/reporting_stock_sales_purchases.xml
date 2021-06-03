@@ -15,10 +15,10 @@
           <field name="name"/>
           <field name="delivery_amount"/>
           <field name="is_waste" invisible="1"/>
-          <field name="waste_id"/> 
+          <field name="waste_id" style="text-align:right;"/> 
           <field name="waste_amount"/>  
           <field name="is_surplus" invisible="1"/>  
-          <field name="surplus_id"/>
+          <field name="surplus_id" style="text-align:right;"/>
           <field name="surplus_amount"/>
           <field name="eff_qty_amount"/> 
           <field name="state" invisible="1"/>                  
