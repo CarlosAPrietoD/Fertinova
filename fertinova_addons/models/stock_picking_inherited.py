@@ -6,11 +6,68 @@ from odoo import models, fields, api
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
-
+    #///////////////////////////////
+    #  Fields to add
+    #///////////////////////////////
     origin_transfer_id = fields.Many2one('stock.picking', string='Transferencia Origen', track_visibility='always')
+    
+    is_waste   = fields.Boolean(string='¿Es merma?')
+    is_surplus = fields.Boolean(string='¿Es excedente?')
+
+    waste_id   = fields.Many2one('stock.picking', string='Folio Merma', compute='_set_waste_id')
+    surplus_id = fields.Many2one('stock.picking', string='Folio Excedente', compute='_set_surplus_id')
+
+    delivery_amount = fields.Float(string='Entrega', digits=(20, 2), compute='_set_delivery_amount')
+    waste_amount    = fields.Float(string='Merma', digits=(20, 2), compute='_set_waste_amount')
+    surplus_amount  = fields.Float(string='Excedente', digits=(20, 2), compute='_set_surplus_amount')
+    eff_qty_amount  = fields.Float(string='Cantidad Efectivamente Recibida', digits=(20, 2), compute='_set_eff_qty_amount')
 
 
 
+    @api.one 
+    def _set_waste_id(self):
+        self.waste_id = self.env['stock.picking'].search([('is_waste', '=', True),
+                                                          ('origin_transfer_id', '=', self.id)]).id         
+
+
+
+    @api.one 
+    def _set_surplus_id(self):
+        self.surplus_id = self.env['stock.picking'].search([('is_surplus', '=', True),
+                                                            ('origin_transfer_id', '=', self.id)]).id 
+
+
+
+    @api.one
+    @api.depends('name')
+    def _set_delivery_amount(self):
+        self.delivery_amount = sum(line.quantity_done for line in self.move_ids_without_package)                                                                    
+
+
+
+    @api.one
+    @api.depends('waste_id')
+    def _set_waste_amount(self):
+        self.waste_amount = sum(line.quantity_done for line in self.waste_id.move_ids_without_package)
+
+
+
+    @api.one
+    @api.depends('surplus_id')
+    def _set_surplus_amount(self):
+        self.surplus_amount = sum(line.quantity_done for line in self.surplus_id.move_ids_without_package)
+
+
+
+    @api.one
+    @api.depends('waste_id', 'surplus_id')
+    def _set_eff_qty_amount(self):          
+        self.eff_qty_amount = self.delivery_amount - self.waste_amount + self.surplus_amount
+
+
+
+    #|-|-|-|-|-|-|-|-|-|-|-|-|-|
+    #Open a new window for waste
     @api.multi
     def open_stock_picking_waste(self):
         #Get current company_id from user where this process will apply just to GRANERO:
@@ -56,6 +113,8 @@ class StockPicking(models.Model):
                 'default_location_id': location_id,
                 'default_location_dest_id': location_dest_id,
                 'default_origin_transfer_id': self.id,
+                'default_is_waste': True,
+                'default_waste_id': self.id,
                 'default_move_ids_without_package': line_ids_list
             }
 
@@ -76,6 +135,8 @@ class StockPicking(models.Model):
 
 
 
+    #|-|-|-|-|-|-|-|-|-|-|-|-|-|-|
+    #Open a new window for surplus
     @api.multi
     def open_stock_picking_surplus(self):
         #Get current company_id from user where this process will apply just to GRANERO:
@@ -118,6 +179,8 @@ class StockPicking(models.Model):
                 'default_picking_type_id': picking_type,
                 'default_location_id': self.location_id.id,
                 'default_origin_transfer_id': self.id,
+                'default_is_surplus': True,
+                'default_surplus_id': self.id,
                 'default_move_ids_without_package': line_ids_list
             }
 

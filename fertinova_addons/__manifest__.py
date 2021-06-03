@@ -23,6 +23,7 @@
         #'views/account_payments_inherited_view.xml',         
         'views/product_template_inherited_view.xml',
         'views/purchase_inherited_view.xml',
+        'views/reporting_stock_sales_purchases.xml',
         'views/res_partner_inherited_view.xml',
         'views/sale_inherited_view.xml',       
         #'views/stock_move_inherited_view.xml',
