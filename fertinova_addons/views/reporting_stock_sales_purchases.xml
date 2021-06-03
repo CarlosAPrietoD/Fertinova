@@ -13,14 +13,14 @@
         <tree>
           <field name="sale_id"/>
           <field name="name"/>
-          <field name="delivery_amount" type="char"/>
+          <field name="delivery_amount"/>
           <field name="is_waste" invisible="1"/>
           <field name="waste_id"/> 
-          <field name="waste_amount" type="char"/>  
+          <field name="waste_amount"/>  
           <field name="is_surplus" invisible="1"/>  
           <field name="surplus_id"/>
-          <field name="surplus_amount" type="char"/>
-          <field name="eff_qty_amount" type="char"/> 
+          <field name="surplus_amount"/>
+          <field name="eff_qty_amount"/> 
           <field name="state" invisible="1"/>                  
         </tree>
       </field>
