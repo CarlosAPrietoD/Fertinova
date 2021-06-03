@@ -59,7 +59,7 @@
       <field name="res_model">stock.picking</field>
       <field name="view_mode">tree</field>
       <field name="view_id" ref="view_analysis_stock_report_sales"/>     
-      <field name="domain">[('sale_id.name', 'not ilike', ''), ('is_waste', '=', False), ('is_surplus', '=', False)]</field>
+      <field name="domain">[('is_waste', '=', False), ('is_surplus', '=', False)]</field>
     </record>
 
     <!-- Purchase Report with Stock Picking with Wastes and Surplus - GENERAL ACTION -->
