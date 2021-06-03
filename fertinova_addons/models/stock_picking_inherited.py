@@ -17,9 +17,9 @@ class StockPicking(models.Model):
     waste_id   = fields.Many2one('stock.picking', string='Folio Merma', compute='_set_waste_id')
     surplus_id = fields.Many2one('stock.picking', string='Folio Excedente', compute='_set_surplus_id')
 
-    delivery_amount = fields.Float(string='Entrega', digits=(20, 2), compute='_set_delivery_amount')
-    waste_amount    = fields.Float(string='Merma', digits=(20, 2), compute='_set_waste_amount')
-    surplus_amount  = fields.Float(string='Excedente', digits=(20, 2), compute='_set_surplus_amount')
+    delivery_amount = fields.Float(string='     Entrega', digits=(20, 2), compute='_set_delivery_amount')
+    waste_amount    = fields.Float(string='     Merma', digits=(20, 2), compute='_set_waste_amount')
+    surplus_amount  = fields.Float(string='     Excedente', digits=(20, 2), compute='_set_surplus_amount')
     eff_qty_amount  = fields.Float(string='Cantidad Efectivamente Recibida', digits=(20, 2), compute='_set_eff_qty_amount')
 
 
