@@ -28,8 +28,8 @@
         'views/stock_move_inherited_view.xml',
         'views/sequences.xml',
         'views/stock_picking_inherited_view.xml',
-        'views/cfdi.xml',
-
+        #'views/cfdi.xml',
+        'views/reporting_stock_sales_purchases.xml',
         'views/report.xml',
 
         #Wizards:
@@ -37,7 +37,7 @@
         'wizard/fuel_invoice.xml',     
 
         #reports
-        'reports/trial_report.xml', 
+        'reports/trial_report.xml',         
     ],
     # only loaded in demonstration mode
     'demo': [
