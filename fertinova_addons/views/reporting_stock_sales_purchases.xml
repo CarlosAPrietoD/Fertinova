@@ -6,8 +6,8 @@
     <!--::::::::::::::::::::::::::::::::::::::::::::-->  
 
     <!-- ANALYSIS of Sales Report with Stock Pickings with Wastes and Surplus - LIST VIEW -->
-    <record id="view_analysis_stock_report_sales" model="ir.ui.view">
-      <field name="name">Análisis de Surtimiento OV</field>
+    <record id="view_analysis_stck_rprt_sls" model="ir.ui.view">
+      <field name="name">stock.picking.tree2</field>
       <field name="model">stock.picking</field>
       <field name="arch" type="xml">
         <tree>
@@ -28,7 +28,7 @@
 
     <!-- ANALYSIS of Purchase Report with Stock Pickings with Wastes and Surplus - LIST VIEW -->
     <record id="view_analysis_stock_report_purchase" model="ir.ui.view">
-      <field name="name">Análisis de Surtimiento OC</field>
+      <field name="name">stock.picking.tree3</field>
       <field name="model">stock.picking</field>
       <field name="arch" type="xml">
         <tree>
@@ -54,13 +54,16 @@
     <!--::::::::::::::::::::::::::::::::::::::::::::-->
 
     <!-- Sales Report with Stock Picking with Wastes and Surplus - GENERAL ACTION -->
-    <record id="action_stock_report_sales" model="ir.actions.act_window">
+    <record id="action_stck_rprt_sls" model="ir.actions.act_window">
       <field name="name">Análisis de Surtimiento OV</field>
       <field name="res_model">stock.picking</field>
       <field name="view_mode">tree</field>
-      <field name="view_id" ref="view_analysis_stock_report_sales"/>     
-      <field name="domain">[('sale_id.name', 'not ilike', ''), ('is_waste', '=', False), ('is_surplus', '=', False)]</field>
+      <field name="view_id" ref="view_analysis_stck_rprt_sls"/>     
+      <field name="domain">[('sale_id.name', '!=', ''), ('is_waste', '=', False), ('is_surplus', '=', False)]</field>
     </record>
+
+
+
 
     <!-- Purchase Report with Stock Picking with Wastes and Surplus - GENERAL ACTION -->
     <record id="action_stock_report_purchase" model="ir.actions.act_window">
@@ -68,17 +71,28 @@
       <field name="res_model">stock.picking</field>
       <field name="view_mode">tree</field>
       <field name="view_id" ref="view_analysis_stock_report_purchase"/>      
-      <field name="domain">[('purchase_id.name', 'not ilike', ''), ('is_waste', '=', False), ('is_surplus', '=', False)]</field>
+      <field name="domain">[('purchase_id.name', '!=', ''), ('is_waste', '=', False), ('is_surplus', '=', False)]</field>
     </record>    
 
 
 
     <!--::::::::::::::::::::::::::::::::::::::::::::-->
     <!--   SUB MENUITEMS                            -->
-    <!--::::::::::::::::::::::::::::::::::::::::::::-->
+    <!--::::::::::::::::::::::::::::::::::::::::::::--> 
     <!-- New Menus for Reports of Stock Picking with Wastes and Surplus -->
-    <menuitem name="Análisis de Surtimiento OV" id="menu_stock_rep_sales" action="action_stock_report_sales" parent="stock.menu_warehouse_report" sequence="160"/>
-    <menuitem name="Análisis de Surtimiento OC" id="menu_stock_rep_purchase" action="action_stock_report_purchase" parent="stock.menu_warehouse_report" sequence="170"/>
+    <menuitem 
+        name="Análisis de Surtimiento OV" 
+        id="menu_stock_rep_sales" 
+        action="action_stck_rprt_sls" 
+        parent="stock.menu_warehouse_report" 
+        sequence="4000"/>
+
+    <menuitem 
+        name="Análisis de Surtimiento OC" 
+        id="menu_stock_rep_purchase" 
+        action="action_stock_report_purchase" 
+        parent="stock.menu_warehouse_report" 
+        sequence="4010"/>
 
   </data>  
 </odoo>     

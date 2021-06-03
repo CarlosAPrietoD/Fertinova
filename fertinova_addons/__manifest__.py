@@ -23,14 +23,13 @@
         #'views/account_payments_inherited_view.xml',         
         'views/product_template_inherited_view.xml',
         'views/purchase_inherited_view.xml',
-        'views/reporting_stock_sales_purchases.xml',
         'views/res_partner_inherited_view.xml',
         'views/sale_inherited_view.xml',       
         #'views/stock_move_inherited_view.xml',
         'views/sequences.xml',
         'views/stock_picking_inherited_view.xml',
         #'views/cfdi.xml',
-
+        'views/reporting_stock_sales_purchases.xml',
         'views/report.xml',
 
         #Wizards:
@@ -38,7 +37,7 @@
         'wizard/fuel_invoice.xml',     
 
         #reports
-        'reports/trial_report.xml', 
+        'reports/trial_report.xml',         
     ],
     # only loaded in demonstration mode
     'demo': [
