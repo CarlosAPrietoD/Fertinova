@@ -211,7 +211,7 @@
               id="wobin_logistics.sub_menuitem_invoicing" 
               parent="wobin_logistics.reports_menu_4"
               action="wobin_logistics.action_invoicing_report" 
-              groups="wobin_logistics.group_wl_access_analysis"
+              groups="wobin_logistics.group_wl_access_analysis,group_wl_access_admin"
               sequence="7"/>    
     <menuitem name="Vehicles" 
               id="wobin_logistics.sub_menuitem_vehicles" 
