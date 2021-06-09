@@ -369,6 +369,11 @@ class RecibaTicket(models.Model):
                     msg = 'Este producto no cuenta con lista de materiales'
                     raise UserError(msg)
 
+    def update_expected(self):
+        #Actualizar cantidad esperada
+        if self.sale_id:
+            self.net_expected = self.sale_id.order_line[0].product_uom_qty - self.sale_id.order_line[0].qty_delivered
+
     def confirm_receipt_ticket(self):
         #Metodo para confirmar la boleta de entrada
         #Condicionales para confirmar la boleta
@@ -382,6 +387,10 @@ class RecibaTicket(models.Model):
             if (self.purchase_id.order_line[0].product_qty-self.purchase_id.order_line[0].qty_received) < self.net_weight:
                 msg = 'El peso neto es mayor a la cantidad faltante en la orden de compra'
                 raise UserError(msg)
+        if self.origin_id == self.destination_id:
+            msg = 'Las ubicaciones de origen y destino deben ser diferentes'
+            raise UserError(msg)
+
         if self.state == 'draft':
             #Asignacion del nombre de acuerdo al destino si esta en modo borrador
             if self.destination_id:
@@ -527,6 +536,9 @@ class RecibaTicket(models.Model):
         if self.delivery == 'price' and self.net_expected < self.net_weight:
             msg = 'El peso neto es mayor a la cantidad pendiente por surtir'
             raise UserError(msg)
+        if self.origin_id == self.destination_id:
+            msg = 'Las ubicaciones de origen y destino deben ser diferentes'
+            raise UserError(msg)
         if self.state == 'draft':
             #Asignacion del nombre de acuerdo al destino si esta en modo borrador
             if self.origin_id:
@@ -642,6 +654,9 @@ class RecibaTicket(models.Model):
         if self.sale_id.order_line[0].qty_delivered < self.net_weight:
             msg = 'El peso neto es mayor a la cantidad entregada en la orden de venta'
             raise UserError(msg)
+        if self.origin_id == self.destination_id:
+            msg = 'Las ubicaciones de origen y destino deben ser diferentes'
+            raise UserError(msg)
         if self.state == 'draft':
             #Asignacion del nombre de acuerdo al destino si esta en modo borrador
             if self.destination_id:
@@ -689,6 +704,9 @@ class RecibaTicket(models.Model):
             raise UserError(msg)
         if self.purchase_id.order_line[0].qty_received < self.net_weight:
             msg = 'El peso neto es mayor a la cantidad entregada de la orden de compra'
+            raise UserError(msg)
+        if self.origin_id == self.destination_id:
+            msg = 'Las ubicaciones de origen y destino deben ser diferentes'
             raise UserError(msg)
         if self.state == 'draft':
             #Asignacion del nombre de acuerdo al destino si esta en modo borrador
