@@ -417,7 +417,11 @@
                                         <field name="gross_weight" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
                                         <field name="tare_weight" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" />
                                         <field name="net_weight" />
-                                        <field name="net_expected" readonly="1" force_save="1" />
+                                        <label for="net_expected"/>
+                                        <div class="o_row">
+                                            <field name="net_expected" readonly="1" force_save="1" />
+                                            <button name="update_expected" type="object" string="Actualizar" class="oe_link"/>
+                                        </div>
                                     </group>
                                     <group>
                                         <field name="gross_date" />
