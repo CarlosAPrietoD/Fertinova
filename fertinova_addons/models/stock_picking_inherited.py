@@ -14,7 +14,7 @@ class StockPicking(models.Model):
     #is_waste   = fields.Boolean(string='¿Es merma?')
     is_surplus = fields.Boolean(string='¿Es excedente?')
 
-    waste_ids  = fields.Many2one('stock.scrap', string='Folio Desecho', compute='_set_waste_ids')
+    waste_ids  = fields.Many2many('stock.scrap', string='Folio Desecho', compute='_set_waste_ids')
     surplus_id = fields.Many2one('stock.picking', string='Folio Excedente', compute='_set_surplus_id')
 
     delivery_amount = fields.Float(string='Entrega', digits=(20, 2), compute='_set_delivery_amount')
