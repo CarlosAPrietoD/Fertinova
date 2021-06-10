@@ -75,9 +75,9 @@ class StockPicking(models.Model):
     @api.depends('sale_id', 'purchase_id')
     def _set_partner(self):   
         if self.sale_id:
-            self.custom_partner_id = self.env['res.partner'].search([('id', '=', self.sale_id.partner_id)]).id
+            self.custom_partner_id = self.env['res.partner'].search([('id', '=', self.sale_id.partner_id.id)]).id
         elif self.purchase_id:       
-            self.custom_partner_id = self.env['res.partner'].search([('id', '=', self.purchase_id.partner_id)]).id
+            self.custom_partner_id = self.env['res.partner'].search([('id', '=', self.purchase_id.partner_id.id)]).id
 
 
 
@@ -85,9 +85,9 @@ class StockPicking(models.Model):
     @api.depends('sale_id', 'purchase_id')
     def _set_date_order(self):   
         if self.sale_id:
-            self.custom_date_order = self.env['sale.order'].search([('id', '=', self.sale_id.partner_id)]).date_order
+            self.custom_date_order = self.env['sale.order'].search([('id', '=', self.sale_id.id)]).date_order
         elif self.purchase_id:       
-            self.custom_date_order = self.env['purchase.order'].search([('id', '=', self.purchase_id.partner_id)]).date_order           
+            self.custom_date_order = self.env['purchase.order'].search([('id', '=', self.purchase_id.id)]).date_order           
 
 
 
@@ -95,9 +95,9 @@ class StockPicking(models.Model):
     @api.depends('sale_id', 'purchase_id')
     def _set_incoterm(self):   
         if self.sale_id:
-            self.custom_incoterm_id = self.env['sale.order'].search([('id', '=', self.sale_id.partner_id)]).incoterm_id.id
+            self.custom_incoterm_id = self.env['sale.order'].search([('id', '=', self.sale_id.id)]).incoterm_id.id
         elif self.purchase_id:       
-            self.custom_incoterm_id = self.env['purchase.order'].search([('id', '=', self.purchase_id.partner_id)]).incoterm_id.id
+            self.custom_incoterm_id = self.env['purchase.order'].search([('id', '=', self.purchase_id.id)]).incoterm_id.id
 
 
 
