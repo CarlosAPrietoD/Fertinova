@@ -95,7 +95,7 @@ class StockPicking(models.Model):
     @api.depends('sale_id', 'purchase_id')
     def _set_incoterm(self):   
         if self.sale_id:
-            self.custom_incoterm_id = self.env['sale.order'].search([('id', '=', self.sale_id.id)]).incoterm_id.id
+            self.custom_incoterm_id = self.env['sale.order'].search([('id', '=', self.sale_id.id)]).incoterm.id
         elif self.purchase_id:       
             self.custom_incoterm_id = self.env['purchase.order'].search([('id', '=', self.purchase_id.id)]).incoterm_id.id
 
