@@ -22,9 +22,9 @@ class StockPicking(models.Model):
     surplus_amount  = fields.Float(string='Excedente', digits=(20, 2), compute='_set_surplus_amount')
     eff_qty_amount  = fields.Float(string='Cantidad Efectivamente Recibida', digits=(20, 2), compute='_set_eff_qty_amount')
 
-    custom_partner_id  = fields.Many2one('res_partner', compute='_set_partner')
+    custom_partner_id  = fields.Many2one('res.partner', string='Cliente', compute='_set_partner')
     custom_date_order  = fields.Datetime(string='Fecha', compute='_set_date_order')
-    custom_incoterm_id = fields.Many2one('account.incoterms', compute='_set_incoterm')
+    custom_incoterm_id = fields.Many2one('account.incoterms', string='Incoterm', compute='_set_incoterm')
 
 
 
@@ -74,9 +74,9 @@ class StockPicking(models.Model):
     @api.depends('sale_id', 'purchase_id')
     def _set_partner(self):   
         if self.sale_id:
-            self.custom_partner_id = self.env['res.partner'].search([('id', '=', self.sale_id.partner_id)]).id
+            self.custom_partner_id = self.env['res.partner'].search([('id', '=', self.sale_id.partner_id.id)]).id
         elif self.purchase_id:       
-            self.custom_partner_id = self.env['res.partner'].search([('id', '=', self.purchase_id.partner_id)]).id
+            self.custom_partner_id = self.env['res.partner'].search([('id', '=', self.purchase_id.partner_id.id)]).id
 
 
 
@@ -84,9 +84,9 @@ class StockPicking(models.Model):
     @api.depends('sale_id', 'purchase_id')
     def _set_date_order(self):   
         if self.sale_id:
-            self.custom_date_order = self.env['sale.order'].search([('id', '=', self.sale_id.partner_id)]).date_order
+            self.custom_date_order = self.env['sale.order'].search([('id', '=', self.sale_id.id)]).date_order
         elif self.purchase_id:       
-            self.custom_date_order = self.env['purchase.order'].search([('id', '=', self.purchase_id.partner_id)]).date_order           
+            self.custom_date_order = self.env['purchase.order'].search([('id', '=', self.purchase_id.id)]).date_order           
 
 
 
@@ -94,9 +94,9 @@ class StockPicking(models.Model):
     @api.depends('sale_id', 'purchase_id')
     def _set_incoterm(self):   
         if self.sale_id:
-            self.custom_incoterm_id = self.env['sale.order'].search([('id', '=', self.sale_id.partner_id)]).incoterm_id.id
+            self.custom_incoterm_id = self.env['sale.order'].search([('id', '=', self.sale_id.id)]).incoterm_id.id
         elif self.purchase_id:       
-            self.custom_incoterm_id = self.env['purchase.order'].search([('id', '=', self.purchase_id.partner_id)]).incoterm_id.id
+            self.custom_incoterm_id = self.env['purchase.order'].search([('id', '=', self.purchase_id.id)]).incoterm_id.id
 
 
 
