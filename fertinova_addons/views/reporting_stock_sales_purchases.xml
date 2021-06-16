@@ -27,6 +27,7 @@
         </tree>
       </field>
     </record>   
+    
 
     <!-- ANALYSIS of Purchase Report with Stock Pickings with Wastes and Surplus - LIST VIEW -->
     <record id="view_analysis_stock_report_purchase" model="ir.ui.view">
