@@ -47,19 +47,20 @@ class StockMove(models.Model):
         account_id = v[2].get('account_id')  
 
         #Retrieval of "code" from model 'account.account' matching with account_id:                    
-        code = self.env['account.account'].search([('id', '=', account_id)]).code         
-                           
-        #Assign and create the new value of analytic_account:           
-        new_vals = v[2] #get the dictionary from original tuple (0, 0, dict{})
-        
-        #Validate that accounts belonging to Equity, Assets and Liabilities must not be considered: 
-        if int(code[0]) not in [1, 2 , 3]:
-          new_vals['analytic_account_id'] = self.analytic_account_id.id                    
-          new_vals['analytic_tag_ids'] = [(6, 0, self.analytic_tag_id.ids)]
+        code = self.env['account.account'].search([('id', '=', account_id)]).code 
 
-        #Append new values into original dictionary:
-        element = (0, 0, new_vals)
-        result.append(element) 
+        if code:                   
+          #Assign and create the new value of analytic_account:           
+          new_vals = v[2] #get the dictionary from original tuple (0, 0, dict{})
+          
+          #Validate that accounts belonging to Equity, Assets and Liabilities must not be considered: 
+          if int(code[0]) not in [1, 2 , 3]:
+            new_vals['analytic_account_id'] = self.analytic_account_id.id                    
+            new_vals['analytic_tag_ids'] = [(6, 0, self.analytic_tag_id.ids)]
+
+          #Append new values into original dictionary:
+          element = (0, 0, new_vals)
+          result.append(element) 
                             
       return result
 #//////////////////////////////////////////////////////////////////////////////////////////////#

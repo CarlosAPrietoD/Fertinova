@@ -14,5 +14,16 @@
         </field>
     </record>
     <!--  TICKET 028  -  DEVELOPED BY SEBASTIAN MENDEZ  -  END   -->
+
+    <record id="view_purchase_lines_filter" model="ir.ui.view">
+        <field name="model">purchase.order.line</field>
+        <field name="inherit_id" ref="studio_customization.default_search_view__cae49ea9-a4d1-4882-918a-4cef3843be10"/>
+        <field name="arch" type="xml">
+            <xpath expr="." position="inside">
+                <field name="order_id" />
+            </xpath>
+        </field>
+    </record>
+
   </data>
 </odoo> 

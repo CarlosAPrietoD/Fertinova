@@ -22,7 +22,7 @@
           <field name="is_surplus" invisible="1"/>  
           <field name="surplus_id"/>
           <field name="surplus_amount"/>
-          <field name="eff_qty_amount"/> 
+          <field name="d_eff_qty_amount"/> 
           <field name="state" invisible="1"/>                  
         </tree>
       </field>
