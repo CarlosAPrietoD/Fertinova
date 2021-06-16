@@ -21,7 +21,7 @@ class StockPicking(models.Model):
     waste_amount     = fields.Float(string='Desecho', digits=(20, 2), compute='_set_waste_amount')
     surplus_amount   = fields.Float(string='Excedente', digits=(20, 2), compute='_set_surplus_amount')
     eff_qty_amount   = fields.Float(string='Cantidad Efectivamente Recibida', digits=(20, 2), compute='_set_eff_qty_amount')
-    d_eff_qty_amount = fields.Float(string='Cantidad Efectivamente Entregada', digits=(20, 2), compute='_set_eff_qty_amount')
+    d_eff_qty_amount = fields.Float(string='Cantidad Efectivamente Entregada', digits=(20, 2), compute='_set_d_eff_qty_amount'
 
     custom_partner_id  = fields.Many2one('res.partner', string='Cliente', compute='_set_partner')
     custom_date_order  = fields.Datetime(string='Fecha', compute='_set_date_order')
@@ -68,6 +68,13 @@ class StockPicking(models.Model):
     @api.depends('waste_amount', 'surplus_amount')
     def _set_eff_qty_amount(self):          
         self.eff_qty_amount = self.delivery_amount - self.waste_amount + self.surplus_amount 
+
+
+
+    @api.one
+    @api.depends('waste_amount', 'surplus_amount')
+    def _set_d_eff_qty_amount(self):          
+        self.d_eff_qty_amount = self.delivery_amount - self.waste_amount + self.surplus_amount                                     
 
     
 
