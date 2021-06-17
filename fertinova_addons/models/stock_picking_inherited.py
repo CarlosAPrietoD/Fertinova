@@ -28,7 +28,7 @@ class StockPicking(models.Model):
     custom_incoterm_id = fields.Many2one('account.incoterms', string='Incoterm', compute='_set_incoterm')
 
     # Odoo Studio Fields - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    x_studio_aplica_flete = fields.Boolean(string='Aplica Flete', compute='_set_aplica_flete')
+    x_studio_aplica_flete = fields.Boolean(string='Aplica Flete', default=True)
     x_studio_pedido_de_compra_flete = fields.Many2one('purchase.order', string='Pedido de compra flete', domain="[('order_line.product_id.name', 'ilike', 'FLETE')]")
 
     @api.one
