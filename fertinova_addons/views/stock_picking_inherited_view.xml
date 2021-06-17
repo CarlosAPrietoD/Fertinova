@@ -22,9 +22,9 @@
                 <attribute name="required">1</attribute>
             </field>  
             <field name="origin" position="attributes">
-                <attribute name="required">1</attribute>
-                <attribute name="attrs">{'readonly': [('state', '!=', 'draft')]}</attribute>
-            </field>         
+                <attribute name="required">1</attribute>                             
+                <attribute name="readonly">['|', '|', ('state', '!=', 'draft'), ('picking_type_code', '=', 'incoming'), ('picking_type_code', '=', 'outgoing')]</attribute>
+            </field>       
             <!--[END] Add required attribute to fields-->
 
             <xpath expr="/form/sheet/notebook/page/field[@name='move_ids_without_package']/tree/field[@name='product_id']" position="after">
