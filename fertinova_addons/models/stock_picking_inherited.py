@@ -17,7 +17,7 @@ class StockPicking(models.Model):
     waste_ids  = fields.Many2many('stock.scrap', string='Folio Desecho', compute='_set_waste_ids')
     surplus_id = fields.Many2one('stock.picking', string='Folio Excedente', compute='_set_surplus_id')
 
-    delivery_amount  = fields.Float(string='Entrega', digits=(20, 2), compute='_set_delivery_amount')
+    delivery_amount  = fields.Float(string='Peso Origen', digits=(20, 2), compute='_set_delivery_amount')
     waste_amount     = fields.Float(string='Desecho', digits=(20, 2), compute='_set_waste_amount')
     surplus_amount   = fields.Float(string='Excedente', digits=(20, 2), compute='_set_surplus_amount')
     eff_qty_amount   = fields.Float(string='Cantidad Efectivamente Recibida', digits=(20, 2), compute='_set_eff_qty_amount')
@@ -26,6 +26,14 @@ class StockPicking(models.Model):
     custom_partner_id  = fields.Many2one('res.partner', string='Cliente', compute='_set_partner')
     custom_date_order  = fields.Datetime(string='Fecha', compute='_set_date_order')
     custom_incoterm_id = fields.Many2one('account.incoterms', string='Incoterm', compute='_set_incoterm')
+
+    # Odoo Studio Fields - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    x_studio_aplica_flete = fields.Boolean(string='Aplica Flete', compute='_set_aplica_flete')
+    x_studio_pedido_de_compra_flete = fields.Many2one('purchase.order', string='Pedido de compra flete', domain="[('order_line.product_id.name', 'ilike', 'FLETE')]")
+
+    @api.one
+    def _set_aplica_flete(self):
+        self.x_studio_aplica_flete = True
 
 
 
