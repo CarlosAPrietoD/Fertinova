@@ -56,7 +56,8 @@ class StockPicking(models.Model):
     @api.one
     @api.depends('name')
     def _set_delivery_amount(self):
-        self.delivery_amount = sum(line.quantity_done for line in self.move_ids_without_package if "Desecho" not in self.move_ids_without_package.location_dest_id.name)                                                                    
+        if self.move_ids_without_package.location_dest_id.name:
+            self.delivery_amount = sum(line.quantity_done for line in self.move_ids_without_package if "Desecho" not in self.move_ids_without_package.location_dest_id.name)                                                                            
 
 
 
