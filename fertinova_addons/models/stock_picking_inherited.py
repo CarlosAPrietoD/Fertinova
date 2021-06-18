@@ -14,8 +14,9 @@ class StockPicking(models.Model):
     #is_waste   = fields.Boolean(string='¿Es merma?')
     is_surplus = fields.Boolean(string='¿Es excedente?')
 
-    waste_ids  = fields.Many2many('stock.scrap', string='Folio Desecho', compute='_set_waste_ids')
-    surplus_id = fields.Many2one('stock.picking', string='Folio Excedente', compute='_set_surplus_id')
+    waste_ids     = fields.Many2many('stock.scrap', string='Folio Desecho', compute='_set_waste_ids')
+    surplus_id    = fields.Many2one('stock.picking', string='Folio Excedente', compute='_set_surplus_id')
+    surplus_count = fields.Integer(compute='get_surplus_count')
 
     delivery_amount  = fields.Float(string='Peso Origen', digits=(20, 2), compute='_set_delivery_amount')
     waste_amount     = fields.Float(string='Desecho', digits=(20, 2), compute='_set_waste_amount')
@@ -30,7 +31,10 @@ class StockPicking(models.Model):
     # Odoo Studio Fields - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     x_studio_aplica_flete = fields.Boolean(string='Aplica Flete', default=True)
     x_studio_pedido_de_compra_flete = fields.Many2one('purchase.order', string='Pedido de compra flete', domain="[('order_line.product_id.name', 'ilike', 'FLETE')]")
-
+    # Odoo Studio Fields - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    
+    
+    
     @api.one
     def _set_aplica_flete(self):
         self.x_studio_aplica_flete = True
@@ -52,7 +56,27 @@ class StockPicking(models.Model):
     @api.one
     @api.depends('name')
     def _set_delivery_amount(self):
-        self.delivery_amount = sum(line.quantity_done for line in self.move_ids_without_package)                                                                    
+        self.delivery_amount = sum(line.quantity_done for line in self.move_ids_without_package if "Desecho" not in self.move_ids_without_package.location_dest_id.name)                                                                    
+
+
+
+    def get_surplus(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Excedentes',
+            'view_mode': 'tree',
+            'res_model': 'stock.picking',
+            'domain': [('is_surplus', '=', True), ('origin_transfer_id', '=', self.id)],
+            'context': "{'create': False}"
+        }
+
+
+
+    def get_surplus_count(self):
+        for record in self:
+            record.vehicle_count = self.env['stock.picking'].search_count(
+                [('is_surplus', '=', True), ('origin_transfer_id', '=', self.id)])                                                                  
 
 
 
