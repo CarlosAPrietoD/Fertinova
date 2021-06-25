@@ -9,8 +9,9 @@ class StockPicking(models.Model):
     #///////////////////////////////
     #  Fields to add
     #///////////////////////////////
+    """
     origin_transfer_id = fields.Many2one('stock.picking', string='Transferencia Origen', track_visibility='always')
-    
+
     #is_waste   = fields.Boolean(string='¿Es merma?')
     is_surplus = fields.Boolean(string='¿Es excedente?')
 
@@ -27,6 +28,11 @@ class StockPicking(models.Model):
     custom_partner_id  = fields.Many2one('res.partner', string='Cliente', compute='_set_partner')
     custom_date_order  = fields.Datetime(string='Fecha', compute='_set_date_order')
     custom_incoterm_id = fields.Many2one('account.incoterms', string='Incoterm', compute='_set_incoterm')
+
+    # Odoo Studio Fields - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    x_studio_aplica_flete = fields.Boolean(string='Aplica Flete', default=True)
+    x_studio_pedido_de_compra_flete = fields.Many2one('purchase.order', string='Pedido de compra flete', domain="[('order_line.product_id.name', 'ilike', 'FLETE')]")
+    # Odoo Studio Fields - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     # Odoo Studio Fields - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     x_studio_aplica_flete = fields.Boolean(string='Aplica Flete', default=True)
@@ -55,8 +61,8 @@ class StockPicking(models.Model):
 
     @api.one
     @api.depends('name')
-    def _set_delivery_amount(self):
-        self.delivery_amount = sum(line.quantity_done for line in self.move_ids_without_package if "Desecho" not in line.location_dest_id.name)                                                                            
+    def _set_delivery_amount(self):        
+        self.delivery_amount = sum(line.quantity_done for line in self.move_ids_without_package if "Desecho" not in line.location_dest_id.name) 
 
 
 
@@ -76,8 +82,7 @@ class StockPicking(models.Model):
     def get_surplus_count(self):
         for record in self:
             record.vehicle_count = self.env['stock.picking'].search_count(
-                [('is_surplus', '=', True), ('origin_transfer_id', '=', self.id)])                                                                  
-
+                [('is_surplus', '=', True), ('origin_transfer_id', '=', self.id)])
 
 
     @api.one
@@ -201,4 +206,5 @@ class StockPicking(models.Model):
                 'target': 'current',
                 'domain': '[]',
                 'context': ctxt            
-            }     
+            }   
+    """        

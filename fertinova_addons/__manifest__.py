@@ -29,7 +29,7 @@
         'views/sequences.xml',
         'views/stock_picking_inherited_view.xml',
         #'views/cfdi.xml',
-        'views/reporting_stock_sales_purchases.xml',
+        #'views/reporting_stock_sales_purchases.xml',
         'views/report.xml',
 
         #Wizards:

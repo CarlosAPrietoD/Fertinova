@@ -5,6 +5,21 @@ from odoo.exceptions import UserError
 from odoo.tools.translate import _  
 
 
+class PurchaseOrder(models.Model):
+    _inherit = 'purchase.order'
+
+    #########################################################
+    # MODEL FIELDS
+    #########################################################
+    user_id = fields.Many2one('res.users', 
+                              string='Purchase Representative', 
+                              index=True, 
+                              track_visibility='onchange', 
+                              required=True,
+                              default=lambda self: None)
+
+
+
 #//////////////////////////////////////////////////////////////////////////////////////////////#
 #   TICKET 028    DEVELOPED BY SEBASTIAN MENDEZ    --     START
 #//////////////////////////////////////////////////////////////////////////////////////////////#

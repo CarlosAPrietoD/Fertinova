@@ -9,7 +9,7 @@ from . import purchase_inherited
 from . import res_partner_inherit
 from . import sale_inherited
 from . import stock_move_inherited
-from . import stock_picking_inherited
+#from . import stock_picking_inherited
 from . import stock_quant_inherited
 
 

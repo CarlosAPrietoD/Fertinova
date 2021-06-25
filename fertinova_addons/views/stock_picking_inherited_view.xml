@@ -9,20 +9,21 @@
         <field name="model">stock.picking</field>
         <field name="inherit_id" ref="stock.view_picking_form"/>	
         <field name="arch" type="xml">
-            <!--Add 2 new buttons for waste and surplus in header-->
+            <!--Add 2 new buttons for waste and surplus in header
             <xpath expr="//form/header" position="inside">
                 <button string="Excedentes" name="open_stock_picking_surplus" type="object" class="oe_highlight"/>
             </xpath>
             <field name="origin" position="after">
-                <field name="origin_transfer_id" readonly="True"/>
-            </field>    
-          
-            <!--Add new Smart Button in order to count up Surplus at a given transfer-->          
+                <field name="origin_transfer_id" readonly="True"/>                
+            </field>-->   
+
+            <!--Add new Smart Button in order to count up Surplus at a given transfer
             <div name="button_box" position="inside">
                 <button class="oe_stat_button" type="object" name="get_surplus" icon="fa-trash">
                     <field string="Excedentes" name="surplus_count" widget="statinfo"/>
                 </button>
-            </div>            
+            </div>   
+            -->                   
 
             <!--[START] Add required attribute to fields-->
             <field name="partner_id" position="attributes">
