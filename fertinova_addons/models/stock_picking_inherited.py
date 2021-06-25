@@ -9,13 +9,15 @@ class StockPicking(models.Model):
     #///////////////////////////////
     #  Fields to add
     #///////////////////////////////
+    """
     origin_transfer_id = fields.Many2one('stock.picking', string='Transferencia Origen', track_visibility='always')
-    
+
     #is_waste   = fields.Boolean(string='¿Es merma?')
     is_surplus = fields.Boolean(string='¿Es excedente?')
 
-    waste_ids  = fields.Many2many('stock.scrap', string='Folio Desecho', compute='_set_waste_ids')
-    surplus_id = fields.Many2one('stock.picking', string='Folio Excedente', compute='_set_surplus_id')
+    waste_ids     = fields.Many2many('stock.scrap', string='Folio Desecho', compute='_set_waste_ids')
+    surplus_id    = fields.Many2one('stock.picking', string='Folio Excedente', compute='_set_surplus_id')
+    surplus_count = fields.Integer(compute='get_surplus_count')
 
     delivery_amount  = fields.Float(string='Peso Origen', digits=(20, 2), compute='_set_delivery_amount')
     waste_amount     = fields.Float(string='Desecho', digits=(20, 2), compute='_set_waste_amount')
@@ -28,12 +30,9 @@ class StockPicking(models.Model):
     custom_incoterm_id = fields.Many2one('account.incoterms', string='Incoterm', compute='_set_incoterm')
 
     # Odoo Studio Fields - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    x_studio_aplica_flete = fields.Boolean(string='Aplica Flete', compute='_set_aplica_flete')
+    x_studio_aplica_flete = fields.Boolean(string='Aplica Flete', default=True)
     x_studio_pedido_de_compra_flete = fields.Many2one('purchase.order', string='Pedido de compra flete', domain="[('order_line.product_id.name', 'ilike', 'FLETE')]")
-
-    @api.one
-    def _set_aplica_flete(self):
-        self.x_studio_aplica_flete = True
+    # Odoo Studio Fields - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
 
@@ -52,9 +51,28 @@ class StockPicking(models.Model):
 
     @api.one
     @api.depends('name')
-    def _set_delivery_amount(self):
-        self.delivery_amount = sum(line.quantity_done for line in self.move_ids_without_package)                                                                    
+    def _set_delivery_amount(self):        
+        self.delivery_amount = sum(line.quantity_done for line in self.move_ids_without_package if "Desecho" not in line.location_dest_id.name) 
 
+
+
+    def get_surplus(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Excedentes',
+            'view_mode': 'tree',
+            'res_model': 'stock.picking',
+            'domain': [('is_surplus', '=', True), ('origin_transfer_id', '=', self.id)],
+            'context': "{'create': False}"
+        }
+
+
+
+    def get_surplus_count(self):
+        for record in self:
+            record.vehicle_count = self.env['stock.picking'].search_count(
+                [('is_surplus', '=', True), ('origin_transfer_id', '=', self.id)])
 
 
     @api.one
@@ -178,4 +196,5 @@ class StockPicking(models.Model):
                 'target': 'current',
                 'domain': '[]',
                 'context': ctxt            
-            }           
+            }   
+    """        

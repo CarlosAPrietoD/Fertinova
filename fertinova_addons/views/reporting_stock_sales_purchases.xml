@@ -18,7 +18,7 @@
           <field name="name"/>
           <field name="delivery_amount"/>
           <field name="x_studio_pedido_de_compra_flete"/>
-          <!--<field name="x_studio_estado_de_facturacion"/>-->
+          <!--<field name="x_studio_estado_de_facturacion"/> Esto sólo está en Odoo Studio--> 
           <field name="waste_ids" widget="many2many_tags"/> 
           <field name="waste_amount"/>  
           <field name="is_surplus" invisible="1"/>  
@@ -43,7 +43,7 @@
           <field name="name"/>
           <field name="delivery_amount"/>
           <field name="x_studio_pedido_de_compra_flete"/>
-          <!--<field name="x_studio_estado_de_facturacion"/>-->          
+          <!--<field name="x_studio_estado_de_facturacion"/> Esto sólo está en Odoo Studio-->          
           <field name="waste_ids" widget="many2many_tags"/> 
           <field name="waste_amount"/>  
           <field name="is_surplus" invisible="1"/>  

@@ -9,13 +9,21 @@
         <field name="model">stock.picking</field>
         <field name="inherit_id" ref="stock.view_picking_form"/>	
         <field name="arch" type="xml">
-            <!--Add 2 new buttons for waste and surplus in header-->
+            <!--Add 2 new buttons for waste and surplus in header
             <xpath expr="//form/header" position="inside">
                 <button string="Excedentes" name="open_stock_picking_surplus" type="object" class="oe_highlight"/>
             </xpath>
             <field name="origin" position="after">
                 <field name="origin_transfer_id" readonly="True"/>                
-            </field>             
+            </field>-->   
+
+            <!--Add new Smart Button in order to count up Surplus at a given transfer
+            <div name="button_box" position="inside">
+                <button class="oe_stat_button" type="object" name="get_surplus" icon="fa-trash">
+                    <field string="Excedentes" name="surplus_count" widget="statinfo"/>
+                </button>
+            </div>   
+            -->                   
 
             <!--[START] Add required attribute to fields-->
             <field name="partner_id" position="attributes">
@@ -27,6 +35,12 @@
             </field>         
             <!--[END] Add required attribute to fields-->
 
+            <!--
+            <xpath expr="/form/sheet/notebook/page/field[@name='move_ids_without_package']/tree/field[@name='product_id']" position="after">
+                <field name="analytic_account_id" attrs="{'readonly': [('state', 'not in', ('draft', 'assigned'))]}" />
+                <field name="analytic_tag_id" attrs="{'readonly': [('state', 'not in', ('draft', 'assigned'))]}" widget="many2many_tags" />
+            </xpath>
+            -->
         </field>
     </record> 
     <!--  TICKET 108  -  DEVELOPED BY SEBASTIAN MENDEZ  -  END   -->      
