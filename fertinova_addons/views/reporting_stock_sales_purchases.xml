@@ -17,16 +17,19 @@
           <field name="custom_incoterm_id"/>
           <field name="name"/>
           <field name="delivery_amount"/>
+          <field name="x_studio_pedido_de_compra_flete"/>
+          <field name="x_studio_estado_de_facturacion"/>          
           <field name="waste_ids" widget="many2many_tags"/> 
           <field name="waste_amount"/>  
           <field name="is_surplus" invisible="1"/>  
           <field name="surplus_id"/>
           <field name="surplus_amount"/>
-          <field name="eff_qty_amount"/> 
+          <field name="d_eff_qty_amount"/> 
           <field name="state" invisible="1"/>                  
         </tree>
       </field>
     </record>   
+    
 
     <!-- ANALYSIS of Purchase Report with Stock Pickings with Wastes and Surplus - LIST VIEW -->
     <record id="view_analysis_stock_report_purchase" model="ir.ui.view">
@@ -40,6 +43,8 @@
           <field name="custom_incoterm_id"/>          
           <field name="name"/>
           <field name="delivery_amount"/>
+          <field name="x_studio_pedido_de_compra_flete"/>
+          <field name="x_studio_estado_de_facturacion"/>          
           <field name="waste_ids" widget="many2many_tags"/> 
           <field name="waste_amount"/>  
           <field name="is_surplus" invisible="1"/>  
