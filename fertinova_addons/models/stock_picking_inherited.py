@@ -9,6 +9,14 @@ class StockPicking(models.Model):
     #///////////////////////////////
     #  Fields to add
     #///////////////////////////////
+    operador = fields.Char(string='Operador')
+    placas   = fields.Char(string='Placas')
+    importe  = fields.Float(string='Importe', digits=(20, 2), compute='_set_importe')
+
+    @api.one
+    def _set_importe(self):
+        #self.importe = 
+        pass
     """
     origin_transfer_id = fields.Many2one('stock.picking', string='Transferencia Origen', track_visibility='always')
 
