@@ -26,7 +26,7 @@
                         <!--1° Tabla-->
                         <div class="row">
                             <div class="table-responsive col-xs-6">
-                                <table class="table" style="font-size: 12px; padding: 2px; margin-top: 30px;">
+                                <table class="table w-45" style="font-size: 12px; padding: 2px; margin-top: 30px;">
                                     <tbody>
                                         <tr>
                                             <td class="table-secondary font-weight-bold">Cliente</td>
@@ -70,7 +70,7 @@
 
                         <!--2° Tabla-->
                             <div class="table-responsive col-xs-6">
-                                <table class="table" style="font-size: 12px; padding: 2px; margin-top: 30px;">
+                                <table class="table w-45" style="font-size: 12px; padding: 2px; margin-top: 30px;">
                                     <tbody>
                                         <tr>
                                             <td class="table-secondary font-weight-bold">Precio unitario</td>
