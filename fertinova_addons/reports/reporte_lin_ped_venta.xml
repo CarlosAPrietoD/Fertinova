@@ -141,7 +141,7 @@
                                 <td><span t-esc="line.quantity"/></td>
                                 <td><span t-esc="line.uom_id.name"/></td>
                                 <td><span t-esc="line.price_subtotal"/></td>
-                                <td><span t-esc="line.refund_invoice_id.name"/></td>
+                                <td><span t-esc="line.factura_origen_credito"/></td>
                             </tr>  
                         </table>  
 
