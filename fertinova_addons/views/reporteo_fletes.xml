@@ -15,9 +15,9 @@
     -->
 
     <record id="sale_order_line_inherited_fletes" model="ir.ui.view">
-        <field name="name">sale.order.line.form.readonly.inherit</field>
+        <field name="name">Odoo Studio: sale.order.line.form.readonly customization.inherit</field>
         <field name="model">sale.order.line</field>
-        <field name="inherit_id" ref="sale.sale_order_line_view_form_readonly"/>
+        <field name="inherit_id" ref="studio_customization.odoo_studio_sale_ord_5ca3ac37-4383-48f3-be12-6bf5adee41ba"/>
         <field name="arch" type="xml">
            <xpath expr="//field[@name='invoice_lines']" position="after">
                 <field name="credit_notes_ids">
