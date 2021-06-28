@@ -66,7 +66,7 @@
                         </table>
 
                         <!--2° Tabla-->
-                        <table class="float-right table w-50" style="font-size: 12px; padding: 2px; margin-top: 30px; margin-left: 30px;">
+                        <table class="float-right table w-40" style="font-size: 12px; padding: 2px; margin-top: 30px; margin-left: 30px;">
                             <tbody>
                                 <tr>
                                     <td class="table-secondary font-weight-bold">Precio unitario</td>
@@ -79,11 +79,9 @@
                                 <tr>
                                     <td class="table-secondary font-weight-bold">Impuestos</td>
                                 </tr> 
-                                <tr t-foreach="doc.tax_id" t-as="l">
-                                    <td>
+                                <td t-foreach="doc.tax_id" t-as="l">
                                         <span t-field="l.name"/>
-                                    </td>
-                                </tr>
+                                </td>
                                 <tr>
                                     <td class="table-secondary font-weight-bold">Total de impuestos</td>
                                     <td><span t-field="doc.price_tax"/></td>
@@ -133,7 +131,7 @@
                                 <th class="table-secondary">Estado de la factura</th>
                                 <th class="table-secondary">Factura Origen</th>
                             </tr>                             
-                            <tr t-foreach='doc.invoice_lines' t-as='line'>
+                            <tr t-foreach='doc.credit_notes_ids' t-as='line'>
                                 <td><span t-esc="line.invoice_id.number"/></td>                            
                                 <td><span t-esc="line.invoice_id.date_invoice" t-options='{"widget": "date"}'/></td>
                                 <td><span t-esc="line.invoice_id.name"/></td>
