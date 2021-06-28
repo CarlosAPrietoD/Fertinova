@@ -7,12 +7,12 @@
     <report
         id="reporte_lin_ped_ven_formato"
         model="sale.order.line"
-        string="Imprimir Reporte"
+        string="Imprimir Reporte Líneas de Pedido"
         name="fertinova_addons.reporte_lin_ped_ven_formato"
         file="fertinova_addons.lin_ped_ven_formato"
         report_type="qweb-pdf" />
 
-    <template id="reporte_liquidacion_formato">
+    <template id="reporte_lin_ped_ven_formato">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="doc">
                 <t t-call="web.external_layout">
