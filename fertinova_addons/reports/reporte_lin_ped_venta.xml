@@ -24,7 +24,7 @@
 
                         <!--Cabecera de formato con 2 tablas contiguas-->
                         <!--1° Tabla-->
-                        <div class="row">
+                        <div class="row w-100">
                             <div class="table-responsive col-sm-6">
                                 <table class="table" style="font-size: 12px; padding: 2px; margin-top: 30px;">
                                     <tbody>
