@@ -49,7 +49,7 @@ class StockMove(models.Model):
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
-    credit_notes_ids = fields.Many2many('account.invoice', string='Notas de crédito', compute='_set_credit_notes')
+    credit_notes_ids = fields.Many2many('account.invoice.line', string='Notas de crédito', compute='_set_credit_notes')
 
     @api.one
     def _set_credit_notes(self):
