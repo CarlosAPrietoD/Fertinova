@@ -67,10 +67,8 @@
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
 
                         <!--2° Tabla-->
-                        <div class="row">
                             <div class="table-responsive col-md-6">
                                 <table class="table" style="font-size: 12px; padding: 2px; margin-top: 30px;">
                                     <tbody>
