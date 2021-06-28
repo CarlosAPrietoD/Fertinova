@@ -115,7 +115,7 @@
                             <tr t-foreach='doc.invoice_lines' t-as='line'>
                                 <td><span t-esc="line.invoice_id.number"/></td>                            
                                 <td><span t-esc="line.invoice_id.date_invoice" t-options='{"widget": "date"}'/></td>
-                                <td><span t-esc="line.invoice_id.name"/></td>
+                                <td><span t-esc="line.product_id.name"/></td>
                                 <td><span t-esc="line.account_id.name"/></td>
                                 <td><span t-esc="line.quantity"/></td>
                                 <td><span t-esc="line.uom_id.name"/></td>
@@ -140,7 +140,7 @@
                             <tr t-foreach='doc.credit_notes_ids' t-as='line'>
                                 <td><span t-esc="line.invoice_id.number"/></td>                            
                                 <td><span t-esc="line.invoice_id.date_invoice" t-options='{"widget": "date"}'/></td>
-                                <td><span t-esc="line.invoice_id.name"/></td>
+                                <td><span t-esc="line.product_id.name"/></td>
                                 <td><span t-esc="line.account_id.name"/></td>
                                 <td><span t-esc="line.quantity"/></td>
                                 <td><span t-esc="line.uom_id.name"/></td>
