@@ -28,7 +28,7 @@
                             <tbody>
                                 <tr>
                                     <td class="table-secondary font-weight-bold">Cliente</td>
-                                    <td><span t-field="doc.order_id.partner_id"/></td>
+                                    <td><span t-field="doc.order_partner_id.name"/></td>
                                 </tr>                            
                                 <tr>
                                     <td class="table-secondary font-weight-bold">Referencia del pedido</td>
@@ -48,11 +48,11 @@
                                 </tr>
                                 <tr>
                                     <td class="table-secondary font-weight-bold">Cantidad Entregada</td>
-                                    <td><span t-field="doc.order_id.qty_delivered"/></td>
+                                    <td><span t-field="doc.qty_delivered"/></td>
                                 </tr>
                                 <tr>
                                     <td class="table-secondary font-weight-bold">Cantidad Facturada</td>
-                                    <td><span t-field="doc.order_id.qty_invoiced"/></td>
+                                    <td><span t-field="doc.qty_invoiced"/></td>
                                 </tr>
                                 <tr>
                                     <td class="table-secondary font-weight-bold">Unidad de medida</td>
