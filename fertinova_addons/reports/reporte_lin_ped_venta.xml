@@ -7,7 +7,7 @@
     <report
         id="reporte_lin_ped_ven"
         model="sale.order.line"
-        string="Imprimir Reporte Líneas de Pedido"
+        string="Reporte Líneas de Pedido"
         name="fertinova_addons.reporte_lin_ped_ven"
         file="fertinova_addons.lin_ped_ven_formato"
         report_type="qweb-pdf" />
@@ -66,7 +66,7 @@
                         </table>
 
                         <!--2° Tabla-->
-                        <table class="float-right table w-40" style="font-size: 12px; padding: 2px; margin-top: 30px;">
+                        <table class="table w-40" style="font-size: 12px; padding: 2px; margin-top: 30px;">
                             <tbody>
                                 <tr>
                                     <td class="table-secondary font-weight-bold">Precio unitario</td>
