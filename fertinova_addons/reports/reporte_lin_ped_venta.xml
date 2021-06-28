@@ -24,74 +24,82 @@
 
                         <!--Cabecera de formato con 2 tablas contiguas-->
                         <!--1° Tabla-->
-                        <table class="float-left table w-50" style="font-size: 12px; padding: 2px; margin-top: 30px;">
-                            <tbody>
-                                <tr>
-                                    <td class="table-secondary font-weight-bold">Cliente</td>
-                                    <td><span t-field="doc.order_partner_id.name"/></td>
-                                </tr>                            
-                                <tr>
-                                    <td class="table-secondary font-weight-bold">Referencia del pedido</td>
-                                    <td><span t-field="doc.order_id.name"/></td>
-                                </tr>
-                                <tr>
-                                    <td class="table-secondary font-weight-bold">Producto</td>
-                                    <td><span t-field="doc.product_id.name"/></td>
-                                </tr> 
-                                <tr>
-                                    <td class="table-secondary font-weight-bold">Descripción</td>
-                                    <td><span t-field="doc.name"/></td>
-                                </tr>                                
-                                <tr>
-                                    <td class="table-secondary font-weight-bold">Cantidad Pedida</td>
-                                    <td><span t-field="doc.product_uom_qty"/></td>
-                                </tr>
-                                <tr>
-                                    <td class="table-secondary font-weight-bold">Cantidad Entregada</td>
-                                    <td><span t-field="doc.qty_delivered"/></td>
-                                </tr>
-                                <tr>
-                                    <td class="table-secondary font-weight-bold">Cantidad Facturada</td>
-                                    <td><span t-field="doc.qty_invoiced"/></td>
-                                </tr>
-                                <tr>
-                                    <td class="table-secondary font-weight-bold">Unidad de medida</td>
-                                    <td><span t-field="doc.product_uom.name"/></td>
-                                </tr>
-                                <tr>
-                                    <td class="table-secondary font-weight-bold">Compañía</td>
-                                    <td><span t-field="doc.company_id.name"/></td>
-                                </tr>                                                                                                                                                                                                                                                                                           
-                            </tbody>
-                        </table>
+                        <div class="col-xs-6">
+                            <div class="table-responsive">
+                                <table class="table" style="font-size: 12px; padding: 2px; margin-top: 30px;">
+                                    <tbody>
+                                        <tr>
+                                            <td class="table-secondary font-weight-bold">Cliente</td>
+                                            <td><span t-field="doc.order_partner_id.name"/></td>
+                                        </tr>                            
+                                        <tr>
+                                            <td class="table-secondary font-weight-bold">Referencia del pedido</td>
+                                            <td><span t-field="doc.order_id.name"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="table-secondary font-weight-bold">Producto</td>
+                                            <td><span t-field="doc.product_id.name"/></td>
+                                        </tr> 
+                                        <tr>
+                                            <td class="table-secondary font-weight-bold">Descripción</td>
+                                            <td><span t-field="doc.name"/></td>
+                                        </tr>                                
+                                        <tr>
+                                            <td class="table-secondary font-weight-bold">Cantidad Pedida</td>
+                                            <td><span t-field="doc.product_uom_qty"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="table-secondary font-weight-bold">Cantidad Entregada</td>
+                                            <td><span t-field="doc.qty_delivered"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="table-secondary font-weight-bold">Cantidad Facturada</td>
+                                            <td><span t-field="doc.qty_invoiced"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="table-secondary font-weight-bold">Unidad de medida</td>
+                                            <td><span t-field="doc.product_uom.name"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="table-secondary font-weight-bold">Compañía</td>
+                                            <td><span t-field="doc.company_id.name"/></td>
+                                        </tr>                                                                                                                                                                                                                                                                                           
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
 
                         <!--2° Tabla-->
-                        <table class="float-left table w-40" style="font-size: 12px; padding: 2px; margin-top: 30px;">
-                            <tbody>
-                                <tr>
-                                    <td class="table-secondary font-weight-bold">Precio unitario</td>
-                                    <td><span t-field="doc.price_unit"/></td>
-                                </tr>                            
-                                <tr>
-                                    <td class="table-secondary font-weight-bold">Subtotal</td>
-                                    <td><span t-field="doc.price_subtotal"/></td>
-                                </tr>
-                                <tr>
-                                    <td class="table-secondary font-weight-bold">Impuestos</td>
-                                    <td t-foreach="doc.tax_id" t-as="l">
-                                            <span t-field="l.name"/>
-                                    </td>                                    
-                                </tr> 
-                                <tr>
-                                    <td class="table-secondary font-weight-bold">Total de impuestos</td>
-                                    <td><span t-field="doc.price_tax"/></td>
-                                </tr>                                
-                                <tr>
-                                    <td class="table-secondary font-weight-bold">Total</td>
-                                    <td><span t-field="doc.price_total"/></td>
-                                </tr>                                                                                                                                                                                                                                                                                          
-                            </tbody>
-                        </table>
+                        <div class="col-xs-6">
+                            <div class="table-responsive">
+                                <table class="table" style="font-size: 12px; padding: 2px; margin-top: 30px;">
+                                    <tbody>
+                                        <tr>
+                                            <td class="table-secondary font-weight-bold">Precio unitario</td>
+                                            <td><span t-field="doc.price_unit"/></td>
+                                        </tr>                            
+                                        <tr>
+                                            <td class="table-secondary font-weight-bold">Subtotal</td>
+                                            <td><span t-field="doc.price_subtotal"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="table-secondary font-weight-bold">Impuestos</td>
+                                            <td t-foreach="doc.tax_id" t-as="l">
+                                                    <span t-field="l.name"/>
+                                            </td>                                    
+                                        </tr> 
+                                        <tr>
+                                            <td class="table-secondary font-weight-bold">Total de impuestos</td>
+                                            <td><span t-field="doc.price_tax"/></td>
+                                        </tr>                                
+                                        <tr>
+                                            <td class="table-secondary font-weight-bold">Total</td>
+                                            <td><span t-field="doc.price_total"/></td>
+                                        </tr>                                                                                                                                                                                                                                                                                          
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>                                
 
                         <!--Tablas de Facturas, Notas de Crédito y Movimientos de Inventario-->
                         <!--Tabla de Facturas-->
