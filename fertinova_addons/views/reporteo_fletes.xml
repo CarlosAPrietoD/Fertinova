@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <!--
+# /////////////////////////////////////////////////////////////////////////////
+#
+#   Development to create a new PDF report from Odoo Studio View 
+#   "Líneas de Pedido de Ventas" where also it was necessary add
+#   new custom fields.
+#
+#   Also it was created a new Report {List View} and PDF for Management
+#   of Fleets (with new custom fields too)
+#
+# /////////////////////////////////////////////////////////////////////////////
+    -->
+
+    <record id="sale_order_line_inherited_fletes" model="ir.ui.view">
+        <field name="name">sale.order.line.form.readonly.inherit</field>
+        <field name="model">sale.order.line</field>
+        <field name="inherit_id" ref="sale.sale_order_line_view_form_readonly"/>
+        <field name="arch" type="xml">
+           <xpath expr="//field[@name='invoice_lines']" position="after">
+                <field name="credit_notes_ids">
+                    <tree string="Notas de Crédito">
+                        <field name="invoice_id"/>
+                        <field name="x_studio_fecha_de_factura"/>
+                        <field name="name"/>
+                        <field name="account_id" groups="account.group_account_user"/>
+                        <field name="quantity"/>
+                        <field name="uom_id" groups="uom.group_uom"/>
+                        <field name="price_unit"/>
+                        <field name="discount" groups="sale.group_discount_per_so_line"/>
+                        <field name="price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
+                        <field name="x_studio_estado_de_la_factura"/>
+                        <field name="price_total" groups="account.group_show_line_subtotals_tax_included"/>
+                        <field name="currency_id" invisible="1"/>
+                        <field name="refund_invoice_id" position="attributes">
+                                <attribute name="string">Factura Origen</attribute>
+                        </field>                        
+                    </tree>                
+                </field>
+            </xpath>        
+        </field>
+    </record>
+
+  </data>
+</odoo> 
