@@ -20,7 +20,7 @@
         
         #Views:
         'views/account_move.xml',        
-        #'views/account_payments_inherited_view.xml',         
+        #'views/account_payments_inherited_view.xml', DESARROLLO CANCELADO        
         'views/product_template_inherited_view.xml',
         'views/purchase_inherited_view.xml',
         'views/res_partner_inherited_view.xml',
@@ -28,8 +28,9 @@
         'views/stock_move_inherited_view.xml',
         'views/sequences.xml',
         'views/stock_picking_inherited_view.xml',
-        #'views/cfdi.xml',
-        #'views/reporting_stock_sales_purchases.xml',
+        'views/cfdi.xml',
+        #'views/reporting_stock_sales_purchases.xml', DESARROLLO CANCELADO
+        'views/reporteo_fletes.xml',
         'views/report.xml',
 
         #Wizards:
@@ -37,7 +38,8 @@
         'wizard/fuel_invoice.xml',     
 
         #reports
-        'reports/trial_report.xml',         
+        'reports/trial_report.xml',  
+        'reports/reporte_lin_ped_venta.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
