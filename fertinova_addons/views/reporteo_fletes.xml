@@ -21,8 +21,7 @@
         <field name="arch" type="xml">
            <xpath expr="//field[@name='invoice_lines']" position="after">
                 <field name="credit_notes_ids">
-                    <tree string="Notas de Crédito">
-                        <field name="invoice_id"/>
+                    <tree string="Notas de Crédito">                        
                         <field name="x_studio_fecha_de_factura"/>
                         <field name="name"/>
                         <field name="account_id" groups="account.group_account_user"/>
