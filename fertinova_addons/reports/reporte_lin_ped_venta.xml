@@ -176,7 +176,7 @@
                                 <td><span t-esc="line.operador"/></td>
                                 <td><span t-esc="line.placas"/></td>
                                 <td><span t-esc="line.product_uom.name"/></td>
-                                <td><span t-field="line.invoice_id.state"/></td>
+                                <td><span t-field="line.state"/></td>
                                 <td><span t-esc="line.importe"/></td>
                             </tr>  
                         </table>                                                  
