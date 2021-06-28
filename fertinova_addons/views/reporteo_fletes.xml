@@ -34,9 +34,7 @@
                         <field name="x_studio_estado_de_la_factura"/>
                         <field name="price_total" groups="account.group_show_line_subtotals_tax_included"/>
                         <field name="currency_id" invisible="1"/>
-                        <field name="refund_invoice_id" position="attributes">
-                                <attribute name="string">Factura Origen</attribute>
-                        </field>                        
+                        <field name="factura_origen_credito"/>                        
                     </tree>                
                 </field>
             </xpath>        
