@@ -21,6 +21,7 @@ class StockPicking(models.Model):
 
 
 
+
 class StockMove(models.Model):
     _inherit = 'stock.move'
     
@@ -46,6 +47,7 @@ class StockMove(models.Model):
 
 
 
+
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
@@ -54,3 +56,11 @@ class SaleOrderLine(models.Model):
     @api.one
     def _set_credit_notes(self):
         self.credit_notes_ids = self.env['account.invoice'].search([('id', 'in', self.invoice_lines.ids)]).ids         
+
+
+
+
+class AccountInvoiceLine(models.Model):
+    _inherit = 'account.invoice.line'
+
+    factura_origen_credito = fields.Char(string='Factura Origen', related='invoice_id.number') 
