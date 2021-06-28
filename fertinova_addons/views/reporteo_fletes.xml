@@ -24,7 +24,9 @@
                     <tree string="Notas de Crédito">
                         <field name="invoice_id"/>
                         <field name="x_studio_fecha_de_factura"/>
-                        <field name="name"/>
+                        <field name="name" position="attributes">
+                            <attribute name="string">Referencia Nota Crédito</attribute>
+                        </field>
                         <field name="account_id" groups="account.group_account_user"/>
                         <field name="quantity"/>
                         <field name="uom_id" groups="uom.group_uom"/>
