@@ -22,11 +22,9 @@
            <xpath expr="//field[@name='invoice_lines']" position="after">
                 <field name="credit_notes_ids">
                     <tree string="Notas de Crédito">
-                        <field name="invoice_id"/>
-                        <field name="x_studio_fecha_de_factura"/>
-                        <field name="name" position="attributes">
-                            <attribute name="string">Referencia Nota Crédito</attribute>
-                        </field>
+                        <field name="invoice_id" string="Referencia Nota Crédito"/>
+                        <field name="x_studio_fecha_de_factura" string="Fecha Nota Crédito"/>
+                        <field name="name"/>
                         <field name="account_id" groups="account.group_account_user"/>
                         <field name="quantity"/>
                         <field name="uom_id" groups="uom.group_uom"/>
