@@ -70,7 +70,7 @@ class SaleOrderLine(models.Model):
         ids_credit_notes = self.env['account.invoice'].search([('refund_invoice_id', 'in', list_inv_ids)])                    
         _logger.info('\n\n\n ids_credit_notes: %s\n\n\n', ids_credit_notes)
 
-        ids_lns_credit_notes = self.env['account.invoice.line'].search([('invoice_id', 'in', ids_credit_notes)])
+        ids_lns_credit_notes = self.env['account.invoice.line'].search([('invoice_id', 'in', ids_credit_notes.ids)])
         
         self.credit_notes_ids = ids_lns_credit_notes.ids
 
