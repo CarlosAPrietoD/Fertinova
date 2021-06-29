@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from collections import defaultdict
 from odoo import models, fields, api
+import logging
+_logger = logging.getLogger(__name__)
 
 # /////////////////////////////////////////////////////////////////////////////
 #
@@ -55,7 +57,22 @@ class SaleOrderLine(models.Model):
 
     @api.one
     def _set_credit_notes(self):
-        self.credit_notes_ids = self.env['account.invoice.line'].search([('ids_factura_origen_credito', 'in', self.invoice_lines.ids)]).ids         
+        #Get invoices to check up
+        list_inv_ids = []
+        _logger.info('\n\n\n invoice_lines: %s\n\n\n', self.invoice_lines)
+        
+        for ln in self.invoices_lines:
+            _logger.info('\n\n\n ln - invoice_id: %s\n\n\n', ln.invoice_id)
+            list_inv_ids.append(ln.invoice_id)
+        _logger.info('\n\n\n list_inv_ids: %s\n\n\n', list_inv_ids)
+
+        #Get credit notes
+        ids_credit_notes = self.env['account.invoice'].search([('refund_invoice_id', 'in', list_inv_ids)])                    
+        _logger.info('\n\n\n ids_credit_notes: %s\n\n\n', ids_credit_notes)
+
+        ids_lns_credit_notes = self.env['account.invoice.line'].search([('invoice_id', 'in', ids_credit_notes)])
+        
+        self.credit_notes_ids = ids_lns_credit_notes.ids
 
 
 
