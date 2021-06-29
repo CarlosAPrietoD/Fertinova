@@ -62,8 +62,8 @@ class SaleOrderLine(models.Model):
         _logger.info('\n\n\n invoice_lines: %s\n\n\n', self.invoice_lines)
         
         for ln in self.invoice_lines:
-            _logger.info('\n\n\n ln - invoice_id: %s\n\n\n', ln.invoice_id)
-            list_inv_ids.append(ln.invoice_id)
+            _logger.info('\n\n\n ln - invoice_id: %s\n\n\n', ln.invoice_id.id)
+            list_inv_ids.append(ln.invoice_id.id)
         _logger.info('\n\n\n list_inv_ids: %s\n\n\n', list_inv_ids)
 
         #Get credit notes
