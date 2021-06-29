@@ -55,7 +55,7 @@ class SaleOrderLine(models.Model):
 
     @api.one
     def _set_credit_notes(self):
-        self.credit_notes_ids = self.env['account.invoice'].search([('id', 'in', self.invoice_lines.ids)]).ids         
+        self.credit_notes_ids = self.env['account.invoice.line'].search([('ids_factura_origen_credito', 'in', self.invoice_lines.ids)]).ids         
 
 
 
@@ -63,4 +63,5 @@ class SaleOrderLine(models.Model):
 class AccountInvoiceLine(models.Model):
     _inherit = 'account.invoice.line'
 
-    factura_origen_credito = fields.Char(string='Factura Origen', related='invoice_id.number') 
+    ids_factura_origen_credito = fields.Integer(string='Factura Origen IDs', related='invoice_id.refund_invoice_id.id')
+    factura_origen_credito     = fields.Char(string='Factura Origen', related='invoice_id.refund_invoice_id.number')
