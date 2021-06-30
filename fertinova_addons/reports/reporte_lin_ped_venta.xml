@@ -159,6 +159,7 @@
                                 <th class="table-secondary">Fecha prevista</th>   
                                 <th class="table-secondary">Documento origen</th>                           
                                 <th class="table-secondary">Producto</th>
+                                <th class="table-secondary">Folio Peso Ticket</th>
                                 <th class="table-secondary">Cantidad hecha</th>
                                 <th class="table-secondary">Operador</th>
                                 <th class="table-secondary">Placas</th>
@@ -172,6 +173,7 @@
                                 <td><span t-esc="line.date_expected" t-options='{"widget": "date"}'/></td>
                                 <td><span t-esc="line.origin"/></td>
                                 <td><span t-esc="line.product_id.name"/></td>
+                                <td><span t-esc="line.folio_peso_tk"/></td>
                                 <td><span t-esc="line.quantity_done"/></td>
                                 <td><span t-esc="line.operador"/></td>
                                 <td><span t-esc="line.placas"/></td>
