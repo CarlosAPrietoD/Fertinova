@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collections import defaultdict
 from odoo import models, fields, api
 import logging
@@ -30,6 +29,7 @@ class StockMove(models.Model):
     operador = fields.Char(string='Operador', compute='_set_operador')
     placas   = fields.Char(string='Placas', compute='_set_placas')    
     importe  = fields.Float(string='Importe', digits=(20, 2), compute='_set_importe')
+    folio_peso_tk = fields.Char(string='Folio Peso Ticket')
 
 
     @api.one
@@ -59,19 +59,15 @@ class SaleOrderLine(models.Model):
     def _set_credit_notes(self):
         #Get invoices to check up
         list_inv_ids = []
-        _logger.info('\n\n\n invoice_lines: %s\n\n\n', self.invoice_lines)
         
         for ln in self.invoice_lines:
-            _logger.info('\n\n\n ln - invoice_id: %s\n\n\n', ln.invoice_id.id)
             list_inv_ids.append(ln.invoice_id.id)
-        _logger.info('\n\n\n list_inv_ids: %s\n\n\n', list_inv_ids)
 
         #Get credit notes
         ids_credit_notes = self.env['account.invoice'].search([('refund_invoice_id', 'in', list_inv_ids)])                    
-        _logger.info('\n\n\n ids_credit_notes: %s\n\n\n', ids_credit_notes)
-
         ids_lns_credit_notes = self.env['account.invoice.line'].search([('invoice_id', 'in', ids_credit_notes.ids)])
         
+        #Assign to field retrieved credit notes
         self.credit_notes_ids = ids_lns_credit_notes.ids
 
 
@@ -80,5 +76,4 @@ class SaleOrderLine(models.Model):
 class AccountInvoiceLine(models.Model):
     _inherit = 'account.invoice.line'
 
-    ids_factura_origen_credito = fields.Integer(string='Factura Origen IDs', related='invoice_id.refund_invoice_id.id')
     factura_origen_credito     = fields.Char(string='Factura Origen', related='invoice_id.refund_invoice_id.number')
