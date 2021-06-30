@@ -14,32 +14,7 @@
 # /////////////////////////////////////////////////////////////////////////////
     -->
 
-    <record id="sale_order_line_inherited_fletes" model="ir.ui.view">
-        <field name="name">Odoo Studio: sale.order.line.form.readonly customization.inherit</field>
-        <field name="model">sale.order.line</field>
-        <field name="inherit_id" ref="studio_customization.odoo_studio_sale_ord_5ca3ac37-4383-48f3-be12-6bf5adee41ba"/>
-        <field name="arch" type="xml">
-           <xpath expr="//field[@name='invoice_lines']" position="after">
-                <field name="credit_notes_ids">
-                    <tree string="Notas de Crédito">
-                        <field name="invoice_id" string="Referencia Nota Crédito"/>
-                        <field name="x_studio_fecha_de_factura" string="Fecha Nota Crédito"/>
-                        <field name="name"/>
-                        <field name="account_id" groups="account.group_account_user"/>
-                        <field name="quantity"/>
-                        <field name="uom_id" groups="uom.group_uom"/>
-                        <field name="price_unit"/>
-                        <field name="discount" groups="sale.group_discount_per_so_line"/>
-                        <field name="price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
-                        <field name="x_studio_estado_de_la_factura"/>
-                        <field name="price_total" groups="account.group_show_line_subtotals_tax_included"/>
-                        <field name="currency_id" invisible="1"/>
-                        <field name="factura_origen_credito"/>                        
-                    </tree>                
-                </field>
-            </xpath>        
-        </field>
-    </record>
+
 
   </data>
 </odoo> 
