@@ -39,7 +39,8 @@
 
         #reports
         'reports/trial_report.xml',  
-        'reports/reporte_lin_ped_venta.xml',
+        'reports/reporte_lin_ped_venta.xml', 
+        'reports/reporte_orden_servicio_fletes.xml', 
     ],
     # only loaded in demonstration mode
     'demo': [
