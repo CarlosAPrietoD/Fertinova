@@ -15,7 +15,7 @@
     # always loaded
     'data': [
         #Security Files:
-        #'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
         'security/account_security.xml',     
         
         #Views:
