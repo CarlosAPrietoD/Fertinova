@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
 from collections import defaultdict
 from odoo import models, fields, api
+from openerp.exceptions import ValidationError
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -17,8 +19,25 @@ _logger = logging.getLogger(__name__)
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
+    #Fields added to Form View of Inventory > Operations > Transfers
     operador = fields.Char(string='Operador')
     placas   = fields.Char(string='Placas')
+    wbn_service_order_id1 = fields.Many2one('wobin.service.order', string='Orden de Servicio')
+    estado_wbn_servi_ord1 = fields.Selection([('no_asignada', 'No Asignada'),
+                                              ('asignada', 'Asignada'),                                     
+                                              ('cancelada', 'Cancelada')
+                                             ],string='Estado', related='wbn_service_order_id1.estado')
+    wbn_service_order_id2 = fields.Many2one('wobin.service.order', string='Orden de Servicio')
+    estado_wbn_servi_ord2 = fields.Selection([('no_asignada', 'No Asignada'),
+                                              ('asignada', 'Asignada'),                                     
+                                              ('cancelada', 'Cancelada')
+                                             ],string='Estado', related='wbn_service_order_id2.estado') 
+    wbn_service_order_id3 = fields.Many2one('wobin.service.order', string='Orden de Servicio')
+    estado_wbn_servi_ord3 = fields.Selection([('no_asignada', 'No Asignada'),
+                                              ('asignada', 'Asignada'),                                     
+                                              ('cancelada', 'Cancelada')
+                                             ],string='Estado', related='wbn_service_order_id3.estado')                                                                                               
+
 
 
 
@@ -26,11 +45,15 @@ class StockPicking(models.Model):
 class StockMove(models.Model):
     _inherit = 'stock.move'
     
+    #Fields added to one2many field of Stock Moves in Form View 
+    # of Sales > To Incoice > Lineas de Pedido {Odoo Studio}
     operador = fields.Char(string='Operador', compute='_set_operador')
     placas   = fields.Char(string='Placas', compute='_set_placas')    
     importe  = fields.Float(string='Importe', digits=(20, 2), compute='_set_importe')
-    folio_peso_tk = fields.Char(string='Folio Peso Ticket')
-
+    #Revisar su correcta asignación dado que se puso en una vista de Odoo Studio |
+    #de "Líneas de Pedido de Venta"                                              |
+    folio_peso_tk = fields.Char(string='Folio Peso Ticket')#                     |
+    #----------------------------------------------------------------------------|
 
     @api.one
     def _set_operador(self):
@@ -50,9 +73,26 @@ class StockMove(models.Model):
 
 
 
+
+class StockQuant(models.Model):
+    _inherit = 'stock.quant'
+
+    #Field added to List View of Inventory > Reporting > Inventory Report
+    cant_disponible = fields.Float(string='Cantidad Disponible', digits=(20, 2), compute='_set_cant_disponible')
+
+    @api.one
+    def _set_cant_disponible(self):           
+        self.cant_disponible = self.quantity - self.reserved_quantity
+
+
+
+
+
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
+    #Field added to display credit notes in Form View 
+    # of Sales > To Incoice > Lineas de Pedido {Odoo Studio}
     credit_notes_ids = fields.Many2many('account.invoice.line', string='Notas de crédito', compute='_set_credit_notes')
 
     @api.one
@@ -73,7 +113,261 @@ class SaleOrderLine(models.Model):
 
 
 
+
 class AccountInvoiceLine(models.Model):
     _inherit = 'account.invoice.line'
 
-    factura_origen_credito     = fields.Char(string='Factura Origen', related='invoice_id.refund_invoice_id.number')
+    #Field added to one2many field of Credit Notes in Form View 
+    # of Sales > To Incoice > Lineas de Pedido {Odoo Studio}
+    factura_origen_credito = fields.Char(string='Factura Origen', related='invoice_id.refund_invoice_id.number')
+
+
+
+
+
+class WobinServiceOrder(models.Model):
+    _name = 'wobin.service.order'
+    _description = 'Wobin Service Order'
+    _inherit = ['mail.thread', 'mail.activity.mixin'] 
+
+    @api.model
+    def create(self, vals):  
+        """This method intends to create a sequence for a given Service Order"""            
+        #Change of sequence (if it isn't stored is shown "New" else e.g ORD000001) 
+        if vals.get('name', 'New') == 'New':
+            sequence = self.env['ir.sequence'].next_by_code(
+                'self.orden_servicio') or 'New'
+            vals['name'] = sequence     
+            res = super(WobinServiceOrder, self).create(vals)  
+
+        return res      
+
+
+    name         = fields.Char(string="Orden de Servicio", readonly=True, required=True, copy=False, default='New')
+    partner_id   = fields.Many2one('res.partner', string='Proveedor')
+    estado       = fields.Selection([('no_asignada', 'No Asignada'),
+                                     ('asignada', 'Asignada'),                                     
+                                     ('cancelada', 'Cancelada')
+                                    ], string='Estado', default='no_asignada', compute='_set_estado_asignada', store=True)
+    check_cancel = fields.Boolean()                                    
+                                   
+    pickings_ids = fields.One2many('wobin.service.order.line', 'wbn_service_order_id', string='Control de Albaranes')
+    purchase_with_order_id = fields.Many2one('purchase.order', string='Orden de Compra')
+    
+
+    def cancelar_orden(self):
+        self.check_cancel = True
+        self.estado = 'cancelada'
+
+
+    @api.one
+    @api.depends('purchase_with_order_id')
+    def _set_estado_asignada(self):
+        if self.purchase_with_order_id and self.check_cancel != True:
+            self.estado = 'asignada'
+        elif not self.purchase_with_order_id and self.check_cancel != True:
+            self.estado = 'no_asignada'   
+        elif self.check_cancel == True:
+            self.estado = 'cancelada'                     
+
+
+
+
+
+class WobinServiceOrderLine(models.Model):
+    _name = 'wobin.service.order.line'
+    _description = 'Wobin Service Order Line'
+    _inherit = ['mail.thread', 'mail.activity.mixin'] 
+
+
+    _sql_constraints = [('transferencia_origen', 
+                         'unique (transferencia_origen_id)',     
+                         'Albaranes duplicados no están permitidos por línea'),
+                        ('transferencia_interna', 
+                         'unique (transferencia_interna_id)',     
+                         'Albaranes duplicados no están permitidos por línea'),
+                        ('transferencia_destino', 
+                         'unique (transferencia_destino_id)',     
+                         'Albaranes duplicados no están permitidos por línea')]
+
+
+    wbn_service_order_id     = fields.Many2one('wobin.service.order', string='Orden de Servicio')
+    estado_wbn_servi_ord     = fields.Selection([('no_asignada', 'No Asignada'),
+                                                 ('asignada', 'Asignada'),                                     
+                                                 ('cancelada', 'Cancelada')
+                                    ],string='Estado', related='wbn_service_order_id.estado')
+    wbn_pur_order_related    = fields.Char(string="Orden de Compra", related='wbn_service_order_id.purchase_with_order_id.name')
+    transferencia_origen_aux_ids  = fields.One2many('stock.picking', 'wbn_service_order_id1', compute='_set_transferencia_origen_aux_ids')                                    
+    transferencia_interna_aux_ids = fields.One2many('stock.picking', 'wbn_service_order_id2', compute='_set_transferencia_interna_aux_ids')                                    
+    transferencia_destino_aux_ids = fields.One2many('stock.picking', 'wbn_service_order_id3', compute='_set_transferencia_destino_aux_ids')                                    
+                                    
+    fecha_carga_origen       = fields.Date(string='Fecha Carga Origen')
+    producto_id              = fields.Many2one('product.product', string='Producto', compute='_set_producto_id')
+    folio_peso_tk_tr_ori     = fields.Char(string='Folio Peso Ticket')
+    kilos_origen             = fields.Float(string='Kg Origen', digits=(20, 2), compute='_set_kilos_origen')
+    transferencia_origen_id  = fields.Many2one('stock.picking', string='Transferencia Origen')#, domain=[('estado_wbn_servi_ord1', '!=', 'cancelada')])
+    fecha_descarga_destino   = fields.Date(string='Fecha Descarga Destino')
+    dif_merma_excedente      = fields.Float(string='Diferencia Merma o Excedente', digits=(20, 2), compute='_set_dif_merma_excedente')
+    transferencia_interna_id = fields.Many2one('stock.picking', string='Transferencia Interna')
+    folio_peso_tk_tr_dest    = fields.Char(string='Folio Peso Ticket')
+    kilos_destino            = fields.Float(string='Kg Destino', digits=(20, 2), compute='_set_kilos_destino')
+    transferencia_destino_id = fields.Many2one('stock.picking', string='Transferencia Destino')
+    placas                   = fields.Char(string='Placas', compute='_set_placas') 
+    operador                 = fields.Char(string='Operador', compute='_set_operador')    
+    tolerancia               = fields.Float(string='Tolerancia Sistema', digits=(20, 2), compute='_set_tolerancia')
+    tolerancia_ajustada      = fields.Float(string='Tolerancia Ajustada', digits=(20, 2))
+    tolerancia_autorizada    = fields.Float(string='Tolerancia Autorizada', digits=(20, 2), compute='_set_tolerancia_autorizada')
+    tolerancia_excedida      = fields.Float(string='Tolerancia Excedida', digits=(20, 2), compute='_set_tolerancia_excedida')
+    tarifas                  = fields.Float(string='Tarifas', digits=(20, 2))
+    subtotal_antes_desc      = fields.Float(string='Subtotal antes Descuento', digits=(20, 2), compute='_set_subtotal_antes_desc')
+    currency_id              = fields.Many2one('res.currency', default=lambda self: self.env.user.company_id.currency_id)
+    precio_producto          = fields.Monetary('Precio Producto', currency_field='currency_id')
+    desc_tolerancia_exced    = fields.Monetary('Descuento por Tolerancia Excedida', currency_field='currency_id', compute='_set_desc_tolerancia_exced')
+    importe                  = fields.Monetary('Importe', currency_field='currency_id', compute='_set_importe')
+    iva                      = fields.Monetary('IVA', currency_field='currency_id', compute='_set_iva')
+    retencion                = fields.Monetary('Retención', currency_field='currency_id', compute='_set_retencion')
+    total                    = fields.Monetary('Total', currency_field='currency_id', compute='_set_total')
+
+    
+    @api.constrains('transferencia_origen_id', 'transferencia_interna_id', 'transferencia_destino_id')
+    def _constrains_transferencias(self):
+        if self.transferencia_origen_id == self.transferencia_interna_id:
+            raise ValidationError("No se pueden repetir albaranes")
+        elif self.transferencia_origen_id == self.transferencia_destino_id:
+            raise ValidationError("No se pueden repetir albaranes")  
+
+        elif self.transferencia_interna_id == self.transferencia_origen_id:
+            raise ValidationError("No se pueden repetir albaranes")
+        elif self.transferencia_interna_id == self.transferencia_destino_id:
+            raise ValidationError("No se pueden repetir albaranes")   
+
+        elif self.transferencia_destino_id == self.transferencia_origen_id:
+            raise ValidationError("No se pueden repetir albaranes")
+        elif self.transferencia_destino_id == self.transferencia_interna_id:
+            raise ValidationError("No se pueden repetir albaranes")                        
+            
+
+
+    @api.one 
+    @api.depends('wbn_service_order_id')
+    def _set_transferencia_origen_aux_ids(self):
+        self.transferencia_origen_aux_ids = [(6, 0, self.transferencia_origen_id.ids)]
+
+
+    @api.one 
+    @api.depends('wbn_service_order_id')
+    def _set_transferencia_interna_aux_ids(self):
+        self.transferencia_interna_aux_ids = [(6, 0, self.transferencia_interna_id.ids)]
+
+
+    @api.one 
+    @api.depends('wbn_service_order_id')
+    def _set_transferencia_destino_aux_ids(self):
+        self.transferencia_destino_aux_ids = [(6, 0, self.transferencia_destino_id.ids)]        
+
+
+    @api.one
+    @api.depends('transferencia_origen_id')
+    def _set_producto_id(self):        
+        if self.transferencia_origen_id:
+            self.producto_id = self.env['stock.move'].search([('picking_id', '=', self.transferencia_origen_id.id)], limit=1).product_id.id
+
+
+    @api.one
+    @api.depends('transferencia_origen_id')
+    def _set_kilos_origen(self):        
+        if self.transferencia_origen_id:
+            self.kilos_origen = self.env['stock.move'].search([('picking_id', '=', self.transferencia_origen_id.id)], limit=1).quantity_done    
+
+    
+    @api.one
+    @api.depends('kilos_destino', 'kilos_origen')    
+    def _set_dif_merma_excedente(self):
+        self.dif_merma_excedente = self.kilos_destino - self.kilos_origen        
+
+    
+    @api.one
+    @api.depends('transferencia_destino_id')
+    def _set_kilos_destino(self):        
+        if self.transferencia_destino_id:
+            self.kilos_destino = self.env['stock.move'].search([('picking_id', '=', self.transferencia_destino_id.id)], limit=1).quantity_done    
+    
+
+    @api.one
+    @api.depends('transferencia_destino_id')
+    def _set_placas(self):        
+        if self.transferencia_destino_id:
+            self.placas = self.env['stock.picking'].search([('id', '=', self.transferencia_destino_id.id)], limit=1).placas        
+
+
+    @api.one
+    @api.depends('transferencia_destino_id')
+    def _set_operador(self):        
+        if self.transferencia_destino_id:
+            self.operador = self.env['stock.picking'].search([('id', '=', self.transferencia_destino_id.id)], limit=1).operador
+    
+
+    @api.one
+    @api.depends('kilos_origen')     
+    def _set_tolerancia(self):
+        self.tolerancia = self.kilos_origen * 0.002
+
+
+    @api.one
+    @api.depends('tolerancia')    
+    def _set_tolerancia_autorizada(self):
+        self.tolerancia_autorizada = self.tolerancia
+
+
+    @api.one
+    @api.depends('dif_merma_excedente', 'tolerancia_ajustada', 'tolerancia_autorizada') 
+    def _set_tolerancia_excedida(self):
+        self.tolerancia_excedida = -(self.dif_merma_excedente) - (self.tolerancia_ajustada + self.tolerancia_autorizada)
+
+
+    @api.one
+    @api.depends('kilos_origen', 'tarifas') 
+    def _set_subtotal_antes_desc(self):
+        self.subtotal_antes_desc = self.kilos_origen * self.tarifas
+
+
+    @api.one
+    @api.depends('tolerancia_excedida') 
+    def _set_desc_tolerancia_exced(self):
+        if self.tolerancia_excedida <= 0:
+            self.desc_tolerancia_exced = 0.0
+        elif self.tolerancia_excedida > 0:
+            self.desc_tolerancia_exced = self.tolerancia_excedida * self.precio_producto
+
+
+    @api.one
+    @api.depends('subtotal_antes_desc', 'desc_tolerancia_exced') 
+    def _set_importe(self):
+        self.importe = self.subtotal_antes_desc - self.desc_tolerancia_exced
+
+
+    @api.one
+    @api.depends('importe') 
+    def _set_iva(self): 
+        self.iva = self.importe * 0.16
+
+
+    @api.one
+    @api.depends('importe') 
+    def _set_retencion(self): 
+        self.retencion = self.importe * 0.04
+
+
+    @api.one
+    @api.depends('importe', 'iva', 'retencion') 
+    def _set_total(self):         
+        self.total = self.importe + self.iva - self.retencion
+
+
+
+
+
+class PurchaseOrder(models.Model):
+    _inherit = 'purchase.order'
+
+    wbn_service_order_ids = fields.One2many('wobin.service.order', 'purchase_with_order_id', string='Ordenes de Servicio')
