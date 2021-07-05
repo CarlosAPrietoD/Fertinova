@@ -95,6 +95,7 @@
           <field name="partner_id"/>
           <field name="create_date"/>                 
           <field name="estado"/>   
+          <field name="purchase_with_order_id"/> 
         </tree>
       </field>
     </record>   
