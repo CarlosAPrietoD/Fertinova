@@ -83,6 +83,19 @@ class StockQuant(models.Model):
     @api.one
     def _set_cant_disponible(self):           
         self.cant_disponible = self.quantity - self.reserved_quantity
+        
+        
+    @api.model 
+    def read_group(self, domain, fields, groupby, offset=0, limit=None, orderby=False, lazy=True):
+        res = super(StockQuant, self).read_group(domain, fields, groupby, offset=offset, limit=limit, orderby=orderby, lazy=lazy)
+        if 'cant_disponible' in fields:
+            for line in res:
+                if '__domain' in line:
+                    lines = self.search(line['__domain'])
+                    total_due = 0.0
+                    for record in lines:
+                            total_due += record.cant_disponible
+                    line['cant_disponible'] = total_due         
 
 
 
