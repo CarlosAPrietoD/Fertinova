@@ -52,6 +52,7 @@
             <field name="origin" position="after">
                 <field name="operador"/>
                 <field name="placas"/>
+                <field name="folio_peso_tk"/>
             </field>           
         </field>
     </record> 
@@ -94,7 +95,7 @@
           <field name="name"/>
           <field name="partner_id"/>
           <field name="create_date"/>                 
-          <field name="estado"/>   
+          <field name="estado"/>  
           <field name="purchase_with_order_id"/> 
         </tree>
       </field>
@@ -127,19 +128,19 @@
                     
                     <field name="pickings_ids">
                         <tree editable="bottom">
+                            <field name="transferencia_origen_id"/>
                             <field name="fecha_carga_origen"/>
                             <field name="producto_id"/>
                             <field name="folio_peso_tk_tr_ori"/>
                             <field name="kilos_origen"/>
-                            <field name="transferencia_origen_id"/>
+                            <field name="transferencia_destino_id"/>
                             <field name="fecha_descarga_destino"/>
-                            <field name="dif_merma_excedente"/>
-                            <field name="transferencia_interna_id"/>
+                            <field name="producto_destino_id"/>
                             <field name="folio_peso_tk_tr_dest"/>
                             <field name="kilos_destino"/>
-                            <field name="transferencia_destino_id"/>
                             <field name="placas"/>
                             <field name="operador"/>
+                            <field name="dif_merma_excedente"/>
                             <field name="tolerancia"/>
                             <field name="tolerancia_ajustada"/>
                             <field name="tolerancia_autorizada"/>
@@ -175,19 +176,19 @@
                 <field name="wbn_service_order_id"/>
                 <field name="estado_wbn_servi_ord"/>
                 <field name="wbn_pur_order_related"/>
+                <field name="transferencia_origen_id"/>
                 <field name="fecha_carga_origen"/>
                 <field name="producto_id"/>
                 <field name="folio_peso_tk_tr_ori"/>
                 <field name="kilos_origen"/>
-                <field name="transferencia_origen_id"/>
+                <field name="transferencia_destino_id"/>
                 <field name="fecha_descarga_destino"/>
-                <field name="dif_merma_excedente"/>
-                <field name="transferencia_interna_id"/>
+                <field name="producto_destino_id"/>
                 <field name="folio_peso_tk_tr_dest"/>
                 <field name="kilos_destino"/>
-                <field name="transferencia_destino_id"/>
                 <field name="placas"/>
-                <field name="operador"/>
+                <field name="operador"/>  
+                <field name="dif_merma_excedente"/>                          
                 <field name="tolerancia"/>
                 <field name="tolerancia_ajustada"/>
                 <field name="tolerancia_autorizada"/>
@@ -234,13 +235,13 @@
                         <div class="container border border-info m-2" style="border-radius: 10px;">
                           <div style="margin-top: 27px !important;">
                             <div style="padding-top: 30px !important;">
-                                <h5 style="background: #fff none repeat scroll 0 0; height: auto; margin-left: 20px; padding: 3px 5px; position: absolute; margin-top: -47px; border: 1px solid #337ab7; border-radius: 8px;"><strong>Transferencia Origen</strong></h5>                    
+                                <h5 style="background: #fff none repeat scroll 0 0; height: auto; margin-left: 20px; padding: 3px 5px; position: absolute; margin-top: -47px; border: 1px solid #337ab7; border-radius: 8px;"><strong>Movimiento Origen</strong></h5>                    
                                 <group>
+                                    <field name="transferencia_origen_id"/>
                                     <field name="fecha_carga_origen"/>
                                     <field name="producto_id"/>
                                     <field name="folio_peso_tk_tr_ori"/>
-                                    <field name="kilos_origen"/>
-                                    <field name="transferencia_origen_id"/>                            
+                                    <field name="kilos_origen"/>                           
                                 </group>   
                             </div>  
                           </div> 
@@ -249,11 +250,28 @@
                         <div class="container border border-info m-2" style="border-radius: 10px;">
                           <div style="margin-top: 27px !important;">
                             <div style="padding-top: 30px !important;">
-                                <h5 style="background: #fff none repeat scroll 0 0; height: auto; margin-left: 20px; padding: 3px 5px; position: absolute; margin-top: -47px; border: 1px solid #337ab7; border-radius: 8px;"><strong>Transferencia Interna</strong></h5>                                                                                                                          
+                                <h5 style="background: #fff none repeat scroll 0 0; height: auto; margin-left: 20px; padding: 3px 5px; position: absolute; margin-top: -47px; border: 1px solid #337ab7; border-radius: 8px;"><strong>Movimiento Destino</strong></h5>                                                                                                                          
                                 <group>  
+                                    <field name="transferencia_destino_id"/>
                                     <field name="fecha_descarga_destino"/>
-                                    <field name="dif_merma_excedente"/>
-                                    <field name="transferencia_interna_id"/>                                                                                    
+                                    <field name="producto_destino_id"/>
+                                    <field name="folio_peso_tk_tr_dest"/>
+                                    <field name="kilos_destino"/>
+                                    <field name="placas"/>
+                                    <field name="operador"/>  
+                                    <field name="dif_merma_excedente"/>                          
+                                    <field name="tolerancia"/>
+                                    <field name="tolerancia_ajustada"/>
+                                    <field name="tolerancia_autorizada"/>
+                                    <field name="tolerancia_excedida"/>
+                                    <field name="tarifas"/>
+                                    <field name="subtotal_antes_desc"/>
+                                    <field name="precio_producto"/>
+                                    <field name="desc_tolerancia_exced"/>
+                                    <field name="importe"/>
+                                    <field name="iva"/>
+                                    <field name="retencion"/>
+                                    <field name="total"/>                                                                                   
                                 </group> 
                             </div>  
                           </div> 
@@ -261,59 +279,14 @@
 
                     </group> 
 
+                </sheet>  
 
-                    <group>
-
-                        <div class="container border border-info m-2" style="border-radius: 10px;">
-                          <div style="margin-top: 27px !important;">
-                            <div style="padding-top: 30px !important;">
-                                <h5 style="background: #fff none repeat scroll 0 0; height: auto; margin-left: 20px; padding: 3px 5px; position: absolute; margin-top: -47px; border: 1px solid #337ab7; border-radius: 8px;"><strong>Transferencia Destino</strong></h5>                                                                                                                                              
-                                <group>                       
-                                    <field name="folio_peso_tk_tr_dest"/>
-                                    <field name="kilos_destino"/>
-                                    <field name="transferencia_destino_id"/>
-                                    <field name="placas"/>
-                                    <field name="operador"/>              
-                                </group>  
-                            </div>  
-                          </div> 
-                        </div> 
-
-                        <group></group>
-
-                    </group>                       
-
-                    <div class="container border border-info m-2" style="border-radius: 10px;">
-                        <div style="margin-top: 27px !important;">
-                            <div style="padding-top: 30px !important;">                    
-                                <group>
-                                    <group>
-                                        <field name="tolerancia"/>
-                                        <field name="tolerancia_ajustada"/>
-                                        <field name="tolerancia_autorizada"/>
-                                        <field name="tolerancia_excedida"/>
-                                        <field name="tarifas"/>            
-                                    </group>                                                 
-                                    <group>  
-                                        <field name="subtotal_antes_desc"/>
-                                        <field name="precio_producto"/>
-                                        <field name="desc_tolerancia_exced"/>
-                                        <field name="importe"/>
-                                        <field name="iva"/>
-                                        <field name="retencion"/>
-                                        <field name="total"/>                                                                                     
-                                    </group> 
-                                </group>  
-                            </div>  
-                        </div> 
-                    </div>                    
-
-                </sheet>              
                 <div class="oe_chatter">
                     <field name="message_follower_ids" widget="mail_followers"/>
                     <field name="activity_ids" widget="mail_activity"/>
                     <field name="message_ids" widget="mail_thread"/>
-                </div>               
+                </div>  
+
             </form> 
         </field> 
     </record>    
