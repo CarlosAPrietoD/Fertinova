@@ -38,19 +38,19 @@
                         <!--Tabla de Control de Ords. Servicio-->
                         <table class="table table-condensed table-bordered" style="font-size: 10px; margin-top: 40px;">
                             <tr>
-                                <th class="table-secondary">Fecha Carga Origen</th>
+                                <th class="table-secondary">Movimiento Origen</th>
+                                <th class="table-secondary">Fecha Carga</th>
                                 <th class="table-secondary">Producto</th>
                                 <th class="table-secondary">Folio Peso Ticket</th>
                                 <th class="table-secondary">Kg Origen</th>
-                                <th class="table-secondary">Transferencia Origen</th>
-                                <th class="table-secondary">Fecha Descarga Destino</th>
-                                <th class="table-secondary">Diferencia Merma o Excedente</th>
-                                <th class="table-secondary">Transferencia Interna</th>
+                                <th class="table-secondary">Movimiento Destino</th>
+                                <th class="table-secondary">Fecha Entrega</th>
+                                <th class="table-secondary">Producto</th>
                                 <th class="table-secondary">Folio Peso Ticket</th>
-                                <th class="table-secondary">Kg Destino</th>
-                                <th class="table-secondary">Transferencia Destino</th>
+                                <th class="table-secondary">Kg Entrega</th>+                                
                                 <th class="table-secondary">Placas</th>
                                 <th class="table-secondary">Operador</th>
+                                <th class="table-secondary">Diferencia Merma o Excedente</th>                                
                                 <th class="table-secondary">Tolerancia Sistema</th>
                                 <th class="table-secondary">Tolerancia Ajustada</th>
                                 <th class="table-secondary">Tolerancia Autorizada</th>
@@ -65,19 +65,19 @@
                                 <th class="table-secondary">Total</th>
                             </tr>                             
                             <tr t-foreach='doc.pickings_ids' t-as='line'>
-                                <td><span t-field="line.fecha_carga_origen" t-options='{"widget": "date"}'/></td>
+                                <td><span t-field="line.transferencia_origen_id.name"/></td>
+                                <td><span t-field="line.fecha_carga_origen" t-options='{"widget": "date"}'/></td>                                
                                 <td><span t-field="line.producto_id.name"/></td>
                                 <td><span t-field="line.folio_peso_tk_tr_ori"/></td>
-                                <td><span t-field="line.kilos_origen"/></td>
-                                <td><span t-field="line.transferencia_origen_id.name"/></td>
-                                <td><span t-field="line.fecha_descarga_destino" t-options='{"widget": "date"}'/></td>
-                                <td><span t-field="line.dif_merma_excedente"/></td>
-                                <td><span t-field="line.transferencia_interna_id.name"/></td>
+                                <td><span t-field="line.kilos_origen"/></td>                               
+                                <td><span t-field="line.transferencia_destino_id.name"/></td>                                
+                                <td><span t-field="line.fecha_descarga_destino" t-options='{"widget": "date"}'/></td>                                
+                                <td><span t-field="line.producto_destino_id.name"/></td>
                                 <td><span t-field="line.folio_peso_tk_tr_dest"/></td>
-                                <td><span t-field="line.kilos_destino"/></td>
-                                <td><span t-field="line.transferencia_destino_id.name"/></td>
+                                <td><span t-field="line.kilos_destino"/></td>                                
                                 <td><span t-field="line.placas"/></td>
                                 <td><span t-field="line.operador"/></td>
+                                <td><span t-field="line.dif_merma_excedente"/></td>
                                 <td><span t-field="line.tolerancia"/></td>
                                 <td><span t-field="line.tolerancia_ajustada"/></td>
                                 <td><span t-field="line.tolerancia_autorizada"/></td>
