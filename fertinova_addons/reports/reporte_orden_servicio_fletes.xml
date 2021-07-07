@@ -41,13 +41,13 @@
                                 <th class="table-secondary">Movimiento Origen</th>
                                 <th class="table-secondary">Fecha Carga</th>
                                 <th class="table-secondary">Producto</th>
-                                <th class="table-secondary">Folio Peso Ticket</th>
+                                <th class="table-secondary">Folio Ticket</th>
                                 <th class="table-secondary">Kg Origen</th>
                                 <th class="table-secondary">Movimiento Destino</th>
                                 <th class="table-secondary">Fecha Entrega</th>
                                 <th class="table-secondary">Producto</th>
-                                <th class="table-secondary">Folio Peso Ticket</th>
-                                <th class="table-secondary">Kg Entrega</th>+                                
+                                <th class="table-secondary">Folio Ticket</th>
+                                <th class="table-secondary">Kg Entrega</th>                                
                                 <th class="table-secondary">Placas</th>
                                 <th class="table-secondary">Operador</th>
                                 <th class="table-secondary">Diferencia Merma o Excedente</th>                                
