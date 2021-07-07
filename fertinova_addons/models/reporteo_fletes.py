@@ -22,7 +22,7 @@ class StockPicking(models.Model):
     #Fields added to Form View of Inventory > Operations > Transfers
     operador = fields.Char(string='Operador')
     placas   = fields.Char(string='Placas')
-    folio_peso_tk = fields.Char(string='Folio Peso Ticket')                                                                                             
+    folio_peso_tk = fields.Char(string='Folio Ticket')                                                                                             
 
 
 
@@ -38,7 +38,7 @@ class StockMove(models.Model):
     importe  = fields.Float(string='Importe', digits=(20, 2), compute='_set_importe')
     #Revisar su correcta asignación dado que se puso en una vista de Odoo Studio |
     #de "Líneas de Pedido de Venta"                                              |
-    folio_peso_tk = fields.Char(string='Folio Peso Ticket')#                     |
+    folio_peso_tk = fields.Char(string='Folio Ticket')#                     |
     #----------------------------------------------------------------------------|
 
     @api.one
@@ -185,14 +185,14 @@ class WobinServiceOrderLine(models.Model):
     transferencia_origen_id  = fields.Many2one('stock.picking', string='Movimiento Origen')    
     fecha_carga_origen       = fields.Date(string='Fecha Carga')
     producto_id              = fields.Many2one('product.product', string='Producto', compute='_set_producto_id')
-    folio_peso_tk_tr_ori     = fields.Char(string='Folio Peso Ticket', compute='_set_folio_tk_origen')
+    folio_peso_tk_tr_ori     = fields.Char(string='Folio Ticket', compute='_set_folio_tk_origen')
     kilos_origen             = fields.Float(string='Kg Carga', digits=(20, 2), compute='_set_kilos_origen')
     
     #Discharge Destiny Data:
     transferencia_destino_id = fields.Many2one('stock.picking', string='Movimiento Destino')
     fecha_descarga_destino   = fields.Date(string='Fecha Entrega')
     producto_destino_id      = fields.Many2one('product.product', string='Producto', compute='_set_producto_destino_id')
-    folio_peso_tk_tr_dest    = fields.Char(string='Folio Peso Ticket', compute='_set_folio_tk_destino')
+    folio_peso_tk_tr_dest    = fields.Char(string='Folio Ticket', compute='_set_folio_tk_destino')
     kilos_destino            = fields.Float(string='Kg Entrega', digits=(20, 2), compute='_set_kilos_destino')
     placas                   = fields.Char(string='Placas', compute='_set_placas') 
     operador                 = fields.Char(string='Operador', compute='_set_operador') 
