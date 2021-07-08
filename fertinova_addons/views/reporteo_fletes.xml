@@ -15,7 +15,7 @@
     -->
 
     <!--This inherited view is just present at the system via Odoo Studio
-        it was added a new many2many field for credit notes--> 
+        it was added a new many2many field for credit notes 
     <record id="sale_order_line_inherited_fletes" model="ir.ui.view">
         <field name="name">Odoo Studio: sale.order.line.form.readonly customization.inherit</field>
         <field name="model">sale.order.line</field>
@@ -41,7 +41,7 @@
                 </field>
             </xpath>        
         </field>
-    </record>
+    </record>-->
 
     <!--Stock Picking Form Inherited where 2 new fields were added: Placas & Operador-->
     <record id="stock_picking_form_inherit_fletes" model="ir.ui.view">
@@ -132,12 +132,12 @@
                             <field name="fecha_carga_origen"/>
                             <field name="producto_id"/>
                             <field name="folio_peso_tk_tr_ori"/>
-                            <field name="kilos_origen"/>
+                            <field name="kilos_origen" sum="Total Kilos Origen"/>
                             <field name="transferencia_destino_id"/>
                             <field name="fecha_descarga_destino"/>
                             <field name="producto_destino_id"/>
                             <field name="folio_peso_tk_tr_dest"/>
-                            <field name="kilos_destino"/>
+                            <field name="kilos_destino" sum="Total Kilos Destino"/>
                             <field name="placas"/>
                             <field name="operador"/>
                             <field name="dif_merma_excedente"/>
@@ -149,10 +149,10 @@
                             <field name="subtotal_antes_desc"/>
                             <field name="precio_producto"/>
                             <field name="desc_tolerancia_exced"/>
-                            <field name="importe"/>
+                            <field name="importe" sum="Total Importe"/>
                             <field name="iva"/>
                             <field name="retencion"/>
-                            <field name="total"/>
+                            <field name="total" sum="Total"/>
                         </tree>
                     </field>                     
                                                              
