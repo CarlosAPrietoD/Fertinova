@@ -2,7 +2,9 @@
 from collections import defaultdict
 from datetime import date, datetime
 from odoo import models, fields, api
-from openerp.exceptions import ValidationError
+from odoo.exceptions import UserError
+from odoo.tools.translate import _
+
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -142,6 +144,42 @@ class WobinServiceOrder(models.Model):
     purchase_with_order_id = fields.Many2one('purchase.order', string='Orden de Compra')
     
 
+    @api.onchange('pickings_ids')
+    def _onchange_pickings_ids(self): 
+        list_origin = []
+        list_destiny = []
+
+        for line in self.pickings_ids:
+            
+            if line.transferencia_origen_id:
+                if line.transferencia_origen_id == line.transferencia_destino_id:
+                    msg = _('No se pueden duplicar albaranes. Revisar %s y %s') % (line.transferencia_origen_id.name, line.transferencia_destino_id.name)
+                    raise UserError(msg)
+                
+                #Append ids from origin transfers:
+                list_origin.append(line.transferencia_origen_id)
+
+            elif line.transferencia_destino_id:
+                if line.transferencia_destino_id == line.transferencia_origen_id:
+                    msg = _('No se pueden duplicar albaranes. Revisar %s y %s') % (line.transferencia_origen_id.name, line.transferencia_destino_id.name)
+                    raise UserError(msg) 
+                
+                #Append ids from destiny transfers:
+                list_destiny.append(line.transferencia_destino_id)
+
+        #Avoid duplicates in lines:
+        for elem in list_origin:
+            if list_origin.count(elem) > 1:
+                msg = _('No se pueden duplicar albaranes. Revisar %s') % (elem.name)
+                raise UserError(msg)
+
+        for elem in list_destiny:
+            if list_destiny.count(elem) > 1:
+                msg = _('No se pueden duplicar albaranes. Revisar %s') % (elem.name)
+                raise UserError(msg)
+
+
+
     def cancelar_orden(self):
         self.check_cancel = True
         self.estado = 'cancelada'
@@ -210,15 +248,7 @@ class WobinServiceOrderLine(models.Model):
     importe                  = fields.Monetary('Importe', currency_field='currency_id', compute='_set_importe')
     iva                      = fields.Monetary('IVA', currency_field='currency_id', compute='_set_iva')
     retencion                = fields.Monetary('Retención', currency_field='currency_id', compute='_set_retencion')
-    total                    = fields.Monetary('Total', currency_field='currency_id', compute='_set_total')
-
-    
-    @api.constrains('transferencia_origen_id', 'transferencia_destino_id')
-    def _constrains_transferencias(self):
-        if self.transferencia_origen_id == self.transferencia_destino_id:
-            raise ValidationError("No se pueden repetir albaranes")
-        elif self.transferencia_destino_id == self.transferencia_origen_id:
-            raise ValidationError("No se pueden repetir albaranes")
+    total                    = fields.Monetary('Total', currency_field='currency_id', compute='_set_total')        
 
 
     #/ - / - / - / - / - / - / - / - / - / - / - /
