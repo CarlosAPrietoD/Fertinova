@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 from collections import defaultdict
+from datetime import date, datetime
 from odoo import models, fields, api
-from openerp.exceptions import ValidationError
+from odoo.exceptions import UserError
+from odoo.tools.translate import _
+
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -141,6 +144,42 @@ class WobinServiceOrder(models.Model):
     purchase_with_order_id = fields.Many2one('purchase.order', string='Orden de Compra')
     
 
+    @api.onchange('pickings_ids')
+    def _onchange_pickings_ids(self): 
+        list_origin = []
+        list_destiny = []
+
+        for line in self.pickings_ids:
+            
+            if line.transferencia_origen_id:
+                if line.transferencia_origen_id == line.transferencia_destino_id:
+                    msg = _('No se pueden duplicar albaranes. Revisar %s y %s') % (line.transferencia_origen_id.name, line.transferencia_destino_id.name)
+                    raise UserError(msg)
+                
+                #Append ids from origin transfers:
+                list_origin.append(line.transferencia_origen_id)
+
+            elif line.transferencia_destino_id:
+                if line.transferencia_destino_id == line.transferencia_origen_id:
+                    msg = _('No se pueden duplicar albaranes. Revisar %s y %s') % (line.transferencia_origen_id.name, line.transferencia_destino_id.name)
+                    raise UserError(msg) 
+                
+                #Append ids from destiny transfers:
+                list_destiny.append(line.transferencia_destino_id)
+
+        #Avoid duplicates in lines:
+        for elem in list_origin:
+            if list_origin.count(elem) > 1:
+                msg = _('No se pueden duplicar albaranes. Revisar %s') % (elem.name)
+                raise UserError(msg)
+
+        for elem in list_destiny:
+            if list_destiny.count(elem) > 1:
+                msg = _('No se pueden duplicar albaranes. Revisar %s') % (elem.name)
+                raise UserError(msg)
+
+
+
     def cancelar_orden(self):
         self.check_cancel = True
         self.estado = 'cancelada'
@@ -183,14 +222,14 @@ class WobinServiceOrderLine(models.Model):
                                     
     #Upload Origin Data:
     transferencia_origen_id  = fields.Many2one('stock.picking', string='Movimiento Origen')    
-    fecha_carga_origen       = fields.Date(string='Fecha Carga')
+    fecha_carga_origen       = fields.Date(string='Fecha Carga', compute='_set_fecha_carga')
     producto_id              = fields.Many2one('product.product', string='Producto', compute='_set_producto_id')
     folio_peso_tk_tr_ori     = fields.Char(string='Folio Ticket', compute='_set_folio_tk_origen')
     kilos_origen             = fields.Float(string='Kg Carga', digits=(20, 2), compute='_set_kilos_origen')
     
     #Discharge Destiny Data:
     transferencia_destino_id = fields.Many2one('stock.picking', string='Movimiento Destino')
-    fecha_descarga_destino   = fields.Date(string='Fecha Entrega')
+    fecha_descarga_destino   = fields.Date(string='Fecha Entrega', compute='_set_fecha_descarga')
     producto_destino_id      = fields.Many2one('product.product', string='Producto', compute='_set_producto_destino_id')
     folio_peso_tk_tr_dest    = fields.Char(string='Folio Ticket', compute='_set_folio_tk_destino')
     kilos_destino            = fields.Float(string='Kg Entrega', digits=(20, 2), compute='_set_kilos_destino')
@@ -204,25 +243,27 @@ class WobinServiceOrderLine(models.Model):
     tarifas                  = fields.Float(string='Tarifas', digits=(20, 2))
     subtotal_antes_desc      = fields.Float(string='Subtotal antes Descuento', digits=(20, 2), compute='_set_subtotal_antes_desc')
     currency_id              = fields.Many2one('res.currency', default=lambda self: self.env.user.company_id.currency_id)
-    precio_producto          = fields.Monetary('Precio Producto', currency_field='currency_id')
+    precio_producto          = fields.Monetary('Precio Producto', currency_field='currency_id', compute='_set_precio_producto')
     desc_tolerancia_exced    = fields.Monetary('Descuento por Tolerancia Excedida', currency_field='currency_id', compute='_set_desc_tolerancia_exced')
     importe                  = fields.Monetary('Importe', currency_field='currency_id', compute='_set_importe')
     iva                      = fields.Monetary('IVA', currency_field='currency_id', compute='_set_iva')
     retencion                = fields.Monetary('Retención', currency_field='currency_id', compute='_set_retencion')
-    total                    = fields.Monetary('Total', currency_field='currency_id', compute='_set_total')
-
-    
-    @api.constrains('transferencia_origen_id', 'transferencia_interna_id', 'transferencia_destino_id')
-    def _constrains_transferencias(self):
-        if self.transferencia_origen_id == self.transferencia_destino_id:
-            raise ValidationError("No se pueden repetir albaranes")  
-        elif self.transferencia_destino_id == self.transferencia_origen_id:
-            raise ValidationError("No se pueden repetir albaranes")                              
+    total                    = fields.Monetary('Total', currency_field='currency_id', compute='_set_total')        
 
 
     #/ - / - / - / - / - / - / - / - / - / - / - /
     #Upload Origin Methods
-    #/ - / - / - / - / - / - / - / - / - / - / - /    
+    #/ - / - / - / - / - / - / - / - / - / - / - /  
+    @api.one
+    @api.depends('transferencia_origen_id')
+    def _set_fecha_carga(self):
+        if self.transferencia_origen_id:        
+            fecha_carga_origen_aux = self.env['stock.picking'].search([('id', '=', self.transferencia_origen_id.id)], limit=1).date_done
+            
+            if fecha_carga_origen_aux:
+                self.fecha_carga_origen = fecha_carga_origen_aux.date()
+
+
     @api.one
     @api.depends('transferencia_origen_id')
     def _set_producto_id(self):        
@@ -247,6 +288,16 @@ class WobinServiceOrderLine(models.Model):
     #/ - / - / - / - / - / - / - / - / - / - / - /
     #Discharge Destiny Methods
     #/ - / - / - / - / - / - / - / - / - / - / - /
+    @api.one
+    @api.depends('transferencia_destino_id')
+    def _set_fecha_descarga(self):
+        if self.transferencia_destino_id:        
+            fecha_destino_aux = self.env['stock.picking'].search([('id', '=', self.transferencia_destino_id.id)], limit=1).date_done
+
+            if fecha_destino_aux:
+                self.fecha_descarga_destino = fecha_destino_aux.date()
+
+
     @api.one
     @api.depends('transferencia_destino_id')
     def _set_producto_destino_id(self):        
@@ -284,14 +335,18 @@ class WobinServiceOrderLine(models.Model):
 
     @api.one
     @api.depends('transferencia_destino_id')
-    def _set_placas(self):        
+    def _set_placas(self):    
+        if self.transferencia_origen_id:
+            self.placas = self.env['stock.picking'].search([('id', '=', self.transferencia_origen_id.id)], limit=1).placas        
         if self.transferencia_destino_id:
             self.placas = self.env['stock.picking'].search([('id', '=', self.transferencia_destino_id.id)], limit=1).placas        
 
 
     @api.one
     @api.depends('transferencia_destino_id')
-    def _set_operador(self):        
+    def _set_operador(self):  
+        if self.transferencia_origen_id:
+            self.operador = self.env['stock.picking'].search([('id', '=', self.transferencia_origen_id.id)], limit=1).operador
         if self.transferencia_destino_id:
             self.operador = self.env['stock.picking'].search([('id', '=', self.transferencia_destino_id.id)], limit=1).operador
     
@@ -334,6 +389,19 @@ class WobinServiceOrderLine(models.Model):
                                                                             ('producto_id', '=', self.producto_destino_id.id)], limit=1).kilos_origen       
         
             self.subtotal_antes_desc = kilos_origen * self.tarifas
+
+
+    @api.one
+    @api.depends('transferencia_destino_id') 
+    def _set_precio_producto(self):
+        if self.transferencia_destino_id: 
+            #Get Order Sale ID from current tranfer
+            sale_order = self.transferencia_destino_id.sale_id.id
+
+            if sale_order and self.producto_destino_id:
+                precio_unitario = self.env['sale.order.line'].search([('order_id', '=', sale_order),
+                                                                      ('product_id', '=', self.producto_destino_id.id)], limit=1).price_unit         
+                self.precio_producto = precio_unitario
 
 
     @api.one

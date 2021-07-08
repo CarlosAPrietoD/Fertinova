@@ -69,12 +69,12 @@
                                 <td><span t-field="line.fecha_carga_origen" t-options='{"widget": "date"}'/></td>                                
                                 <td><span t-field="line.producto_id.name"/></td>
                                 <td><span t-field="line.folio_peso_tk_tr_ori"/></td>
-                                <td><span t-field="line.kilos_origen"/></td>                               
+                                <td><span t-field="line.kilos_origen"/></td>
                                 <td><span t-field="line.transferencia_destino_id.name"/></td>                                
                                 <td><span t-field="line.fecha_descarga_destino" t-options='{"widget": "date"}'/></td>                                
                                 <td><span t-field="line.producto_destino_id.name"/></td>
                                 <td><span t-field="line.folio_peso_tk_tr_dest"/></td>
-                                <td><span t-field="line.kilos_destino"/></td>                                
+                                <td><span t-field="line.kilos_destino"/></td>
                                 <td><span t-field="line.placas"/></td>
                                 <td><span t-field="line.operador"/></td>
                                 <td><span t-field="line.dif_merma_excedente"/></td>
@@ -91,6 +91,14 @@
                                 <td><span t-field="line.retencion"/></td>
                                 <td><span t-field="line.total"/></td>
                             </tr>  
+                            <tr>
+                                <td colspan="5"  class="text-right"><span t-esc="sum(line.kilos_origen for line in doc.pickings_ids)"/></td>
+                                <td colspan="5" class="text-right"><span t-esc="sum(line.kilos_destino for line in doc.pickings_ids)"/></td>
+                                <td colspan="12" class="text-right"><span t-esc="sum(line.importe for line in doc.pickings_ids)"/></td>
+                                <td colspan="3" class="text-right"><span t-esc="sum(line.total for line in doc.pickings_ids)"/></td>
+                            </tr>
+
+
                         </table>                                                   
 
                     </div><!--Fin Estilo de hoja-->

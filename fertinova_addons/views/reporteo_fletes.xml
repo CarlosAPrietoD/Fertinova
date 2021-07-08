@@ -132,12 +132,12 @@
                             <field name="fecha_carga_origen"/>
                             <field name="producto_id"/>
                             <field name="folio_peso_tk_tr_ori"/>
-                            <field name="kilos_origen"/>
+                            <field name="kilos_origen" sum="Total Kilos Origen"/>
                             <field name="transferencia_destino_id"/>
                             <field name="fecha_descarga_destino"/>
                             <field name="producto_destino_id"/>
                             <field name="folio_peso_tk_tr_dest"/>
-                            <field name="kilos_destino"/>
+                            <field name="kilos_destino" sum="Total Kilos Destino"/>
                             <field name="placas"/>
                             <field name="operador"/>
                             <field name="dif_merma_excedente"/>
@@ -149,10 +149,10 @@
                             <field name="subtotal_antes_desc"/>
                             <field name="precio_producto"/>
                             <field name="desc_tolerancia_exced"/>
-                            <field name="importe"/>
+                            <field name="importe" sum="Total Importe"/>
                             <field name="iva"/>
                             <field name="retencion"/>
-                            <field name="total"/>
+                            <field name="total" sum="Total"/>
                         </tree>
                     </field>                     
                                                              
