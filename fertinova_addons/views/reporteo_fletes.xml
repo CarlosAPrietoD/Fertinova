@@ -15,7 +15,7 @@
     -->
 
     <!--This inherited view is just present at the system via Odoo Studio
-        it was added a new many2many field for credit notes 
+        it was added a new many2many field for credit notes--> 
     <record id="sale_order_line_inherited_fletes" model="ir.ui.view">
         <field name="name">Odoo Studio: sale.order.line.form.readonly customization.inherit</field>
         <field name="model">sale.order.line</field>
@@ -41,7 +41,7 @@
                 </field>
             </xpath>        
         </field>
-    </record>-->
+    </record>
 
     <!--Stock Picking Form Inherited where 2 new fields were added: Placas & Operador-->
     <record id="stock_picking_form_inherit_fletes" model="ir.ui.view">
