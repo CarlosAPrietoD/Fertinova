@@ -370,7 +370,7 @@ class WobinServiceOrderLine(models.Model):
 
             if sale_order and self.producto_destino_id:
                 precio_unitario = self.env['sale.order.line'].search([('order_id', '=', sale_order),
-                                                                      ('product_id', '=', self.producto_destino_id)], limit=1).price_unit         
+                                                                      ('product_id', '=', self.producto_destino_id.id)], limit=1).price_unit         
                 self.precio_producto = precio_unitario
 
 
