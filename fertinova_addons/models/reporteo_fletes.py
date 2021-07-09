@@ -157,7 +157,7 @@ class WobinServiceOrder(models.Model):
                     raise UserError(msg)
                 
                 #Append ids from origin transfers:
-                list_origin.append(line.transferencia_origen_id)
+                list_origin.append((line.transferencia_origen_id, line.producto_id))
 
             elif line.transferencia_destino_id:
                 if line.transferencia_destino_id == line.transferencia_origen_id:
@@ -165,17 +165,17 @@ class WobinServiceOrder(models.Model):
                     raise UserError(msg) 
                 
                 #Append ids from destiny transfers:
-                list_destiny.append(line.transferencia_destino_id)
+                list_destiny.append((line.transferencia_destino_id, line.producto_destino_id))
 
         #Avoid duplicates in lines:
         for elem in list_origin:
             if list_origin.count(elem) > 1:
-                msg = _('No se pueden duplicar albaranes. Revisar %s') % (elem.name)
+                msg = _('No se pueden duplicar albaranes. Revisar albarán %s') % (elem[0].name)
                 raise UserError(msg)
 
         for elem in list_destiny:
             if list_destiny.count(elem) > 1:
-                msg = _('No se pueden duplicar albaranes. Revisar %s') % (elem.name)
+                msg = _('No se pueden duplicar albaranes. Revisar albarán %s') % (elem[0].name)
                 raise UserError(msg)
 
 
