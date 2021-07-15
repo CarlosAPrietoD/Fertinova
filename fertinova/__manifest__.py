@@ -13,7 +13,6 @@
     'depends': [
         'account_accountant',
         'company_country',
-        'crm',
         'l10n_mx_avoid_reversal_entry',
         'l10n_mx_cash_basis_entries',
         'l10n_mx_edi_cancellation_complement',
