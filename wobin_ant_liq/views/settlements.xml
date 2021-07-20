@@ -39,7 +39,7 @@
         <field name="name">Settlements</field> 
         <field name="model">wobin.settlements</field> 
         <field name="arch" type="xml"> 
-            <form> 
+            <form duplicate="0"> 
                 <header>
                     <button name="create_payment" type="object" string="Pay Settlement" class="oe_highlight" attrs="{'invisible': ['|', ('btn_crt_payment', '=', False), ('state', '!=', 'pending')]}"/>
                     <button name="mark_settled" type="object" string="Mark Settled" class="oe_highlight" attrs="{'invisible': ['|', ('btn_mark_settle', '=', False), ('state', '!=', 'pending')]}"/>

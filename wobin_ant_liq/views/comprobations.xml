@@ -45,7 +45,7 @@
         <field name="name">Comprobations</field> 
         <field name="model">wobin.comprobations</field> 
         <field name="arch" type="xml"> 
-            <form> 
+            <form duplicate="0"> 
                 <header>
                     <button name="create_acc_mov" type="object" string="Create Comprobation Entry" class="oe_highlight" attrs="{'invisible': [('name', '=', 'New')]}"/>
                 </header>

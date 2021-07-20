@@ -53,7 +53,7 @@ class WobinComprobations(models.Model):
         return res
 
 
-    name        = fields.Char(string="Advance", readonly=True, required=True, copy=False, default='New')
+    name        = fields.Char(string="Advance", readonly=True, required=True, copy=False, default='New', track_visibility='always')
     operator_id = fields.Many2one('hr.employee',string='Operator', track_visibility='always', ondelete='cascade')
     date        = fields.Date(string='Date', track_visibility='always')
     amount      = fields.Float(string='Amount $', digits=(15,2), track_visibility='always')
