@@ -34,7 +34,7 @@ class WobinSettlements(models.Model):
 
 
 
-    name        = fields.Char(string="Settlement", readonly=True, required=True, copy=False, default='New')
+    name        = fields.Char(string="Settlement", readonly=True, required=True, copy=False, default='New', track_visibility='always')
     operator_id = fields.Many2one('hr.employee',string='Operator', track_visibility='always', ondelete='cascade')
     date        = fields.Date(string='Date', track_visibility='always')
     attachments = fields.Many2many('ir.attachment', relation='settlements_attachment', string='Attachments', track_visibility='always')

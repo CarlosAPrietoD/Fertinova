@@ -78,7 +78,7 @@
         <field name="name">Informs</field> 
         <field name="model">wobin.moves.adv.set.lines</field> 
         <field name="arch" type="xml"> 
-            <form> 
+            <form duplicate="0"> 
                 <sheet> 
                     <div class="oe_left oe_title">
                         <h1>
