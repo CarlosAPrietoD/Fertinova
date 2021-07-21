@@ -6,6 +6,7 @@ from . import account_report
 #from . import payments  *DESARROLLO CANCELADO
 from . import product_template_inherited
 from . import purchase_inherited
+from . import res_partner_inherit
 from . import reporteo_fletes
 from . import sale_inherited
 from . import stock_move_inherited
