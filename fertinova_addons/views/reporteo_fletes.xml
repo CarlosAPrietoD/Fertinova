@@ -337,9 +337,9 @@
         id="menu_2_report_wbn_serv_ord_lns" 
         action="action_wbn_service_orders_lns" 
         parent="sale.menu_sale_report" 
-        sequence="200"/> 
+        sequence="200"/> -->
 
-  </data>-->
+  </data>
 
   <!--
   <data noupdate="1">
