@@ -32,6 +32,7 @@ class SaleOrderLine(models.Model):
 #   TICKET 028    DEVELOPED BY SEBASTIAN MENDEZ    --     START
 #//////////////////////////////////////////////////////////////////////////////////////////////#
 
+
 class ReportCustom(models.AbstractModel):
     _name = 'report.fertinova_addons.report_custom_pdf'
 
