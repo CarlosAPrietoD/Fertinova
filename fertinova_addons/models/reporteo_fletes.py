@@ -18,7 +18,7 @@ _logger = logging.getLogger(__name__)
 #   of Fleets (with new custom fields too)
 #
 # /////////////////////////////////////////////////////////////////////////////
-'''
+
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
@@ -26,7 +26,6 @@ class StockPicking(models.Model):
     operador = fields.Char(string='Operador')
     placas   = fields.Char(string='Placas')
     folio_peso_tk = fields.Char(string='Folio Ticket')                                                                                             
-'''
 
 
 
