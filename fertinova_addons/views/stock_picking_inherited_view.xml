@@ -29,10 +29,11 @@
             <field name="partner_id" position="attributes">
                 <attribute name="required">1</attribute>
             </field>  
+            <!--
             <field name="origin" position="attributes">
                 <attribute name="required">1</attribute>                             
                 <attribute name="readonly">['|', '|', ('state', '!=', 'draft'), ('picking_type_code', '=', 'incoming'), ('picking_type_code', '=', 'outgoing')]</attribute>
-            </field>         
+            </field>      -->   
             <!--[END] Add required attribute to fields-->
 
             <!--
