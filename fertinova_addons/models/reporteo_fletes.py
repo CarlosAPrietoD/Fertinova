@@ -82,8 +82,18 @@ class SaleOrderLine(models.Model):
 
     #Field added to display credit notes in Form View 
     # of Sales > To Incoice > Lineas de Pedido {Odoo Studio}
-    credit_notes_ids = fields.Many2many('account.invoice.line', string='Notas de crédito', compute='_set_credit_notes')
+    cant_ef_facturada = fields.Float(string='Cantidad Efectivamente Facturada', digits=(20, 2), compute='_set_cant_ef_facturada')
+    credit_notes_ids  = fields.Many2many('account.invoice.line', string='Notas de crédito', compute='_set_credit_notes')
 
+
+    @api.one
+    def _set_cant_ef_facturada(self):
+        total_cant_facturas = sum(line.quantity for line in self.invoice_lines)
+        total_cant_not_cred = sum(line.quantity for line in self.credit_notes_ids)
+        self.cant_ef_facturada = total_cant_facturas - total_cant_not_cred 
+
+
+    
     @api.one
     def _set_credit_notes(self):
         #Get invoices to check up
